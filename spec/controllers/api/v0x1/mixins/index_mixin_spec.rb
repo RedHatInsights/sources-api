@@ -1,4 +1,4 @@
-describe Api::V0x1::Mixins::IndexMixin do
+describe Api::V0::Mixins::IndexMixin do
   describe Api::V0x1::SourcesController, :type => :request do
     let!(:source_1)    { Source.create!(:source_type => source_type, :tenant => tenant, :name => "test_source 1", :uid => SecureRandom.uuid) }
     let!(:source_2)    { Source.create!(:source_type => source_type, :tenant => tenant, :name => "test_source 2", :uid => SecureRandom.uuid) }

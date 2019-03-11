@@ -29,7 +29,7 @@ describe "Swagger stuff" do
 
       it "matches the routes" do
         redirect_routes = [{:path => "#{path_prefix}/#{app_name}/v0/*path", :verb => "DELETE|GET|OPTIONS|PATCH|POST"}]
-        internal_api_routes = [{:path => "/internal/v0/*path", :verb => "GET"}, {:path=>"/internal/v0.0/authentications/:id", :verb=>"GET"}]
+        internal_api_routes = [{:path => "/internal/v0/*path", :verb => "GET"}, {:path=>"/internal/v0.1/authentications/:id", :verb=>"GET"}]
         expect(rails_routes).to match_array(swagger_routes + redirect_routes + internal_api_routes)
       end
     end
@@ -41,7 +41,7 @@ describe "Swagger stuff" do
       it "with a random prefix" do
         expect(ENV["PATH_PREFIX"]).not_to be_nil
         expect(ENV["APP_NAME"]).not_to be_nil
-        expect(api_v0x0_sources_url(:only_path => true)).to eq("/#{URI.encode(ENV["PATH_PREFIX"])}/#{URI.encode(ENV["APP_NAME"])}/v0.0/sources")
+        expect(api_v0x1_sources_url(:only_path => true)).to eq("/#{URI.encode(ENV["PATH_PREFIX"])}/#{URI.encode(ENV["APP_NAME"])}/v0.1/sources")
       end
 
       it "with extra slashes" do
@@ -49,7 +49,7 @@ describe "Swagger stuff" do
         ENV["APP_NAME"] = "/appname/"
         Rails.application.reload_routes!
 
-        expect(api_v0x0_sources_url(:only_path => true)).to eq("/example/path/prefix/appname/v0.0/sources")
+        expect(api_v0x1_sources_url(:only_path => true)).to eq("/example/path/prefix/appname/v0.1/sources")
       end
 
       it "doesn't use the APP_NAME when PATH_PREFIX is empty" do
@@ -57,7 +57,7 @@ describe "Swagger stuff" do
         Rails.application.reload_routes!
 
         expect(ENV["APP_NAME"]).not_to be_nil
-        expect(api_v0x0_sources_url(:only_path => true)).to eq("/api/v0.0/sources")
+        expect(api_v0x1_sources_url(:only_path => true)).to eq("/api/v0.1/sources")
       end
     end
 
@@ -81,18 +81,6 @@ describe "Swagger stuff" do
     let(:source) { Source.create!(doc.example_attributes("Source").symbolize_keys.merge(:source_type => source_type, :tenant => tenant, :uid => SecureRandom.uuid)) }
     let(:source_type) { SourceType.create!(:name => "openshift", :product_name => "OpenShift", :vendor => "Red Hat") }
     let(:tenant) { Tenant.create! }
-
-    context "v0.0" do
-      let(:version) { "0.0" }
-      Api::Docs["0.0"].definitions.each do |definition_name, schema|
-        next if definition_name.in?(["OrderParameters", "Tagging"])
-
-        it "#{definition_name} matches the JSONSchema" do
-          const = definition_name.constantize
-          expect(send(definition_name.underscore).as_json(:prefixes => ["api/v0x0/#{definition_name.underscore}"])).to match_json_schema("0.0", definition_name)
-        end
-      end
-    end
 
     context "v0.1" do
       let(:version) { "0.1" }

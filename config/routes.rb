@@ -25,23 +25,12 @@ Rails.application.routes.draw do
         resources :endpoints,      :only => [:index]
       end
     end
-
-    namespace :v0x0, :path => "v0.0" do
-      resources :authentications, :only => [:create, :destroy, :index, :show, :update]
-      resources :endpoints,       :only => [:create, :destroy, :index, :show, :update]
-      resources :source_types,    :only => [:create, :index, :show] do
-        resources :sources, :only => [:index]
-      end
-      resources :sources,                 :only => [:create, :destroy, :index, :show, :update] do
-        resources :endpoints, :only => [:index]
-      end
-    end
   end
 
   scope :as => :internal, :module => "internal", :path => "internal" do
     match "/v0/*path", :via => [:get], :to => redirect(:path => "/internal/v0.0/%{path}", :only_path => true)
 
-    namespace :v0x0, :path => "v0.0" do
+    namespace :v0x1, :path => "v0.1" do
       resources :authentications, :only => [:show]
     end
   end
