@@ -43,6 +43,6 @@ module Sources
     config.autoload_paths << Rails.root.join("lib").to_s
 
     ManageIQ::API::Common::Logging.activate(config)
-    ManageIQ::API::Common::Metrics.activate(config, "topological_inventory_api")
+    ManageIQ::API::Common::Metrics.activate(config, "sources_api")
   end
 end
