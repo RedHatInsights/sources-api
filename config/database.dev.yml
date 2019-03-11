@@ -1,0 +1,22 @@
+default: &default
+  adapter: postgresql
+  encoding: utf8
+  host: localhost
+  port: 5432
+  username: root
+  pool: 5
+  wait_timeout: 5
+  min_messages: warning
+
+development:
+  <<: *default
+  database: topological_inventory_development
+  min_messages: notice
+
+test:
+  <<: *default
+  database: topological_inventory_test
+
+production:
+  <<: *default
+  database: topological_inventory_production

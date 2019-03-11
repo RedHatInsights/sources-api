@@ -1,0 +1,1 @@
+ApplicationRecord.prepend(OpenApi::Serializer)
