@@ -1,3 +1,5 @@
+require "more_core_extensions/core_ext/hash"
+
 module OpenApi
   class Docs
     class DocV2
