@@ -144,20 +144,7 @@ RSpec.describe("v0.0 - Sources") do
 
   describe("subcollections") do
     existing_subcollections = [
-      "container_groups",
-      "container_images",
-      "container_nodes",
-      "container_projects",
-      "container_templates",
-      "containers",
       "endpoints",
-      "orchestration_stacks",
-      "service_instances",
-      "service_offerings",
-      "service_plans",
-      "vms",
-      "volume_types",
-      "volumes",
     ]
 
     existing_subcollections.each do |subcollection|
