@@ -14,7 +14,7 @@ RUN yum -y install centos-release-scl-rh && \
                    && \
     yum clean all
 
-ENV WORKDIR /opt/topological_inventory-api/
+ENV WORKDIR /opt/sources-api/
 ENV RAILS_ROOT $WORKDIR
 WORKDIR $WORKDIR
 
