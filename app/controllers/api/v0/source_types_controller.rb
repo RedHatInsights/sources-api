@@ -5,8 +5,9 @@ module Api
       include Api::V0::Mixins::ShowMixin
 
       def create
-        source = model.create!(params_for_create)
-        render :json => source, :status => :created, :location => instance_link(source)
+        source_type = model.create!(params_for_create)
+        raise_event __method__, params_for_create.merge("id" => source_type.id.to_s)
+        render :json => source_type, :status => :created, :location => instance_link(source_type)
       end
     end
   end

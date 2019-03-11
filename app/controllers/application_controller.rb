@@ -30,6 +30,25 @@ class ApplicationController < ActionController::API
     @api_version ||= name.split("::")[1].downcase
   end
 
+  def raise_event(action, payload)
+    messaging_client.publish_topic(
+      :service => "platform.sources.event-stream",
+      :event   => "#{model}.#{action}",
+      :payload => payload
+    )
+  end
+
+  def messaging_client
+    require "manageiq-messaging"
+
+    @messaging_client ||= ManageIQ::Messaging::Client.open({
+      :protocol => :Kafka,
+      :host     => ENV["QUEUE_HOST"] || "localhost",
+      :port     => ENV["QUEUE_PORT"] || "9092",
+      :encoding => "json"
+    })
+  end
+
   def body_params
     @body_params ||= begin
       raw_body = request.body.read

@@ -1,3 +1,5 @@
+require "manageiq-messaging"
+
 RSpec.describe Api::V0x1::EndpointsController, :type => :request do
   it("Uses DestroyMixin") { expect(described_class.instance_method(:destroy).owner).to eq(Api::V0::Mixins::DestroyMixin) }
   it("Uses IndexMixin")   { expect(described_class.instance_method(:index).owner).to eq(Api::V0::Mixins::IndexMixin) }
@@ -7,6 +9,12 @@ RSpec.describe Api::V0x1::EndpointsController, :type => :request do
   let(:source)      { Source.create!(:source_type => source_type, :tenant => tenant, :uid => SecureRandom.uuid, :name => "test_source") }
   let(:source_type) { SourceType.create!(:name => "openshift", :product_name => "OpenShift", :vendor => "Red Hat") }
   let(:tenant)      { Tenant.create! }
+  let(:client) { instance_double("ManageIQ::Messaging::Client") }
+
+  before do
+    allow(client).to receive(:publish_topic)
+    allow(ManageIQ::Messaging::Client).to receive(:open).and_return(client)
+  end
 
   it "post /endpoints creates an Endpoint" do
     headers = { "CONTENT_TYPE" => "application/json" }

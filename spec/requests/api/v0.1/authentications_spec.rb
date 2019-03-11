@@ -1,3 +1,5 @@
+require "manageiq-messaging"
+
 RSpec.describe("v0.1 - Authentications") do
   let(:attributes)      { {"username" => "test_name", "password" => "Test Password", "tenant_id" => tenant.id.to_s, "resource_type" => "Tenant", "resource_id" => tenant.id.to_s} }
   let(:collection_path) { "/api/v0.1/authentications" }
@@ -27,6 +29,12 @@ RSpec.describe("v0.1 - Authentications") do
     end
 
     context "post" do
+      let(:client) { instance_double("ManageIQ::Messaging::Client") }
+      before do
+        allow(client).to receive(:publish_topic)
+        allow(ManageIQ::Messaging::Client).to receive(:open).and_return(client)
+      end
+
       it "success: with valid body" do
         post(collection_path, :params => attributes.to_json)
 

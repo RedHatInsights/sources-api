@@ -1,3 +1,5 @@
+require "manageiq-messaging"
+
 RSpec.describe("v0.1 - SourceTypes") do
   let(:attributes)      { {"name" => "test_name", "product_name" => "Test Product", "vendor" => "TestVendor"} }
   let(:collection_path) { "/api/v0.1/source_types" }
@@ -26,6 +28,12 @@ RSpec.describe("v0.1 - SourceTypes") do
     end
 
     context "post" do
+      let(:client) { instance_double("ManageIQ::Messaging::Client") }
+      before do
+        allow(client).to receive(:publish_topic)
+        allow(ManageIQ::Messaging::Client).to receive(:open).and_return(client)
+      end
+
       it "success: with valid body" do
         post(collection_path, :params => attributes.to_json)
 

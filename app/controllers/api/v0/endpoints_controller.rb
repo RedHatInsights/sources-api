@@ -8,6 +8,7 @@ module Api
 
       def create
         endpoint = Endpoint.create!(params_for_create)
+        raise_event __method__, params_for_create.to_h.merge("id" => endpoint.id.to_s)
         render :json => endpoint, :status => :created, :location => instance_link(endpoint)
       end
     end
