@@ -31,10 +31,11 @@ class ApplicationController < ActionController::API
   end
 
   def raise_event(action, payload)
+    filtered_payload = payload.except(model.try(:encrypted_columns) || [])
     messaging_client.publish_topic(
       :service => "platform.sources.event-stream",
       :event   => "#{model}.#{action}",
-      :payload => payload
+      :payload => filtered_payload
     )
   end
 
