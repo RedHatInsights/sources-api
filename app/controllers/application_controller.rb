@@ -31,7 +31,9 @@ class ApplicationController < ActionController::API
   end
 
   def raise_event(payload)
-    filtered_payload = payload.except(model.try(:encrypted_columns) || [])
+    encrypted_columns = model.try(:encrypted_columns) || []
+    filtered_payload = payload.except(*encrypted_columns)
+
     messaging_client.publish_topic(
       :service => "platform.sources.event-stream",
       :event   => "#{model}.#{params.fetch(:action)}",
