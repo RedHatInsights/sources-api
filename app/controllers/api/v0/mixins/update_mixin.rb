@@ -4,7 +4,7 @@ module Api
       module UpdateMixin
         def update
           model.update(params.require(:id), params_for_update)
-          raise_event __method__, params_for_update.merge("id" => params.fetch(:id).to_s)
+          raise_event(params_for_update.merge("id" => params.fetch(:id).to_s))
           head :no_content
         rescue ActiveRecord::RecordNotFound
           head :not_found

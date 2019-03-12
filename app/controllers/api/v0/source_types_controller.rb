@@ -6,7 +6,7 @@ module Api
 
       def create
         source_type = model.create!(params_for_create)
-        raise_event __method__, params_for_create.merge("id" => source_type.id.to_s)
+        raise_event(params_for_create.merge("id" => source_type.id.to_s))
         render :json => source_type, :status => :created, :location => instance_link(source_type)
       end
     end
