@@ -7,11 +7,12 @@ module Api
       include Api::V0::Mixins::UpdateMixin
 
       def create
-        create_params = params_for_create.merge!("uid" => SecureRandom.uuid)
+        tenant_id     = Tenant.find_or_create_by!(:external_tenant => params_for_create.fetch("tenant")).id
+        create_params = params_for_create.except("tenant").merge("uid" => SecureRandom.uuid, "tenant_id" => tenant_id)
+
         source = Source.create!(create_params)
 
-        event_payload = create_params.to_h.merge("id" => source.id.to_s)
-        Sources::Api::Events.raise_event("#{model}.create", event_payload)
+        Sources::Api::Events.raise_event("#{model}.create", source.as_json)
 
         render :json => source, :status => :created, :location => instance_link(source)
       end

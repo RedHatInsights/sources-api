@@ -1,7 +1,7 @@
 require "manageiq-messaging"
 
 RSpec.describe("v0.0 - Sources") do
-  let(:attributes)      { {"name" => "my source", "source_type_id" => source_type.id.to_s, "tenant_id" => tenant.id.to_s} }
+  let(:attributes)      { {"name" => "my source", "source_type_id" => source_type.id.to_s, "tenant" => tenant.external_tenant} }
   let(:collection_path) { "/api/v0.1/sources" }
   let(:source_type)     { SourceType.create!(:name => "SourceType", :vendor => "Some Vendor", :product_name => "Product Name") }
   let(:tenant)          { Tenant.create!(:external_tenant => SecureRandom.uuid) }
@@ -23,7 +23,7 @@ RSpec.describe("v0.0 - Sources") do
       end
 
       it "success: non-empty collection" do
-        Source.create!(attributes)
+        Source.create!(attributes.except("tenant").merge("tenant" => tenant))
 
         get(collection_path)
 
@@ -74,7 +74,7 @@ RSpec.describe("v0.0 - Sources") do
 
     context "get" do
       it "success: with a valid id" do
-        instance = Source.create!(attributes)
+        instance = Source.create!(attributes.except("tenant").merge("tenant" => tenant))
 
         get(instance_path(instance.id))
 
@@ -85,7 +85,7 @@ RSpec.describe("v0.0 - Sources") do
       end
 
       it "failure: with an invalid id" do
-        instance = Source.create!(attributes)
+        instance = Source.create!(attributes.except("tenant").merge("tenant" => tenant))
 
         get(instance_path(instance.id * 1000))
 
@@ -98,7 +98,7 @@ RSpec.describe("v0.0 - Sources") do
 
     context "patch" do
       it "success: with a valid id" do
-        instance = Source.create!(attributes)
+        instance = Source.create!(attributes.except("tenant").merge("tenant" => tenant))
         new_attributes = {"name" => "new name"}
 
         patch(instance_path(instance.id), :params => new_attributes.to_json)
@@ -112,7 +112,7 @@ RSpec.describe("v0.0 - Sources") do
       end
 
       it "failure: with an invalid id" do
-        instance = Source.create!(attributes)
+        instance = Source.create!(attributes.except("tenant").merge("tenant" => tenant))
         new_attributes = {"name" => "new name"}
 
         patch(instance_path(instance.id * 1000), :params => new_attributes.to_json)
@@ -124,7 +124,7 @@ RSpec.describe("v0.0 - Sources") do
       end
 
       it "failure: with extra parameters" do
-        instance = Source.create!(attributes)
+        instance = Source.create!(attributes.except("tenant").merge("tenant" => tenant))
         new_attributes = {"aaaaa" => "bbbbb"}
 
         patch(instance_path(instance.id), :params => new_attributes.to_json)
@@ -136,7 +136,7 @@ RSpec.describe("v0.0 - Sources") do
       end
 
       it "failure: with read-only parameters" do
-        instance = Source.create!(attributes)
+        instance = Source.create!(attributes.except("tenant").merge("tenant" => tenant))
         new_attributes = {"uid" => "xxxxx"}
 
         patch(instance_path(instance.id), :params => new_attributes.to_json)
@@ -164,7 +164,7 @@ RSpec.describe("v0.0 - Sources") do
 
         context "get" do
           it "success: with a valid id" do
-            instance = Source.create!(attributes)
+            instance = Source.create!(attributes.except("tenant").merge("tenant" => tenant))
 
             get(subcollection_path(instance.id))
 
@@ -175,7 +175,7 @@ RSpec.describe("v0.0 - Sources") do
           end
 
           it "failure: with an invalid id" do
-            instance = Source.create!(attributes)
+            instance = Source.create!(attributes.except("tenant").merge("tenant" => tenant))
             missing_id = (instance.id * 1000)
             expect(Source.exists?(missing_id)).to eq(false)
 

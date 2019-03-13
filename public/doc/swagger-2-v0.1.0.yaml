@@ -466,8 +466,8 @@ definitions:
         type: string
       status_details:
         type: string
-      tenant_id:
-        "$ref": "#/definitions/ID"
+      tenant:
+        type: string
       username:
         example: user@example.com
         type: string
@@ -577,8 +577,8 @@ definitions:
         type: string
       source_id:
         "$ref": "#/definitions/ID"
-      tenant_id:
-        "$ref": "#/definitions/ID"
+      tenant:
+        type: string
       updated_at:
         format: date-time
         readOnly: true
@@ -627,8 +627,8 @@ definitions:
         type: string
       source_type_id:
         "$ref": "#/definitions/ID"
-      tenant_id:
-        "$ref": "#/definitions/ID"
+      tenant:
+        type: string
       uid:
         readOnly: true
         title: Unique ID of the inventory source installation

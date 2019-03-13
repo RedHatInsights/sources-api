@@ -1,7 +1,7 @@
 require "manageiq-messaging"
 
 RSpec.describe("v0.1 - Authentications") do
-  let(:attributes)      { {"username" => "test_name", "password" => "Test Password", "tenant_id" => tenant.id.to_s, "resource_type" => "Tenant", "resource_id" => tenant.id.to_s} }
+  let(:attributes)      { {"username" => "test_name", "password" => "Test Password", "tenant" => tenant.external_tenant, "resource_type" => "Tenant", "resource_id" => tenant.id.to_s} }
   let(:collection_path) { "/api/v0.1/authentications" }
   let(:tenant)          { Tenant.create!(:external_tenant => SecureRandom.uuid) }
 
@@ -17,7 +17,7 @@ RSpec.describe("v0.1 - Authentications") do
       end
 
       it "success: non-empty collection" do
-        Authentication.create!(attributes)
+        Authentication.create!(attributes.except("tenant").merge("tenant" => tenant))
 
         get(collection_path)
 
@@ -74,7 +74,7 @@ RSpec.describe("v0.1 - Authentications") do
 
     context "get" do
       it "success: with a valid id" do
-        instance = Authentication.create!(attributes)
+        instance = Authentication.create!(attributes.except("tenant").merge("tenant" => tenant))
 
         get(instance_path(instance.id))
 
@@ -85,7 +85,7 @@ RSpec.describe("v0.1 - Authentications") do
       end
 
       it "failure: with an invalid id" do
-        instance = Authentication.create!(attributes)
+        instance = Authentication.create!(attributes.except("tenant").merge("tenant" => tenant))
 
         get(instance_path(instance.id * 1000))
 

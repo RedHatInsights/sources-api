@@ -3,8 +3,8 @@ module Api
     module Mixins
       module UpdateMixin
         def update
-          model.update(params.require(:id), params_for_update)
-          Sources::Api::Events.raise_event("#{model}.update", params_for_update.merge("id" => params.fetch(:id).to_s))
+          record = model.update(params.require(:id), params_for_update)
+          Sources::Api::Events.raise_event("#{model}.update", record.as_json)
           head :no_content
         rescue ActiveRecord::RecordNotFound
           head :not_found

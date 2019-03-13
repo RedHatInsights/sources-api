@@ -1,5 +1,5 @@
 class Application < ApplicationRecord
-  belongs_to :tenant
+  include TenancyConcern
   belongs_to :source
   belongs_to :application_type
 end

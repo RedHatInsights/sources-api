@@ -3,9 +3,6 @@ module Sources
     class Events
       class << self
         def raise_event(event, payload)
-          tenant_id = payload.delete("tenant_id")
-          payload["tenant"] = Tenant.find(tenant_id).external_tenant if tenant_id
-
           messaging_client.publish_topic(
             :service => "platform.sources.event-stream",
             :event   => event,
