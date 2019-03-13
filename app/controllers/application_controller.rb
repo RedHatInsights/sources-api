@@ -30,30 +30,6 @@ class ApplicationController < ActionController::API
     @api_version ||= name.split("::")[1].downcase
   end
 
-  def raise_event(payload)
-    tenant_id = payload.delete("tenant_id")
-    payload["tenant"] = Tenant.find(tenant_id).external_tenant if tenant_id # TODO cache this
-    encrypted_columns = model.try(:encrypted_columns) || []
-    filtered_payload = payload.except(*encrypted_columns)
-
-    messaging_client.publish_topic(
-      :service => "platform.sources.event-stream",
-      :event   => "#{model}.#{params.fetch(:action)}",
-      :payload => filtered_payload
-    )
-  end
-
-  def messaging_client
-    require "manageiq-messaging"
-
-    @messaging_client ||= ManageIQ::Messaging::Client.open({
-      :protocol => :Kafka,
-      :host     => ENV["QUEUE_HOST"] || "localhost",
-      :port     => ENV["QUEUE_PORT"] || "9092",
-      :encoding => "json"
-    })
-  end
-
   def body_params
     @body_params ||= begin
       raw_body = request.body.read

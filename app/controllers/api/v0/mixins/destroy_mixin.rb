@@ -4,7 +4,7 @@ module Api
       module DestroyMixin
         def destroy
           record = model.destroy(params.require(:id))
-          raise_event(record.as_json)
+          Sources::Api::Events.raise_event("#{model}.destroy", record.as_json)
           head :no_content
         rescue ActiveRecord::RecordNotFound
           head :not_found

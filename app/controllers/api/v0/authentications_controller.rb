@@ -8,7 +8,10 @@ module Api
 
       def create
         authentication = model.create!(params_for_create)
-        raise_event(params_for_create.to_h.merge("id" => authentication.id.to_s))
+
+        event_payload = params_for_create.to_h.merge("id" => authentication.id.to_s).except(*model.encrypted_columns)
+        Sources::Api::Events.raise_event("#{model}.create", event_payload)
+
         render :json => authentication, :status => :created, :location => instance_link(authentication)
       end
     end
