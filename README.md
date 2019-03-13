@@ -5,7 +5,7 @@
 [![Test Coverage](https://api.codeclimate.com/v1/badges/47776e67dbb7cc572c3b/test_coverage)](https://codeclimate.com/github/ManageIQ/sources-api/test_coverage)
 [![Security](https://hakiri.io/github/ManageIQ/sources-api/master.svg)](https://hakiri.io/github/ManageIQ/sources-api/master)
 
-This project exposes an API for accessing objects living in the Topological Inventory Service database
+This project exposes an API for accessing objects living in the Sources Service database
 
 ## Prerequisites
 You need to install ruby >= 2.2.2 and run:

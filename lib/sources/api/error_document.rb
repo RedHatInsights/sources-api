@@ -1,4 +1,4 @@
-module TopologicalInventory
+module Sources
   module Api
     class ErrorDocument < Hash
       def initialize

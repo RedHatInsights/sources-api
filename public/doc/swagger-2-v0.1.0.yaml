@@ -1,8 +1,8 @@
 swagger: '2.0'
 info:
-  description: Topological Inventory
+  description: Sources
   version: 0.1.0
-  title: Topological Inventory
+  title: Sources
   contact:
     email: you@your-company.com
   license:

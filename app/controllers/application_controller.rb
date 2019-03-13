@@ -2,17 +2,17 @@ class ApplicationController < ActionController::API
   ActionController::Parameters.action_on_unpermitted_parameters = :raise
 
   rescue_from ActionController::UnpermittedParameters do |exception|
-    error_document = TopologicalInventory::Api::ErrorDocument.new.add(400, exception.message)
+    error_document = Sources::Api::ErrorDocument.new.add(400, exception.message)
     render :json => error_document, :status => error_document.status
   end
 
   rescue_from ActiveRecord::RecordNotFound do |exception|
-    error_document = TopologicalInventory::Api::ErrorDocument.new.add(404, exception.message)
+    error_document = Sources::Api::ErrorDocument.new.add(404, exception.message)
     render :json => error_document, :status => :not_found
   end
 
-  rescue_from TopologicalInventory::Api::BodyParseError do |exception|
-    error_document = TopologicalInventory::Api::ErrorDocument.new.add(400, "Failed to parse POST body, expected JSON")
+  rescue_from Sources::Api::BodyParseError do |exception|
+    error_document = Sources::Api::ErrorDocument.new.add(400, "Failed to parse POST body, expected JSON")
     render :json => error_document, :status => error_document.status
   end
 
@@ -60,7 +60,7 @@ class ApplicationController < ActionController::API
       parsed_body = JSON.parse(raw_body)
       ActionController::Parameters.new(parsed_body)
     rescue JSON::ParserError
-      raise TopologicalInventory::Api::BodyParseError
+      raise Sources::Api::BodyParseError
     end
   end
 
