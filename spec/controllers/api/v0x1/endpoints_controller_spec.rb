@@ -8,7 +8,7 @@ RSpec.describe Api::V0x1::EndpointsController, :type => :request do
 
   let(:source)      { Source.create!(:source_type => source_type, :tenant => tenant, :uid => SecureRandom.uuid, :name => "test_source") }
   let(:source_type) { SourceType.create!(:name => "openshift", :product_name => "OpenShift", :vendor => "Red Hat") }
-  let(:tenant)      { Tenant.create! }
+  let(:tenant)      { Tenant.create!(:external_tenant => SecureRandom.uuid) }
   let(:client) { instance_double("ManageIQ::Messaging::Client") }
 
   before do

@@ -31,6 +31,8 @@ class ApplicationController < ActionController::API
   end
 
   def raise_event(payload)
+    tenant_id = payload.delete("tenant_id")
+    payload["tenant"] = Tenant.find(tenant_id).external_tenant if tenant_id # TODO cache this
     encrypted_columns = model.try(:encrypted_columns) || []
     filtered_payload = payload.except(*encrypted_columns)
 

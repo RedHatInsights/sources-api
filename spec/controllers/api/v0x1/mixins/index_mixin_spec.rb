@@ -3,7 +3,7 @@ describe Api::V0::Mixins::IndexMixin do
     let!(:source_1)    { Source.create!(:source_type => source_type, :tenant => tenant, :name => "test_source 1", :uid => SecureRandom.uuid) }
     let!(:source_2)    { Source.create!(:source_type => source_type, :tenant => tenant, :name => "test_source 2", :uid => SecureRandom.uuid) }
     let!(:source_type) { SourceType.create!(:name => "openshift", :product_name => "OpenShift", :vendor => "Red Hat") }
-    let!(:tenant)      { Tenant.create! }
+    let!(:tenant)      { Tenant.create!(:external_tenant => SecureRandom.uuid) }
 
     it "Primary Collection: get /sources lists all Sources" do
       get(api_v0x1_sources_url)

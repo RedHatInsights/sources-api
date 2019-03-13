@@ -80,7 +80,7 @@ describe "Swagger stuff" do
     let(:endpoint) { Endpoint.create!(doc.example_attributes("Endpoint").symbolize_keys.merge(:tenant => tenant, :source => source)) }
     let(:source) { Source.create!(doc.example_attributes("Source").symbolize_keys.merge(:source_type => source_type, :tenant => tenant, :uid => SecureRandom.uuid)) }
     let(:source_type) { SourceType.create!(:name => "openshift", :product_name => "OpenShift", :vendor => "Red Hat") }
-    let(:tenant) { Tenant.create! }
+    let(:tenant) { Tenant.create!(:external_tenant => SecureRandom.uuid) }
 
     context "v0.1" do
       let(:version) { "0.1" }

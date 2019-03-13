@@ -4,7 +4,7 @@ RSpec.describe("v0.0 - Sources") do
   let(:attributes)      { {"name" => "my source", "source_type_id" => source_type.id.to_s, "tenant_id" => tenant.id.to_s} }
   let(:collection_path) { "/api/v0.1/sources" }
   let(:source_type)     { SourceType.create!(:name => "SourceType", :vendor => "Some Vendor", :product_name => "Product Name") }
-  let(:tenant)          { Tenant.create! }
+  let(:tenant)          { Tenant.create!(:external_tenant => SecureRandom.uuid) }
   let(:client) { instance_double("ManageIQ::Messaging::Client") }
   before do
     allow(client).to receive(:publish_topic)

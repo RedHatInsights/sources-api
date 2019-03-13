@@ -3,7 +3,7 @@ RSpec.describe Internal::V0x1::AuthenticationsController, :type => :request do
   let(:endpoint)       { Endpoint.create!(:source => source, :tenant => tenant) }
   let(:source)         { Source.create!(:source_type => source_type, :tenant => tenant, :uid => SecureRandom.uuid, :name => "test_source") }
   let(:source_type)    { SourceType.create!(:name => "openshift", :product_name => "OpenShift", :vendor => "Red Hat") }
-  let(:tenant)         { Tenant.create! }
+  let(:tenant)         { Tenant.create!(:external_tenant => SecureRandom.uuid) }
 
   it "GET an instance" do
     get(internal_v0x1_authentication_url(authentication.id))
