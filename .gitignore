@@ -2,6 +2,7 @@
 /.rspec_status
 /.ruby-gemset
 /.ruby-version
+/.rubocop-*
 /.yardoc
 /v2_key
 /Gemfile.lock
