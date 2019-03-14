@@ -4,11 +4,11 @@ describe Api::V0::Mixins::UpdateMixin do
   describe Api::V0x1::SourcesController, :type => :request do
     let(:source_type) { SourceType.create!(:name => "openshift", :product_name => "OpenShift", :vendor => "Red Hat") }
     let(:tenant)      { Tenant.create!(:external_tenant => SecureRandom.uuid) }
-    let(:client) { instance_double("ManageIQ::Messaging::Client") }
+    let(:client)      { instance_double("ManageIQ::Messaging::Client") }
 
     before do
       allow(client).to receive(:publish_topic)
-      allow(ManageIQ::Messaging::Client).to receive(:open).and_return(client)
+      allow(Sources::Api::Events).to receive(:messaging_client).and_return(client)
     end
 
     it "patch /sources/:id updates a Source" do

@@ -15,7 +15,7 @@ module Sources
         def messaging_client
           require "manageiq-messaging"
 
-          ManageIQ::Messaging::Client.open({
+          @messaging_client ||= ManageIQ::Messaging::Client.open({
             :protocol => :Kafka,
             :host     => ENV["QUEUE_HOST"] || "localhost",
             :port     => ENV["QUEUE_PORT"] || "9092",

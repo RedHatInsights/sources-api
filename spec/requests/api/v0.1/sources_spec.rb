@@ -1,14 +1,12 @@
-require "manageiq-messaging"
-
 RSpec.describe("v0.0 - Sources") do
   let(:attributes)      { {"name" => "my source", "source_type_id" => source_type.id.to_s, "tenant" => tenant.external_tenant} }
   let(:collection_path) { "/api/v0.1/sources" }
   let(:source_type)     { SourceType.create!(:name => "SourceType", :vendor => "Some Vendor", :product_name => "Product Name") }
   let(:tenant)          { Tenant.create!(:external_tenant => SecureRandom.uuid) }
-  let(:client) { instance_double("ManageIQ::Messaging::Client") }
+  let(:client)          { instance_double("ManageIQ::Messaging::Client") }
   before do
     allow(client).to receive(:publish_topic)
-    allow(ManageIQ::Messaging::Client).to receive(:open).and_return(client)
+    allow(Sources::Api::Events).to receive(:messaging_client).and_return(client)
   end
 
   describe("/api/v0.1/sources") do

@@ -1,9 +1,18 @@
 require "manageiq-messaging"
 
 RSpec.describe("v0.1 - Authentications") do
-  let(:attributes)      { {"username" => "test_name", "password" => "Test Password", "tenant" => tenant.external_tenant, "resource_type" => "Tenant", "resource_id" => tenant.id.to_s} }
   let(:collection_path) { "/api/v0.1/authentications" }
   let(:tenant)          { Tenant.create!(:external_tenant => SecureRandom.uuid) }
+  let(:attributes)      { payload.except("tenant").merge("tenant" => tenant) }
+  let(:payload) do
+    {
+      "username"      => "test_name",
+      "password"      => "Test Password",
+      "tenant"        => tenant.external_tenant,
+      "resource_type" => "Tenant",
+      "resource_id"   => tenant.id.to_s
+    }
+  end
 
   describe("/api/v0.1/authentications") do
     context "get" do
@@ -17,13 +26,13 @@ RSpec.describe("v0.1 - Authentications") do
       end
 
       it "success: non-empty collection" do
-        Authentication.create!(attributes.except("tenant").merge("tenant" => tenant))
+        Authentication.create!(attributes)
 
         get(collection_path)
 
         expect(response).to have_attributes(
           :status => 200,
-          :parsed_body => paginated_response(1, [a_hash_including(attributes.except("password"))])
+          :parsed_body => paginated_response(1, [a_hash_including(payload.except("password"))])
         )
       end
     end
@@ -32,16 +41,16 @@ RSpec.describe("v0.1 - Authentications") do
       let(:client) { instance_double("ManageIQ::Messaging::Client") }
       before do
         allow(client).to receive(:publish_topic)
-        allow(ManageIQ::Messaging::Client).to receive(:open).and_return(client)
+        allow(Sources::Api::Events).to receive(:messaging_client).and_return(client)
       end
 
       it "success: with valid body" do
-        post(collection_path, :params => attributes.to_json)
+        post(collection_path, :params => payload.to_json)
 
         expect(response).to have_attributes(
           :status => 201,
           :location => "http://www.example.com/api/v0.1/authentications/#{response.parsed_body["id"]}",
-          :parsed_body => a_hash_including(attributes.except("password"))
+          :parsed_body => a_hash_including(payload.except("password"))
         )
       end
 
@@ -56,7 +65,7 @@ RSpec.describe("v0.1 - Authentications") do
       end
 
       it "failure: with extra attributes" do
-        post(collection_path, :params => attributes.merge("aaa" => "bbb").to_json)
+        post(collection_path, :params => payload.merge("aaa" => "bbb").to_json)
 
         expect(response).to have_attributes(
           :status => 400,
@@ -74,18 +83,18 @@ RSpec.describe("v0.1 - Authentications") do
 
     context "get" do
       it "success: with a valid id" do
-        instance = Authentication.create!(attributes.except("tenant").merge("tenant" => tenant))
+        instance = Authentication.create!(attributes)
 
         get(instance_path(instance.id))
 
         expect(response).to have_attributes(
           :status => 200,
-          :parsed_body => attributes.except("password").merge("id" => instance.id.to_s)
+          :parsed_body => payload.except("password").merge("id" => instance.id.to_s)
         )
       end
 
       it "failure: with an invalid id" do
-        instance = Authentication.create!(attributes.except("tenant").merge("tenant" => tenant))
+        instance = Authentication.create!(attributes)
 
         get(instance_path(instance.id * 1000))
 
