@@ -38,3 +38,7 @@ ansible_tower_json_schema = {
   ]
 }
 update_or_create(SourceType, :name => "ansible-tower", :product_name => "Ansible Tower", :vendor => "Red Hat", :schema => ansible_tower_json_schema)
+
+update_or_create(ApplicationType, :name => "/insights/platform/catalog",               :display_name => "Catalog")
+update_or_create(ApplicationType, :name => "/insights/platform/cost-management",       :display_name => "Cost Management")
+update_or_create(ApplicationType, :name => "/insights/platform/topological-inventory", :display_name => "Topological Inventory")
