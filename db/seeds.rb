@@ -26,3 +26,15 @@ amazon_json_schema = {
   ]
 }
 update_or_create(SourceType, :name => "amazon", :product_name => "AWS", :vendor => "Amazon", :schema => amazon_json_schema)
+
+ansible_tower_json_schema = {
+  :title  => "Configure AnsibleTower",
+  :fields => [
+    {:component => "text-field", :name => "url", :label => "URL"},
+    {:component => "checkbox", :name => "verify_ssl", :label => "Verify SSL"},
+    {:component => "text-field", :name => "certificate_authority", :label => "Certificate Authority", :condition => {:when => "verify_ssl", :is => true}},
+    {:component => "text-field", :name => "user", :label => "User name"},
+    {:component => "text-field", :name => "password", :label => "Secret Key"}
+  ]
+}
+update_or_create(SourceType, :name => "ansible-tower", :product_name => "Ansible Tower", :vendor => "Red Hat", :schema => ansible_tower_json_schema)
