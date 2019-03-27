@@ -1,8 +1,8 @@
 # Sources API
 
-[![Build Status](https://travis-ci.org/ManageIQ/sources-api.svg)](https://travis-ci.org/ManageIQ/sources-api)
-[![Maintainability](https://api.codeclimate.com/v1/badges/47776e67dbb7cc572c3b/maintainability)](https://codeclimate.com/github/ManageIQ/sources-api/maintainability)
-[![Test Coverage](https://api.codeclimate.com/v1/badges/47776e67dbb7cc572c3b/test_coverage)](https://codeclimate.com/github/ManageIQ/sources-api/test_coverage)
+[![Build Status](https://travis-ci.org/ManageIQ/sources-api.svg?branch=master)](https://travis-ci.org/ManageIQ/sources-api)
+[![Maintainability](https://api.codeclimate.com/v1/badges/bc0595445f017018ffbc/maintainability)](https://codeclimate.com/github/ManageIQ/sources-api/maintainability)
+[![Test Coverage](https://api.codeclimate.com/v1/badges/bc0595445f017018ffbc/test_coverage)](https://codeclimate.com/github/ManageIQ/sources-api/test_coverage)
 [![Security](https://hakiri.io/github/ManageIQ/sources-api/master.svg)](https://hakiri.io/github/ManageIQ/sources-api/master)
 
 This project exposes an API for accessing objects living in the Sources Service database

@@ -8,13 +8,13 @@ default: &default
 
 development:
   <<: *default
-  database: sources_development
+  database: sources_api_development
   min_messages: notice
 
 test:
   <<: *default
-  database: sources_test
+  database: sources_api_test
 
 production:
   <<: *default
-  database: sources_production
+  database: sources_api_production
