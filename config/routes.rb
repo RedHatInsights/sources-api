@@ -8,7 +8,7 @@ Rails.application.routes.draw do
   end
 
   scope :as => :api, :module => "api", :path => prefix do
-    match "/v0/*path", :via => [:delete, :get, :options, :patch, :post], :to => redirect(:path => "/#{prefix}/v0.0/%{path}", :only_path => true)
+    match "/v0/*path", :via => [:delete, :get, :options, :patch, :post], :to => redirect(:path => "/#{prefix}/v0.1/%{path}", :only_path => true)
 
     namespace :v0x1, :path => "v0.1" do
       get "/openapi.json", :to => "root#openapi"
