@@ -25,7 +25,7 @@ describe "Swagger stuff" do
 
     context "with the swagger yaml" do
       let(:app_name)    { "sources" }
-      let(:path_prefix) { "/r/insights/platform" }
+      let(:path_prefix) { "/api" }
 
       it "matches the routes" do
         redirect_routes = [{:path => "#{path_prefix}/#{app_name}/v0/*path", :verb => "DELETE|GET|OPTIONS|PATCH|POST"}]
