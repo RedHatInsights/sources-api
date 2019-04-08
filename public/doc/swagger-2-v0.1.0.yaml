@@ -705,4 +705,4 @@ host: virtserver.swaggerhub.com
 schemes:
 - https
 - http
-basePath: "/r/insights/platform/sources/v0.1"
+basePath: "/api/sources/v0.1"
