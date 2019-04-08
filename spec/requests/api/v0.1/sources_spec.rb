@@ -89,7 +89,7 @@ RSpec.describe("v0.0 - Sources") do
 
         expect(response).to have_attributes(
           :status => 404,
-          :parsed_body => ""
+          :parsed_body => {"errors"=>[{"detail"=>"Couldn't find Source with 'id'=#{instance.id * 1000}", "status"=>404}]}
         )
       end
     end
@@ -117,7 +117,7 @@ RSpec.describe("v0.0 - Sources") do
 
         expect(response).to have_attributes(
           :status => 404,
-          :parsed_body => ""
+          :parsed_body => {"errors"=>[{"detail"=>"Couldn't find Source with 'id'=#{instance.id * 1000}", "status"=>404}]}
         )
       end
 

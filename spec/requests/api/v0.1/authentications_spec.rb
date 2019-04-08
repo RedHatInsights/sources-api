@@ -100,7 +100,7 @@ RSpec.describe("v0.1 - Authentications") do
 
         expect(response).to have_attributes(
           :status => 404,
-          :parsed_body => ""
+          :parsed_body => {"errors"=>[{"detail"=>"Couldn't find Authentication with 'id'=#{instance.id * 1000}", "status"=>404}]}
         )
       end
     end
