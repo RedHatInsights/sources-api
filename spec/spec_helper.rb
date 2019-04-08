@@ -95,4 +95,8 @@ RSpec.configure do |config|
   # as the one that triggered the failure.
   Kernel.srand config.seed
 =end
+
+  # This is just temporary until all the tests can be updated to pass a valid tenant
+  # identity with tenancy enforced by default
+  config.before(:each) { stub_const("ENV", "BYPASS_TENANCY" => "true") }
 end

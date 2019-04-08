@@ -1,6 +1,8 @@
 class ApplicationController < ActionController::API
   ActionController::Parameters.action_on_unpermitted_parameters = :raise
 
+  around_action :with_current_request
+
   rescue_from ActionController::UnpermittedParameters do |exception|
     error_document = Sources::Api::ErrorDocument.new.add(400, exception.message)
     render :json => error_document, :status => error_document.status
@@ -17,6 +19,23 @@ class ApplicationController < ActionController::API
   end
 
   private
+
+  def with_current_request
+    ManageIQ::API::Common::Request.with_request(request) do |current|
+      begin
+        if Tenant.tenancy_enabled?
+          tenant = Tenant.find_or_create_by(:external_tenant => current.user.tenant)
+          raise Sources::Api::NoTenantError unless tenant.present?
+
+          ActsAsTenant.with_tenant(tenant) { yield }
+        else
+          ActsAsTenant.without_tenant { yield }
+        end
+      rescue Sources::Api::NoTenantError, KeyError
+        render :json => { :message => 'Unauthorized' }, :status => :unauthorized
+      end
+    end
+  end
 
   private_class_method def self.model
     @model ||= controller_name.classify.constantize
