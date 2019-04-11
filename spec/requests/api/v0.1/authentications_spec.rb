@@ -1,6 +1,8 @@
 require "manageiq-messaging"
 
 RSpec.describe("v0.1 - Authentications") do
+  include ::Spec::Support::TenantIdentity
+
   let(:collection_path) { "/api/v0.1/authentications" }
   let(:tenant)          { Tenant.create!(:external_tenant => SecureRandom.uuid) }
   let(:attributes)      { payload.except("tenant").merge("tenant" => tenant) }

@@ -1,6 +1,8 @@
 require "manageiq-messaging"
 
 RSpec.describe("v0.1 - SourceTypes") do
+  include ::Spec::Support::TenantIdentity
+
   let(:attributes)      { {"name" => "test_name", "product_name" => "Test Product", "vendor" => "TestVendor"} }
   let(:collection_path) { "/api/v0.1/source_types" }
 

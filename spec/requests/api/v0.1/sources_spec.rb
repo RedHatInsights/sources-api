@@ -1,4 +1,6 @@
 RSpec.describe("v0.0 - Sources") do
+  include ::Spec::Support::TenantIdentity
+
   let(:attributes)      { {"name" => "my source", "source_type_id" => source_type.id.to_s, "tenant" => tenant.external_tenant} }
   let(:collection_path) { "/api/v0.1/sources" }
   let(:source_type)     { SourceType.create!(:name => "SourceType", :vendor => "Some Vendor", :product_name => "Product Name") }
