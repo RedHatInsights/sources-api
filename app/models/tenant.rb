@@ -1,4 +1,4 @@
-class Tenant < ActiveRecord::Base
+class Tenant < ApplicationRecord
   has_many :authentications
   has_many :endpoints
   has_many :sources

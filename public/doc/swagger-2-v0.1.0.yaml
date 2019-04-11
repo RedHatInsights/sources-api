@@ -794,6 +794,21 @@ definitions:
         type: string
         readOnly: true
         example: x86_64
+  Tenant:
+    type: object
+    properties:
+      name:
+        type: string
+        readOnly: true
+        example: Sample Tenant
+      description:
+        type: string
+        readOnly: true
+        example: Description of the Tenant
+      external_tenant:
+        type: string
+        readOnly: true
+        example: External tenant identifier
 host: virtserver.swaggerhub.com
 schemes:
 - https

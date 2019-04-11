@@ -29,7 +29,12 @@ describe "Swagger stuff" do
 
       it "matches the routes" do
         redirect_routes = [{:path => "#{path_prefix}/#{app_name}/v0/*path", :verb => "DELETE|GET|OPTIONS|PATCH|POST"}]
-        internal_api_routes = [{:path => "/internal/v0/*path", :verb => "GET"}, {:path=>"/internal/v0.1/authentications/:id", :verb=>"GET"}]
+        internal_api_routes = [
+          {:path => "/internal/v0/*path",                 :verb => "GET"},
+          {:path => "/internal/v0.1/authentications/:id", :verb => "GET"},
+          {:path => "/internal/v0.1/tenants",             :verb => "GET"},
+          {:path => "/internal/v0.1/tenants/:id",         :verb => "GET"}
+        ]
         expect(rails_routes).to match_array(swagger_routes + redirect_routes + internal_api_routes)
       end
     end
