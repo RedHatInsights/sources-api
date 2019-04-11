@@ -14,6 +14,103 @@ securityDefinitions:
 security:
 - UserSecurity: []
 paths:
+  "/application_types":
+    get:
+      summary: List ApplicationTypes
+      operationId: listApplicationTypes
+      description: Returns an array of ApplicationType objects
+      parameters:
+      - "$ref": "#/parameters/QueryLimit"
+      - "$ref": "#/parameters/QueryOffset"
+      produces:
+      - application/json
+      responses:
+        200:
+          description: ApplicationTypes collection
+          schema:
+            "$ref": "#/definitions/ApplicationTypesCollection"
+  "/application_types/{id}":
+    get:
+      summary: Show an existing ApplicationType
+      operationId: showApplicationType
+      description: Returns a ApplicationType object
+      produces:
+      - application/json
+      parameters:
+      - "$ref": "#/parameters/ID"
+      responses:
+        200:
+          description: ApplicationType info
+          schema:
+            "$ref": "#/definitions/ApplicationType"
+        404:
+          description: Not found
+  "/applications":
+    get:
+      summary: List Applications
+      operationId: listApplications
+      description: Returns an array of Application objects
+      parameters:
+      - "$ref": "#/parameters/QueryLimit"
+      - "$ref": "#/parameters/QueryOffset"
+      produces:
+      - application/json
+      responses:
+        200:
+          description: Applications collection
+          schema:
+            "$ref": "#/definitions/ApplicationsCollection"
+    post:
+      summary: Create a new Application
+      operationId: createApplication
+      description: Creates a Application object
+      produces:
+      - application/json
+      consumes:
+      - application/json
+      parameters:
+      - name: body
+        in: body
+        description: Application attributes to create
+        required: true
+        schema:
+          "$ref": "#/definitions/Application"
+      responses:
+        201:
+          description: Application creation successful
+          schema:
+            type: object
+            items:
+              "$ref": "#/definitions/Application"
+  "/applications/{id}":
+    get:
+      summary: Show an existing Application
+      operationId: showApplication
+      description: Returns a Application object
+      produces:
+      - application/json
+      parameters:
+      - "$ref": "#/parameters/ID"
+      responses:
+        200:
+          description: Application info
+          schema:
+            "$ref": "#/definitions/Application"
+        404:
+          description: Not found
+    delete:
+      summary: Delete an existing Application
+      operationId: deleteApplication
+      description: Deletes a Application object
+      produces:
+      - application/json
+      parameters:
+      - "$ref": "#/parameters/ID"
+      responses:
+        204:
+          description: Application deleted
+        404:
+          description: Not found
   "/authentications":
     get:
       summary: List Authentications
@@ -369,6 +466,22 @@ paths:
           description: Source deleted
         404:
           description: Not found
+  "/sources/{id}/applications":
+    get:
+      summary: List Applications for Source
+      operationId: listSourceApplications
+      description: Returns an array of Application objects
+      parameters:
+      - "$ref": "#/parameters/QueryLimit"
+      - "$ref": "#/parameters/QueryOffset"
+      - "$ref": "#/parameters/ID"
+      produces:
+      - application/json
+      responses:
+        200:
+          description: Applications collection
+          schema:
+            "$ref": "#/definitions/ApplicationsCollection"
   "/sources/{id}/endpoints":
     get:
       summary: List Endpoints for Source
@@ -411,6 +524,62 @@ parameters:
     minimum: 0
     description: The number of items to skip before starting to collect the result set.
 definitions:
+  Application:
+    type: object
+    properties:
+      application_type_id:
+        "$ref": "#/definitions/ID"
+      created_at:
+        format: date-time
+        readOnly: true
+        type: string
+      id:
+        "$ref": "#/definitions/ID"
+      source_id:
+        "$ref": "#/definitions/ID"
+      updated_at:
+        format: date-time
+        readOnly: true
+        type: string
+  ApplicationType:
+    type: object
+    properties:
+      created_at:
+        format: date-time
+        readOnly: true
+        type: string
+      display_name:
+        type: string
+      id:
+        "$ref": "#/definitions/ID"
+      name:
+        type: string
+      updated_at:
+        format: date-time
+        readOnly: true
+        type: string
+  ApplicationTypesCollection:
+    type: object
+    properties:
+      meta:
+        "$ref": "#/definitions/CollectionMetadata"
+      links:
+        "$ref": "#/definitions/CollectionLinks"
+      data:
+        type: array
+        items:
+          "$ref": "#/definitions/ApplicationType"
+  ApplicationsCollection:
+    type: object
+    properties:
+      meta:
+        "$ref": "#/definitions/CollectionMetadata"
+      links:
+        "$ref": "#/definitions/CollectionLinks"
+      data:
+        type: array
+        items:
+          "$ref": "#/definitions/Application"
   Authentication:
     type: object
     properties:
