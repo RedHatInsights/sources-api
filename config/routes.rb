@@ -19,12 +19,10 @@ Rails.application.routes.draw do
         resources :authentications, :only => [:index]
       end
       resources :source_types,    :only => [:create, :index, :show] do
-        resources :availabilities, :only => [:index]
-        resources :sources,        :only => [:index]
+        resources :sources, :only => [:index]
       end
       resources :sources,         :only => [:create, :destroy, :index, :show, :update] do
-        resources :availabilities, :only => [:index]
-        resources :endpoints,      :only => [:index]
+        resources :endpoints, :only => [:index]
       end
     end
   end

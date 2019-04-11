@@ -266,22 +266,6 @@ paths:
             "$ref": "#/definitions/SourceType"
         404:
           description: Not found
-  "/source_types/{id}/availabilities":
-    get:
-      summary: List Availabilities for SourceType
-      operationId: listSourceTypeAvailabilities
-      description: Returns an array of Availability objects
-      parameters:
-      - "$ref": "#/parameters/QueryLimit"
-      - "$ref": "#/parameters/QueryOffset"
-      - "$ref": "#/parameters/ID"
-      produces:
-      - application/json
-      responses:
-        200:
-          description: Availabilities collection
-          schema:
-            "$ref": "#/definitions/AvailabilitiesCollection"
   "/source_types/{id}/sources":
     get:
       summary: List Sources for SourceType
@@ -385,22 +369,6 @@ paths:
           description: Source deleted
         404:
           description: Not found
-  "/sources/{id}/availabilities":
-    get:
-      summary: List Availabilities for Source
-      operationId: listSourceAvailabilities
-      description: Returns an array of Availability objects
-      parameters:
-      - "$ref": "#/parameters/QueryLimit"
-      - "$ref": "#/parameters/QueryOffset"
-      - "$ref": "#/parameters/ID"
-      produces:
-      - application/json
-      responses:
-        200:
-          description: Availabilities collection
-          schema:
-            "$ref": "#/definitions/AvailabilitiesCollection"
   "/sources/{id}/endpoints":
     get:
       summary: List Endpoints for Source
@@ -482,50 +450,6 @@ definitions:
         type: array
         items:
           "$ref": "#/definitions/Authentication"
-  AvailabilitiesCollection:
-    type: object
-    properties:
-      meta:
-        "$ref": "#/definitions/CollectionMetadata"
-      links:
-        "$ref": "#/definitions/CollectionLinks"
-      data:
-        type: array
-        items:
-          "$ref": "#/definitions/Availability"
-  Availability:
-    type: object
-    properties:
-      action:
-        type: string
-      availability:
-        example: available
-        type: string
-      created_at:
-        format: date-time
-        readOnly: true
-        type: string
-      id:
-        "$ref": "#/definitions/ID"
-      identifier:
-        example: "/service_offerings"
-        readOnly: true
-        type: string
-      last_checked_at:
-        format: date-time
-        type: string
-      last_valid_at:
-        format: date-time
-        type: string
-      resource_id:
-        "$ref": "#/definitions/ID"
-      resource_type:
-        readOnly: true
-        type: string
-      updated_at:
-        format: date-time
-        readOnly: true
-        type: string
   CollectionLinks:
     type: object
     properties:
