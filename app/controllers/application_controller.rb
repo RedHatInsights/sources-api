@@ -23,7 +23,7 @@ class ApplicationController < ActionController::API
   def with_current_request
     ManageIQ::API::Common::Request.with_request(request) do |current|
       begin
-        if Tenant.tenancy_enabled?
+        if Tenant.tenancy_enabled? && current.required_auth?
           tenant = Tenant.find_or_create_by(:external_tenant => current.user.tenant)
           raise Sources::Api::NoTenantError unless tenant.present?
 
