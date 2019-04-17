@@ -10,9 +10,9 @@ Rails.application.routes.draw do
   end
 
   scope :as => :api, :module => "api", :path => prefix do
-    routing_helper.redirect_major_version("v0.1", prefix)
+    routing_helper.redirect_major_version("v1.0", prefix)
 
-    namespace :v0x1, :path => "v0.1" do
+    namespace :v1x0, :path => "v1.0" do
       get "/openapi.json", :to => "root#openapi"
       resources :application_types, :only => [:index, :show]
       resources :applications,      :only => [:create, :destroy, :index, :show]
@@ -31,9 +31,9 @@ Rails.application.routes.draw do
   end
 
   scope :as => :internal, :module => "internal", :path => "internal" do
-    routing_helper.redirect_major_version("v0.0", "internal", :via => [:get])
+    routing_helper.redirect_major_version("v1.0", "internal", :via => [:get])
 
-    namespace :v0x1, :path => "v0.1" do
+    namespace :v1x0, :path => "v1.0" do
       resources :authentications, :only => [:show]
       resources :tenants,         :only => [:index, :show]
     end

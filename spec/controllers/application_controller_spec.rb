@@ -9,7 +9,7 @@ RSpec.describe ApplicationController, :type => :request do
     it "get /source with tenant" do
       headers = { "CONTENT_TYPE" => "application/json", "x-rh-identity" => identity }
 
-      get("/api/v0.1/sources/#{source.id}", :headers => headers)
+      get("/api/v1.0/sources/#{source.id}", :headers => headers)
 
       expect(response.status).to eq(200)
       expect(response.parsed_body).to include("id" => source.id.to_s)
@@ -18,7 +18,7 @@ RSpec.describe ApplicationController, :type => :request do
     it "get /source with unknown tenant" do
       headers = { "CONTENT_TYPE" => "application/json", "x-rh-identity" => unknown_identity }
 
-      get("/api/v0.1/sources/#{source.id}", :headers => headers)
+      get("/api/v1.0/sources/#{source.id}", :headers => headers)
 
       expect(response.status).to eq(404)
       expect(Tenant.find_by(:external_tenant => unknown_tenant)).not_to be_nil
@@ -27,7 +27,7 @@ RSpec.describe ApplicationController, :type => :request do
     it "get /sources with tenant" do
       headers = { "CONTENT_TYPE" => "application/json", "x-rh-identity" => identity }
 
-      get("/api/v0.1/sources", :headers => headers)
+      get("/api/v1.0/sources", :headers => headers)
 
       expect(response.status).to eq(200)
     end
@@ -35,7 +35,7 @@ RSpec.describe ApplicationController, :type => :request do
     it "get /sources with unknown tenant" do
       headers = { "CONTENT_TYPE" => "application/json", "x-rh-identity" => unknown_identity }
 
-      get("/api/v0.1/sources", :headers => headers)
+      get("/api/v1.0/sources", :headers => headers)
 
       expect(response.status).to eq(200)
       expect(Tenant.find_by(:external_tenant => unknown_tenant)).not_to be_nil
@@ -48,7 +48,7 @@ RSpec.describe ApplicationController, :type => :request do
     it "get /sources without identity" do
       headers = { "CONTENT_TYPE" => "application/json" }
 
-      get("/api/v0.1/sources", :headers => headers)
+      get("/api/v1.0/sources", :headers => headers)
 
       expect(response.status).to eq(200)
     end
@@ -56,7 +56,7 @@ RSpec.describe ApplicationController, :type => :request do
     it "get /sources with unknown identity" do
       headers = { "CONTENT_TYPE" => "application/json", "x-rh-identity" => unknown_identity }
 
-      get("/api/v0.1/sources", :headers => headers)
+      get("/api/v1.0/sources", :headers => headers)
 
       expect(response.status).to eq(200)
     end
