@@ -113,7 +113,8 @@ class OpenapiGenerator
       "description" => "Returns an array of #{klass_name} objects",
       "parameters"  => [
         { "$ref" => "##{PARAMETERS_PATH}/QueryLimit"  },
-        { "$ref" => "##{PARAMETERS_PATH}/QueryOffset" }
+        { "$ref" => "##{PARAMETERS_PATH}/QueryOffset" },
+        { "$ref" => "##{PARAMETERS_PATH}/QueryFilter" }
       ],
       "responses"   => {
         "200" => {
@@ -332,6 +333,18 @@ class OpenapiGenerator
         "minimum" => 1,
         "maximum" => 1000,
         "default" => 100
+      }
+    }
+
+    parameters["QueryFilter"] = {
+      "in"          => "query",
+      "name"        => "filter",
+      "description" => "Filter for querying collections.",
+      "required"    => false,
+      "style"       => "deepObject",
+      "explode"     => true,
+      "schema"      => {
+        "type" => "object"
       }
     }
 

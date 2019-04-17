@@ -31,6 +31,9 @@
           },
           {
             "$ref": "#/components/parameters/QueryOffset"
+          },
+          {
+            "$ref": "#/components/parameters/QueryFilter"
           }
         ],
         "responses": {
@@ -85,6 +88,9 @@
           },
           {
             "$ref": "#/components/parameters/QueryOffset"
+          },
+          {
+            "$ref": "#/components/parameters/QueryFilter"
           }
         ],
         "responses": {
@@ -188,6 +194,9 @@
           },
           {
             "$ref": "#/components/parameters/QueryOffset"
+          },
+          {
+            "$ref": "#/components/parameters/QueryFilter"
           }
         ],
         "responses": {
@@ -323,6 +332,9 @@
           },
           {
             "$ref": "#/components/parameters/QueryOffset"
+          },
+          {
+            "$ref": "#/components/parameters/QueryFilter"
           }
         ],
         "responses": {
@@ -460,6 +472,9 @@
             "$ref": "#/components/parameters/QueryOffset"
           },
           {
+            "$ref": "#/components/parameters/QueryFilter"
+          },
+          {
             "$ref": "#/components/parameters/ID"
           }
         ],
@@ -499,6 +514,9 @@
           },
           {
             "$ref": "#/components/parameters/QueryOffset"
+          },
+          {
+            "$ref": "#/components/parameters/QueryFilter"
           }
         ],
         "responses": {
@@ -586,6 +604,9 @@
             "$ref": "#/components/parameters/QueryOffset"
           },
           {
+            "$ref": "#/components/parameters/QueryFilter"
+          },
+          {
             "$ref": "#/components/parameters/ID"
           }
         ],
@@ -614,6 +635,9 @@
           },
           {
             "$ref": "#/components/parameters/QueryOffset"
+          },
+          {
+            "$ref": "#/components/parameters/QueryFilter"
           }
         ],
         "responses": {
@@ -751,6 +775,9 @@
             "$ref": "#/components/parameters/QueryOffset"
           },
           {
+            "$ref": "#/components/parameters/QueryFilter"
+          },
+          {
             "$ref": "#/components/parameters/ID"
           }
         ],
@@ -779,6 +806,9 @@
           },
           {
             "$ref": "#/components/parameters/QueryOffset"
+          },
+          {
+            "$ref": "#/components/parameters/QueryFilter"
           },
           {
             "$ref": "#/components/parameters/ID"
@@ -832,6 +862,17 @@
         "schema": {
           "type": "string",
           "pattern": "/^\\d+$/"
+        }
+      },
+      "QueryFilter": {
+        "in": "query",
+        "name": "filter",
+        "description": "Filter for querying collections.",
+        "required": false,
+        "style": "deepObject",
+        "explode": true,
+        "schema": {
+          "type": "object"
         }
       },
       "QueryLimit": {
