@@ -3,14 +3,12 @@ require "manageiq-messaging"
 RSpec.describe("v1.0 - Authentications") do
   include ::Spec::Support::TenantIdentity
 
+  let(:headers)         { {"CONTENT_TYPE" => "application/json", "x-rh-identity" => identity} }
   let(:collection_path) { "/api/v1.0/authentications" }
-  let(:tenant)          { Tenant.create!(:external_tenant => SecureRandom.uuid) }
-  let(:attributes)      { payload.except("tenant").merge("tenant" => tenant) }
   let(:payload) do
     {
       "username"      => "test_name",
       "password"      => "Test Password",
-      "tenant"        => tenant.external_tenant,
       "resource_type" => "Tenant",
       "resource_id"   => tenant.id.to_s
     }
@@ -19,7 +17,7 @@ RSpec.describe("v1.0 - Authentications") do
   describe("/api/v1.0/authentications") do
     context "get" do
       it "success: empty collection" do
-        get(collection_path)
+        get(collection_path, :headers => headers)
 
         expect(response).to have_attributes(
           :status => 200,
@@ -28,9 +26,9 @@ RSpec.describe("v1.0 - Authentications") do
       end
 
       it "success: non-empty collection" do
-        Authentication.create!(attributes)
+        Authentication.create!(payload.merge(:tenant => tenant))
 
-        get(collection_path)
+        get(collection_path, :headers => headers)
 
         expect(response).to have_attributes(
           :status => 200,
@@ -47,7 +45,7 @@ RSpec.describe("v1.0 - Authentications") do
       end
 
       it "success: with valid body" do
-        post(collection_path, :params => payload.to_json)
+        post(collection_path, :params => payload.to_json, :headers => headers)
 
         expect(response).to have_attributes(
           :status => 201,
@@ -57,7 +55,7 @@ RSpec.describe("v1.0 - Authentications") do
       end
 
       it "failure: with no body" do
-        post(collection_path)
+        post(collection_path, :headers => headers)
 
         expect(response).to have_attributes(
           :status => 400,
@@ -67,7 +65,7 @@ RSpec.describe("v1.0 - Authentications") do
       end
 
       it "failure: with extra attributes" do
-        post(collection_path, :params => payload.merge("aaa" => "bbb").to_json)
+        post(collection_path, :params => payload.merge("aaa" => "bbb").to_json, :headers => headers)
 
         expect(response).to have_attributes(
           :status => 400,
@@ -85,24 +83,24 @@ RSpec.describe("v1.0 - Authentications") do
 
     context "get" do
       it "success: with a valid id" do
-        instance = Authentication.create!(attributes)
+        instance = Authentication.create!(payload.merge(:tenant => tenant))
 
-        get(instance_path(instance.id))
+        get(instance_path(instance.id), :headers => headers)
 
         expect(response).to have_attributes(
           :status => 200,
-          :parsed_body => payload.except("password").merge("id" => instance.id.to_s)
+          :parsed_body => payload.except("password").merge("id" => instance.id.to_s, "tenant" => tenant.external_tenant)
         )
       end
 
       it "failure: with an invalid id" do
-        instance = Authentication.create!(attributes)
+        instance = Authentication.create!(payload.merge(:tenant => tenant))
 
-        get(instance_path(instance.id * 1000))
+        get(instance_path(instance.id * 1000), :headers => headers)
 
         expect(response).to have_attributes(
           :status => 404,
-          :parsed_body => {"errors"=>[{"detail"=>"Couldn't find Authentication with 'id'=#{instance.id * 1000}", "status"=>404}]}
+          :parsed_body => {"errors"=>[{"detail"=>"Record not found", "status"=>404}]}
         )
       end
     end

@@ -9,7 +9,7 @@ class ApplicationController < ActionController::API
   end
 
   rescue_from ActiveRecord::RecordNotFound do |exception|
-    error_document = ManageIQ::API::Common::ErrorDocument.new.add(404, exception.message)
+    error_document = ManageIQ::API::Common::ErrorDocument.new.add(404, "Record not found")
     render :json => error_document.to_h, :status => :not_found
   end
 
@@ -29,13 +29,12 @@ class ApplicationController < ActionController::API
       begin
         if Tenant.tenancy_enabled? && current.required_auth?
           tenant = Tenant.find_or_create_by(:external_tenant => current.user.tenant)
-          raise Sources::Api::NoTenantError unless tenant.present?
 
           ActsAsTenant.with_tenant(tenant) { yield }
         else
           ActsAsTenant.without_tenant { yield }
         end
-      rescue Sources::Api::NoTenantError, KeyError
+      rescue KeyError, ManageIQ::API::Common::IdentityError
         render :json => { :message => 'Unauthorized' }, :status => :unauthorized
       end
     end
