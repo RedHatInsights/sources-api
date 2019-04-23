@@ -1,17 +1,17 @@
 RSpec.describe("Sources Filtering") do
   include ::Spec::Support::TenantIdentity
 
+  let(:headers)           { {"CONTENT_TYPE" => "application/json", "x-rh-identity" => identity} }
   let(:api_version)       { "v1.0" }
   let(:source_collection) { "/api/#{api_version}/sources" }
   let(:source_type)       { SourceType.create!(:name => "SampleSourceType", :vendor => "Sample Vendor", :product_name => "Sample Product Name") }
-  let(:tenant)            { Tenant.create!(:external_tenant => SecureRandom.uuid) }
 
   def create_source(source_name, opt_params = {})
     Source.create!({:name => source_name, :source_type_id => source_type.id, :tenant => tenant}.merge(opt_params))
   end
 
   def expect_success(query, *results)
-    get("#{source_collection}?#{query}")
+    get("#{source_collection}?#{query}", :headers => headers)
 
     expect(response).to(
       have_attributes(
@@ -22,7 +22,7 @@ RSpec.describe("Sources Filtering") do
   end
 
   def expect_failure(query, *errors)
-    get("#{source_collection}?#{query}")
+    get("#{source_collection}?#{query}", :headers => headers)
 
     expect(response).to(
       have_attributes(
@@ -61,7 +61,7 @@ RSpec.describe("Sources Filtering") do
     it("unknown attribute") { expect_failure("filter[xxx]", "found unpermitted parameter: xxx") }
 
     it "invalid attribute" do
-      get("#{source_collection}?filter[bogus_attribute]=a")
+      get("#{source_collection}?filter[bogus_attribute]=a", :headers => headers)
 
       expect(response.status).to(eq(400))
       expect(response.parsed_body["errors"]).to(eq([{"detail" => "found unpermitted parameter: bogus_attribute", "status" => 400}]))

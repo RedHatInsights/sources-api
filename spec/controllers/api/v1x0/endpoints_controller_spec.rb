@@ -6,9 +6,11 @@ RSpec.describe Api::V1x0::EndpointsController, :type => :request do
   it("Uses ShowMixin")    { expect(described_class.instance_method(:show).owner).to eq(Api::V1::Mixins::ShowMixin) }
   it("Uses UpdateMixin")  { expect(described_class.instance_method(:update).owner).to eq(Api::V1::Mixins::UpdateMixin) }
 
+  include ::Spec::Support::TenantIdentity
+
+  let(:headers)     { {"CONTENT_TYPE" => "application/json", "x-rh-identity" => identity} }
   let(:source)      { Source.create!(:source_type => source_type, :tenant => tenant, :uid => SecureRandom.uuid, :name => "test_source") }
   let(:source_type) { SourceType.create!(:name => "openshift", :product_name => "OpenShift", :vendor => "Red Hat") }
-  let(:tenant)      { Tenant.create!(:external_tenant => SecureRandom.uuid) }
   let(:client)      { instance_double("ManageIQ::Messaging::Client") }
 
   before do
@@ -17,20 +19,19 @@ RSpec.describe Api::V1x0::EndpointsController, :type => :request do
   end
 
   it "post /endpoints creates an Endpoint" do
-    headers = { "CONTENT_TYPE" => "application/json" }
     post(
       api_v1x0_endpoints_url,
-      :params => {
+      :params  => {
         :host                  => "example.com",
         :port                  => "443",
         :role                  => "default",
         :path                  => "api",
         :source_id             => source.id.to_s,
-        :tenant                => tenant.external_tenant,
         :scheme                => "https",
         :verify_ssl            => true,
         :certificate_authority => "-----BEGIN CERTIFICATE-----\nabcd\n-----END CERTIFICATE-----",
-      }.to_json
+      }.to_json,
+      :headers => headers
     )
 
     endpoint = Endpoint.first
