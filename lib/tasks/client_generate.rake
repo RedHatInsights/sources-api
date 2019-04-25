@@ -1,6 +1,6 @@
 #
 # Usage: bundle exec rake client:generate
-#        bundle exec rake client:generate[/alternate_ruby_client_dir]
+#        bundle exec rake client:generate[/alternate_client_dir, alternate_client_lang]
 #
 class ClientGenerator
   require 'json'
@@ -52,24 +52,25 @@ class ClientGenerator
     File.write(yaml_spec, JSON.parse(File.read(json_spec)).to_yaml(:line_width => -1).sub("---\n", "").tap { |c| c.gsub!("- NULL VALUE", "- null") })
   end
 
-  def generate_ruby_client(client_dir)
+  def generate_client(client_dir, lng)
     msg("Sources API Version: #{api_version}")
     msg("Using OpenAPI Generator CLI Jar:   #{generator_cli_jar}")
     msg("OpenAPI 3.0 Specification File:    #{openapi_file}")
     msg("OpenAPI 3.0 Specification Yaml:    #{openapi_yaml_file}")
     msg("OpenAPI Generator Config:          #{generator_config}")
 
-    msg("\nGenerating API Ruby Client ...")
+    msg("\nGenerating API #{lng} Client ...")
     generate_yaml_file(openapi_file, openapi_yaml_file)
-    system("java -jar #{generator_cli_jar} generate -i #{openapi_yaml_file} -c #{generator_config} -g ruby -o #{client_dir}")
+    system("java -jar #{generator_cli_jar} generate -i #{openapi_yaml_file} -c #{generator_config} -g #{lng} -o #{client_dir}")
   end
 end
 
 namespace :client do
-  desc "Generate the Toplogical Inventory API Ruby Client"
-  task :generate, [:client_dir] => [:environment] do |_task, args|
-    default_client_dir = Pathname.new(Rails.root.join("..", "sources-api-client-ruby"))
+  desc "Generate the Sources API Client (by default in Ruby)"
+  task :generate, [:client_dir, :language] => [:environment] do |_task, args|
+    args.with_defaults(:language => "ruby")
+    default_client_dir = Pathname.new(Rails.root.join("..", "sources-api-client-#{args[:language]}"))
     args.with_defaults(:client_dir => default_client_dir)
-    ClientGenerator.new.generate_ruby_client(args[:client_dir])
+    ClientGenerator.new.generate_client(args[:client_dir], args[:language])
   end
 end
