@@ -17,7 +17,7 @@ openshift_json_schema = {
     {:component => "text-field", :name => "token", :label => "Token", :type => "password"}
   ]
 }
-update_or_create(SourceType, :name => "openshift", :product_name => "OpenShift", :vendor => "Red Hat", :schema => openshift_json_schema)
+update_or_create(SourceType, :name => "openshift", :product_name => "OpenShift Container Platform", :vendor => "Red Hat", :schema => openshift_json_schema)
 
 amazon_json_schema = {
   :title  => "Configure AWS",
@@ -27,7 +27,7 @@ amazon_json_schema = {
     {:component => "text-field", :name => "password", :label => "Secret Key", :type => "password"}
   ]
 }
-update_or_create(SourceType, :name => "amazon", :product_name => "AWS", :vendor => "Amazon", :schema => amazon_json_schema)
+update_or_create(SourceType, :name => "amazon", :product_name => "Amazon Web Services", :vendor => "Amazon", :schema => amazon_json_schema)
 
 ansible_tower_json_schema = {
   :title  => "Configure AnsibleTower",
