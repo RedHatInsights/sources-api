@@ -45,14 +45,17 @@ class ApplicationController < ActionController::API
     ManageIQ::API::Common::Request.with_request(request) do |current|
       begin
         if Tenant.tenancy_enabled? && current.required_auth?
-          tenant = Tenant.find_or_create_by(:external_tenant => current.user.tenant)
+          raise ManageIQ::API::Common::EntitlementError unless request_is_entitled?(current.entitlement)
 
+          tenant = Tenant.find_or_create_by(:external_tenant => current.user.tenant)
           ActsAsTenant.with_tenant(tenant) { yield }
         else
           ActsAsTenant.without_tenant { yield }
         end
       rescue KeyError, ManageIQ::API::Common::IdentityError
         render :json => { :message => 'Unauthorized' }, :status => :unauthorized
+      rescue ManageIQ::API::Common::EntitlementError
+        render :json => { :message => 'Forbidden' }, :status => :forbidden
       end
     end
   end
@@ -77,6 +80,11 @@ class ApplicationController < ActionController::API
     rescue JSON::ParserError
       raise Sources::Api::BodyParseError
     end
+  end
+
+  def request_is_entitled?(entitlement)
+    required_entitlements = %i[hybrid_cloud? insights?]
+    required_entitlements.any? { |e| entitlement.send(e) }
   end
 
   def instance_link(instance)
