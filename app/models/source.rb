@@ -10,6 +10,7 @@ class Source < ApplicationRecord
 
   delegate :scheme, :scheme=, :host, :host=, :port, :port=, :path, :path=,
            :to => :default_endpoint, :allow_nil => true
+  validates :name, :presence => true, :allow_blank => false
 
   def default_endpoint
     default = endpoints.detect(&:default)
