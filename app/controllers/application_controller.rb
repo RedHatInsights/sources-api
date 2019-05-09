@@ -17,6 +17,12 @@ class ApplicationController < ActionController::API
     render :json => exception.error_document.to_h, :status => exception.error_document.status
   end
 
+  rescue_from ActiveRecord::NotNullViolation do |exception|
+    exception_msg = exception.message.split("\n").first.gsub("PG::NotNullViolation: ERROR:  ", "")
+    error_document = ManageIQ::API::Common::ErrorDocument.new.add(400, "Missing parameter - #{exception_msg}")
+    render :json => error_document.to_h, :status => :bad_request
+  end
+
   rescue_from Sources::Api::BodyParseError do |exception|
     error_document = ManageIQ::API::Common::ErrorDocument.new.add(400, "Failed to parse POST body, expected JSON")
     render :json => error_document.to_h, :status => error_document.status

@@ -55,6 +55,16 @@ RSpec.describe("v1.0 - Sources") do
         )
       end
 
+      it "failure: with a missing name attribute" do
+        post(collection_path, :params => attributes.except("name").to_json, :headers => headers)
+
+        expect(response).to have_attributes(
+          :status      => 400,
+          :location    => nil,
+          :parsed_body => ManageIQ::API::Common::ErrorDocument.new.add(400, a_string_starting_with("Missing parameter - null value in column \"name\"")).to_h
+        )
+      end
+
       it "failure: with extra attributes" do
         post(collection_path, :params => attributes.merge("aaa" => "bbb").to_json, :headers => headers)
 
