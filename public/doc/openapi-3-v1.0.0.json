@@ -127,10 +127,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "items": {
-                    "$ref": "#/components/schemas/Application"
-                  }
+                  "$ref": "#/components/schemas/Application"
                 }
               }
             }
@@ -233,10 +230,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "items": {
-                    "$ref": "#/components/schemas/Authentication"
-                  }
+                  "$ref": "#/components/schemas/Authentication"
                 }
               }
             }
@@ -371,10 +365,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "items": {
-                    "$ref": "#/components/schemas/Endpoint"
-                  }
+                  "$ref": "#/components/schemas/Endpoint"
                 }
               }
             }
@@ -553,10 +544,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "items": {
-                    "$ref": "#/components/schemas/SourceType"
-                  }
+                  "$ref": "#/components/schemas/SourceType"
                 }
               }
             }
@@ -674,10 +662,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "items": {
-                    "$ref": "#/components/schemas/Source"
-                  }
+                  "$ref": "#/components/schemas/Source"
                 }
               }
             }

@@ -273,10 +273,7 @@ class OpenapiGenerator
           "description" => "#{klass_name} creation successful",
           "content"     => {
             "application/json" => {
-              "schema" => {
-                "type"  => "object",
-                "items" => { "$ref" => build_schema(klass_name) }
-              }
+              "schema" => { "$ref" => build_schema(klass_name) }
             }
           }
         }
