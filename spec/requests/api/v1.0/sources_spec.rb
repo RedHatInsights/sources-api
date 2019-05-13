@@ -61,7 +61,7 @@ RSpec.describe("v1.0 - Sources") do
         expect(response).to have_attributes(
           :status      => 400,
           :location    => nil,
-          :parsed_body => ManageIQ::API::Common::ErrorDocument.new.add(400, a_string_starting_with("Missing parameter - null value in column \"name\"")).to_h
+          :parsed_body => ManageIQ::API::Common::ErrorDocument.new.add(400, "Invalid parameter - Validation failed: Name can't be blank").to_h
         )
       end
 
