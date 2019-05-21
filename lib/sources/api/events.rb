@@ -2,6 +2,7 @@ module Sources
   module Api
     module Events
       def self.raise_event(event, payload)
+        return if ENV['NO_KAFKA']
         messaging_client.publish_topic(
           :service => "platform.sources.event-stream",
           :event   => event,
