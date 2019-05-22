@@ -26,6 +26,8 @@ class ClientGenerator
     @generator_cli_jar ||= begin
       jar_path = Pathname.new(Rails.root.join("public/doc/openapi-generator-cli-#{VERSION}.jar"))
       unless File.exist?(jar_path) && File.size(jar_path).positive?
+        require "net/http"
+
         source_url = "#{SOURCE_URL}/#{VERSION}/openapi-generator-cli-#{VERSION}.jar"
         cli_res = Net::HTTP.get_response(URI(source_url))
         raise "Failed to get the #{source_url} - #{cli_res.message}" unless cli_res.kind_of?(Net::HTTPSuccess)
