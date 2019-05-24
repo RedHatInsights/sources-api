@@ -8,9 +8,7 @@ module Api
 
       def create
         endpoint = Endpoint.create!(params_for_create)
-
-        Sources::Api::Events.raise_event("#{model}.create", endpoint.as_json)
-
+        raise_event("#{model}.create", endpoint.as_json)
         render :json => endpoint, :status => :created, :location => instance_link(endpoint)
       end
     end

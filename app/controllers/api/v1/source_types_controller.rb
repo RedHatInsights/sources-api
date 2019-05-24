@@ -6,7 +6,7 @@ module Api
 
       def create
         source_type = model.create!(params_for_create)
-        Sources::Api::Events.raise_event("#{model}.create", source_type.as_json)
+        raise_event("#{model}.create", source_type.as_json)
         render :json => source_type, :status => :created, :location => instance_link(source_type)
       end
     end

@@ -85,6 +85,11 @@ class ApplicationController < ActionController::API
     send("api_#{version}_#{endpoint}_url", instance.id)
   end
 
+  def raise_event(event, payload)
+    headers = ManageIQ::API::Common::Request.current_forwardable
+    Sources::Api::Events.raise_event(event, payload, headers)
+  end
+
   def params_for_create
     required = api_doc_definition.required_attributes
     body_params.permit(*api_doc_definition.all_attributes).tap { |i| i.require(required) if required }
