@@ -12,6 +12,8 @@ Rails.application.routes.draw do
   scope :as => :api, :module => "api", :path => prefix do
     routing_helper.redirect_major_version("v1.0", prefix)
 
+    post "graphql" => "graphql#query"
+
     namespace :v1x0, :path => "v1.0" do
       get "/openapi.json", :to => "root#openapi"
       resources :application_types, :only => [:index, :show]

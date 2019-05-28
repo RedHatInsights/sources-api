@@ -14,7 +14,8 @@ gem 'puma',                 '~> 3.0'
 gem 'rack-cors',            '>= 0.4.1'
 gem 'rails',                '~> 5.2.2'
 
-gem 'manageiq-api-common', :git => 'https://github.com/ManageIQ/manageiq-api-common', :branch => 'master'
+# gem 'manageiq-api-common', :git => 'https://github.com/ManageIQ/manageiq-api-common', :branch => 'master'
+gem 'manageiq-api-common', :git => 'https://github.com/abellotti/manageiq-api-common', :branch => 'support_graphql'
 
 group :development, :test do
   gem 'simplecov'
