@@ -19,6 +19,11 @@ class ApplicationController < ActionController::API
     render :json => error_document.to_h, :status => :bad_request
   end
 
+  rescue_from ActiveRecord::RecordNotUnique do |_exception|
+    error_document = ManageIQ::API::Common::ErrorDocument.new.add(400, "Record not unique")
+    render :json => error_document.to_h, :status => :bad_request
+  end
+
   rescue_from ManageIQ::API::Common::Filter::Error do |exception|
     render :json => exception.error_document.to_h, :status => exception.error_document.status
   end

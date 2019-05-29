@@ -84,6 +84,17 @@ RSpec.describe("v1.0 - Sources") do
           :parsed_body => ManageIQ::API::Common::ErrorDocument.new.add(400, "Invalid parameter - Validation failed: Name can't be blank").to_h
         )
       end
+
+      it "failure: with a not unique UID" do
+        post(collection_path, :params => attributes.merge("name" => "aaa", "uid" => "123").to_json, :headers => headers)
+        post(collection_path, :params => attributes.merge("name" => "aaa", "uid" => "123").to_json, :headers => headers)
+
+        expect(response).to have_attributes(
+          :status      => 400,
+          :location    => nil,
+          :parsed_body => ManageIQ::API::Common::ErrorDocument.new.add(400, "Record not unique").to_h
+        )
+      end
     end
   end
 
