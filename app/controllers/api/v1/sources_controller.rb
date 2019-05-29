@@ -7,7 +7,10 @@ module Api
       include Api::V1::Mixins::UpdateMixin
 
       def create
-        source = Source.create!(params_for_create.merge("uid" => SecureRandom.uuid))
+        binding.pry
+        source_data = params_for_create
+        source_data.merge!("uid" => SecureRandom.uuid) if source_data["uid"].nil?
+        source = Source.create!(source_data)
 
         Sources::Api::Events.raise_event("#{model}.create", source.as_json)
 
