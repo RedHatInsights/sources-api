@@ -79,7 +79,11 @@ class OpenapiGenerator
         expected_paths[sub_path][verb] =
           case verb
           when "post"
-            openapi_contents.dig("paths", sub_path, verb) || openapi_create_description(klass_name)
+            if sub_path == "/graphq" && route.action == "query"
+              openapi_graphql_description
+            else
+              openapi_contents.dig("paths", sub_path, verb) || openapi_create_description(klass_name)
+            end
           when "get"
             openapi_contents.dig("paths", sub_path, verb) || openapi_show_description(klass_name)
           else
@@ -252,6 +256,37 @@ class OpenapiGenerator
       "responses"   => {
         "204" => { "description" => "#{klass_name} deleted" },
         "404" => { "description" => "Not found"             }
+      }
+    }
+  end
+
+  def openapi_graphql_description
+    {
+      "summary"     => "Perform a GraphQL Query",
+      "operationId" => "postGraphQL",
+      "description" => "Performs a GraphQL Query",
+      "requestBody" => {
+        "content"     => {
+          "application/json" => {
+            "schema" => {
+              "type" => "object"
+            }
+          }
+        },
+        "description" => "GraphQL Query Request",
+        "required"    => true
+      },
+      "responses"   => {
+        "200" => {
+          "description" => "GraphQL Query Response",
+          "content"     => {
+            "application/json" => {
+              "schema" => {
+                "type" => "object"
+              }
+            }
+          }
+        }
       }
     }
   end
