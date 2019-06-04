@@ -1,7 +1,6 @@
-require "manageiq/api/common/graphql/generator"
-
 class OpenapiGenerator
   require 'json'
+  require 'manageiq/api/common/graphql'
 
   PARAMETERS_PATH = "/components/parameters".freeze
   SCHEMAS_PATH = "/components/schemas".freeze
@@ -79,8 +78,8 @@ class OpenapiGenerator
         expected_paths[sub_path][verb] =
           case verb
           when "post"
-            if sub_path == "/graphq" && route.action == "query"
-              openapi_graphql_description
+            if sub_path == "/graphql" && route.action == "query"
+              ::ManageIQ::API::Common::GraphQL.openapi_graphql_description
             else
               openapi_contents.dig("paths", sub_path, verb) || openapi_create_description(klass_name)
             end
@@ -260,37 +259,6 @@ class OpenapiGenerator
     }
   end
 
-  def openapi_graphql_description
-    {
-      "summary"     => "Perform a GraphQL Query",
-      "operationId" => "postGraphQL",
-      "description" => "Performs a GraphQL Query",
-      "requestBody" => {
-        "content"     => {
-          "application/json" => {
-            "schema" => {
-              "type" => "object"
-            }
-          }
-        },
-        "description" => "GraphQL Query Request",
-        "required"    => true
-      },
-      "responses"   => {
-        "200" => {
-          "description" => "GraphQL Query Response",
-          "content"     => {
-            "application/json" => {
-              "schema" => {
-                "type" => "object"
-              }
-            }
-          }
-        }
-      }
-    }
-  end
-
   def openapi_create_description(klass_name)
     {
       "summary"     => "Create a new #{klass_name}",
@@ -344,7 +312,7 @@ class OpenapiGenerator
     }
   end
 
-  def run(graphql)
+  def run
     parameters["QueryOffset"] = {
       "in"          => "query",
       "name"        => "offset",
@@ -451,7 +419,6 @@ class OpenapiGenerator
     new_content["components"]["schemas"]    = schemas.sort.each_with_object({})    { |(name, val), h| h[name] = val || openapi_contents["components"]["schemas"][name]    || {} }
     new_content["components"]["parameters"] = parameters.sort.each_with_object({}) { |(name, val), h| h[name] = val || openapi_contents["components"]["parameters"][name] || {} }
     File.write(openapi_file, JSON.pretty_generate(new_content) + "\n")
-    ManageIQ::API::Common::GraphQL::Generator.generate(api_version, new_content) if graphql
   end
 end
 
@@ -475,8 +442,7 @@ GENERATOR_READ_ONLY_ATTRIBUTES = [
 
 namespace :openapi do
   desc "Generate the openapi.json contents"
-  task :generate, [:graphql] => [:environment] do |_task, args|
-    graphql = args[:graphql] == "graphql"
-    OpenapiGenerator.new.run(graphql)
+  task :generate => :environment do
+    OpenapiGenerator.new.run
   end
 end
