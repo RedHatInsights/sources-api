@@ -483,6 +483,68 @@
         }
       }
     },
+    "/graphql": {
+      "post": {
+        "summary": "Perform a GraphQL Query",
+        "operationId": "postGraphQL",
+        "description": "Performs a GraphQL Query",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "query": {
+                    "type": "string",
+                    "description": "The GraphQL query",
+                    "default": "{}"
+                  },
+                  "operationName": {
+                    "type": "string",
+                    "description": "If the Query contains several named operations, the operationName controls which one should be executed",
+                    "default": ""
+                  },
+                  "variables": {
+                    "type": "object",
+                    "description": "Optional Query variables"
+                  }
+                },
+                "required": [
+                  "query"
+                ]
+              }
+            }
+          },
+          "description": "GraphQL Query Request",
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "GraphQL Query Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "description": "Results from the GraphQL query"
+                    },
+                    "errors": {
+                      "type": "array",
+                      "description": "Errors resulting from the GraphQL query",
+                      "items": {
+                        "type": "object"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/openapi.json": {
       "get": {
         "summary": "Return this API document in JSON format",
