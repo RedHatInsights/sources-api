@@ -908,7 +908,7 @@
         "required": true,
         "schema": {
           "type": "string",
-          "pattern": "/^\\d+$/"
+          "pattern": "^\\d+$"
         }
       },
       "QueryFilter": {
@@ -1197,7 +1197,7 @@
       "ID": {
         "type": "string",
         "description": "ID of the resource",
-        "pattern": "/^\\d+$/",
+        "pattern": "^\\d+$",
         "readOnly": true
       },
       "OrderParameters": {
