@@ -11,7 +11,7 @@ module Api
         source_data["uid"] = SecureRandom.uuid if source_data["uid"].nil?
         source = Source.create!(source_data)
 
-        Sources::Api::Events.raise_event("#{model}.create", source.as_json)
+        raise_event("#{model}.create", source.as_json)
 
         render :json => source, :status => :created, :location => instance_link(source)
       end
