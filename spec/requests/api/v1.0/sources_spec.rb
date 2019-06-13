@@ -85,6 +85,16 @@ RSpec.describe("v1.0 - Sources") do
         )
       end
 
+      it "failure: with an invalid attribute value" do
+        post(collection_path, :params => attributes.merge("source_type_id" => "xxx").to_json, :headers => headers)
+
+        expect(response).to have_attributes(
+          :status => 400,
+          :location => nil,
+          :parsed_body => ManageIQ::API::Common::ErrorDocument.new.add(400, "xxx isn't match ^\\d+$ in #/components/schemas/ID").to_h
+        )
+      end
+
       it "failure: with a not unique UID" do
         post(collection_path, :params => attributes.merge("name" => "aaa", "uid" => "123").to_json, :headers => headers)
         post(collection_path, :params => attributes.merge("name" => "aaa", "uid" => "123").to_json, :headers => headers)
@@ -176,6 +186,16 @@ RSpec.describe("v1.0 - Sources") do
           :status => 400,
           :parsed_body => {"errors" => [{"detail"=>"found unpermitted parameter: :uid", "status" => 400}]}
         )
+      end
+
+      it "failure: with an invalid attribute value" do
+        post(collection_path, :params => attributes.merge("source_type_id" => 4).to_json, :headers => headers)
+
+        expect(response).to have_attributes(
+                              :status => 400,
+                              :location => nil,
+                              :parsed_body => ManageIQ::API::Common::ErrorDocument.new.add(400, "4 class is Integer but it's not valid string in #/components/schemas/ID").to_h
+                            )
       end
     end
   end
