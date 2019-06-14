@@ -78,10 +78,10 @@ RSpec.describe("v1.0 - Authentications") do
         post(collection_path, :params => payload.merge("password" => 123).to_json, :headers => headers)
 
         expect(response).to have_attributes(
-                              :status => 400,
-                              :location => nil,
-                              :parsed_body => ManageIQ::API::Common::ErrorDocument.new.add(400, "123 class is Integer but it's not valid string in #/components/schemas/Authentication/properties/password").to_h
-                            )
+          :status      => 400,
+          :location    => nil,
+          :parsed_body => ManageIQ::API::Common::ErrorDocument.new.add(400, "123 class is Integer but it's not valid string in #/components/schemas/Authentication/properties/password").to_h
+        )
       end
     end
   end
