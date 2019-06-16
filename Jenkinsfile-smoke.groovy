@@ -14,7 +14,7 @@ if (env.CHANGE_ID) {
         // the service-set/component for this app in e2e-deploy "templates"
         ocDeployerComponentPath: "sources/sources-api",
         // the service sets to deploy into the test environment
-        ocDeployerServiceSets: "platform-mq, sources",
+        ocDeployerServiceSets: "platform-mq,sources",
         // the iqe plugins to install for the test
         iqePlugins: ["iqe-sources-plugin"],
         // the pytest marker to use when calling `iqe tests all`
