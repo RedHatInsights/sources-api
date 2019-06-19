@@ -64,14 +64,11 @@ class ApplicationController < ActionController::API
     return unless request.post? || request.patch?
 
     api_version = self.class.send(:api_version)[1..-1].sub(/x/, ".")
-    request_path = request.path.split(api_version)[1]
-    payload = body_params.as_json
 
-    root = self.class.send(:parsed_api_doc)
-
-    request_operation = root.request_operation(request.method.downcase, request_path)
-
-    request_operation.validate_request_body('application/json', payload)
+    self.class.send(:api_doc).validate!(request.method,
+                                        request.path,
+                                        api_version,
+                                        body_params.as_json)
   rescue OpenAPIParser::OpenAPIError => exception
     error_document = ManageIQ::API::Common::ErrorDocument.new.add(400, exception.message)
     render :json => error_document.to_h, :status => :bad_request
@@ -91,10 +88,6 @@ class ApplicationController < ActionController::API
 
   private_class_method def self.api_version
     @api_version ||= name.split("::")[1].downcase
-  end
-
-  private_class_method def self.parsed_api_doc
-    @parsed_api_doc ||= OpenAPIParser.parse(api_doc.content, :coerce_value => true, :datetime_coerce_class => DateTime)
   end
 
   def body_params

@@ -9,7 +9,6 @@ gem 'manageiq-loggers',     '~> 0.1'
 gem 'manageiq-messaging',   '~> 0.1.2', :require => false
 gem 'manageiq-password',    '~> 0.2', ">= 0.2.1"
 gem 'more_core_extensions', '~> 3.5'
-gem 'openapi_parser',       '~> 0.3.0'
 gem 'pg',                   '~> 1.0', :require => false
 gem 'puma',                 '~> 3.0'
 gem 'rack-cors',            '>= 0.4.1'
