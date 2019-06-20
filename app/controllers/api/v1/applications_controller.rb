@@ -8,6 +8,7 @@ module Api
 
       def create
         application = Application.create!(params_for_create)
+        raise_event("#{model}.create", application.as_json)
         render :json => application, :status => :created, :location => instance_link(application)
       end
     end
