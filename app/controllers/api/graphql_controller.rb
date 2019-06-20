@@ -1,5 +1,7 @@
 require "manageiq/api/common/graphql"
 
+skip_before_action :validate_request
+
 module Api
   class GraphqlController < ApplicationController
     def query

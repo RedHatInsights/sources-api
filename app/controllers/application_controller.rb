@@ -2,6 +2,7 @@ class ApplicationController < ActionController::API
   ActionController::Parameters.action_on_unpermitted_parameters = :raise
 
   around_action :with_current_request
+  before_action :validate_request
 
   rescue_from ActionController::UnpermittedParameters do |exception|
     error_document = ManageIQ::API::Common::ErrorDocument.new.add(400, exception.message)
@@ -57,12 +58,32 @@ class ApplicationController < ActionController::API
     end
   end
 
+  # Validates against openapi.json
+  # - only for HTTP POST/PATCH
+  def validate_request
+    return unless request.post? || request.patch?
+
+    api_version = self.class.send(:api_version)[1..-1].sub(/x/, ".")
+
+    self.class.send(:api_doc).validate!(request.method,
+                                        request.path,
+                                        api_version,
+                                        body_params.as_json)
+  rescue OpenAPIParser::OpenAPIError => exception
+    error_document = ManageIQ::API::Common::ErrorDocument.new.add(400, exception.message)
+    render :json => error_document.to_h, :status => :bad_request
+  end
+
   private_class_method def self.model
     @model ||= controller_name.classify.constantize
   end
 
+  private_class_method def self.api_doc
+    @api_doc ||= Api::Docs[api_version[1..-1].sub(/x/, ".")]
+  end
+
   private_class_method def self.api_doc_definition
-    @api_doc_definition ||= Api::Docs[api_version[1..-1].sub(/x/, ".")].definitions[model.name]
+    @api_doc_definition ||= api_doc.definitions[model.name]
   end
 
   private_class_method def self.api_version
