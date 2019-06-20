@@ -18,6 +18,8 @@ gem 'manageiq-api-common', :git => 'https://github.com/ManageIQ/manageiq-api-com
 
 group :development, :test do
   gem 'simplecov'
+  gem 'rubocop',             '~>0.69.0', :require => false
+  gem 'rubocop-performance', '~>1.3',    :require => false
 end
 
 group :test do
