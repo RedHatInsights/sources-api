@@ -524,20 +524,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "data": {
-                      "type": "object",
-                      "description": "Results from the GraphQL query"
-                    },
-                    "errors": {
-                      "type": "array",
-                      "description": "Errors resulting from the GraphQL query",
-                      "items": {
-                        "type": "object"
-                      }
-                    }
-                  }
+                  "$ref": "#/components/schemas/GraphQLResponse"
                 }
               }
             }
@@ -1190,6 +1177,22 @@
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/Endpoint"
+            }
+          }
+        }
+      },
+      "GraphQLResponse": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "object",
+            "description": "Results from the GraphQL query"
+          },
+          "errors": {
+            "type": "array",
+            "description": "Errors resulting from the GraphQL query",
+            "items": {
+              "type": "object"
             }
           }
         }

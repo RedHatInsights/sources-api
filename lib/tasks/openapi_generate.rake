@@ -79,6 +79,7 @@ class OpenapiGenerator
           case verb
           when "post"
             if sub_path == "/graphql" && route.action == "query"
+              schemas["GraphQLResponse"] = ::ManageIQ::API::Common::GraphQL.openapi_graphql_response
               ::ManageIQ::API::Common::GraphQL.openapi_graphql_description
             else
               openapi_contents.dig("paths", sub_path, verb) || openapi_create_description(klass_name)
