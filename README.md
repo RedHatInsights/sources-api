@@ -8,7 +8,7 @@
 This project exposes an API for accessing objects living in the Sources Service database
 
 ## Prerequisites
-You need to install ruby >= 2.2.2 and run:
+You need to install ruby >= 2.4 and run:
 
 ```
 bundle install
@@ -16,6 +16,14 @@ bundle install
 
 ## Getting started
 
+Setup your database configuration
+```
+config/database.dev.yml config/database.yml
+```
+
+Then edit the file to setup your postgres info
+
+Next create the database
 ```
 bin/rake db:create db:migrate
 bin/rails s
@@ -26,6 +34,13 @@ To list all your routes, use:
 ```
 bin/rake routes
 ```
+
+Start your server:
+```
+bin/rails s
+```
+
+This will use kafka by default to send updates for created/updated/deleted actions.  It uses localhost:9092 by default but this can be changed by passing `QUEUE_HOST=` and/or `QUEUE_PORT=`.  To disable kafka updates pass `NO_KAFKA=true`.
 
 ## License
 
