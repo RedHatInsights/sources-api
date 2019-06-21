@@ -12,18 +12,14 @@ module Spec
 
         let!(:entitlements) do
           {
-              "hybrid_cloud"     => {
-                  "is_entitled" => true
-              },
-              "insights"         => {
-                  "is_entitled" => true
-              }
+            "hybrid_cloud" => { "is_entitled" => true },
+            "insights"     => { "is_entitled" => true }
           }
         end
 
         let!(:identity_with_entitlements) do
           Base64.encode64(
-              {'identity' => { 'account_number' => external_tenant}, :entitlements => entitlements}.to_json
+            {'identity' => { 'account_number' => external_tenant}, :entitlements => entitlements}.to_json
           )
         end
       end
