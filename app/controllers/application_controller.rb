@@ -79,7 +79,7 @@ class ApplicationController < ActionController::API
   end
 
   private_class_method def self.api_doc
-    @api_doc ||= Api::Docs[api_version[1..-1].sub(/x/, ".")]
+    @api_doc ||= ::ManageIQ::API::Common::OpenApi::Docs.instance[api_version[1..-1].sub(/x/, ".")]
   end
 
   private_class_method def self.api_doc_definition
