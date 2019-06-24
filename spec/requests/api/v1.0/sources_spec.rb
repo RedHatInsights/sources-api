@@ -95,9 +95,36 @@ RSpec.describe("v1.0 - Sources") do
         )
       end
 
+      it "failure: with a duplicate name in the same tenant" do
+        2.times do
+          post(collection_path, :params => attributes.to_json, :headers => headers)
+        end
+
+        expect(response).to have_attributes(
+          :status      => 400,
+          :location    => nil,
+          :parsed_body => ManageIQ::API::Common::ErrorDocument.new.add(
+            400, "Invalid parameter - Validation failed: Name has already been taken").to_h
+        )
+      end
+
+      it "success: with a duplicate name in a different tenant" do
+        post(collection_path, :params => attributes.to_json, :headers => headers)
+
+        second_tenant = rand(1000).to_s
+        second_identity = {"x-rh-identity" => Base64.encode64({"identity" => {"account_number" => second_tenant}}.to_json)}
+        post(collection_path, :params => attributes.to_json, :headers => headers.merge(second_identity))
+
+        expect(response).to have_attributes(
+          :status      => 201,
+          :location    => "http://www.example.com/api/v1.0/sources/#{response.parsed_body["id"]}",
+          :parsed_body => a_hash_including(attributes)
+        )
+      end
+
       it "failure: with a not unique UID" do
         post(collection_path, :params => attributes.merge("name" => "aaa", "uid" => "123").to_json, :headers => headers)
-        post(collection_path, :params => attributes.merge("name" => "aaa", "uid" => "123").to_json, :headers => headers)
+        post(collection_path, :params => attributes.merge("name" => "abc", "uid" => "123").to_json, :headers => headers)
 
         expect(response).to have_attributes(
           :status      => 400,
