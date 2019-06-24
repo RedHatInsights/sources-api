@@ -220,10 +220,20 @@ class OpenapiGenerator
       if GENERATOR_READ_ONLY_DEFINITIONS.include?(klass_name) || GENERATOR_READ_ONLY_ATTRIBUTES.include?(key.to_sym)
         # Everything under providers data is read only for now
         properties_value['readOnly'] = true
+      else
+        properties_value['required'] ||= true if required?(klass_name, model, key, value)
       end
 
       properties_value.sort.to_h
     end
+  end
+
+  def required?(_klass_name, model, key, value)
+    nullable = value.null && model.validators_on(key).none? { |v| v.kind == :presence }
+    has_default = value.default.present?
+
+    # If an attribute isn't nullable and has no default then it is required
+    !nullable && !has_default
   end
 
   def openapi_show_description(klass_name)
