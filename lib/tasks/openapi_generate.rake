@@ -157,6 +157,7 @@ class OpenapiGenerator
     {
       "type"       => "object",
       "properties" => openapi_schema_properties(klass_name),
+      "required"   => openapi_schema_required(klass_name),
     }
   end
 
@@ -182,7 +183,7 @@ class OpenapiGenerator
       }
     elsif key.ends_with?("_id")
       properties_value = {}
-      if GENERATOR_READ_ONLY_DEFINITIONS.include?(klass_name)
+      if openapi_schema_properties_read_only?(klass_name, key)
         # Everything under providers data is read only for now
         properties_value["$ref"] = "##{SCHEMAS_PATH}/ID"
       else
@@ -217,23 +218,30 @@ class OpenapiGenerator
         properties_value[property_key] = property_value if property_value
       end
 
-      if GENERATOR_READ_ONLY_DEFINITIONS.include?(klass_name) || GENERATOR_READ_ONLY_ATTRIBUTES.include?(key.to_sym)
+      if openapi_schema_properties_read_only?(klass_name, key)
         # Everything under providers data is read only for now
         properties_value['readOnly'] = true
-      else
-        properties_value['required'] ||= true if required?(klass_name, model, key, value)
       end
 
       properties_value.sort.to_h
     end
   end
 
-  def required?(_klass_name, model, key, value)
-    nullable = value.null && model.validators_on(key).none? { |v| v.kind == :presence }
-    has_default = value.default.present?
+  def openapi_schema_properties_read_only?(klass_name, key)
+    GENERATOR_READ_ONLY_DEFINITIONS.include?(klass_name) || GENERATOR_READ_ONLY_ATTRIBUTES.include?(key.to_sym)
+  end
 
-    # If an attribute isn't nullable and has no default then it is required
-    !nullable && !has_default
+  def openapi_schema_required(klass_name)
+    model = klass_name.constantize
+    model.columns_hash.select do |key, value|
+      primary_key = key == model.primary_key
+      read_only = openapi_schema_properties_read_only?(klass_name, key)
+      blacklisted = GENERATOR_BLACKLIST_ATTRIBUTES.include?(key.to_sym)
+      nullable = value.null && model.validators_on(key).none? { |v| v.kind == :presence }
+      has_default = value.default.present?
+
+      !primary_key && !read_only && !blacklisted && !nullable && !has_default
+    end.map(&:first).compact
   end
 
   def openapi_show_description(klass_name)
