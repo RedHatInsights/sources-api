@@ -975,7 +975,11 @@
             "readOnly": true,
             "type": "string"
           }
-        }
+        },
+        "required": [
+          "source_id",
+          "application_type_id"
+        ]
       },
       "ApplicationType": {
         "type": "object",
@@ -992,7 +996,6 @@
             "$ref": "#/components/schemas/ID"
           },
           "name": {
-            "required": true,
             "type": "string"
           },
           "updated_at": {
@@ -1000,7 +1003,10 @@
             "readOnly": true,
             "type": "string"
           }
-        }
+        },
+        "required": [
+          "name"
+        ]
       },
       "ApplicationTypesCollection": {
         "type": "object",
@@ -1227,7 +1233,6 @@
           },
           "name": {
             "example": "Sample Provider",
-            "required": true,
             "title": "Name",
             "type": "string"
           },
@@ -1239,7 +1244,6 @@
           },
           "uid": {
             "readOnly": true,
-            "required": true,
             "title": "Unique ID of the inventory source installation",
             "type": "string"
           },
@@ -1254,7 +1258,12 @@
             "title": "Version",
             "type": "string"
           }
-        }
+        },
+        "required": [
+          "name",
+          "uid",
+          "source_type_id"
+        ]
       },
       "SourceType": {
         "type": "object",
@@ -1269,12 +1278,10 @@
           },
           "name": {
             "example": "openshift",
-            "required": true,
             "type": "string"
           },
           "product_name": {
             "example": "OpenShift",
-            "required": true,
             "type": "string"
           },
           "schema": {
@@ -1287,10 +1294,14 @@
           },
           "vendor": {
             "example": "Red Hat",
-            "required": true,
             "type": "string"
           }
-        }
+        },
+        "required": [
+          "name",
+          "product_name",
+          "vendor"
+        ]
       },
       "SourceTypesCollection": {
         "type": "object",
