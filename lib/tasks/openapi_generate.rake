@@ -154,11 +154,15 @@ class OpenapiGenerator
   end
 
   def openapi_schema(klass_name)
-    {
+    schema = {
       "type"       => "object",
       "properties" => openapi_schema_properties(klass_name),
-      "required"   => openapi_schema_required(klass_name),
     }
+
+    required = openapi_schema_required(klass_name)
+    schema["required"] = required unless required.empty?
+
+    schema
   end
 
   def openapi_schema_properties(klass_name)
