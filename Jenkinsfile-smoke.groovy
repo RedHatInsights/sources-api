@@ -19,5 +19,7 @@ if (env.CHANGE_ID) {
         iqePlugins: ["iqe-sources-plugin"],
         // the pytest marker to use when calling `iqe tests all`
         pytestMarker: "sources_smoke",
+        // Config file for tests
+        configFileCredentialsId: "sources-config"
     )
 }
