@@ -1,24 +1,20 @@
 class SourceAvailabilityChecker
   attr_accessor :thread_available_checker, :thread_unavailable_checker
 
-  AVAILABLE_SOURCE_CHECK_FREQUENCY_DEFAULT   = 60
-  UNAVAILABLE_SOURCE_CHECK_FREQUENCY_DEFAULT = 10
-
-  def self.instance(config = {})
-    @instance ||= new(config)
+  def self.instance
+    @instance ||= new
   end
 
-  def initialize(config)
-    @config = config
-    start_threads(config)
+  def initialize
+    start_threads
   end
   private_class_method :new
 
   private
 
-  def start_threads(config)
+  def start_threads
     @thread_available_checker = Thread.new do
-      interval = config.fetch_path(:available, :check_frequency) || AVAILABLE_SOURCE_CHECK_FREQUENCY_DEFAULT
+      interval = ENV["AVAILABLE_SOURCE_CHECK_INTERVAL"] || 60
       loop do
         sleep(interval)
         check_available_sources
@@ -26,7 +22,7 @@ class SourceAvailabilityChecker
     end
 
     @thread_unavailable_checker = Thread.new do
-      interval = config.fetch_path(:unavailable, :check_frequency) || UNAVAILABLE_SOURCE_CHECK_FREQUENCE_DEFAULT
+      interval = ENV["UNAVAILABLE_SOURCE_CHECK_INTERVAL"] || 10
       loop do
         sleep(interval)
         check_unavailable_sources
