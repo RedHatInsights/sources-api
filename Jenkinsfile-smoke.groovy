@@ -2,7 +2,7 @@
  * Requires: https://github.com/RedHatInsights/insights-pipeline-lib
  */
 
-@Library("github.com/RedHatInsights/insights-pipeline-lib") _
+@Library("github.com/RedHatInsights/insights-pipeline-lib@customConfig") _
 
 
 // this 'if' statement makes sure this is a PR, so we don't run smoke tests again
@@ -19,5 +19,7 @@ if (env.CHANGE_ID) {
         iqePlugins: ["iqe-sources-plugin"],
         // the pytest marker to use when calling `iqe tests all`
         pytestMarker: "sources_smoke",
+        // Config file for tests
+        configFileCredentialsId: "sources-config"
     )
 }
