@@ -61,4 +61,52 @@ RSpec.describe ApplicationController, :type => :request do
       expect(response.status).to eq(200)
     end
   end
+
+  context "with entitlement" do
+    let(:entitlements) do
+      {
+        "hybrid_cloud" => { "is_entitled" => true },
+        "insights"     => { "is_entitled" => true }
+      }
+    end
+
+    it "permits request with all the necessary entitlements" do
+      headers = { "CONTENT_TYPE" => "application/json", "x-rh-identity" => identity_with_entitlements }
+
+      get("/api/v1.0/sources", :headers => headers)
+
+      expect(response.status).to eq(200)
+    end
+
+    it "permits request with one of the necessary entitlements" do
+      entitlements["insights"]["is_entitled"] = false
+
+      headers = {
+        "CONTENT_TYPE"  => "application/json",
+        "x-rh-identity" => Base64.encode64(
+          {'identity' => { 'account_number' => external_tenant}, :entitlements => entitlements}.to_json
+        )
+      }
+
+      get("/api/v1.0/sources", :headers => headers)
+
+      expect(response.status).to eq(200)
+    end
+
+    it "forbids request with none of the necessary entitlements" do
+      entitlements["insights"]["is_entitled"]     = false
+      entitlements["hybrid_cloud"]["is_entitled"] = false
+
+      headers = {
+        "CONTENT_TYPE"  => "application/json",
+        "x-rh-identity" => Base64.encode64(
+          {'identity' => { 'account_number' => external_tenant}, :entitlements => entitlements}.to_json
+        )
+      }
+
+      get("/api/v1.0/sources", :headers => headers)
+
+      expect(response.status).to eq(403)
+    end
+  end
 end
