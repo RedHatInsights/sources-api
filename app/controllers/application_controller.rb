@@ -55,7 +55,8 @@ class ApplicationController < ActionController::API
       rescue KeyError, ManageIQ::API::Common::IdentityError
         render :json => { :message => 'Unauthorized' }, :status => :unauthorized
       rescue ManageIQ::API::Common::EntitlementError
-        render :json => { :message => 'Forbidden' }, :status => :forbidden
+        error_document = ManageIQ::API::Common::ErrorDocument.new.add(403, 'Forbidden')
+        render :json => error_document.to_h, :status => error_document.status
       end
     end
   end
