@@ -12,6 +12,10 @@ class SourceAvailabilityChecker
 
   private
 
+  def log
+    Rails.logger
+  end
+
   def start_threads
     @thread_available_checker = Thread.new do
       interval = ENV["AVAILABLE_SOURCE_CHECK_INTERVAL"] || 60
@@ -31,18 +35,54 @@ class SourceAvailabilityChecker
   end
 
   def check_available_sources
-    puts "Checking Available Sources ..."
-    puts ""
-    Source.all.each do |source|
-      puts "Checking source #{source.uid} ..."
+    check_sources = []
+
+    Source.joins(:endpoints).each do |source|
+      next unless source_available(source)
+
+      check_sources << source.id
+      Sources::Api::Events.send_message_for_service(
+        "platform.topological-inventory.operations-openshift",
+        "availability_check",
+        {
+          "message"        => "availability_check",
+          "current_status" => "available",
+          "source_id"      => source.id,
+          "source_uid"     => source.uid
+        },
+        nil
+      )
     end
+    log.info("Requested Availability check for available sources [#{check_sources.join(', ')}]") if check_sources.present?
+  rescue => err
+    log.error(err)
   end
 
   def check_unavailable_sources
-    puts "Checking Unavailable Sources ..."
-    puts ""
-    Source.all.each do |source|
-      puts "Checking source #{source.uid} ..."
+    check_sources = []
+
+    Source.joins(:endpoints).each do |source|
+      next if source_available(source)
+
+      check_sources << source.id
+      Sources::Api::Events.send_message_for_service(
+        "platform.topological-inventory.operations-openshift",
+        "availability_check",
+        {
+          "message"        => "availability_check",
+          "current_status" => "unavailable",
+          "source_id"      => source.id,
+          "source_uid"     => source.uid
+        },
+        nil
+      )
     end
+    log.info("Requested Availability check for unavailable sources [#{check_sources.join(', ')}]") if check_sources.present?
+  rescue => err
+    log.error(err)
+  end
+
+  def source_available(source)
+    source.endpoints.all? { |ep| ep.endpoint_availability.try(:status) == "available" }
   end
 end
