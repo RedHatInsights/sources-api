@@ -54,7 +54,8 @@ class ApplicationController < ActionController::API
           ActsAsTenant.without_tenant { yield }
         end
       rescue KeyError, ManageIQ::API::Common::IdentityError
-        render :json => { :message => 'Unauthorized' }, :status => :unauthorized
+        error_document = ManageIQ::API::Common::ErrorDocument.new.add(401, 'Unauthorized')
+        render :json => error_document.to_h, :status => error_document.status
       rescue ManageIQ::API::Common::EntitlementError
         error_document = ManageIQ::API::Common::ErrorDocument.new.add(403, 'Forbidden')
         render :json => error_document.to_h, :status => error_document.status
