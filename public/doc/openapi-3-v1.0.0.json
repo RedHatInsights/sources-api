@@ -979,7 +979,6 @@
             "$ref": "#/components/schemas/ID"
           },
           "name": {
-            "required": true,
             "type": "string"
           },
           "updated_at": {
@@ -1230,7 +1229,6 @@
           },
           "name": {
             "example": "Sample Provider",
-            "required": true,
             "title": "Name",
             "type": "string"
           },
@@ -1242,7 +1240,6 @@
           },
           "uid": {
             "readOnly": true,
-            "required": true,
             "title": "Unique ID of the inventory source installation",
             "type": "string"
           },
@@ -1272,12 +1269,10 @@
           },
           "name": {
             "example": "openshift",
-            "required": true,
             "type": "string"
           },
           "product_name": {
             "example": "OpenShift",
-            "required": true,
             "type": "string"
           },
           "schema": {
@@ -1290,7 +1285,6 @@
           },
           "vendor": {
             "example": "Red Hat",
-            "required": true,
             "type": "string"
           }
         }
