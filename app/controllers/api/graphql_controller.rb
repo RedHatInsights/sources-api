@@ -1,9 +1,9 @@
 require "manageiq/api/common/graphql"
 
-skip_before_action :validate_request
-
 module Api
   class GraphqlController < ApplicationController
+    skip_before_action :validate_request
+
     def query
       schema_overlay = {
         "^.+$" => {
