@@ -1,5 +1,6 @@
 class OpenapiGenerator
   require 'json'
+  require 'manageiq/api/common/graphql'
 
   PARAMETERS_PATH = "/components/parameters".freeze
   SCHEMAS_PATH = "/components/schemas".freeze
@@ -77,7 +78,12 @@ class OpenapiGenerator
         expected_paths[sub_path][verb] =
           case verb
           when "post"
-            openapi_contents.dig("paths", sub_path, verb) || openapi_create_description(klass_name)
+            if sub_path == "/graphql" && route.action == "query"
+              schemas["GraphQLResponse"] = ::ManageIQ::API::Common::GraphQL.openapi_graphql_response
+              ::ManageIQ::API::Common::GraphQL.openapi_graphql_description
+            else
+              openapi_contents.dig("paths", sub_path, verb) || openapi_create_description(klass_name)
+            end
           when "get"
             openapi_contents.dig("paths", sub_path, verb) || openapi_show_description(klass_name)
           else
@@ -396,7 +402,7 @@ class OpenapiGenerator
     }
 
     schemas["ID"] = {
-      "type"=>"string", "description"=>"ID of the resource", "pattern"=>"/^\\d+$/", "readOnly"=>true
+      "type" => "string", "description" => "ID of the resource", "pattern" => "^\\d+$", "readOnly" => true
     }
 
     schemas["Tenant"] = {

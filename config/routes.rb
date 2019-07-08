@@ -14,6 +14,8 @@ Rails.application.routes.draw do
 
     namespace :v1x0, :path => "v1.0" do
       get "/openapi.json", :to => "root#openapi"
+      post "/graphql", :to => "graphql#query"
+
       resources :application_types, :only => [:index, :show]
       resources :applications,      :only => [:create, :destroy, :index, :show]
       resources :authentications,   :only => [:create, :destroy, :index, :show, :update]

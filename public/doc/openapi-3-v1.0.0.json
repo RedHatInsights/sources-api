@@ -483,6 +483,55 @@
         }
       }
     },
+    "/graphql": {
+      "post": {
+        "summary": "Perform a GraphQL Query",
+        "operationId": "postGraphQL",
+        "description": "Performs a GraphQL Query",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "query": {
+                    "type": "string",
+                    "description": "The GraphQL query",
+                    "default": "{}"
+                  },
+                  "operationName": {
+                    "type": "string",
+                    "description": "If the Query contains several named operations, the operationName controls which one should be executed",
+                    "default": ""
+                  },
+                  "variables": {
+                    "type": "object",
+                    "description": "Optional Query variables"
+                  }
+                },
+                "required": [
+                  "query"
+                ]
+              }
+            }
+          },
+          "description": "GraphQL Query Request",
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "GraphQL Query Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GraphQLResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/openapi.json": {
       "get": {
         "summary": "Return this API document in JSON format",
@@ -846,7 +895,7 @@
         "required": true,
         "schema": {
           "type": "string",
-          "pattern": "/^\\d+$/"
+          "pattern": "^\\d+$"
         }
       },
       "QueryFilter": {
@@ -1132,10 +1181,26 @@
           }
         }
       },
+      "GraphQLResponse": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "object",
+            "description": "Results from the GraphQL query"
+          },
+          "errors": {
+            "type": "array",
+            "description": "Errors resulting from the GraphQL query",
+            "items": {
+              "type": "object"
+            }
+          }
+        }
+      },
       "ID": {
         "type": "string",
         "description": "ID of the resource",
-        "pattern": "/^\\d+$/",
+        "pattern": "^\\d+$",
         "readOnly": true
       },
       "OrderParameters": {

@@ -2,6 +2,7 @@ class ApplicationController < ActionController::API
   ActionController::Parameters.action_on_unpermitted_parameters = :raise
 
   around_action :with_current_request
+  before_action :validate_request
 
   rescue_from ActionController::UnpermittedParameters do |exception|
     error_document = ManageIQ::API::Common::ErrorDocument.new.add(400, exception.message)
@@ -45,24 +46,49 @@ class ApplicationController < ActionController::API
     ManageIQ::API::Common::Request.with_request(request) do |current|
       begin
         if Tenant.tenancy_enabled? && current.required_auth?
-          tenant = Tenant.find_or_create_by(:external_tenant => current.user.tenant)
+          raise ManageIQ::API::Common::EntitlementError unless request_is_entitled?(current.entitlement)
 
+          tenant = Tenant.find_or_create_by(:external_tenant => current.user.tenant)
           ActsAsTenant.with_tenant(tenant) { yield }
         else
           ActsAsTenant.without_tenant { yield }
         end
       rescue KeyError, ManageIQ::API::Common::IdentityError
-        render :json => { :message => 'Unauthorized' }, :status => :unauthorized
+        error_document = ManageIQ::API::Common::ErrorDocument.new.add(401, 'Unauthorized')
+        render :json => error_document.to_h, :status => error_document.status
+      rescue ManageIQ::API::Common::EntitlementError
+        error_document = ManageIQ::API::Common::ErrorDocument.new.add(403, 'Forbidden')
+        render :json => error_document.to_h, :status => error_document.status
       end
     end
+  end
+
+  # Validates against openapi.json
+  # - only for HTTP POST/PATCH
+  def validate_request
+    return unless request.post? || request.patch?
+
+    api_version = self.class.send(:api_version)[1..-1].sub(/x/, ".")
+
+    self.class.send(:api_doc).validate!(request.method,
+                                        request.path,
+                                        api_version,
+                                        body_params.as_json)
+  rescue OpenAPIParser::OpenAPIError => exception
+    error_document = ManageIQ::API::Common::ErrorDocument.new.add(400, exception.message)
+    render :json => error_document.to_h, :status => :bad_request
   end
 
   private_class_method def self.model
     @model ||= controller_name.classify.constantize
   end
 
+  private_class_method def self.api_doc
+    @api_doc ||= ::ManageIQ::API::Common::OpenApi::Docs.instance[api_version[1..-1].sub(/x/, ".")]
+  end
+
   private_class_method def self.api_doc_definition
-    @api_doc_definition ||= Api::Docs[api_version[1..-1].sub(/x/, ".")].definitions[model.name]
+    @api_doc_definition ||= api_doc.definitions[model.name]
   end
 
   private_class_method def self.api_version
@@ -79,10 +105,20 @@ class ApplicationController < ActionController::API
     end
   end
 
+  def request_is_entitled?(entitlement)
+    required_entitlements = %i[hybrid_cloud? insights?]
+    required_entitlements.any? { |e| entitlement.send(e) }
+  end
+
   def instance_link(instance)
     endpoint = instance.class.name.underscore
     version  = self.class.send(:api_version)
     send("api_#{version}_#{endpoint}_url", instance.id)
+  end
+
+  def raise_event(event, payload)
+    headers = ManageIQ::API::Common::Request.current_forwardable
+    Sources::Api::Events.raise_event(event, payload, headers)
   end
 
   def params_for_create

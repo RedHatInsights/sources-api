@@ -66,6 +66,16 @@ RSpec.describe("v1.0 - SourceTypes") do
           :parsed_body => ManageIQ::API::Common::ErrorDocument.new.add(400, "found unpermitted parameter: :aaa").to_h
         )
       end
+
+      it "failure: with an invalid attribute value" do
+        post(collection_path, :params => attributes.merge("name" => 123).to_json, :headers => headers)
+
+        expect(response).to have_attributes(
+          :status      => 400,
+          :location    => nil,
+          :parsed_body => ManageIQ::API::Common::ErrorDocument.new.add(400, "123 class is Integer but it's not valid string in #/components/schemas/SourceType/properties/name").to_h
+        )
+      end
     end
   end
 
