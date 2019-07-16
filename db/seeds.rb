@@ -44,6 +44,10 @@ ansible_tower_json_schema = {
   ]
 }
 update_or_create(SourceType, :name => "ansible-tower", :product_name => "Ansible Tower", :vendor => "Red Hat", :schema => ansible_tower_json_schema)
+update_or_create(SourceType, :name => "vsphere", :product_name => "VMware vSphere", :vendor => "VMware")
+update_or_create(SourceType, :name => "ovirt", :product_name => "Red Hat Virtualization", :vendor => "Red Hat")
+update_or_create(SourceType, :name => "openstack", :product_name => "Red Hat OpenStack", :vendor => "Red Hat")
+update_or_create(SourceType, :name => "cloudforms", :product_name => "Red Hat CloudForms", :vendor => "Red Hat")
 
 update_or_create(ApplicationType, :name => "/insights/platform/catalog",               :display_name => "Catalog")
 update_or_create(ApplicationType, :name => "/insights/platform/cost-management",       :display_name => "Cost Management")
