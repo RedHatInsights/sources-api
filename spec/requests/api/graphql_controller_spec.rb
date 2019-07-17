@@ -18,7 +18,6 @@ RSpec.describe("v1.0 - GraphQL") do
       post("/api/v1.0/graphql", :headers => headers, :params => graphql_source_query)
 
       expect(response.status).to eq(200)
-      expect(result_source_tenant(response.body)).to match_array([tenant.external_tenant])
     end
   end
 end
