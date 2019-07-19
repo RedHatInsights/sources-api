@@ -99,7 +99,7 @@ RSpec.describe("v1.0 - Authentications") do
 
         expect(response).to have_attributes(
           :status => 200,
-          :parsed_body => payload.except("password").merge("id" => instance.id.to_s)
+          :parsed_body => payload.except("password").merge("id" => instance.id.to_s, "tenant" => tenant.external_tenant)
         )
       end
 

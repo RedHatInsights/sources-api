@@ -1053,6 +1053,9 @@
           "status_details": {
             "type": "string"
           },
+          "tenant": {
+            "type": "string"
+          },
           "username": {
             "example": "user@example.com",
             "type": "string"
@@ -1146,6 +1149,9 @@
           "source_id": {
             "$ref": "#/components/schemas/ID"
           },
+          "tenant": {
+            "type": "string"
+          },
           "updated_at": {
             "format": "date-time",
             "readOnly": true,
@@ -1228,6 +1234,9 @@
           },
           "source_type_id": {
             "$ref": "#/components/schemas/ID"
+          },
+          "tenant": {
+            "type": "string"
           },
           "uid": {
             "readOnly": true,
