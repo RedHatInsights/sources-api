@@ -427,15 +427,10 @@ GENERATOR_BLACKLIST_ATTRIBUTES           = [
   :resource_timestamp, :resource_timestamps, :resource_timestamps_max, :tenant_id
 ].to_set.freeze
 GENERATOR_ALLOW_BLACKLISTED_ATTRIBUTES   = {
-  :tenant_id => ['Source', 'Endpoint', 'Authentication'].to_set.freeze
 }
 GENERATOR_SUBSTITUTE_BLACKLISTED_ATTRIBUTES = {
-  :tenant_id => ["tenant", { "type" => "string" }].freeze
 }
 GENERATOR_READ_ONLY_DEFINITIONS = [
-  'Container', 'ContainerGroup', 'ContainerImage', 'ContainerNode', 'ContainerProject', 'ContainerTemplate', 'Flavor',
-  'OrchestrationStack', 'ServiceInstance', 'ServiceOffering', 'ServiceOfferingIcon', 'ServicePlan', 'Tag', 'Tagging',
-  'Vm', 'Volume', 'VolumeAttachment', 'VolumeType'
 ].to_set.freeze
 GENERATOR_READ_ONLY_ATTRIBUTES = [
   :created_at, :updated_at, :archived_at, :last_seen_at
