@@ -3,8 +3,6 @@ source 'https://rubygems.org'
 plugin "bundler-inject", "~> 1.1"
 require File.join(Bundler::Plugin.index.load_paths("bundler-inject")[0], "bundler-inject") rescue nil
 
-gem 'activerecord-pg_enum'
-gem "default_value_for",    '~> 3.1'
 gem 'jbuilder',             '~> 2.0'
 gem 'json-schema',          '~> 2.8'
 gem 'manageiq-loggers',     '~> 0.1'

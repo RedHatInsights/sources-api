@@ -83,6 +83,6 @@ class SourceAvailabilityChecker
   end
 
   def source_available(source)
-    source.endpoints.all? { |ep| ep.endpoint_availability.try(:status) == "available" }
+    source.endpoints.all? { |ep| ep.status == "available" }
   end
 end
