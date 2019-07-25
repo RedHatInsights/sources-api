@@ -2,7 +2,7 @@ class Endpoint < ApplicationRecord
   include TenancyConcern
   belongs_to :source
 
-  has_many   :authentications, :as => :resource
+  has_many   :authentications, :as => :resource, :dependent => :destroy
 
   validates :role, :uniqueness => { :scope => :source_id }
 
