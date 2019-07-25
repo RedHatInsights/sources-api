@@ -16,7 +16,6 @@ module Sources
 
         publish_opts[:headers] = headers if headers
 
-        puts "SOURCES: Raising Event for #{publish_opts} ..."
         messaging_client.publish_topic(publish_opts)
       end
 
@@ -31,10 +30,8 @@ module Sources
 
         publish_opts[:headers] = headers if headers
 
-        puts "SOURCES: Publishing message #{publish_opts} ..."
         messaging_client.publish_message(publish_opts)
       end
-
 
       private_class_method def self.messaging_client
         require "manageiq-messaging"

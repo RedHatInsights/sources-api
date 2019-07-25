@@ -1319,6 +1319,9 @@
       "Source": {
         "type": "object",
         "properties": {
+          "availability_status": {
+            "type": "string"
+          },
           "created_at": {
             "format": "date-time",
             "readOnly": true,

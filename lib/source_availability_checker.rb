@@ -37,7 +37,7 @@ class SourceAvailabilityChecker
   def check_available_sources
     check_sources = []
 
-    Source.includes(:endpoints).each do |source|
+    Source.all.each do |source|
       next unless source_available(source)
 
       check_sources << source.id
@@ -61,7 +61,7 @@ class SourceAvailabilityChecker
   def check_unavailable_sources
     check_sources = []
 
-    Source.includes(:endpoints).each do |source|
+    Source.all.each do |source|
       next if source_available(source)
 
       check_sources << source.id
@@ -83,6 +83,6 @@ class SourceAvailabilityChecker
   end
 
   def source_available(source)
-    source.endpoints.all? { |ep| ep.status == "available" }
+    source.availability_status == "available"
   end
 end
