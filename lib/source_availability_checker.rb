@@ -44,7 +44,7 @@ class SourceAvailabilityChecker
       Sources::Api::Events.send_message(
         "platform.topological-inventory.operations-openshift",
         "Source.availability_check",
-        "source_id" => source.id.to_s
+        :params => { :source_id => source.id.to_s }
       )
     end
     log.info("Requested Availability check for available sources [#{check_sources.join(', ')}]") if check_sources.present?
@@ -62,7 +62,7 @@ class SourceAvailabilityChecker
       Sources::Api::Events.send_message(
         "platform.topological-inventory.operations-openshift",
         "Source.availability_check",
-        "source_id" => source.id.to_s
+        :params => { :source_id => source.id.to_s }
       )
     end
     log.info("Requested Availability check for unavailable sources [#{check_sources.join(', ')}]") if check_sources.present?
