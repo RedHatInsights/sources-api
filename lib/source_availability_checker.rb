@@ -41,16 +41,10 @@ class SourceAvailabilityChecker
       next unless source_available(source)
 
       check_sources << source.id
-      Sources::Api::Events.send_message_for_service(
+      Sources::Api::Events.send_message(
         "platform.topological-inventory.operations-openshift",
-        "availability_check",
-        {
-          "message"        => "availability_check",
-          "current_status" => "available",
-          "source_id"      => source.id,
-          "source_uid"     => source.uid
-        },
-        nil
+        "Source.availability_check",
+        "source_id" => source.id.to_s
       )
     end
     log.info("Requested Availability check for available sources [#{check_sources.join(', ')}]") if check_sources.present?
@@ -65,16 +59,10 @@ class SourceAvailabilityChecker
       next if source_available(source)
 
       check_sources << source.id
-      Sources::Api::Events.send_message_for_service(
+      Sources::Api::Events.send_message(
         "platform.topological-inventory.operations-openshift",
-        "availability_check",
-        {
-          "message"        => "availability_check",
-          "current_status" => "unavailable",
-          "source_id"      => source.id,
-          "source_uid"     => source.uid
-        },
-        nil
+        "Source.availability_check",
+        "source_id" => source.id.to_s
       )
     end
     log.info("Requested Availability check for unavailable sources [#{check_sources.join(', ')}]") if check_sources.present?

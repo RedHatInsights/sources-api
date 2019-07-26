@@ -2,14 +2,10 @@ module Sources
   module Api
     module Events
       def self.raise_event(event, payload, headers = nil)
-        raise_event_for_service("platform.sources.event-stream", event, payload, headers)
-      end
-
-      def self.raise_event_for_service(service, event, payload, headers = nil)
         return if ENV['NO_KAFKA']
 
         publish_opts = {
-          :service => service,
+          :service => "platform.sources.event-stream",
           :event   => event,
           :payload => payload
         }
@@ -19,12 +15,12 @@ module Sources
         messaging_client.publish_topic(publish_opts)
       end
 
-      def self.send_message_for_service(service, event, payload, headers = nil)
+      def self.send_message(service, message, payload, headers = nil)
         return if ENV['NO_KAFKA']
 
         publish_opts = {
           :service => service,
-          :message => event,
+          :message => message,
           :payload => payload
         }
 
