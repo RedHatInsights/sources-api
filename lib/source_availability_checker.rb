@@ -37,12 +37,12 @@ class SourceAvailabilityChecker
   def check_available_sources
     check_sources = []
 
-    Source.all.each do |source|
+    Source.includes(:source_type).all.each do |source|
       next unless source_available(source)
 
       check_sources << source.id
       Sources::Api::Events.send_message(
-        "platform.topological-inventory.operations-openshift",
+        "platform.topological-inventory.operations-#{source.source_type.name}",
         "Source.availability_check",
         :params => { :source_id => source.id.to_s, :timestamp => Time.now.utc }
       )
@@ -55,12 +55,12 @@ class SourceAvailabilityChecker
   def check_unavailable_sources
     check_sources = []
 
-    Source.all.each do |source|
+    Source.includes(:source_type).all.each do |source|
       next if source_available(source)
 
       check_sources << source.id
       Sources::Api::Events.send_message(
-        "platform.topological-inventory.operations-openshift",
+        "platform.topological-inventory.operations-#{source.source_type.name}",
         "Source.availability_check",
         :params => { :source_id => source.id.to_s, :timestamp => Time.now.utc }
       )
