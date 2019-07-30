@@ -41,7 +41,7 @@ class SourceAvailabilityChecker
       next unless source_available(source)
 
       check_sources << source.id
-      Sources::Api::Events.send_message(
+      Sources::Api::Events.send_event(
         "platform.topological-inventory.operations-#{source.source_type.name}",
         "Source.availability_check",
         :params => availability_check_params(source)
@@ -59,7 +59,7 @@ class SourceAvailabilityChecker
       next if source_available(source)
 
       check_sources << source.id
-      Sources::Api::Events.send_message(
+      Sources::Api::Events.send_event(
         "platform.topological-inventory.operations-#{source.source_type.name}",
         "Source.availability_check",
         :params => availability_check_params(source)
