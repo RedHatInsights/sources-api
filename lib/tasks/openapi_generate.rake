@@ -370,9 +370,15 @@ class OpenapiGenerator
     }
 
     schemas["CollectionMetadata"] = {
-      "type" => "object",
+      "type"       => "object",
       "properties" => {
-        "count" => {
+        "count"  => {
+          "type" => "integer"
+        },
+        "limit"  => {
+          "type" => "integer"
+        },
+        "offset" => {
           "type" => "integer"
         }
       }
