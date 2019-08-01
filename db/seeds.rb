@@ -25,7 +25,7 @@ amazon_json_schema = {
   :fields => [
     {:component => "text-field", :name => "role", :type => "hidden", :initialValue => "aws"},
     {:component => "text-field", :name => "authtype", :type => "hidden", :initialValue => "access_key_secret_key"},
-    {:component => "text-field", :name => "user_name", :label => "Access Key"},
+    {:component => "text-field", :name => "username", :label => "Access Key"},
     {:component => "text-field", :name => "password", :label => "Secret Key", :type => "password"}
   ]
 }
@@ -39,7 +39,7 @@ ansible_tower_json_schema = {
     {:component => "text-field", :name => "url", :label => "URL"},
     {:component => "checkbox", :name => "verify_ssl", :label => "Verify SSL"},
     {:component => "text-field", :name => "certificate_authority", :label => "Certificate Authority", :condition => {:when => "verify_ssl", :is => true}},
-    {:component => "text-field", :name => "user", :label => "User name"},
+    {:component => "text-field", :name => "username", :label => "User name"},
     {:component => "text-field", :name => "password", :label => "Secret Key", :type => "password"}
   ]
 }

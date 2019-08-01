@@ -4,7 +4,7 @@ class Source < ApplicationRecord
 
   has_many :applications
   has_many :application_types, :through => :applications
-  has_many :endpoints, :autosave => true
+  has_many :endpoints, :autosave => true, :dependent => :destroy
 
   belongs_to :source_type
 

@@ -1101,6 +1101,12 @@
         "properties": {
           "count": {
             "type": "integer"
+          },
+          "limit": {
+            "type": "integer"
+          },
+          "offset": {
+            "type": "integer"
           }
         }
       },
