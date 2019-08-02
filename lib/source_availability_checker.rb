@@ -41,11 +41,7 @@ class SourceAvailabilityChecker
       next unless source_available(source)
 
       check_sources << source.id
-      Sources::Api::Events.send_event(
-        "platform.topological-inventory.operations-#{source.source_type.name}",
-        "Source.availability_check",
-        :params => availability_check_params(source)
-      )
+      request_availability_check(source)
     end
     log.info("Requested Availability check for available sources [#{check_sources.join(', ')}]") if check_sources.present?
   rescue => err
@@ -59,11 +55,7 @@ class SourceAvailabilityChecker
       next if source_available(source)
 
       check_sources << source.id
-      Sources::Api::Events.send_event(
-        "platform.topological-inventory.operations-#{source.source_type.name}",
-        "Source.availability_check",
-        :params => availability_check_params(source)
-      )
+      request_availability_check(source)
     end
     log.info("Requested Availability check for unavailable sources [#{check_sources.join(', ')}]") if check_sources.present?
   rescue => err
@@ -74,7 +66,17 @@ class SourceAvailabilityChecker
     source.availability_status == "available"
   end
 
-  def availability_check_params(source)
-    { :source_id => source.id.to_s, :timestamp => Time.now.utc, :external_tenant => source.tenant.external_tenant }
+  def request_availability_check(source)
+    Sources::Api::Messaging.client.publish_topic(
+      :service => "platform.topological-inventory.operations-#{source.source_type.name}",
+      :event   => "Source.availability_check",
+      :payload => {
+        :params => {
+          :source_id       => source.id.to_s,
+          :timestamp       => Time.now.utc,
+          :external_tenant => source.tenant.external_tenant
+        }
+      }
+    )
   end
 end

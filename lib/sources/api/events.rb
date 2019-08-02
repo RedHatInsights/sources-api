@@ -2,14 +2,10 @@ module Sources
   module Api
     module Events
       def self.raise_event(event, payload, headers = nil)
-        send_event("platform.sources.event-stream", event, payload, headers)
-      end
-
-      def self.send_event(service, event, payload, headers = nil)
         return if ENV['NO_KAFKA']
 
         publish_opts = {
-          :service => service,
+          :service => "platform.sources.event-stream",
           :event   => event,
           :payload => payload
         }
