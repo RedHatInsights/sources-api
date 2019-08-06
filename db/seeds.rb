@@ -31,6 +31,18 @@ amazon_json_schema = {
 }
 update_or_create(SourceType, :name => "amazon", :product_name => "Amazon Web Services", :vendor => "Amazon", :schema => amazon_json_schema)
 
+azure_json_schema = {
+  :title  => "Configure Azure",
+  :fields => [
+    {:component => "text-field", :name => "role", :type => "hidden", :initialValue => "azure"},
+    {:component => "text-field", :name => "authtype", :type => "hidden", :initialValue => "access_key_secret_key"},
+    {:component => "text-field", :name => "tenant_id", :label => "Tenant ID"},
+    {:component => "text-field", :name => "username", :label => "Client ID"},
+    {:component => "text-field", :name => "password", :label => "Client Secret", :type => "password"}
+  ]
+}
+update_or_create(SourceType, :name => "azure", :product_name => "Microsoft Azure", :vendor => "Azure", :schema => azure_json_schema)
+
 ansible_tower_json_schema = {
   :title  => "Configure AnsibleTower",
   :fields => [
