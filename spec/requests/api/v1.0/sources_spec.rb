@@ -122,6 +122,16 @@ RSpec.describe("v1.0 - Sources") do
           :parsed_body => ManageIQ::API::Common::ErrorDocument.new.add(400, "Record not unique").to_h
         )
       end
+
+      it "ignores blacklisted params" do
+        post(collection_path, :params => attributes.merge("tenant" => "123456", "tenant_id" => 1).to_json, :headers => headers)
+
+        expect(response).to have_attributes(
+          :status      => 201,
+          :location    => "http://www.example.com/api/v1.0/sources/#{response.parsed_body["id"]}",
+          :parsed_body => a_hash_including(attributes)
+        )
+      end
     end
   end
 

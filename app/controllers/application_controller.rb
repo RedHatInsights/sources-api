@@ -4,6 +4,8 @@ class ApplicationController < ActionController::API
   include ManageIQ::API::Common::ApplicationControllerMixins::RequestBodyValidation
   include ManageIQ::API::Common::ApplicationControllerMixins::RequestPath
 
+  BLACKLIST_PARAMS = [:tenant, :tenant_id]
+
   around_action :with_current_request
 
   rescue_from ActiveRecord::RecordNotFound do |exception|
@@ -73,7 +75,7 @@ class ApplicationController < ActionController::API
 
   def params_for_create
     # We already validate this with OpenAPI validator, that validates every request, so we shouldn't do it again here.
-    body_params.permit!
+    body_params.reject {|k, _| BLACKLIST_PARAMS.include?(k.to_sym)}.permit!
   end
 
   def safe_params_for_list
