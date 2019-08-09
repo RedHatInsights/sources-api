@@ -156,8 +156,9 @@ class OpenapiGenerator
 
   def openapi_schema(klass_name)
     {
-      "type"       => "object",
-      "properties" => openapi_schema_properties(klass_name),
+      "type"                 => "object",
+      "properties"           => openapi_schema_properties(klass_name),
+      "additionalProperties" => false
     }
   end
 
