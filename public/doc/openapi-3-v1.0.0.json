@@ -1029,6 +1029,21 @@
             "example": "openshift_default",
             "type": "string"
           },
+          "extra": {
+            "additionalProperties": false,
+            "properties": {
+              "azure": {
+                "additionalProperties": false,
+                "properties": {
+                  "tenant_id": {
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              }
+            },
+            "type": "object"
+          },
           "id": {
             "$ref": "#/components/schemas/ID"
           },
