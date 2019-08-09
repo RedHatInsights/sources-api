@@ -36,7 +36,7 @@ azure_json_schema = {
   :fields => [
     {:component => "text-field", :name => "role", :type => "hidden", :initialValue => "azure"},
     {:component => "text-field", :name => "authtype", :type => "hidden", :initialValue => "access_key_secret_key"},
-    {:component => "text-field", :name => "tenant_id", :label => "Tenant ID"},
+    {:component => "text-field", :name => "extra.azure.tenant_id", :label => "Tenant ID"},
     {:component => "text-field", :name => "username", :label => "Client ID"},
     {:component => "text-field", :name => "password", :label => "Client Secret", :type => "password"}
   ]
