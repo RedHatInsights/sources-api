@@ -75,7 +75,7 @@ class ApplicationController < ActionController::API
 
   def params_for_create
     # We already validate this with OpenAPI validator, that validates every request, so we shouldn't do it again here.
-    body_params.reject {|k, _| BLACKLIST_PARAMS.include?(k.to_sym)}.permit!
+    body_params.except(*BLACKLIST_PARAMS).permit!
   end
 
   def safe_params_for_list
@@ -156,6 +156,6 @@ class ApplicationController < ActionController::API
   end
 
   def params_for_update
-    body_params.permit(*api_doc_definition.all_attributes - api_doc_definition.read_only_attributes)
+    body_params.except(*BLACKLIST_PARAMS).permit(*api_doc_definition.all_attributes - api_doc_definition.read_only_attributes)
   end
 end

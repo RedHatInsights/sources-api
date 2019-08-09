@@ -124,7 +124,7 @@ RSpec.describe("v1.0 - Sources") do
       end
 
       it "ignores blacklisted params" do
-        post(collection_path, :params => attributes.merge("tenant" => "123456", "tenant_id" => 1).to_json, :headers => headers)
+        post(collection_path, :params => attributes.merge("tenant" => "123456").to_json, :headers => headers)
 
         expect(response).to have_attributes(
           :status      => 201,
@@ -268,6 +268,18 @@ RSpec.describe("v1.0 - Sources") do
           :status      => 201,
           :location    => "http://www.example.com/api/v1.0/sources/#{response.parsed_body["id"]}",
           :parsed_body => a_hash_including(included_attributes)
+                            )
+      end
+
+      it "ignores blacklisted params" do
+        instance = Source.create!(attributes.merge("tenant" => tenant))
+        new_attributes = {"name" => "new name", "tenant" => "123456"}
+
+        patch(instance_path(instance.id), :params => new_attributes.to_json, :headers => headers)
+
+        expect(response).to have_attributes(
+          :status      => 204,
+          :parsed_body => ""
         )
       end
     end
