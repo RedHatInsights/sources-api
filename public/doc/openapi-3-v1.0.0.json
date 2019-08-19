@@ -962,7 +962,8 @@
             "readOnly": true,
             "type": "string"
           }
-        }
+        },
+        "additionalProperties": false
       },
       "ApplicationType": {
         "type": "object",
@@ -986,7 +987,8 @@
             "readOnly": true,
             "type": "string"
           }
-        }
+        },
+        "additionalProperties": false
       },
       "ApplicationTypesCollection": {
         "type": "object",
@@ -1029,6 +1031,21 @@
             "example": "openshift_default",
             "type": "string"
           },
+          "extra": {
+            "additionalProperties": false,
+            "properties": {
+              "azure": {
+                "additionalProperties": false,
+                "properties": {
+                  "tenant_id": {
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              }
+            },
+            "type": "object"
+          },
           "id": {
             "$ref": "#/components/schemas/ID"
           },
@@ -1060,7 +1077,8 @@
             "example": "user@example.com",
             "type": "string"
           }
-        }
+        },
+        "additionalProperties": false
       },
       "AuthenticationsCollection": {
         "type": "object",
@@ -1168,7 +1186,8 @@
             "example": true,
             "type": "boolean"
           }
-        }
+        },
+        "additionalProperties": false
       },
       "EndpointsCollection": {
         "type": "object",
@@ -1260,7 +1279,8 @@
             "title": "Version",
             "type": "string"
           }
-        }
+        },
+        "additionalProperties": false
       },
       "SourceType": {
         "type": "object",
@@ -1293,7 +1313,8 @@
             "example": "Red Hat",
             "type": "string"
           }
-        }
+        },
+        "additionalProperties": false
       },
       "SourceTypesCollection": {
         "type": "object",

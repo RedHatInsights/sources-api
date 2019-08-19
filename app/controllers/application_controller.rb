@@ -122,8 +122,8 @@ class ApplicationController < ActionController::API
   end
 
   def params_for_create
-    required = api_doc_definition.required_attributes
-    body_params.permit(*api_doc_definition.all_attributes).tap { |i| i.require(required) if required }
+    # We already validate this with OpenAPI validator, that validates every request, so we shouldn't do it again here.
+    body_params.permit!
   end
 
   def safe_params_for_list
