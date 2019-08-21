@@ -829,6 +829,39 @@
         }
       }
     },
+    "/sources/{id}/application_types": {
+      "get": {
+        "summary": "List ApplicationTypes for Source",
+        "operationId": "listSourceApplicationTypes",
+        "description": "Returns an array of ApplicationType objects",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/QueryLimit"
+          },
+          {
+            "$ref": "#/components/parameters/QueryOffset"
+          },
+          {
+            "$ref": "#/components/parameters/QueryFilter"
+          },
+          {
+            "$ref": "#/components/parameters/ID"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "ApplicationTypes collection",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApplicationTypesCollection"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/sources/{id}/applications": {
       "get": {
         "summary": "List Applications for Source",
