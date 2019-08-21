@@ -77,6 +77,39 @@
         }
       }
     },
+    "/application_types/{id}/sources": {
+      "get": {
+        "summary": "List Sources for ApplicationType",
+        "operationId": "listApplicationTypeSources",
+        "description": "Returns an array of Source objects",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/QueryLimit"
+          },
+          {
+            "$ref": "#/components/parameters/QueryOffset"
+          },
+          {
+            "$ref": "#/components/parameters/QueryFilter"
+          },
+          {
+            "$ref": "#/components/parameters/ID"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sources collection",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SourcesCollection"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/applications": {
       "get": {
         "summary": "List Applications",
