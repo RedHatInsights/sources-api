@@ -1039,6 +1039,9 @@
             "readOnly": true,
             "type": "string"
           },
+          "dependent_applications": {
+            "type": "object"
+          },
           "display_name": {
             "type": "string"
           },
@@ -1047,6 +1050,12 @@
           },
           "name": {
             "type": "string"
+          },
+          "supported_authentication_types": {
+            "type": "object"
+          },
+          "supported_source_types": {
+            "type": "object"
           },
           "updated_at": {
             "format": "date-time",
