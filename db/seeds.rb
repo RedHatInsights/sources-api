@@ -61,6 +61,6 @@ update_or_create(SourceType, :name => "ovirt", :product_name => "Red Hat Virtual
 update_or_create(SourceType, :name => "openstack", :product_name => "Red Hat OpenStack", :vendor => "Red Hat")
 update_or_create(SourceType, :name => "cloudforms", :product_name => "Red Hat CloudForms", :vendor => "Red Hat")
 
-update_or_create(ApplicationType, :name => "/insights/platform/catalog",               :display_name => "Catalog")
-update_or_create(ApplicationType, :name => "/insights/platform/cost-management",       :display_name => "Cost Management")
-update_or_create(ApplicationType, :name => "/insights/platform/topological-inventory", :display_name => "Topological Inventory")
+update_or_create(ApplicationType, :name => "/insights/platform/catalog",               :display_name => "Catalog",               :dependent_applications => ["/insights/platform/topological-inventory"])
+update_or_create(ApplicationType, :name => "/insights/platform/cost-management",       :display_name => "Cost Management",       :dependent_applications => [])
+update_or_create(ApplicationType, :name => "/insights/platform/topological-inventory", :display_name => "Topological Inventory", :dependent_applications => [])
