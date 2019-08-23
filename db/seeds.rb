@@ -62,17 +62,27 @@ update_or_create(SourceType, :name => "openstack", :product_name => "Red Hat Ope
 update_or_create(SourceType, :name => "cloudforms", :product_name => "Red Hat CloudForms", :vendor => "Red Hat")
 
 update_or_create(ApplicationType,
-                 :name                   => "/insights/platform/catalog",
-                 :display_name           => "Catalog",
-                 :dependent_applications => ["/insights/platform/topological-inventory"],
-                 :supported_source_types => ["ansible_tower", "amazon"])
+                 :name                           => "/insights/platform/catalog",
+                 :display_name                   => "Catalog",
+                 :dependent_applications         => ["/insights/platform/topological-inventory"],
+                 :supported_source_types         => ["ansible_tower"],
+                 :supported_authentication_types => {"ansible_tower" => ["username_password"]})
+
 update_or_create(ApplicationType,
-                 :name                   => "/insights/platform/cost-management",
-                 :display_name           => "Cost Management",
-                 :dependent_applications => [],
-                 :supported_source_types => ["amazon"])
+                 :name                           => "/insights/platform/cost-management",
+                 :display_name                   => "Cost Management",
+                 :dependent_applications         => [],
+                 :supported_source_types         => ["amazon"],
+                 :supported_authentication_types => {"amazon" => ["arn"]})
+
 update_or_create(ApplicationType,
-                 :name                   => "/insights/platform/topological-inventory",
-                 :display_name           => "Topological Inventory",
-                 :dependent_applications => [],
-                 :supported_source_types => ["amazon", "ansible_tower", "azure", "openshift"])
+                 :name                           => "/insights/platform/topological-inventory",
+                 :display_name                   => "Topological Inventory",
+                 :dependent_applications         => [],
+                 :supported_source_types         => ["amazon", "ansible_tower", "azure", "openshift"],
+                 :supported_authentication_types => {
+                   "amazon"        => ["access_key_secret_key"],
+                   "ansible_tower" => ["username_password"],
+                   "azure"         => ["username_password"],
+                   "openshift"     => ["token"]
+                 })
