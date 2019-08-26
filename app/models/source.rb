@@ -6,6 +6,9 @@ class Source < ApplicationRecord
   has_many :application_types, :through => :applications
   has_many :endpoints, :autosave => true, :dependent => :destroy
 
+  attribute :availability_status, :string
+  validates :availability_status, :inclusion => { :in => %w[available partially_available unavailable] }, :allow_nil => true
+
   belongs_to :source_type
 
   delegate :scheme, :scheme=, :host, :host=, :port, :port=, :path, :path=,

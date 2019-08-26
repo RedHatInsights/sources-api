@@ -224,6 +224,52 @@ RSpec.describe("v1.0 - Sources") do
           :parsed_body => ManageIQ::API::Common::ErrorDocument.new.add(400, "4 class is Integer but it's not valid string in #/components/schemas/ID").to_h
         )
       end
+
+      it "failure: with an invalid availability_status value" do
+        post(collection_path, :params => attributes.merge("availability_status" => "bogus").to_json, :headers => headers)
+
+        expect(response).to have_attributes(
+          :status      => 400,
+          :location    => nil,
+          :parsed_body => ManageIQ::API::Common::ErrorDocument.new.add(400, "Invalid parameter - Validation failed: Availability status is not included in the list").to_h
+        )
+      end
+
+      it "success: with an available availability_status" do
+        included_attributes = { "name" => "availability_source", "availability_status" => "available" }
+
+        post(collection_path, :params => attributes.merge(included_attributes).to_json, :headers => headers)
+
+        expect(response).to have_attributes(
+          :status      => 201,
+          :location    => "http://www.example.com/api/v1.0/sources/#{response.parsed_body["id"]}",
+          :parsed_body => a_hash_including(included_attributes)
+        )
+      end
+
+      it "success: with a partially_available availability_status" do
+        included_attributes = { "name" => "availability_source", "availability_status" => "partially_available" }
+
+        post(collection_path, :params => attributes.merge(included_attributes).to_json, :headers => headers)
+
+        expect(response).to have_attributes(
+          :status      => 201,
+          :location    => "http://www.example.com/api/v1.0/sources/#{response.parsed_body["id"]}",
+          :parsed_body => a_hash_including(included_attributes)
+        )
+      end
+
+      it "success: with an unavailable availability_status" do
+        included_attributes = { "name" => "availability_source", "availability_status" => "unavailable" }
+
+        post(collection_path, :params => attributes.merge(included_attributes).to_json, :headers => headers)
+
+        expect(response).to have_attributes(
+          :status      => 201,
+          :location    => "http://www.example.com/api/v1.0/sources/#{response.parsed_body["id"]}",
+          :parsed_body => a_hash_including(included_attributes)
+        )
+      end
     end
   end
 
