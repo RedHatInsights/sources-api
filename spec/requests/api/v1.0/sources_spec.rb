@@ -235,8 +235,32 @@ RSpec.describe("v1.0 - Sources") do
         )
       end
 
-      it "success: with a valid availability_status" do
+      it "success: with an available availability_status" do
         included_attributes = { "name" => "availability_source", "availability_status" => "available" }
+
+        post(collection_path, :params => attributes.merge(included_attributes).to_json, :headers => headers)
+
+        expect(response).to have_attributes(
+          :status      => 201,
+          :location    => "http://www.example.com/api/v1.0/sources/#{response.parsed_body["id"]}",
+          :parsed_body => a_hash_including(included_attributes)
+        )
+      end
+
+      it "success: with a partially_available availability_status" do
+        included_attributes = { "name" => "availability_source", "availability_status" => "partially_available" }
+
+        post(collection_path, :params => attributes.merge(included_attributes).to_json, :headers => headers)
+
+        expect(response).to have_attributes(
+          :status      => 201,
+          :location    => "http://www.example.com/api/v1.0/sources/#{response.parsed_body["id"]}",
+          :parsed_body => a_hash_including(included_attributes)
+        )
+      end
+
+      it "success: with an unavailable availability_status" do
+        included_attributes = { "name" => "availability_source", "availability_status" => "unavailable" }
 
         post(collection_path, :params => attributes.merge(included_attributes).to_json, :headers => headers)
 
