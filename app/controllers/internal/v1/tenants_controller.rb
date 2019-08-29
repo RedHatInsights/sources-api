@@ -6,7 +6,7 @@ module Internal
       end
 
       def show
-        render json: model.find(params.require(:id)).as_json(:prefixes => [request.path])
+        render json: model.find(params.require(:id))
       end
     end
   end

@@ -1,6 +1,8 @@
 class ApplicationController < ActionController::API
   ActionController::Parameters.action_on_unpermitted_parameters = :raise
 
+  include ManageIQ::API::Common::ApplicationControllerMixins::RequestPath
+
   around_action :with_current_request
   before_action :validate_request
 
@@ -122,8 +124,8 @@ class ApplicationController < ActionController::API
   end
 
   def params_for_create
-    required = api_doc_definition.required_attributes
-    body_params.permit(*api_doc_definition.all_attributes).tap { |i| i.require(required) if required }
+    # We already validate this with OpenAPI validator, that validates every request, so we shouldn't do it again here.
+    body_params.permit!
   end
 
   def safe_params_for_list
@@ -205,18 +207,6 @@ class ApplicationController < ActionController::API
 
   def params_for_update
     body_params.permit(*api_doc_definition.all_attributes - api_doc_definition.read_only_attributes)
-  end
-
-  def request_path
-    request.env["REQUEST_URI"]
-  end
-
-  def request_path_parts
-    @request_path_parts ||= request_path.match(/\/(?<full_version_string>v\d+.\d+)\/(?<primary_collection_name>\w+)\/?(?<primary_collection_id>\d+)?\/?(?<subcollection_name>\w+)?/)&.named_captures || {}
-  end
-
-  def subcollection?
-    !!(request_path_parts["subcollection_name"] && request_path_parts["primary_collection_id"] && request_path_parts["primary_collection_name"])
   end
 
   def api_doc_definition

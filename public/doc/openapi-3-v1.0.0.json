@@ -77,6 +77,39 @@
         }
       }
     },
+    "/application_types/{id}/sources": {
+      "get": {
+        "summary": "List Sources for ApplicationType",
+        "operationId": "listApplicationTypeSources",
+        "description": "Returns an array of Source objects",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/QueryLimit"
+          },
+          {
+            "$ref": "#/components/parameters/QueryOffset"
+          },
+          {
+            "$ref": "#/components/parameters/QueryFilter"
+          },
+          {
+            "$ref": "#/components/parameters/ID"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sources collection",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SourcesCollection"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/applications": {
       "get": {
         "summary": "List Applications",
@@ -796,6 +829,39 @@
         }
       }
     },
+    "/sources/{id}/application_types": {
+      "get": {
+        "summary": "List ApplicationTypes for Source",
+        "operationId": "listSourceApplicationTypes",
+        "description": "Returns an array of ApplicationType objects",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/QueryLimit"
+          },
+          {
+            "$ref": "#/components/parameters/QueryOffset"
+          },
+          {
+            "$ref": "#/components/parameters/QueryFilter"
+          },
+          {
+            "$ref": "#/components/parameters/ID"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "ApplicationTypes collection",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApplicationTypesCollection"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/sources/{id}/applications": {
       "get": {
         "summary": "List Applications for Source",
@@ -962,7 +1028,8 @@
             "readOnly": true,
             "type": "string"
           }
-        }
+        },
+        "additionalProperties": false
       },
       "ApplicationType": {
         "type": "object",
@@ -971,6 +1038,9 @@
             "format": "date-time",
             "readOnly": true,
             "type": "string"
+          },
+          "dependent_applications": {
+            "type": "object"
           },
           "display_name": {
             "type": "string"
@@ -981,12 +1051,19 @@
           "name": {
             "type": "string"
           },
+          "supported_authentication_types": {
+            "type": "object"
+          },
+          "supported_source_types": {
+            "type": "object"
+          },
           "updated_at": {
             "format": "date-time",
             "readOnly": true,
             "type": "string"
           }
-        }
+        },
+        "additionalProperties": false
       },
       "ApplicationTypesCollection": {
         "type": "object",
@@ -1029,6 +1106,21 @@
             "example": "openshift_default",
             "type": "string"
           },
+          "extra": {
+            "additionalProperties": false,
+            "properties": {
+              "azure": {
+                "additionalProperties": false,
+                "properties": {
+                  "tenant_id": {
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              }
+            },
+            "type": "object"
+          },
           "id": {
             "$ref": "#/components/schemas/ID"
           },
@@ -1060,7 +1152,8 @@
             "example": "user@example.com",
             "type": "string"
           }
-        }
+        },
+        "additionalProperties": false
       },
       "AuthenticationsCollection": {
         "type": "object",
@@ -1168,7 +1261,8 @@
             "example": true,
             "type": "boolean"
           }
-        }
+        },
+        "additionalProperties": false
       },
       "EndpointsCollection": {
         "type": "object",
@@ -1225,6 +1319,9 @@
       "Source": {
         "type": "object",
         "properties": {
+          "availability_status": {
+            "type": "string"
+          },
           "created_at": {
             "format": "date-time",
             "readOnly": true,
@@ -1260,7 +1357,8 @@
             "title": "Version",
             "type": "string"
           }
-        }
+        },
+        "additionalProperties": false
       },
       "SourceType": {
         "type": "object",
@@ -1293,7 +1391,8 @@
             "example": "Red Hat",
             "type": "string"
           }
-        }
+        },
+        "additionalProperties": false
       },
       "SourceTypesCollection": {
         "type": "object",

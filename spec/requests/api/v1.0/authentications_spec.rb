@@ -54,6 +54,29 @@ RSpec.describe("v1.0 - Authentications") do
         )
       end
 
+      it "success: with valid body containing extra" do
+        payload_with_extra = payload.merge(:extra => {:azure => {:tenant_id => "tenant_id_value"}})
+        post(collection_path, :params => payload_with_extra.to_json, :headers => headers)
+
+        expect(response).to have_attributes(
+                              :status => 201,
+                              :location => "http://www.example.com/api/v1.0/authentications/#{response.parsed_body["id"]}",
+                              :parsed_body => a_hash_including(payload.except("password"))
+                            )
+        expect(response.parsed_body["extra"]).to match({"azure" => {"tenant_id" => "tenant_id_value"}})
+      end
+
+      it "failure: with valid body containing invalid extra" do
+        payload_with_extra = payload.merge({:extra => {:amazon => {:tenant_id => "tenant_id_value"}}})
+        post(collection_path, :params => payload_with_extra.to_json, :headers => headers)
+
+        expect(response).to have_attributes(
+                              :status => 400,
+                              :location => nil,
+                              :parsed_body => ManageIQ::API::Common::ErrorDocument.new.add(400, "properties amazon are not defined in #/components/schemas/Authentication/properties/extra").to_h
+                            )
+      end
+
       it "failure: with no body" do
         post(collection_path, :headers => headers)
 
@@ -70,7 +93,7 @@ RSpec.describe("v1.0 - Authentications") do
         expect(response).to have_attributes(
           :status => 400,
           :location => nil,
-          :parsed_body => ManageIQ::API::Common::ErrorDocument.new.add(400, "found unpermitted parameter: :aaa").to_h
+          :parsed_body => ManageIQ::API::Common::ErrorDocument.new.add(400, "properties aaa are not defined in #/components/schemas/Authentication").to_h
         )
       end
 

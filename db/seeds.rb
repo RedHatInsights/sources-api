@@ -31,6 +31,18 @@ amazon_json_schema = {
 }
 update_or_create(SourceType, :name => "amazon", :product_name => "Amazon Web Services", :vendor => "Amazon", :schema => amazon_json_schema)
 
+azure_json_schema = {
+  :title  => "Configure Azure",
+  :fields => [
+    {:component => "text-field", :name => "role", :type => "hidden", :initialValue => "azure"},
+    {:component => "text-field", :name => "authtype", :type => "hidden", :initialValue => "access_key_secret_key"},
+    {:component => "text-field", :name => "extra.azure.tenant_id", :label => "Tenant ID"},
+    {:component => "text-field", :name => "username", :label => "Client ID"},
+    {:component => "text-field", :name => "password", :label => "Client Secret", :type => "password"}
+  ]
+}
+update_or_create(SourceType, :name => "azure", :product_name => "Microsoft Azure", :vendor => "Azure", :schema => azure_json_schema)
+
 ansible_tower_json_schema = {
   :title  => "Configure AnsibleTower",
   :fields => [
@@ -49,6 +61,28 @@ update_or_create(SourceType, :name => "ovirt", :product_name => "Red Hat Virtual
 update_or_create(SourceType, :name => "openstack", :product_name => "Red Hat OpenStack", :vendor => "Red Hat")
 update_or_create(SourceType, :name => "cloudforms", :product_name => "Red Hat CloudForms", :vendor => "Red Hat")
 
-update_or_create(ApplicationType, :name => "/insights/platform/catalog",               :display_name => "Catalog")
-update_or_create(ApplicationType, :name => "/insights/platform/cost-management",       :display_name => "Cost Management")
-update_or_create(ApplicationType, :name => "/insights/platform/topological-inventory", :display_name => "Topological Inventory")
+update_or_create(ApplicationType,
+                 :name                           => "/insights/platform/catalog",
+                 :display_name                   => "Catalog",
+                 :dependent_applications         => ["/insights/platform/topological-inventory"],
+                 :supported_source_types         => ["ansible_tower"],
+                 :supported_authentication_types => {"ansible_tower" => ["username_password"]})
+
+update_or_create(ApplicationType,
+                 :name                           => "/insights/platform/cost-management",
+                 :display_name                   => "Cost Management",
+                 :dependent_applications         => [],
+                 :supported_source_types         => ["amazon"],
+                 :supported_authentication_types => {"amazon" => ["arn"]})
+
+update_or_create(ApplicationType,
+                 :name                           => "/insights/platform/topological-inventory",
+                 :display_name                   => "Topological Inventory",
+                 :dependent_applications         => [],
+                 :supported_source_types         => ["amazon", "ansible_tower", "azure", "openshift"],
+                 :supported_authentication_types => {
+                   "amazon"        => ["access_key_secret_key"],
+                   "ansible_tower" => ["username_password"],
+                   "azure"         => ["username_password"],
+                   "openshift"     => ["token"]
+                 })
