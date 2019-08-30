@@ -1,7 +1,7 @@
 def update_or_create(attributes)
   obj = ApplicationType.find_by(:name => attributes[:name])
   if obj
-    obj.update_attributes!(attributes.except(:name))
+    obj.update!(attributes.except(:name))
   else
     ApplicationType.create!(attributes)
   end

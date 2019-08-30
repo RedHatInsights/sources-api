@@ -1,7 +1,7 @@
 def update_or_create(attributes)
   obj = SourceType.find_by(:name => attributes[:name])
   if obj
-    obj.update_attributes!(attributes.except(:name))
+    obj.update!(attributes.except(:name))
   else
     SourceType.create!(attributes)
   end
