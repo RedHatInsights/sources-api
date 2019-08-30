@@ -12,14 +12,16 @@ update_or_create(
   :display_name                   => "Catalog",
   :dependent_applications         => ["/insights/platform/topological-inventory"],
   :supported_source_types         => ["ansible_tower"],
-  :supported_authentication_types => {"ansible_tower" => ["username_password"]})
+  :supported_authentication_types => {"ansible_tower" => ["username_password"]}
+)
 
 update_or_create(
   :name                           => "/insights/platform/cost-management",
   :display_name                   => "Cost Management",
   :dependent_applications         => [],
   :supported_source_types         => ["amazon"],
-  :supported_authentication_types => {"amazon" => ["arn"]})
+  :supported_authentication_types => {"amazon" => ["arn"]}
+)
 
 update_or_create(
   :name                           => "/insights/platform/topological-inventory",
