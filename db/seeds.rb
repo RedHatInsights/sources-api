@@ -18,7 +18,14 @@ openshift_json_schema = {
     {:component => "text-field", :name => "token", :label => "Token", :type => "password"}
   ]
 }
-update_or_create(SourceType, :name => "openshift", :product_name => "OpenShift Container Platform", :vendor => "Red Hat", :schema => openshift_json_schema)
+update_or_create(
+  SourceType,
+  :name         => "openshift",
+  :product_name => "OpenShift Container Platform",
+  :schema       => openshift_json_schema,
+  :vendor       => "Red Hat",
+  :icon_url     => "/openshift_logo.png"
+)
 
 amazon_json_schema = {
   :title  => "Configure AWS",
@@ -29,7 +36,14 @@ amazon_json_schema = {
     {:component => "text-field", :name => "password", :label => "Secret Key", :type => "password"}
   ]
 }
-update_or_create(SourceType, :name => "amazon", :product_name => "Amazon Web Services", :vendor => "Amazon", :schema => amazon_json_schema)
+update_or_create(
+  SourceType,
+  :name         => "amazon",
+  :product_name => "Amazon Web Services",
+  :schema       => amazon_json_schema,
+  :vendor       => "Amazon",
+  :icon_url     => "/aws_logo.png"
+)
 
 azure_json_schema = {
   :title  => "Configure Azure",
@@ -56,7 +70,7 @@ ansible_tower_json_schema = {
   ]
 }
 update_or_create(SourceType, :name => "ansible-tower", :product_name => "Ansible Tower", :vendor => "Red Hat", :schema => ansible_tower_json_schema)
-update_or_create(SourceType, :name => "vsphere", :product_name => "VMware vSphere", :vendor => "VMware")
+update_or_create(SourceType, :name => "vsphere", :product_name => "VMware vSphere", :vendor => "VMware", :icon_url => "/vsphere_logo.png")
 update_or_create(SourceType, :name => "ovirt", :product_name => "Red Hat Virtualization", :vendor => "Red Hat")
 update_or_create(SourceType, :name => "openstack", :product_name => "Red Hat OpenStack", :vendor => "Red Hat")
 update_or_create(SourceType, :name => "cloudforms", :product_name => "Red Hat CloudForms", :vendor => "Red Hat")
