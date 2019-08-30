@@ -1,6 +1,7 @@
 class ApplicationController < ActionController::API
   ActionController::Parameters.action_on_unpermitted_parameters = :raise
 
+  include ManageIQ::API::Common::ApplicationControllerMixins::ApiDoc
   include ManageIQ::API::Common::ApplicationControllerMixins::Common
   include ManageIQ::API::Common::ApplicationControllerMixins::RequestPath
 
@@ -80,18 +81,6 @@ class ApplicationController < ActionController::API
   rescue OpenAPIParser::OpenAPIError => exception
     error_document = ManageIQ::API::Common::ErrorDocument.new.add(400, exception.message)
     render :json => error_document.to_h, :status => :bad_request
-  end
-
-  private_class_method def self.api_doc
-    @api_doc ||= ::ManageIQ::API::Common::OpenApi::Docs.instance[api_version[1..-1].sub(/x/, ".")]
-  end
-
-  private_class_method def self.api_doc_definition
-    @api_doc_definition ||= api_doc.definitions[model.name]
-  end
-
-  private_class_method def self.api_version
-    @api_version ||= name.split("::")[1].downcase
   end
 
   def body_params
@@ -204,9 +193,5 @@ class ApplicationController < ActionController::API
 
   def params_for_update
     body_params.permit(*api_doc_definition.all_attributes - api_doc_definition.read_only_attributes)
-  end
-
-  def api_doc_definition
-    self.class.send(:api_doc_definition)
   end
 end
