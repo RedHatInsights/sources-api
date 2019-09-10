@@ -1,15 +1,10 @@
 class ApplicationController < ActionController::API
-  ActionController::Parameters.action_on_unpermitted_parameters = :raise
-
+  include ManageIQ::API::Common::ApplicationControllerMixins::ApiDoc
+  include ManageIQ::API::Common::ApplicationControllerMixins::Common
+  include ManageIQ::API::Common::ApplicationControllerMixins::RequestBodyValidation
   include ManageIQ::API::Common::ApplicationControllerMixins::RequestPath
 
   around_action :with_current_request
-  before_action :validate_request
-
-  rescue_from ActionController::UnpermittedParameters do |exception|
-    error_document = ManageIQ::API::Common::ErrorDocument.new.add(400, exception.message)
-    render :json => error_document.to_h, :status => error_document.status
-  end
 
   rescue_from ActiveRecord::RecordNotFound do |exception|
     error_document = ManageIQ::API::Common::ErrorDocument.new.add(404, "Record not found")
@@ -37,11 +32,6 @@ class ApplicationController < ActionController::API
     render :json => error_document.to_h, :status => :bad_request
   end
 
-  rescue_from Sources::Api::BodyParseError do |exception|
-    error_document = ManageIQ::API::Common::ErrorDocument.new.add(400, "Failed to parse POST body, expected JSON")
-    render :json => error_document.to_h, :status => error_document.status
-  end
-
   private
 
   def with_current_request
@@ -62,48 +52,6 @@ class ApplicationController < ActionController::API
         error_document = ManageIQ::API::Common::ErrorDocument.new.add(403, 'Forbidden')
         render :json => error_document.to_h, :status => error_document.status
       end
-    end
-  end
-
-  # Validates against openapi.json
-  # - only for HTTP POST/PATCH
-  def validate_request
-    return unless request.post? || request.patch?
-
-    api_version = self.class.send(:api_version)[1..-1].sub(/x/, ".")
-
-    self.class.send(:api_doc).validate!(request.method,
-                                        request.path,
-                                        api_version,
-                                        body_params.as_json)
-  rescue OpenAPIParser::OpenAPIError => exception
-    error_document = ManageIQ::API::Common::ErrorDocument.new.add(400, exception.message)
-    render :json => error_document.to_h, :status => :bad_request
-  end
-
-  private_class_method def self.model
-    @model ||= controller_name.classify.constantize
-  end
-
-  private_class_method def self.api_doc
-    @api_doc ||= ::ManageIQ::API::Common::OpenApi::Docs.instance[api_version[1..-1].sub(/x/, ".")]
-  end
-
-  private_class_method def self.api_doc_definition
-    @api_doc_definition ||= api_doc.definitions[model.name]
-  end
-
-  private_class_method def self.api_version
-    @api_version ||= name.split("::")[1].downcase
-  end
-
-  def body_params
-    @body_params ||= begin
-      raw_body = request.body.read
-      parsed_body = JSON.parse(raw_body)
-      ActionController::Parameters.new(parsed_body)
-    rescue JSON::ParserError
-      raise Sources::Api::BodyParseError
     end
   end
 
@@ -207,13 +155,5 @@ class ApplicationController < ActionController::API
 
   def params_for_update
     body_params.permit(*api_doc_definition.all_attributes - api_doc_definition.read_only_attributes)
-  end
-
-  def api_doc_definition
-    self.class.send(:api_doc_definition)
-  end
-
-  def model
-    self.class.send(:model)
   end
 end
