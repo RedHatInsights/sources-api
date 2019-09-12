@@ -1368,6 +1368,9 @@
             "readOnly": true,
             "type": "string"
           },
+          "icon_url": {
+            "type": "string"
+          },
           "id": {
             "$ref": "#/components/schemas/ID"
           },

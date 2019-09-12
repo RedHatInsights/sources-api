@@ -51,7 +51,7 @@ RSpec.describe("v1.0 - Sources") do
         expect(response).to have_attributes(
           :status => 400,
           :location => nil,
-          :parsed_body => ManageIQ::API::Common::ErrorDocument.new.add(400, "Failed to parse POST body, expected JSON").to_h
+          :parsed_body => ManageIQ::API::Common::ErrorDocument.new.add(400, "Failed to parse request body, expected JSON").to_h
         )
       end
 
