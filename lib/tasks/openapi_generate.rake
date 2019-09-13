@@ -39,14 +39,6 @@ class OpenapiGenerator < ManageIQ::API::Common::OpenApi::Generator
     end
   end
 
-  def openapi_schema(klass_name)
-    {
-      "type"                 => "object",
-      "properties"           => openapi_schema_properties(klass_name),
-      "additionalProperties" => false
-    }
-  end
-
   def openapi_schema_properties(klass_name)
     model = klass_name.constantize
     model.columns_hash.map do |key, value|
