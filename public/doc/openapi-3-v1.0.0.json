@@ -1181,10 +1181,10 @@
           "last": {
             "type": "string"
           },
-          "prev": {
+          "next": {
             "type": "string"
           },
-          "next": {
+          "prev": {
             "type": "string"
           }
         }

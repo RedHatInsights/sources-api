@@ -63,76 +63,6 @@ class OpenapiGenerator < ManageIQ::API::Common::OpenApi::Generator
   end
 
   def run
-    parameters["QueryOffset"] = {
-      "in"          => "query",
-      "name"        => "offset",
-      "description" => "The number of items to skip before starting to collect the result set.",
-      "required"    => false,
-      "schema"      => {
-        "type"    => "integer",
-        "minimum" => 0,
-        "default" => 0
-      }
-    }
-
-    parameters["QueryLimit"] = {
-      "in"          => "query",
-      "name"        => "limit",
-      "description" => "The numbers of items to return per page.",
-      "required"    => false,
-      "schema"      => {
-        "type"    => "integer",
-        "minimum" => 1,
-        "maximum" => 1000,
-        "default" => 100
-      }
-    }
-
-    parameters["QueryFilter"] = {
-      "in"          => "query",
-      "name"        => "filter",
-      "description" => "Filter for querying collections.",
-      "required"    => false,
-      "style"       => "deepObject",
-      "explode"     => true,
-      "schema"      => {
-        "type" => "object"
-      }
-    }
-
-    schemas["CollectionLinks"] = {
-      "type" => "object",
-      "properties" => {
-        "first" => {
-          "type" => "string"
-        },
-        "last"  => {
-          "type" => "string"
-        },
-        "prev"  => {
-          "type" => "string"
-        },
-        "next"  => {
-          "type" => "string"
-        }
-      }
-    }
-
-    schemas["CollectionMetadata"] = {
-      "type"       => "object",
-      "properties" => {
-        "count"  => {
-          "type" => "integer"
-        },
-        "limit"  => {
-          "type" => "integer"
-        },
-        "offset" => {
-          "type" => "integer"
-        }
-      }
-    }
-
     schemas["OrderParameters"] = {
       "type" => "object",
       "properties" => {
@@ -154,10 +84,6 @@ class OpenapiGenerator < ManageIQ::API::Common::OpenApi::Generator
         "name"   => {"type" => "string", "readOnly" => true, "example" => "architecture"},
         "value"  => {"type" => "string", "readOnly" => true, "example" => "x86_64"}
       }
-    }
-
-    schemas["ID"] = {
-      "type" => "string", "description" => "ID of the resource", "pattern" => "^\\d+$", "readOnly" => true
     }
 
     schemas["Tenant"] = {
