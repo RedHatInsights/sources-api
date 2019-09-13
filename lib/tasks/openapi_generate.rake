@@ -68,15 +68,6 @@ class OpenapiGenerator < ManageIQ::API::Common::OpenApi::Generator
       )
     end
   end
-
-  def run
-    new_content = openapi_contents
-    new_content["paths"] = build_paths.sort.to_h
-    new_content["components"] ||= {}
-    new_content["components"]["schemas"]    = schemas.sort.each_with_object({})    { |(name, val), h| h[name] = val || openapi_contents["components"]["schemas"][name]    || {} }
-    new_content["components"]["parameters"] = parameters.sort.each_with_object({}) { |(name, val), h| h[name] = val || openapi_contents["components"]["parameters"][name] || {} }
-    File.write(openapi_file, JSON.pretty_generate(new_content) + "\n")
-  end
 end
 
 GENERATOR_BLACKLIST_ATTRIBUTES           = [
