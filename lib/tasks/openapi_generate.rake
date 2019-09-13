@@ -54,16 +54,22 @@ class OpenapiGenerator < ManageIQ::API::Common::OpenApi::Generator
     end.compact.sort.to_h
   end
 
-  def run
-    schemas["Tenant"] = {
-      "type"       => "object",
-      "properties" => {
-        "name"            => {"type" => "string", "readOnly" => true, "example" => "Sample Tenant"},
-        "description"     => {"type" => "string", "readOnly" => true, "example" => "Description of the Tenant"},
-        "external_tenant" => {"type" => "string", "readOnly" => true, "example" => "External tenant identifier"}
-      }
-    }
+  def schemas
+    @schemas ||= begin
+      super.merge(
+        "Tenant" => {
+          "type"       => "object",
+          "properties" => {
+            "name"            => {"type" => "string", "readOnly" => true, "example" => "Sample Tenant"},
+            "description"     => {"type" => "string", "readOnly" => true, "example" => "Description of the Tenant"},
+            "external_tenant" => {"type" => "string", "readOnly" => true, "example" => "External tenant identifier"}
+          }
+        }
+      )
+    end
+  end
 
+  def run
     new_content = openapi_contents
     new_content["paths"] = build_paths.sort.to_h
     new_content["components"] ||= {}
