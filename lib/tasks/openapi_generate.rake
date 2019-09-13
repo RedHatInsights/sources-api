@@ -55,29 +55,6 @@ class OpenapiGenerator < ManageIQ::API::Common::OpenApi::Generator
   end
 
   def run
-    schemas["OrderParameters"] = {
-      "type" => "object",
-      "properties" => {
-        "service_parameters" => {
-          "type" => "object",
-          "description" => "JSON object with provisioning parameters"
-        },
-        "provider_control_parameters" => {
-          "type" => "object",
-          "description" => "The provider specific parameters needed to provision this service. This might include namespaces, special keys"
-        }
-      }
-    }
-
-    schemas["Tagging"] = {
-      "type"       => "object",
-      "properties" => {
-        "tag_id" => {"$ref" => "##{SCHEMAS_PATH}/ID"},
-        "name"   => {"type" => "string", "readOnly" => true, "example" => "architecture"},
-        "value"  => {"type" => "string", "readOnly" => true, "example" => "x86_64"}
-      }
-    }
-
     schemas["Tenant"] = {
       "type"       => "object",
       "properties" => {
