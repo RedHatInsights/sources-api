@@ -12,7 +12,7 @@ openshift_json_schema = {
   :fields => [
     {:component => "text-field", :name => "endpoint.role", :type => "hidden", :initialValue => "kubernetes"},
     {:component => "text-field", :name => "authentication.authtype", :type => "hidden", :initialValue => "token"},
-    {:component => "text-field", :name => "url", :label => "URL"},
+    {:component => "text-field", :name => "url", :label => "URL", :validate => [{:type => "url-validator"}]},
     {:component => "checkbox", :name => "endpoint.verify_ssl", :label => "Verify SSL"},
     {:component => "text-field", :name => "endpoint.certificate_authority", :label => "Certificate Authority", :condition => {:when => "endpoint.verify_ssl", :is => true}},
     {:component => "text-field", :name => "authentication.password", :label => "Token", :type => "password"}
@@ -62,7 +62,7 @@ ansible_tower_json_schema = {
   :fields => [
     {:component => "text-field", :name => "endpoint.role", :type => "hidden", :initialValue => "ansible"}, # FIXME: Find the correct value.
     {:component => "text-field", :name => "authentication.authtype", :type => "hidden", :initialValue => "username_password"},
-    {:component => "text-field", :name => "url", :label => "URL"},
+    {:component => "text-field", :name => "url", :label => "URL", :validate => [{:type => "url-validator"}]},
     {:component => "checkbox", :name => "endpoint.verify_ssl", :label => "Verify SSL"},
     {:component => "text-field", :name => "endpoint.certificate_authority", :label => "Certificate Authority", :condition => {:when => "endpoint.verify_ssl", :is => true}},
     {:component => "text-field", :name => "authentication.username", :label => "User name"},
