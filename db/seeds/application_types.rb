@@ -19,8 +19,12 @@ update_or_create(
   :name                           => "/insights/platform/cost-management",
   :display_name                   => "Cost Management",
   :dependent_applications         => [],
-  :supported_source_types         => ["amazon"],
-  :supported_authentication_types => {"amazon" => ["arn"]}
+  :supported_source_types         => ["amazon", "azure", "openshift"],
+  :supported_authentication_types => {
+    "amazon"    => ["arn"],
+    "azure"     => ["username_password"],
+    "openshift" => ["token"]
+  }
 )
 
 update_or_create(
