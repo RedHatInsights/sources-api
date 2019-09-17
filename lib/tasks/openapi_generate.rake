@@ -67,12 +67,6 @@ class OpenapiGenerator < ManageIQ::API::Common::OpenApi::Generator
   end
 end
 
-GENERATOR_READ_ONLY_DEFINITIONS = [
-].to_set.freeze
-GENERATOR_READ_ONLY_ATTRIBUTES = [
-  :created_at, :updated_at, :archived_at, :last_seen_at
-].to_set.freeze
-
 namespace :openapi do
   desc "Generate the openapi.json contents"
   task :generate => :environment do
