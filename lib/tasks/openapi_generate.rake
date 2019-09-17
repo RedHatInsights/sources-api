@@ -39,19 +39,16 @@ class OpenapiGenerator < ManageIQ::API::Common::OpenApi::Generator
     end
   end
 
-  def openapi_schema_properties(klass_name)
-    model = klass_name.constantize
-    model.columns_hash.map do |key, value|
-      unless(GENERATOR_ALLOW_BLACKLISTED_ATTRIBUTES[key.to_sym] || []).include?(klass_name)
-        next if GENERATOR_BLACKLIST_ATTRIBUTES.include?(key.to_sym)
-      end
+  def generator_blacklist_allowed_attributes
+    @generator_blacklist_allowed_attributes ||= {
+      :tenant_id => ['Source', 'Endpoint', 'Authentication'].to_set.freeze
+    }
+  end
 
-      if GENERATOR_SUBSTITUTE_BLACKLISTED_ATTRIBUTES.include?(key.to_sym)
-        GENERATOR_SUBSTITUTE_BLACKLISTED_ATTRIBUTES[key.to_sym]
-      else
-        [key, openapi_schema_properties_value(klass_name, model, key, value)]
-      end
-    end.compact.sort.to_h
+  def generator_blacklist_substitute_attributes
+    @generator_blacklist_substitute_attributes ||= {
+      :tenant_id => ["tenant", { "type" => "string" }].freeze
+    }
   end
 
   def schemas
@@ -70,15 +67,6 @@ class OpenapiGenerator < ManageIQ::API::Common::OpenApi::Generator
   end
 end
 
-GENERATOR_BLACKLIST_ATTRIBUTES           = [
-  :resource_timestamp, :resource_timestamps, :resource_timestamps_max, :tenant_id
-].to_set.freeze
-GENERATOR_ALLOW_BLACKLISTED_ATTRIBUTES   = {
-  :tenant_id => ['Source', 'Endpoint', 'Authentication'].to_set.freeze
-}
-GENERATOR_SUBSTITUTE_BLACKLISTED_ATTRIBUTES = {
-  :tenant_id => ["tenant", { "type" => "string" }].freeze
-}
 GENERATOR_READ_ONLY_DEFINITIONS = [
 ].to_set.freeze
 GENERATOR_READ_ONLY_ATTRIBUTES = [
