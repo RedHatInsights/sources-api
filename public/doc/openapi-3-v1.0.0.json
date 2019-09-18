@@ -1181,10 +1181,10 @@
           "last": {
             "type": "string"
           },
-          "prev": {
+          "next": {
             "type": "string"
           },
-          "next": {
+          "prev": {
             "type": "string"
           }
         }
@@ -1303,19 +1303,6 @@
         "pattern": "^\\d+$",
         "readOnly": true
       },
-      "OrderParameters": {
-        "type": "object",
-        "properties": {
-          "service_parameters": {
-            "type": "object",
-            "description": "JSON object with provisioning parameters"
-          },
-          "provider_control_parameters": {
-            "type": "object",
-            "description": "The provider specific parameters needed to provision this service. This might include namespaces, special keys"
-          }
-        }
-      },
       "Source": {
         "type": "object",
         "properties": {
@@ -1428,24 +1415,6 @@
             "items": {
               "$ref": "#/components/schemas/Source"
             }
-          }
-        }
-      },
-      "Tagging": {
-        "type": "object",
-        "properties": {
-          "tag_id": {
-            "$ref": "#/components/schemas/ID"
-          },
-          "name": {
-            "type": "string",
-            "readOnly": true,
-            "example": "architecture"
-          },
-          "value": {
-            "type": "string",
-            "readOnly": true,
-            "example": "x86_64"
           }
         }
       },
