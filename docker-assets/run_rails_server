@@ -28,5 +28,6 @@ write_encryption_key
 # Wait for postgres to be ready
 check_svc_status $DATABASE_HOST $DATABASE_PORT
 
-bundle exec rake db:migrate db:seed
+bundle exec rake db:migrate
+bundle exec rake db:seed
 bundle exec rails server
