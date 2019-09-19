@@ -1236,6 +1236,10 @@
             "example": 80,
             "type": "integer"
           },
+          "receptor_node": {
+            "description": "Identifier of a receptor node",
+            "type": "string"
+          },
           "role": {
             "example": "default",
             "type": "string"
