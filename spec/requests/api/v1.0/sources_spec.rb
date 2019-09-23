@@ -45,16 +45,6 @@ RSpec.describe("v1.0 - Sources") do
         )
       end
 
-      it "failure: with no body" do
-        post(collection_path, :headers => headers)
-
-        expect(response).to have_attributes(
-          :status => 400,
-          :location => nil,
-          :parsed_body => ManageIQ::API::Common::ErrorDocument.new.add(400, "Failed to parse request body, expected JSON").to_h
-        )
-      end
-
       it "failure: with a missing name attribute" do
         post(collection_path, :params => attributes.except("name").to_json, :headers => headers)
 
