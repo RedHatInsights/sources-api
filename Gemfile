@@ -13,8 +13,7 @@ gem 'pg',                   '~> 1.0', :require => false
 gem 'puma',                 '~> 3.0'
 gem 'rack-cors',            '>= 0.4.1'
 gem 'rails',                '~> 5.2.2'
-
-gem 'manageiq-api-common', :git => 'https://github.com/ManageIQ/manageiq-api-common', :branch => 'master'
+gem 'manageiq-api-common',  '~> 0.1.0'
 
 group :development, :test do
   gem 'simplecov'
