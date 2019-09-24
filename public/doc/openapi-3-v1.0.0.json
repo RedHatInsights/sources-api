@@ -571,7 +571,14 @@
         "operationId": "getDocumentation",
         "responses": {
           "200": {
-            "description": "The API document for this version of the API"
+            "description": "The API document for this version of the API",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
           }
         }
       }
