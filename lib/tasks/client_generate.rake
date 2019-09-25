@@ -54,6 +54,13 @@ class ClientGenerator
     File.write(yaml_spec, JSON.parse(File.read(json_spec)).to_yaml(:line_width => -1).sub("---\n", "").tap { |c| c.gsub!("- NULL VALUE", "- null") })
   end
 
+  # Remove source files which are not present but won't be deleted by the generator-cli jar
+  def clean_target_directories(client_dir)
+    FileUtils.rm_r(client_dir.join("docs")) if client_dir.join("docs").exist?
+    FileUtils.rm_r(client_dir.join("spec")) if client_dir.join("spec").exist?
+    FileUtils.rm_r(client_dir.join("lib"))  if client_dir.join("lib").exist?
+  end
+
   def generate_client(client_dir, lng)
     msg("Sources API Version: #{api_version}")
     msg("Using OpenAPI Generator CLI Jar:   #{generator_cli_jar}")
@@ -63,6 +70,7 @@ class ClientGenerator
 
     msg("\nGenerating API #{lng} Client ...")
     generate_yaml_file(openapi_file, openapi_yaml_file)
+    clean_target_directories(client_dir)
     system("java -jar #{generator_cli_jar} generate -i #{openapi_yaml_file} -c #{generator_config} -g #{lng} -o #{client_dir}")
   end
 end

@@ -10,6 +10,7 @@ module Api
     class ApplicationTypesController < Api::V1::ApplicationTypesController; end
     class AuthenticationsController < Api::V1::AuthenticationsController; end
     class EndpointsController < Api::V1::EndpointsController; end
+    class GraphqlController < Api::V1::GraphqlController; end
     class SourcesController < Api::V1::SourcesController; end
     class SourceTypesController < Api::V1::SourceTypesController; end
   end

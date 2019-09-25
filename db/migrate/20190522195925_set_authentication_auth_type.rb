@@ -1,4 +1,11 @@
 class SetAuthenticationAuthType < ActiveRecord::Migration[5.2]
+  class SourceType < ActiveRecord::Base
+  end
+  class Authentication < ActiveRecord::Base
+  end
+  class Endpoint < ActiveRecord::Base
+  end
+
   def up
     source_types_by_id        = SourceType.all.index_by(&:id)
     sources_by_source_type_id = Source.all.group_by(&:source_type_id)

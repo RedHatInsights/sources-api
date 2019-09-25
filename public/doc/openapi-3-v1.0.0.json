@@ -539,7 +539,8 @@
                   },
                   "variables": {
                     "type": "object",
-                    "description": "Optional Query variables"
+                    "description": "Optional Query variables",
+                    "nullable": true
                   }
                 },
                 "required": [
@@ -571,7 +572,14 @@
         "operationId": "getDocumentation",
         "responses": {
           "200": {
-            "description": "The API document for this version of the API"
+            "description": "The API document for this version of the API",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
           }
         }
       }
@@ -1181,10 +1189,10 @@
           "last": {
             "type": "string"
           },
-          "prev": {
+          "next": {
             "type": "string"
           },
-          "next": {
+          "prev": {
             "type": "string"
           }
         }
@@ -1235,6 +1243,10 @@
             "description": "URI port component",
             "example": 80,
             "type": "integer"
+          },
+          "receptor_node": {
+            "description": "Identifier of a receptor node",
+            "type": "string"
           },
           "role": {
             "example": "default",
@@ -1302,19 +1314,6 @@
         "description": "ID of the resource",
         "pattern": "^\\d+$",
         "readOnly": true
-      },
-      "OrderParameters": {
-        "type": "object",
-        "properties": {
-          "service_parameters": {
-            "type": "object",
-            "description": "JSON object with provisioning parameters"
-          },
-          "provider_control_parameters": {
-            "type": "object",
-            "description": "The provider specific parameters needed to provision this service. This might include namespaces, special keys"
-          }
-        }
       },
       "Source": {
         "type": "object",
@@ -1428,24 +1427,6 @@
             "items": {
               "$ref": "#/components/schemas/Source"
             }
-          }
-        }
-      },
-      "Tagging": {
-        "type": "object",
-        "properties": {
-          "tag_id": {
-            "$ref": "#/components/schemas/ID"
-          },
-          "name": {
-            "type": "string",
-            "readOnly": true,
-            "example": "architecture"
-          },
-          "value": {
-            "type": "string",
-            "readOnly": true,
-            "example": "x86_64"
           }
         }
       },
