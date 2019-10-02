@@ -8,7 +8,7 @@ class OpenapiGenerator < ManageIQ::API::Common::OpenApi::Generator
 
   def generator_blacklist_substitute_attributes
     @generator_blacklist_substitute_attributes ||= {
-      :tenant_id => ["tenant", { "type" => "string" }].freeze
+      :tenant_id => ["tenant", { "type" => "string", "readOnly" => true }].freeze
     }
   end
 
