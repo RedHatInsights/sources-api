@@ -2,7 +2,7 @@ require 'manageiq/api/common/open_api/generator'
 class OpenapiGenerator < ManageIQ::API::Common::OpenApi::Generator
   def generator_blacklist_allowed_attributes
     @generator_blacklist_allowed_attributes ||= {
-      :tenant_id => ['Source', 'Endpoint', 'Authentication'].to_set.freeze
+      :tenant_id => ['Authentication', 'Application', 'Endpoint', 'Source'].to_set.freeze
     }
   end
 
