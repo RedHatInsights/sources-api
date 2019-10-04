@@ -8,15 +8,23 @@ def update_or_create(attributes)
 end
 
 openshift_json_schema = {
-  :title  => "Configure OpenShift",
-  :fields => [
-    {:component => "text-field", :name => "endpoint.role", :type => "hidden", :initialValue => "kubernetes"},
-    {:component => "text-field", :name => "authentication.authtype", :type => "hidden", :initialValue => "token"},
-    {:component => "text-field", :name => "url", :label => "URL", :validate => [{:type => "url-validator"}]},
-    {:component => "checkbox", :name => "endpoint.verify_ssl", :label => "Verify SSL"},
-    {:component => "text-field", :name => "endpoint.certificate_authority", :label => "Certificate Authority", :condition => {:when => "endpoint.verify_ssl", :is => true}},
-    {:component => "text-field", :name => "authentication.password", :label => "Token", :type => "password"}
-  ]
+  :authentication => [{
+    :type   => 'token',
+    :name   => "Token",
+    :fields => [
+      {:component => "text-field", :name => "authentication.authtype", :type => "hidden", :initialValue => "token"},
+      {:component => "text-field", :name => "authentication.password", :label => "Token", :type => "password"}
+    ]
+  }],
+  :endpoint       => {
+    :title  => "Configure OpenShift endpoint",
+    :fields => [
+      {:component => "text-field", :name => "endpoint.role", :type => "hidden", :initialValue => "kubernetes"},
+      {:component => "text-field", :name => "url", :label => "URL", :validate => [{:type => "url-validator"}]},
+      {:component => "checkbox", :name => "endpoint.verify_ssl", :label => "Verify SSL"},
+      {:component => "text-field", :name => "endpoint.certificate_authority", :label => "Certificate Authority", :condition => {:when => "endpoint.verify_ssl", :is => true}}
+    ]
+  }
 }
 
 update_or_create(
@@ -28,14 +36,23 @@ update_or_create(
 )
 
 amazon_json_schema = {
-  :title  => "Configure AWS",
-  :fields => [
-    {:component => "text-field", :name => "endpoint.role", :type => "hidden", :initialValue => "aws"},
-    {:component => "text-field", :name => "authentication.authtype", :type => "hidden", :initialValue => "access_key_secret_key"},
-    {:component => "text-field", :name => "authentication.username", :label => "Access Key"},
-    {:component => "text-field", :name => "authentication.password", :label => "Secret Key", :type => "password"}
-  ]
+  :authentication => [{
+    :type   => 'access_key_secret_key',
+    :name   => "AWS Secret Key",
+    :fields => [
+      {:component => "text-field", :name => "authentication.authtype", :type => "hidden", :initialValue => "access_key_secret_key"},
+      {:component => "text-field", :name => "authentication.username", :label => "Access Key"},
+      {:component => "text-field", :name => "authentication.password", :label => "Secret Key", :type => "password"}
+    ]
+  }],
+  :endpoint       => {
+    :hidden => true,
+    :fields => [
+      {:component => "text-field", :name => "endpoint.role", :type => "hidden", :initialValue => "aws"},
+    ]
+  }
 }
+
 update_or_create(
   :name         => "amazon",
   :product_name => "Amazon Web Services",
@@ -45,29 +62,45 @@ update_or_create(
 )
 
 azure_json_schema = {
-  :title  => "Configure Azure",
-  :fields => [
-    {:component => "text-field", :name => "endpoint.role", :type => "hidden", :initialValue => "azure"},
-    {:component => "text-field", :name => "authentication.authtype", :type => "hidden", :initialValue => "access_key_secret_key"},
-    {:component => "text-field", :name => "authentication.extra.azure.tenant_id", :label => "Tenant ID"},
-    {:component => "text-field", :name => "authentication.username", :label => "Client ID"},
-    {:component => "text-field", :name => "authentication.password", :label => "Client Secret", :type => "password"}
-  ]
+  :authentication => [{
+    :type   => 'access_key_secret_key',
+    :name   => "Username and password",
+    :fields => [
+      {:component => "text-field", :name => "authentication.authtype", :type => "hidden", :initialValue => "access_key_secret_key"},
+      {:component => "text-field", :name => "authentication.extra.azure.tenant_id", :label => "Tenant ID"},
+      {:component => "text-field", :name => "authentication.username", :label => "Client ID"},
+      {:component => "text-field", :name => "authentication.password", :label => "Client Secret", :type => "password"}
+    ]
+  }],
+  :endpoint       => {
+    :hidden => true,
+    :fields => [
+      {:component => "text-field", :name => "endpoint.role", :type => "hidden", :initialValue => "azure"},
+    ]
+  }
 }
 
 update_or_create(:name => "azure", :product_name => "Microsoft Azure", :vendor => "Azure", :schema => azure_json_schema)
 
 ansible_tower_json_schema = {
-  :title  => "Configure AnsibleTower",
-  :fields => [
-    {:component => "text-field", :name => "endpoint.role", :type => "hidden", :initialValue => "ansible"}, # FIXME: Find the correct value.
-    {:component => "text-field", :name => "authentication.authtype", :type => "hidden", :initialValue => "username_password"},
-    {:component => "text-field", :name => "url", :label => "URL", :validate => [{:type => "url-validator"}]},
-    {:component => "checkbox", :name => "endpoint.verify_ssl", :label => "Verify SSL"},
-    {:component => "text-field", :name => "endpoint.certificate_authority", :label => "Certificate Authority", :condition => {:when => "endpoint.verify_ssl", :is => true}},
-    {:component => "text-field", :name => "authentication.username", :label => "User name"},
-    {:component => "text-field", :name => "authentication.password", :label => "Secret Key", :type => "password"}
-  ]
+  :authentication => [{
+    :type   => "username_password",
+    :name   => "Username and password",
+    :fields => [
+      {:component => "text-field", :name => "authentication.authtype", :type => "hidden", :initialValue => "username_password"},
+      {:component => "text-field", :name => "authentication.username", :label => "User name"},
+      {:component => "text-field", :name => "authentication.password", :label => "Secret Key", :type => "password"}
+    ]
+  }],
+  :endpoint       => {
+    :title  => "Configure Ansible Tower endpoint",
+    :fields => [
+      {:component => "text-field", :name => "endpoint.role", :type => "hidden", :initialValue => "ansible"},
+      {:component => "text-field", :name => "url", :label => "URL", :validate => [{:type => "url-validator"}]},
+      {:component => "checkbox", :name => "endpoint.verify_ssl", :label => "Verify SSL"},
+      {:component => "text-field", :name => "endpoint.certificate_authority", :label => "Certificate Authority", :condition => {:when => "endpoint.verify_ssl", :is => true}},
+    ]
+  }
 }
 
 update_or_create(:name => "ansible-tower", :product_name => "Ansible Tower", :vendor => "Red Hat", :schema => ansible_tower_json_schema)
