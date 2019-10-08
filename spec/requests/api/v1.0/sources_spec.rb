@@ -271,15 +271,15 @@ RSpec.describe("v1.0 - Sources") do
                             )
       end
 
-      it "ignores blacklisted params" do
+      it "rejects read_only attributes" do
         instance = Source.create!(attributes.merge("tenant" => tenant))
         new_attributes = {"name" => "new name", "tenant" => "123456"}
 
         patch(instance_path(instance.id), :params => new_attributes.to_json, :headers => headers)
 
         expect(response).to have_attributes(
-          :status      => 204,
-          :parsed_body => ""
+          :status      => 400,
+          :parsed_body => { "errors" => [{"detail" => "found unpermitted parameter: :tenant", "status" => 400 }]}
         )
       end
     end

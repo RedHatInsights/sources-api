@@ -156,6 +156,6 @@ class ApplicationController < ActionController::API
   end
 
   def params_for_update
-    body_params.except(*BLACKLIST_PARAMS).permit(*api_doc_definition.all_attributes - api_doc_definition.read_only_attributes)
+    body_params.permit(*api_doc_definition.all_attributes - api_doc_definition.read_only_attributes)
   end
 end
