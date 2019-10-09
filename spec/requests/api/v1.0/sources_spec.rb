@@ -75,6 +75,16 @@ RSpec.describe("v1.0 - Sources") do
         )
       end
 
+      it "failure: with a null name attribute" do
+        post(collection_path, :params => attributes.merge("name" => nil).to_json, :headers => headers)
+
+        expect(response).to have_attributes(
+          :status      => 400,
+          :location    => nil,
+          :parsed_body => ManageIQ::API::Common::ErrorDocument.new.add(400, "#/components/schemas/Source/properties/name don't allow null").to_h
+        )
+      end
+
       it "failure: with an invalid attribute value" do
         post(collection_path, :params => attributes.merge("source_type_id" => "xxx").to_json, :headers => headers)
 
@@ -167,6 +177,20 @@ RSpec.describe("v1.0 - Sources") do
         )
 
         expect(instance.reload).to have_attributes(new_attributes)
+      end
+
+      it "failure: with a null value" do
+        instance = Source.create!(attributes.merge("tenant" => tenant))
+        new_attributes = {"name" => nil}
+
+        patch(instance_path(instance.id), :params => new_attributes.to_json, :headers => headers)
+
+        expect(response).to have_attributes(
+          :status => 400,
+          :parsed_body => {"errors"=>[{"detail"=>"#/components/schemas/Source/properties/name don't allow null", "status"=>400}]}
+        )
+
+        expect(instance.reload).to have_attributes(:name => "my source")
       end
 
       it "failure: with an invalid id" do
