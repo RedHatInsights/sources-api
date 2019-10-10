@@ -268,7 +268,7 @@ RSpec.describe("v1.0 - Sources") do
           :status      => 201,
           :location    => "http://www.example.com/api/v1.0/sources/#{response.parsed_body["id"]}",
           :parsed_body => a_hash_including(included_attributes)
-                            )
+        )
       end
 
       it "rejects read_only attributes" do
