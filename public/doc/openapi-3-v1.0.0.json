@@ -1154,8 +1154,8 @@
             "type": "string"
           },
           "tenant": {
-            "readOnly": true,
-            "type": "string"
+            "type": "string",
+            "readOnly": true
           },
           "username": {
             "example": "user@example.com",
@@ -1262,8 +1262,8 @@
             "$ref": "#/components/schemas/ID"
           },
           "tenant": {
-            "readOnly": true,
-            "type": "string"
+            "type": "string",
+            "readOnly": true
           },
           "updated_at": {
             "format": "date-time",
@@ -1340,8 +1340,8 @@
             "$ref": "#/components/schemas/ID"
           },
           "tenant": {
-            "readOnly": true,
-            "type": "string"
+            "type": "string",
+            "readOnly": true
           },
           "uid": {
             "readOnly": true,
