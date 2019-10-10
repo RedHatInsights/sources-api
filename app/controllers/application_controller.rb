@@ -4,7 +4,7 @@ class ApplicationController < ActionController::API
   include ManageIQ::API::Common::ApplicationControllerMixins::RequestBodyValidation
   include ManageIQ::API::Common::ApplicationControllerMixins::RequestPath
 
-  BLACKLIST_PARAMS = [ :tenant ]
+  BLACKLIST_PARAMS = [:tenant].freeze
 
   around_action :with_current_request
 
