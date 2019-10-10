@@ -12,14 +12,14 @@ openshift_json_schema = {
     :type   => 'token',
     :name   => "Token",
     :fields => [
-      {:component => "text-field", :name => "authentication.authtype", :type => "hidden", :initialValue => "token"},
+      {:component => "text-field", :name => "authentication.authtype", :hideField => true, :initialValue => "token"},
       {:component => "text-field", :name => "authentication.password", :label => "Token", :type => "password"}
     ]
   }],
   :endpoint       => {
     :title  => "Configure OpenShift endpoint",
     :fields => [
-      {:component => "text-field", :name => "endpoint.role", :type => "hidden", :initialValue => "kubernetes"},
+      {:component => "text-field", :name => "endpoint.role", :hideField => true, :initialValue => "kubernetes"},
       {:component => "text-field", :name => "url", :label => "URL", :validate => [{:type => "url-validator"}]},
       {:component => "checkbox", :name => "endpoint.verify_ssl", :label => "Verify SSL"},
       {:component => "text-field", :name => "endpoint.certificate_authority", :label => "Certificate Authority", :condition => {:when => "endpoint.verify_ssl", :is => true}}
@@ -40,7 +40,7 @@ amazon_json_schema = {
     :type   => 'access_key_secret_key',
     :name   => "AWS Secret Key",
     :fields => [
-      {:component => "text-field", :name => "authentication.authtype", :type => "hidden", :initialValue => "access_key_secret_key"},
+      {:component => "text-field", :name => "authentication.authtype", :hideField => true, :initialValue => "access_key_secret_key"},
       {:component => "text-field", :name => "authentication.username", :label => "Access Key"},
       {:component => "text-field", :name => "authentication.password", :label => "Secret Key", :type => "password"}
     ]
@@ -48,7 +48,7 @@ amazon_json_schema = {
   :endpoint       => {
     :hidden => true,
     :fields => [
-      {:component => "text-field", :name => "endpoint.role", :type => "hidden", :initialValue => "aws"},
+      {:component => "text-field", :name => "endpoint.role", :hideField => true, :initialValue => "aws"},
     ]
   }
 }
@@ -66,7 +66,7 @@ azure_json_schema = {
     :type   => 'access_key_secret_key',
     :name   => "Username and password",
     :fields => [
-      {:component => "text-field", :name => "authentication.authtype", :type => "hidden", :initialValue => "access_key_secret_key"},
+      {:component => "text-field", :name => "authentication.authtype", :hideField => true, :initialValue => "access_key_secret_key"},
       {:component => "text-field", :name => "authentication.extra.azure.tenant_id", :label => "Tenant ID"},
       {:component => "text-field", :name => "authentication.username", :label => "Client ID"},
       {:component => "text-field", :name => "authentication.password", :label => "Client Secret", :type => "password"}
@@ -75,7 +75,7 @@ azure_json_schema = {
   :endpoint       => {
     :hidden => true,
     :fields => [
-      {:component => "text-field", :name => "endpoint.role", :type => "hidden", :initialValue => "azure"},
+      {:component => "text-field", :name => "endpoint.role", :hideField => true, :initialValue => "azure"},
     ]
   }
 }
@@ -87,7 +87,7 @@ ansible_tower_json_schema = {
     :type   => "username_password",
     :name   => "Username and password",
     :fields => [
-      {:component => "text-field", :name => "authentication.authtype", :type => "hidden", :initialValue => "username_password"},
+      {:component => "text-field", :name => "authentication.authtype", :hideField => true, :initialValue => "username_password"},
       {:component => "text-field", :name => "authentication.username", :label => "User name"},
       {:component => "text-field", :name => "authentication.password", :label => "Secret Key", :type => "password"}
     ]
@@ -95,7 +95,7 @@ ansible_tower_json_schema = {
   :endpoint       => {
     :title  => "Configure Ansible Tower endpoint",
     :fields => [
-      {:component => "text-field", :name => "endpoint.role", :type => "hidden", :initialValue => "ansible"},
+      {:component => "text-field", :name => "endpoint.role", :hideField => true, :initialValue => "ansible"},
       {:component => "text-field", :name => "url", :label => "URL", :validate => [{:type => "url-validator"}]},
       {:component => "checkbox", :name => "endpoint.verify_ssl", :label => "Verify SSL"},
       {:component => "text-field", :name => "endpoint.certificate_authority", :label => "Certificate Authority", :condition => {:when => "endpoint.verify_ssl", :is => true}},
