@@ -1335,6 +1335,9 @@
           "id": {
             "$ref": "#/components/schemas/ID"
           },
+          "imported": {
+            "type": "string"
+          },
           "name": {
             "example": "Sample Provider",
             "title": "Name",
