@@ -46,16 +46,6 @@
                 }
               }
             }
-          },
-          "404": {
-            "description": "Not found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorNotFound"
-                }
-              }
-            }
           }
         }
       }
@@ -160,16 +150,6 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/ApplicationsCollection"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Not found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorNotFound"
                 }
               }
             }
@@ -287,16 +267,6 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/AuthenticationsCollection"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Not found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorNotFound"
                 }
               }
             }
@@ -453,16 +423,6 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/EndpointsCollection"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Not found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorNotFound"
                 }
               }
             }
@@ -713,16 +673,6 @@
                 }
               }
             }
-          },
-          "404": {
-            "description": "Not found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorNotFound"
-                }
-              }
-            }
           }
         }
       },
@@ -855,16 +805,6 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/SourcesCollection"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Not found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorNotFound"
                 }
               }
             }
