@@ -15,6 +15,7 @@ gem 'puma',                 '~> 3.0'
 gem 'rack-cors',            '>= 0.4.1'
 gem 'rails',                '~> 5.2.2'
 gem 'sprockets',            '~> 4.0'
+gem "vault",                '~> 0.1'
 
 group :development, :test do
   gem 'rubocop',             '~>0.69.0', :require => false

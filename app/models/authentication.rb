@@ -1,5 +1,9 @@
 class Authentication < ApplicationRecord
-  include PasswordConcern
+  if ENV["VAULT_ADDR"].present?
+    include VaultPasswordConcern
+  else
+    include PasswordConcern
+  end
   include TenancyConcern
   encrypt_column :password
 
