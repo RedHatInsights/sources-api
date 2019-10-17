@@ -44,6 +44,36 @@ amazon_json_schema = {
       {:component => "text-field", :name => "authentication.username", :label => "Access Key"},
       {:component => "text-field", :name => "authentication.password", :label => "Secret Key", :type => "password"}
     ]
+  }, {
+    :type   => 'arn',
+    :name   => 'ARN',
+    :fields => [{
+      :component    => 'text-field',
+      :name         => 'authentication.authtype',
+      :hideField    => true,
+      :initialValue => 'arn'
+    }, {
+      :name       => 'billing_source.bucket',
+      :stepKey    => 'amazon-arn-additional-step',
+      :component  => 'text-field',
+      :label      => 'S3 bucket name',
+      :isRequired => true,
+      :validate   => [
+        { :type=>  'required-validator' },
+        { :type => 'pattern-validator', :pattern => '^[A-Za-z0-9]+[A-Za-z0-9_-]*$' }
+      ]
+    }, {
+      :name       => 'authentication.password',
+      :stepKey    => 'arn',
+      :component  => 'text-field',
+      :label      => 'ARN',
+      :isRequired => true,
+      :validate   => [
+        { :type => 'required-validator' },
+        { :type => 'pattern-validator', :pattern => '^arn:aws:.*' },
+        { :type => 'min-length-validator', :threshold => 10 }
+      ]
+    }],
   }],
   :endpoint       => {
     :hidden => true,
