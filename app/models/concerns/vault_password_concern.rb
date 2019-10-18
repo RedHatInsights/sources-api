@@ -17,6 +17,7 @@ module VaultPasswordConcern
 
   def load_encrypted_columns
     self.class.encrypted_columns.each do |col|
+      send("#{col}_encrypted=", read_attribute(col))
       write_attribute(col, read_from_vault(col))
     end
   end
@@ -36,7 +37,7 @@ module VaultPasswordConcern
   end
 
   def read_from_vault(attr)
-    Vault.kv("secret").read(vault_key).try(:data)[attr.to_sym]
+    Vault.kv("secret").read(vault_key).try(:data).try(:[], attr.to_sym)
   end
 
   def write_to_vault(attr, val)
