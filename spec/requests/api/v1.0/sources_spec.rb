@@ -81,7 +81,7 @@ RSpec.describe("v1.0 - Sources") do
         expect(response).to have_attributes(
           :status      => 400,
           :location    => nil,
-          :parsed_body => ManageIQ::API::Common::ErrorDocument.new.add(400, "#/components/schemas/Source/properties/name don't allow null").to_h
+          :parsed_body => ManageIQ::API::Common::ErrorDocument.new.add(400, "OpenAPIParser::NotNullError: #/components/schemas/Source/properties/name does not allow null values").to_h
         )
       end
 
@@ -197,7 +197,7 @@ RSpec.describe("v1.0 - Sources") do
 
         expect(response).to have_attributes(
           :status => 400,
-          :parsed_body => {"errors"=>[{"detail"=>"#/components/schemas/Source/properties/name don't allow null", "status"=>400}]}
+          :parsed_body => {"errors"=>[{"detail"=>"OpenAPIParser::NotNullError: #/components/schemas/Source/properties/name does not allow null values", "status"=>400}]}
         )
 
         expect(instance.reload).to have_attributes(:name => "my source")
