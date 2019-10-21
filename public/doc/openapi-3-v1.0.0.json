@@ -1163,7 +1163,8 @@
             "$ref": "#/components/schemas/ID"
           },
           "tenant": {
-            "type": "string"
+            "type": "string",
+            "readOnly": true
           },
           "updated_at": {
             "format": "date-time",
