@@ -72,7 +72,14 @@
             }
           },
           "404": {
-            "description": "Not found"
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorNotFound"
+                }
+              }
+            }
           }
         }
       }
@@ -103,6 +110,16 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/SourcesCollection"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorNotFound"
                 }
               }
             }
@@ -190,7 +207,14 @@
             }
           },
           "404": {
-            "description": "Not found"
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorNotFound"
+                }
+              }
+            }
           }
         }
       },
@@ -208,7 +232,14 @@
             "description": "Application deleted"
           },
           "404": {
-            "description": "Not found"
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorNotFound"
+                }
+              }
+            }
           }
         }
       }
@@ -293,7 +324,14 @@
             }
           },
           "404": {
-            "description": "Not found"
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorNotFound"
+                }
+              }
+            }
           }
         }
       },
@@ -325,7 +363,14 @@
             "description": "Bad request"
           },
           "404": {
-            "description": "Not found"
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorNotFound"
+                }
+              }
+            }
           }
         }
       },
@@ -343,7 +388,14 @@
             "description": "Authentication deleted"
           },
           "404": {
-            "description": "Not found"
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorNotFound"
+                }
+              }
+            }
           }
         }
       }
@@ -428,7 +480,14 @@
             }
           },
           "404": {
-            "description": "Not found"
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorNotFound"
+                }
+              }
+            }
           }
         }
       },
@@ -460,7 +519,14 @@
             "description": "Bad request"
           },
           "404": {
-            "description": "Not found"
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorNotFound"
+                }
+              }
+            }
           }
         }
       },
@@ -478,7 +544,14 @@
             "description": "Endpoint deleted"
           },
           "404": {
-            "description": "Not found"
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorNotFound"
+                }
+              }
+            }
           }
         }
       }
@@ -509,6 +582,16 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/AuthenticationsCollection"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorNotFound"
                 }
               }
             }
@@ -644,7 +727,14 @@
             }
           },
           "404": {
-            "description": "Not found"
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorNotFound"
+                }
+              }
+            }
           }
         }
       }
@@ -675,6 +765,16 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/SourcesCollection"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorNotFound"
                 }
               }
             }
@@ -762,7 +862,14 @@
             }
           },
           "404": {
-            "description": "Not found"
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorNotFound"
+                }
+              }
+            }
           }
         }
       },
@@ -794,7 +901,14 @@
             "description": "Bad request"
           },
           "404": {
-            "description": "Not found"
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorNotFound"
+                }
+              }
+            }
           }
         }
       },
@@ -812,7 +926,14 @@
             "description": "Source deleted"
           },
           "404": {
-            "description": "Not found"
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorNotFound"
+                }
+              }
+            }
           }
         }
       }
@@ -843,6 +964,16 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/ApplicationTypesCollection"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorNotFound"
                 }
               }
             }
@@ -879,6 +1010,16 @@
                 }
               }
             }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorNotFound"
+                }
+              }
+            }
           }
         }
       }
@@ -909,6 +1050,16 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/EndpointsCollection"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorNotFound"
                 }
               }
             }
@@ -1012,7 +1163,8 @@
             "$ref": "#/components/schemas/ID"
           },
           "tenant": {
-            "type": "string"
+            "type": "string",
+            "readOnly": true
           },
           "updated_at": {
             "format": "date-time",
@@ -1274,6 +1426,27 @@
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/Endpoint"
+            }
+          }
+        }
+      },
+      "ErrorNotFound": {
+        "type": "object",
+        "properties": {
+          "errors": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "integer",
+                  "example": 404
+                },
+                "detail": {
+                  "type": "string",
+                  "example": "Record not found"
+                }
+              }
             }
           }
         }
