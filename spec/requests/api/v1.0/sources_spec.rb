@@ -61,7 +61,7 @@ RSpec.describe("v1.0 - Sources") do
         expect(response).to have_attributes(
           :status => 400,
           :location => nil,
-          :parsed_body => ManageIQ::API::Common::ErrorDocument.new.add(400, "properties aaa are not defined in #/components/schemas/Source").to_h
+          :parsed_body => ManageIQ::API::Common::ErrorDocument.new.add(400, "OpenAPIParser::NotExistPropertyDefinition: #/components/schemas/Source does not define properties: aaa").to_h
         )
       end
 
@@ -81,7 +81,7 @@ RSpec.describe("v1.0 - Sources") do
         expect(response).to have_attributes(
           :status      => 400,
           :location    => nil,
-          :parsed_body => ManageIQ::API::Common::ErrorDocument.new.add(400, "xxx isn't match ^\\d+$ in #/components/schemas/ID").to_h
+          :parsed_body => ManageIQ::API::Common::ErrorDocument.new.add(400, "OpenAPIParser::InvalidPattern: #/components/schemas/ID pattern ^\\d+$ does not match value: xxx").to_h
         )
       end
 
@@ -199,7 +199,7 @@ RSpec.describe("v1.0 - Sources") do
 
         expect(response).to have_attributes(
           :status => 400,
-          :parsed_body => {"errors" => [{"detail"=>"properties aaaaa are not defined in #/components/schemas/Source", "status" => 400}]}
+          :parsed_body => {"errors" => [{"detail" => "OpenAPIParser::NotExistPropertyDefinition: #/components/schemas/Source does not define properties: aaaaa", "status" => 400}]}
         )
       end
 
@@ -211,7 +211,7 @@ RSpec.describe("v1.0 - Sources") do
 
         expect(response).to have_attributes(
           :status => 400,
-          :parsed_body => {"errors" => [{"detail"=>"found unpermitted parameter: :uid", "status" => 400}]}
+          :parsed_body => {"errors" => [{"detail" => "ActionController::UnpermittedParameters: found unpermitted parameter: :uid", "status" => 400}]}
         )
       end
 
@@ -221,7 +221,7 @@ RSpec.describe("v1.0 - Sources") do
         expect(response).to have_attributes(
           :status      => 400,
           :location    => nil,
-          :parsed_body => ManageIQ::API::Common::ErrorDocument.new.add(400, "4 class is Integer but it's not valid string in #/components/schemas/ID").to_h
+          :parsed_body => ManageIQ::API::Common::ErrorDocument.new.add(400, "OpenAPIParser::ValidateError: #/components/schemas/ID expected string, but received Integer: 4").to_h
         )
       end
 
@@ -279,7 +279,7 @@ RSpec.describe("v1.0 - Sources") do
 
         expect(response).to have_attributes(
           :status      => 400,
-          :parsed_body => { "errors" => [{"detail" => "found unpermitted parameter: :tenant", "status" => 400 }]}
+          :parsed_body => { "errors" => [{"detail" => "ActionController::UnpermittedParameters: found unpermitted parameter: :tenant", "status" => 400 }]}
         )
       end
     end

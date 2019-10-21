@@ -57,7 +57,7 @@ RSpec.describe("Sources Filtering") do
     let!(:source_1) { create_source("aaa", :version => "1") }
     let!(:source_2) { create_source("bbb") }
 
-    it("empty filter")      { expect_failure("filter", "found unpermitted parameter: :filter") }
+    it("empty filter")      { expect_failure("filter", "ActionController::UnpermittedParameters: found unpermitted parameter: :filter") }
     it("unknown attribute") { expect_failure("filter[xxx]", "found unpermitted parameter: xxx") }
 
     it "invalid attribute" do
