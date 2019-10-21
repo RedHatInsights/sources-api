@@ -53,7 +53,7 @@ RSpec.describe("v1.0 - SourceTypes") do
         expect(response).to have_attributes(
           :status => 400,
           :location => nil,
-          :parsed_body => ManageIQ::API::Common::ErrorDocument.new.add(400, "properties aaa are not defined in #/components/schemas/SourceType").to_h
+          :parsed_body => ManageIQ::API::Common::ErrorDocument.new.add(400, "OpenAPIParser::NotExistPropertyDefinition: #/components/schemas/SourceType does not define properties: aaa").to_h
         )
       end
 
@@ -63,7 +63,7 @@ RSpec.describe("v1.0 - SourceTypes") do
         expect(response).to have_attributes(
           :status      => 400,
           :location    => nil,
-          :parsed_body => ManageIQ::API::Common::ErrorDocument.new.add(400, "123 class is Integer but it's not valid string in #/components/schemas/SourceType/properties/name").to_h
+          :parsed_body => ManageIQ::API::Common::ErrorDocument.new.add(400, "OpenAPIParser::ValidateError: #/components/schemas/SourceType/properties/name expected string, but received Integer: 123").to_h
         )
       end
     end

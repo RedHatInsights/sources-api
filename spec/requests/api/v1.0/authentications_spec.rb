@@ -73,7 +73,7 @@ RSpec.describe("v1.0 - Authentications") do
         expect(response).to have_attributes(
                               :status => 400,
                               :location => nil,
-                              :parsed_body => ManageIQ::API::Common::ErrorDocument.new.add(400, "properties amazon are not defined in #/components/schemas/Authentication/properties/extra").to_h
+                              :parsed_body => ManageIQ::API::Common::ErrorDocument.new.add(400, "OpenAPIParser::NotExistPropertyDefinition: #/components/schemas/Authentication/properties/extra does not define properties: amazon").to_h
                             )
       end
 
@@ -83,7 +83,7 @@ RSpec.describe("v1.0 - Authentications") do
         expect(response).to have_attributes(
           :status => 400,
           :location => nil,
-          :parsed_body => ManageIQ::API::Common::ErrorDocument.new.add(400, "properties aaa are not defined in #/components/schemas/Authentication").to_h
+          :parsed_body => ManageIQ::API::Common::ErrorDocument.new.add(400, "OpenAPIParser::NotExistPropertyDefinition: #/components/schemas/Authentication does not define properties: aaa").to_h
         )
       end
 
@@ -93,7 +93,7 @@ RSpec.describe("v1.0 - Authentications") do
         expect(response).to have_attributes(
           :status      => 400,
           :location    => nil,
-          :parsed_body => ManageIQ::API::Common::ErrorDocument.new.add(400, "123 class is Integer but it's not valid string in #/components/schemas/Authentication/properties/password").to_h
+          :parsed_body => ManageIQ::API::Common::ErrorDocument.new.add(400, "OpenAPIParser::ValidateError: #/components/schemas/Authentication/properties/password expected string, but received Integer: 123").to_h
         )
       end
     end
