@@ -22,7 +22,7 @@ update_or_create(
   :supported_source_types         => ["amazon", "azure", "openshift"],
   :supported_authentication_types => {
     "amazon"    => ["arn"],
-    "azure"     => ["username_password"],
+    "azure"     => ["tenant_id_client_id_client_secret"],
     "openshift" => ["token"]
   }
 )
@@ -35,7 +35,7 @@ update_or_create(
   :supported_authentication_types => {
     "amazon"        => ["access_key_secret_key"],
     "ansible-tower" => ["username_password"],
-    "azure"         => ["username_password"],
+    "azure"         => ["tenant_id_client_id_client_secret"],
     "openshift"     => ["token"]
   }
 )

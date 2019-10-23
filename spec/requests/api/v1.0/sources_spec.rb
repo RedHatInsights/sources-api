@@ -61,7 +61,7 @@ RSpec.describe("v1.0 - Sources") do
         expect(response).to have_attributes(
           :status => 400,
           :location => nil,
-          :parsed_body => ManageIQ::API::Common::ErrorDocument.new.add(400, "properties aaa are not defined in #/components/schemas/Source").to_h
+          :parsed_body => ManageIQ::API::Common::ErrorDocument.new.add(400, "OpenAPIParser::NotExistPropertyDefinition: #/components/schemas/Source does not define properties: aaa").to_h
         )
       end
 
@@ -75,13 +75,23 @@ RSpec.describe("v1.0 - Sources") do
         )
       end
 
+      it "failure: with a null name attribute" do
+        post(collection_path, :params => attributes.merge("name" => nil).to_json, :headers => headers)
+
+        expect(response).to have_attributes(
+          :status      => 400,
+          :location    => nil,
+          :parsed_body => ManageIQ::API::Common::ErrorDocument.new.add(400, "OpenAPIParser::NotNullError: #/components/schemas/Source/properties/name does not allow null values").to_h
+        )
+      end
+
       it "failure: with an invalid attribute value" do
         post(collection_path, :params => attributes.merge("source_type_id" => "xxx").to_json, :headers => headers)
 
         expect(response).to have_attributes(
           :status      => 400,
           :location    => nil,
-          :parsed_body => ManageIQ::API::Common::ErrorDocument.new.add(400, "xxx isn't match ^\\d+$ in #/components/schemas/ID").to_h
+          :parsed_body => ManageIQ::API::Common::ErrorDocument.new.add(400, "OpenAPIParser::InvalidPattern: #/components/schemas/ID pattern ^\\d+$ does not match value: xxx").to_h
         )
       end
 
@@ -120,6 +130,16 @@ RSpec.describe("v1.0 - Sources") do
           :status      => 400,
           :location    => nil,
           :parsed_body => ManageIQ::API::Common::ErrorDocument.new.add(400, "Record not unique").to_h
+        )
+      end
+
+      it "ignores blacklisted params" do
+        post(collection_path, :params => attributes.merge("tenant" => "123456").to_json, :headers => headers)
+
+        expect(response).to have_attributes(
+          :status      => 201,
+          :location    => "http://www.example.com/api/v1.0/sources/#{response.parsed_body["id"]}",
+          :parsed_body => a_hash_including(attributes)
         )
       end
     end
@@ -169,6 +189,20 @@ RSpec.describe("v1.0 - Sources") do
         expect(instance.reload).to have_attributes(new_attributes)
       end
 
+      it "failure: with a null value" do
+        instance = Source.create!(attributes.merge("tenant" => tenant))
+        new_attributes = {"name" => nil}
+
+        patch(instance_path(instance.id), :params => new_attributes.to_json, :headers => headers)
+
+        expect(response).to have_attributes(
+          :status => 400,
+          :parsed_body => {"errors"=>[{"detail"=>"OpenAPIParser::NotNullError: #/components/schemas/Source/properties/name does not allow null values", "status"=>400}]}
+        )
+
+        expect(instance.reload).to have_attributes(:name => "my source")
+      end
+
       it "failure: with an invalid id" do
         instance = Source.create!(attributes.merge("tenant" => tenant))
         new_attributes = {"name" => "new name"}
@@ -189,7 +223,7 @@ RSpec.describe("v1.0 - Sources") do
 
         expect(response).to have_attributes(
           :status => 400,
-          :parsed_body => {"errors" => [{"detail"=>"properties aaaaa are not defined in #/components/schemas/Source", "status" => 400}]}
+          :parsed_body => {"errors" => [{"detail" => "OpenAPIParser::NotExistPropertyDefinition: #/components/schemas/Source does not define properties: aaaaa", "status" => 400}]}
         )
       end
 
@@ -201,7 +235,7 @@ RSpec.describe("v1.0 - Sources") do
 
         expect(response).to have_attributes(
           :status => 400,
-          :parsed_body => {"errors" => [{"detail"=>"found unpermitted parameter: :uid", "status" => 400}]}
+          :parsed_body => {"errors" => [{"detail" => "ActionController::UnpermittedParameters: found unpermitted parameter: :uid", "status" => 400}]}
         )
       end
 
@@ -211,7 +245,7 @@ RSpec.describe("v1.0 - Sources") do
         expect(response).to have_attributes(
           :status      => 400,
           :location    => nil,
-          :parsed_body => ManageIQ::API::Common::ErrorDocument.new.add(400, "4 class is Integer but it's not valid string in #/components/schemas/ID").to_h
+          :parsed_body => ManageIQ::API::Common::ErrorDocument.new.add(400, "OpenAPIParser::ValidateError: #/components/schemas/ID expected string, but received Integer: 4").to_h
         )
       end
 
@@ -258,6 +292,18 @@ RSpec.describe("v1.0 - Sources") do
           :status      => 201,
           :location    => "http://www.example.com/api/v1.0/sources/#{response.parsed_body["id"]}",
           :parsed_body => a_hash_including(included_attributes)
+        )
+      end
+
+      it "rejects read_only attributes" do
+        instance = Source.create!(attributes.merge("tenant" => tenant))
+        new_attributes = {"name" => "new name", "tenant" => "123456"}
+
+        patch(instance_path(instance.id), :params => new_attributes.to_json, :headers => headers)
+
+        expect(response).to have_attributes(
+          :status      => 400,
+          :parsed_body => { "errors" => [{"detail" => "ActionController::UnpermittedParameters: found unpermitted parameter: :tenant", "status" => 400 }]}
         )
       end
     end

@@ -1,8 +1,11 @@
 class ApplicationController < ActionController::API
   include ManageIQ::API::Common::ApplicationControllerMixins::ApiDoc
   include ManageIQ::API::Common::ApplicationControllerMixins::Common
+  include ManageIQ::API::Common::ApplicationControllerMixins::ExceptionHandling
   include ManageIQ::API::Common::ApplicationControllerMixins::RequestBodyValidation
   include ManageIQ::API::Common::ApplicationControllerMixins::RequestPath
+
+  BLACKLIST_PARAMS = [:tenant].freeze
 
   around_action :with_current_request
 
@@ -73,7 +76,7 @@ class ApplicationController < ActionController::API
 
   def params_for_create
     # We already validate this with OpenAPI validator, that validates every request, so we shouldn't do it again here.
-    body_params.permit!
+    body_params.except(*BLACKLIST_PARAMS).permit!
   end
 
   def safe_params_for_list
