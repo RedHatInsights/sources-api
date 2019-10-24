@@ -26,7 +26,8 @@ class ApplicationController < ActionController::API
   end
 
   rescue_from ManageIQ::API::Common::Filter::Error do |exception|
-    render :json => exception.error_document.to_h, :status => exception.error_document.status
+    error_document = ManageIQ::API::Common::ErrorDocument.new.add(400, exception)
+    render :json => error_document.to_h, :status => error_document.status
   end
 
   rescue_from ActiveRecord::NotNullViolation do |exception|
