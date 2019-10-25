@@ -3,6 +3,12 @@ require "manageiq-messaging"
 RSpec.describe("v1.0 - Authentications") do
   include ::Spec::Support::TenantIdentity
 
+  let(:client) { instance_double("ManageIQ::Messaging::Client") }
+  before do
+    allow(client).to receive(:publish_topic)
+    allow(Sources::Api::Events).to receive(:messaging_client).and_return(client)
+  end
+
   let(:headers)         { {"CONTENT_TYPE" => "application/json", "x-rh-identity" => identity} }
   let(:collection_path) { "/api/v1.0/authentications" }
   let(:payload) do
@@ -38,12 +44,6 @@ RSpec.describe("v1.0 - Authentications") do
     end
 
     context "post" do
-      let(:client) { instance_double("ManageIQ::Messaging::Client") }
-      before do
-        allow(client).to receive(:publish_topic)
-        allow(Sources::Api::Events).to receive(:messaging_client).and_return(client)
-      end
-
       it "success: with valid body" do
         post(collection_path, :params => payload.to_json, :headers => headers)
 
@@ -124,6 +124,41 @@ RSpec.describe("v1.0 - Authentications") do
         expect(response).to have_attributes(
           :status => 404,
           :parsed_body => {"errors"=>[{"detail"=>"Record not found", "status"=>404}]}
+        )
+      end
+    end
+
+    context "patch" do
+      let(:instance) { Authentication.create!(payload.merge(:tenant => tenant)) }
+      it "success: with a valid id" do
+        new_attributes = {"name" => "new name"}
+        patch(instance_path(instance.id), :params => new_attributes.to_json, :headers => headers)
+
+        expect(response).to have_attributes(
+          :status      => 204,
+          :parsed_body => ""
+        )
+
+        expect(instance.reload).to have_attributes(new_attributes)
+      end
+
+      it "success: with extra attributes" do
+        extra_attributes = {"extra" => {"azure" => {"tenant_id" => "tenant_id_value"}}}
+
+        patch(instance_path(instance.id), :params => extra_attributes.to_json, :headers => headers)
+
+        expect(response).to have_attributes(:status => 204, :parsed_body => "")
+        expect(instance.reload).to have_attributes(extra_attributes)
+      end
+
+      it "failure: with an invalid id" do
+        new_attributes = {"name" => "new name"}
+
+        patch(instance_path(instance.id * 1000), :params => new_attributes.to_json, :headers => headers)
+
+        expect(response).to have_attributes(
+          :status      => 404,
+          :parsed_body => {"errors" => [{"detail" => "Record not found", "status" => 404}]}
         )
       end
     end
