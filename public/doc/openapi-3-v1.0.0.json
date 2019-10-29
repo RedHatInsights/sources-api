@@ -1151,6 +1151,12 @@
           "application_type_id": {
             "$ref": "#/components/schemas/ID"
           },
+          "availability_status": {
+            "type": "string"
+          },
+          "availability_status_error": {
+            "type": "string"
+          },
           "created_at": {
             "format": "date-time",
             "readOnly": true,
@@ -1247,6 +1253,12 @@
         "properties": {
           "authtype": {
             "example": "openshift_default",
+            "type": "string"
+          },
+          "availability_status": {
+            "type": "string"
+          },
+          "availability_status_error": {
             "type": "string"
           },
           "extra": {
@@ -1350,6 +1362,12 @@
       "Endpoint": {
         "type": "object",
         "properties": {
+          "availability_status": {
+            "type": "string"
+          },
+          "availability_status_error": {
+            "type": "string"
+          },
           "certificate_authority": {
             "description": "Optional X.509 Certificate Authority",
             "type": "string"

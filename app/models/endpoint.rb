@@ -6,6 +6,9 @@ class Endpoint < ApplicationRecord
 
   validates :role, :uniqueness => { :scope => :source_id }
 
+  attribute :availability_status, :string
+  validates :availability_status, :inclusion => { :in => %w[available unavailable] }, :allow_nil => true
+
   def base_url_path
     URI::Generic.build(:scheme => scheme, :host => host, :port => port, :path => path).to_s
   end
