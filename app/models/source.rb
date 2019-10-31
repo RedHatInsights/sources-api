@@ -15,6 +15,7 @@ class Source < ApplicationRecord
            :to => :default_endpoint, :allow_nil => true
   validates :name, :presence => true, :allow_blank => false,
             :uniqueness => { :scope => :tenant_id }
+  attribute :source_uid, :string
 
   def default_endpoint
     default = endpoints.detect(&:default)
