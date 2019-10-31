@@ -1531,6 +1531,9 @@
           "imported": {
             "type": "string"
           },
+          "source_uid": {
+            "type": "string"
+          },
           "name": {
             "example": "Sample Provider",
             "title": "Name",
