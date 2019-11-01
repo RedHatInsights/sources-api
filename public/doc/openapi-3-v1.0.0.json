@@ -1531,7 +1531,7 @@
           "imported": {
             "type": "string"
           },
-          "source_uid": {
+          "source_ref": {
             "type": "string"
           },
           "name": {
