@@ -1531,12 +1531,12 @@
           "imported": {
             "type": "string"
           },
-          "source_ref": {
-            "type": "string"
-          },
           "name": {
             "example": "Sample Provider",
             "title": "Name",
+            "type": "string"
+          },
+          "source_ref": {
             "type": "string"
           },
           "source_type_id": {
