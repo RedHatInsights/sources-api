@@ -218,6 +218,45 @@
           }
         }
       },
+      "patch": {
+        "summary": "Update an existing Application",
+        "operationId": "updateApplication",
+        "description": "Updates a Application object",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/ID"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Application"
+              }
+            }
+          },
+          "description": "Application attributes to update",
+          "required": true
+        },
+        "responses": {
+          "204": {
+            "description": "Updated, no content"
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorNotFound"
+                }
+              }
+            }
+          }
+        }
+      },
       "delete": {
         "summary": "Delete an existing Application",
         "operationId": "deleteApplication",
@@ -1151,6 +1190,12 @@
           "application_type_id": {
             "$ref": "#/components/schemas/ID"
           },
+          "availability_status": {
+            "type": "string"
+          },
+          "availability_status_error": {
+            "type": "string"
+          },
           "created_at": {
             "format": "date-time",
             "readOnly": true,
@@ -1247,6 +1292,12 @@
         "properties": {
           "authtype": {
             "example": "openshift_default",
+            "type": "string"
+          },
+          "availability_status": {
+            "type": "string"
+          },
+          "availability_status_error": {
             "type": "string"
           },
           "extra": {
@@ -1350,6 +1401,12 @@
       "Endpoint": {
         "type": "object",
         "properties": {
+          "availability_status": {
+            "type": "string"
+          },
+          "availability_status_error": {
+            "type": "string"
+          },
           "certificate_authority": {
             "description": "Optional X.509 Certificate Authority",
             "type": "string"
@@ -1516,6 +1573,9 @@
           "name": {
             "example": "Sample Provider",
             "title": "Name",
+            "type": "string"
+          },
+          "source_ref": {
             "type": "string"
           },
           "source_type_id": {

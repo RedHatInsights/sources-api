@@ -19,7 +19,7 @@ Rails.application.routes.draw do
       resources :application_types, :only => [:index, :show] do
         resources :sources, :only => [:index]
       end
-      resources :applications,      :only => [:create, :destroy, :index, :show]
+      resources :applications,      :only => [:create, :destroy, :index, :show, :update]
       resources :authentications,   :only => [:create, :destroy, :index, :show, :update]
       resources :endpoints,         :only => [:create, :destroy, :index, :show, :update] do
         resources :authentications, :only => [:index]
