@@ -138,3 +138,4 @@ update_or_create(:name => "vsphere", :product_name => "VMware vSphere", :vendor 
 update_or_create(:name => "ovirt", :product_name => "Red Hat Virtualization", :vendor => "Red Hat")
 update_or_create(:name => "openstack", :product_name => "Red Hat OpenStack", :vendor => "Red Hat")
 update_or_create(:name => "cloudforms", :product_name => "Red Hat CloudForms", :vendor => "Red Hat")
+update_or_create(:name => "satellite", :product_name => "Red Hat Satellite", :vendor => "Red Hat")
