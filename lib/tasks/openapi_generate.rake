@@ -1,5 +1,5 @@
-require 'manageiq/api/common/open_api/generator'
-class OpenapiGenerator < ManageIQ::API::Common::OpenApi::Generator
+require 'insights/api/common/open_api/generator'
+class OpenapiGenerator < Insights::API::Common::OpenApi::Generator
   def generator_blacklist_allowed_attributes
     @generator_blacklist_allowed_attributes ||= {
       :tenant_id => ['Authentication', 'Application', 'Endpoint', 'Source'].to_set.freeze

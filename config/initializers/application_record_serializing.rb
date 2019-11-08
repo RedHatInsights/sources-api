@@ -1,1 +1,1 @@
-ApplicationRecord.prepend(ManageIQ::API::Common::OpenApi::Serializer)
+ApplicationRecord.prepend(Insights::API::Common::OpenApi::Serializer)
