@@ -2,7 +2,7 @@ Rails.application.routes.draw do
   # Disable PUT for now since rails sends these :update and they aren't really the same thing.
   def put(*_args); end
 
-  routing_helper = ManageIQ::API::Common::Routing.new(self)
+  routing_helper = Insights::API::Common::Routing.new(self)
 
   prefix = "api"
   if ENV["PATH_PREFIX"].present? && ENV["APP_NAME"].present?

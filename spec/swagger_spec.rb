@@ -9,7 +9,7 @@ describe "Swagger stuff" do
     end
   end
 
-  let(:swagger_routes) { ::ManageIQ::API::Common::OpenApi::Docs.instance.routes }
+  let(:swagger_routes) { ::Insights::API::Common::OpenApi::Docs.instance.routes }
 
   describe "Routing" do
     include Rails.application.routes.url_helpers
@@ -80,7 +80,7 @@ describe "Swagger stuff" do
   end
 
   describe "Model serialization" do
-    let(:doc) { ::ManageIQ::API::Common::OpenApi::Docs.instance[version] }
+    let(:doc) { ::Insights::API::Common::OpenApi::Docs.instance[version] }
     let(:authentication) { Authentication.create!(doc.example_attributes("Authentication").symbolize_keys.merge(:tenant => tenant, :resource => endpoint)) }
     let(:endpoint) { Endpoint.create!(doc.example_attributes("Endpoint").symbolize_keys.merge(:tenant => tenant, :source => source)) }
     let(:source) { Source.create!(doc.example_attributes("Source").symbolize_keys.merge(:source_type => source_type, :tenant => tenant, :uid => SecureRandom.uuid)) }
@@ -89,7 +89,7 @@ describe "Swagger stuff" do
 
     context "v1.0" do
       let(:version) { "1.0" }
-      ::ManageIQ::API::Common::OpenApi::Docs.instance["1.0"].definitions.each do |definition_name, schema|
+      ::Insights::API::Common::OpenApi::Docs.instance["1.0"].definitions.each do |definition_name, schema|
         next if definition_name.in?(["CollectionLinks", "CollectionMetadata"])
         definition_name = definition_name.sub(/Collection\z/, "").singularize
 
