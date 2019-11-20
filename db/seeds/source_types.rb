@@ -12,14 +12,14 @@ openshift_json_schema = {
     :type   => 'token',
     :name   => "Token",
     :fields => [
-      {:component => "text-field", :name => "authentication.authtype", :hideField => true, :initialValue => "token"},
+      {:component => "text-field", :name => "authentication.authtype", :hideField => true, :initializeOnMount => true, :initialValue => "token"},
       {:component => "text-field", :name => "authentication.password", :label => "Token", :type => "password"}
     ]
   }],
   :endpoint       => {
     :title  => "Configure OpenShift endpoint",
     :fields => [
-      {:component => "text-field", :name => "endpoint.role", :hideField => true, :initialValue => "kubernetes"},
+      {:component => "text-field", :name => "endpoint.role", :hideField => true, :initializeOnMount => true, :initialValue => "kubernetes"},
       {:component => "text-field", :name => "url", :label => "URL", :validate => [{:type => "url-validator"}]},
       {:component => "switch-field", :name => "endpoint.verify_ssl", :label => "Verify SSL"},
       {:component => "text-field", :name => "endpoint.certificate_authority", :label => "Certificate Authority", :condition => {:when => "endpoint.verify_ssl", :is => true}}
@@ -40,7 +40,7 @@ amazon_json_schema = {
     :type   => 'access_key_secret_key',
     :name   => "AWS Secret Key",
     :fields => [
-      {:component => "text-field", :name => "authentication.authtype", :hideField => true, :initialValue => "access_key_secret_key"},
+      {:component => "text-field", :name => "authentication.authtype", :hideField => true, :initializeOnMount => true, :initialValue => "access_key_secret_key"},
       {:component => "text-field", :name => "authentication.username", :label => "Access Key"},
       {:component => "text-field", :name => "authentication.password", :label => "Secret Key", :type => "password"}
     ]
@@ -48,10 +48,11 @@ amazon_json_schema = {
     :type   => 'arn',
     :name   => 'ARN',
     :fields => [{
-      :component    => 'text-field',
-      :name         => 'authentication.authtype',
-      :hideField    => true,
-      :initialValue => 'arn'
+      :component         => 'text-field',
+      :name              => 'authentication.authtype',
+      :hideField         => true,
+      :initializeOnMount => true,
+      :initialValue      => 'arn'
     }, {
       :name       => 'billing_source.bucket',
       :stepKey    => 'amazon-arn-additional-step',
@@ -78,7 +79,7 @@ amazon_json_schema = {
   :endpoint       => {
     :hidden => true,
     :fields => [
-      {:component => "text-field", :name => "endpoint.role", :hideField => true, :initialValue => "aws"},
+      {:component => "text-field", :name => "endpoint.role", :hideField => true, :initializeOnMount => true, :initialValue => "aws"},
     ]
   }
 }
@@ -96,7 +97,7 @@ azure_json_schema = {
     :type   => 'tenant_id_client_id_client_secret',
     :name   => "Tenant ID, Client ID, Client Secret",
     :fields => [
-      {:component => "text-field", :name => "authentication.authtype", :hideField => true, :initialValue => "tenant_id_client_id_client_secret"},
+      {:component => "text-field", :name => "authentication.authtype", :hideField => true, :initializeOnMount => true, :initialValue => "tenant_id_client_id_client_secret"},
       {:component => "text-field", :name => "authentication.extra.azure.tenant_id", :label => "Tenant ID"},
       {:component => "text-field", :name => "authentication.username", :label => "Client ID"},
       {:component => "text-field", :name => "authentication.password", :label => "Client Secret", :type => "password"}
@@ -105,7 +106,7 @@ azure_json_schema = {
   :endpoint       => {
     :hidden => true,
     :fields => [
-      {:component => "text-field", :name => "endpoint.role", :hideField => true, :initialValue => "azure"},
+      {:component => "text-field", :name => "endpoint.role", :hideField => true, :initializeOnMount => true, :initialValue => "azure"},
     ]
   }
 }
@@ -117,7 +118,7 @@ ansible_tower_json_schema = {
     :type   => "username_password",
     :name   => "Username and password",
     :fields => [
-      {:component => "text-field", :name => "authentication.authtype", :hideField => true, :initialValue => "username_password"},
+      {:component => "text-field", :name => "authentication.authtype", :hideField => true, :initializeOnMount => true, :initialValue => "username_password"},
       {:component => "text-field", :name => "authentication.username", :label => "User name"},
       {:component => "text-field", :name => "authentication.password", :label => "Secret Key", :type => "password"}
     ]
@@ -125,7 +126,7 @@ ansible_tower_json_schema = {
   :endpoint       => {
     :title  => "Configure Ansible Tower endpoint",
     :fields => [
-      {:component => "text-field", :name => "endpoint.role", :hideField => true, :initialValue => "ansible"},
+      {:component => "text-field", :name => "endpoint.role", :hideField => true, :initializeOnMount => true, :initialValue => "ansible"},
       {:component => "text-field", :name => "url", :label => "URL", :validate => [{:type => "url-validator"}]},
       {:component => "switch-field", :name => "endpoint.verify_ssl", :label => "Verify SSL"},
       {:component => "text-field", :name => "endpoint.certificate_authority", :label => "Certificate Authority", :condition => {:when => "endpoint.verify_ssl", :is => true}},
@@ -138,3 +139,4 @@ update_or_create(:name => "vsphere", :product_name => "VMware vSphere", :vendor 
 update_or_create(:name => "ovirt", :product_name => "Red Hat Virtualization", :vendor => "Red Hat")
 update_or_create(:name => "openstack", :product_name => "Red Hat OpenStack", :vendor => "Red Hat")
 update_or_create(:name => "cloudforms", :product_name => "Red Hat CloudForms", :vendor => "Red Hat")
+update_or_create(:name => "satellite", :product_name => "Red Hat Satellite", :vendor => "Red Hat")
