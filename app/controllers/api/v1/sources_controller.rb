@@ -15,6 +15,23 @@ module Api
 
         render :json => source, :status => :created, :location => instance_link(source)
       end
+
+      def check_availability
+        source = Source.find(params[:source_id])
+
+        Sources::Api::Messaging.client.publish_topic(
+          :service => "platform.topological-inventory.operations-#{source.source_type.name}",
+          :event   => "Source.availability_check",
+          :payload => {
+            :params => {
+              :source_id       => source.id,
+              :external_tenant => source.tenant.external_tenant
+            }
+          }
+        )
+
+        render :json => source, :status => :accepted
+      end
     end
   end
 end

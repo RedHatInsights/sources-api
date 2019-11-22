@@ -1096,6 +1096,40 @@
         }
       }
     },
+    "/sources/{id}/check_availability": {
+      "post": {
+        "summary": "Checks Availability of a Source",
+        "operationId": "checkAvailabilitySource",
+        "description": "Checks Availability of a Source",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/ID"
+          }
+        ],
+        "responses": {
+          "202": {
+            "description": "Availability Check Accepted",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Source"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorNotFound"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/sources/{id}/endpoints": {
       "get": {
         "summary": "List Endpoints for Source",
