@@ -130,6 +130,8 @@ ansible_tower_json_schema = {
       {:component => "text-field", :name => "url", :label => "URL", :validate => [{:type => "url-validator"}]},
       {:component => "switch-field", :name => "endpoint.verify_ssl", :label => "Verify SSL"},
       {:component => "text-field", :name => "endpoint.certificate_authority", :label => "Certificate Authority", :condition => {:when => "endpoint.verify_ssl", :is => true}},
+      {:component => "switch-field", :name => "platform_receptor", :label => "Use Platform Receptor and PKI (?)"},
+      {:component => "text-field", :name => "endpoint.receptor_node", :label => "Receptor ID"},
     ]
   }
 }
