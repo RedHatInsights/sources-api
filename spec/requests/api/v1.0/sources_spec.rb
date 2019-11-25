@@ -309,6 +309,78 @@ RSpec.describe("v1.0 - Sources") do
     end
   end
 
+  describe("/api/v1.0/sources/:id/check_availability") do
+    let(:messaging_client)  { double("Sources::Api::Messaging") }
+    let(:openshift_topic)   { "platform.topological-inventory.operations-openshift" }
+    let(:amazon_topic)      { "platform.topological-inventory.operations-amazon" }
+
+    def check_availability_path(source_id)
+      File.join(collection_path, source_id.to_s, "check_availability")
+    end
+
+    before do
+      allow(messaging_client).to receive(:publish_topic)
+      allow(Sources::Api::Messaging).to receive(:client).and_return(messaging_client)
+    end
+
+    context "post" do
+      it "failure: with an invalid id" do
+        post(check_availability_path(99_999), :headers => headers)
+
+        expect(response).to have_attributes(
+          :status      => 404,
+          :parsed_body => {"errors"=>[{"detail" => "Record not found", "status" => 404}]}
+        )
+      end
+
+      it "success: with valid openshift source" do
+        source_type = SourceType.create!(:name => "openshift", :vendor => "RedHat", :product_name => "OpenShift")
+        attributes  = { "name" => "my_source", "source_type_id" => source_type.id.to_s }
+        source      = Source.create!(attributes.merge("tenant" => tenant))
+
+        expect(messaging_client).to receive(:publish_topic)
+          .with(hash_including(:service => openshift_topic,
+                               :event   => "Source.availability_check",
+                               :payload => a_hash_including(
+                                 :params => a_hash_including(
+                                   :source_id       => source.id.to_s,
+                                   :external_tenant => tenant.external_tenant
+                                 )
+                               )))
+
+        post(check_availability_path(source.id), :headers => headers)
+
+        expect(response).to have_attributes(
+          :status      => 202,
+          :parsed_body => a_hash_including(attributes)
+        )
+      end
+
+      it "success: with valid amazon source" do
+        source_type = SourceType.create!(:name => "amazon", :vendor => "Amazon", :product_name => "Amazon Web Services")
+        attributes  = { "name" => "my_source", "source_type_id" => source_type.id.to_s }
+        source      = Source.create!(attributes.merge("tenant" => tenant))
+
+        expect(messaging_client).to receive(:publish_topic)
+          .with(hash_including(:service => amazon_topic,
+                               :event   => "Source.availability_check",
+                               :payload => a_hash_including(
+                                 :params => a_hash_including(
+                                   :source_id       => source.id.to_s,
+                                   :external_tenant => tenant.external_tenant
+                                 )
+                               )))
+
+        post(check_availability_path(source.id), :headers => headers)
+
+        expect(response).to have_attributes(
+          :status      => 202,
+          :parsed_body => a_hash_including(attributes)
+        )
+      end
+    end
+  end
+
   describe("subcollections") do
     existing_subcollections = [
       "endpoints",
