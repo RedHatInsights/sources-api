@@ -24,7 +24,7 @@ module Api
           :event   => "Source.availability_check",
           :payload => {
             :params => {
-              :source_id       => source.id,
+              :source_id       => source.id.to_s,
               :external_tenant => source.tenant.external_tenant
             }
           }
