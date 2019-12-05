@@ -10,7 +10,7 @@ describe Api::V1::Mixins::UpdateMixin do
 
     before do
       allow(client).to receive(:publish_topic)
-      allow(Sources::Api::Events).to receive(:messaging_client).and_return(client)
+      allow(Sources::Api::Messaging).to receive(:client).and_return(client)
     end
 
     it "patch /sources/:id updates a Source" do
