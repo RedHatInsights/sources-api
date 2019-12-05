@@ -30,7 +30,7 @@ module Api
           }
         )
 
-        render :json => source, :status => :accepted
+        render :json => {}, :status => :accepted
       end
     end
   end

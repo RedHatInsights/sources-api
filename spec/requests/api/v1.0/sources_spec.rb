@@ -352,7 +352,7 @@ RSpec.describe("v1.0 - Sources") do
 
         expect(response).to have_attributes(
           :status      => 202,
-          :parsed_body => a_hash_including(attributes)
+          :parsed_body => {}
         )
       end
 
@@ -375,7 +375,7 @@ RSpec.describe("v1.0 - Sources") do
 
         expect(response).to have_attributes(
           :status      => 202,
-          :parsed_body => a_hash_including(attributes)
+          :parsed_body => {}
         )
       end
     end

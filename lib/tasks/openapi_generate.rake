@@ -41,21 +41,14 @@ class OpenapiGenerator < Insights::API::Common::OpenApi::Generator
         ],
         "responses"   => {
           "202" => {
-            "description" => "Availability Check Accepted",
+            "description" => "Availability Check Accepted"
+          },
+          "404" => {
+            "description" => "Not found",
             "content"     => {
               "application/json" => {
                 "schema" => {
-                  "$ref" => "#/components/schemas/Source"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Not found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorNotFound"
+                  "$ref" => "#/components/schemas/ErrorNotFound"
                 }
               }
             }
