@@ -45,20 +45,22 @@ module Api
           url = app_type.availability_check_url
           next if url.blank?
 
-          headers = {
-            "Content-Type"  => "application/json",
-            "x-rh-identity" => Base64.strict_encode64({'identity' => { 'account_number' => source.tenant.external_tenant }}.to_json)
-          }
+          begin
+            headers = {
+              "Content-Type"  => "application/json",
+              "x-rh-identity" => Base64.strict_encode64({'identity' => { 'account_number' => source.tenant.external_tenant }}.to_json)
+            }
 
-          uri = URI.parse(url)
-          net_http = Net::HTTP.new(uri.host, uri.port)
-          request  = Net::HTTP::Post.new(uri.request_uri, headers)
-          request.body = { "source_id" => source.id.to_s }.to_json
+            uri = URI.parse(url)
+            net_http = Net::HTTP.new(uri.host, uri.port)
+            request  = Net::HTTP::Post.new(uri.request_uri, headers)
+            request.body = { "source_id" => source.id.to_s }.to_json
 
-          response = net_http.request(request)
-          next if response.kind_of?(Net::HTTPSuccess)
-
-          logger.info("Failed to request application availability check for source #{source.id} @ #{url} - #{response.message}")
+            response = net_http.request(request)
+            raise response.message unless response.kind_of?(Net::HTTPSuccess)
+          rescue => e
+            logger.error("Failed to request application availability check of #{app_type.display_name} for Source id: #{source.id} - #{url} Error: #{e.message}")
+          end
         end
       end
     end
