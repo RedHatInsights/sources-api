@@ -1,3 +1,5 @@
+require "webmock/rspec"
+
 RSpec.describe("v1.0 - Sources") do
   include ::Spec::Support::TenantIdentity
 
@@ -372,6 +374,69 @@ RSpec.describe("v1.0 - Sources") do
                                )))
 
         post(check_availability_path(source.id), :headers => headers)
+
+        expect(response).to have_attributes(
+          :status      => 202,
+          :parsed_body => {}
+        )
+      end
+
+      it "success: with valid openshift source querying associated applications" do
+        source_type = SourceType.create!(:name => "openshift", :vendor => "RedHat", :product_name => "OpenShift")
+        attributes  = { "name" => "my_source", "source_type_id" => source_type.id.to_s }
+        source      = Source.create!(attributes.merge("tenant" => tenant))
+
+        app_type1 = ApplicationType.create(:name                   => "ApplicationType1",
+                                           :display_name           => "Application Type One",
+                                           :availability_check_url => "http://app1.example.com:8001/availability_check")
+
+        app_type2 = ApplicationType.create(:name                   => "ApplicationType2",
+                                           :display_name           => "Application Type Two",
+                                           :availability_check_url => "http://app2.example.com:8002/availability_check")
+
+        app1 = Application.create(:application_type => app_type1, :source => source, :tenant => tenant)
+        app2 = Application.create(:application_type => app_type2, :source => source, :tenant => tenant)
+
+        source.applications = [app1, app2]
+
+        expect(messaging_client).to receive(:publish_topic)
+          .with(hash_including(:service => openshift_topic,
+                               :event   => "Source.availability_check",
+                               :payload => a_hash_including(
+                                 :params => a_hash_including(
+                                   :source_id       => source.id.to_s,
+                                   :external_tenant => tenant.external_tenant
+                                 )
+                               )))
+
+        request_body = { :source_id => source.id.to_s }.to_json
+
+        stub_request(:post, app_type1.availability_check_url)
+          .with do |request|
+            request.headers = headers
+            request.body    = request_body
+          end
+          .to_return(:status => 200, :body => "")
+
+        stub_request(:post, app_type2.availability_check_url)
+          .with do |request|
+            request.headers = headers
+            request.body    = request_body
+          end
+          .to_return(:status => 200, :body => "")
+
+        post(check_availability_path(source.id), :headers => headers)
+
+        assert_requested(:post,
+                         app_type1.availability_check_url,
+                         :headers => headers,
+                         :body    => request_body,
+                         :times   => 1)
+        assert_requested(:post,
+                         app_type2.availability_check_url,
+                         :headers => headers,
+                         :body    => request_body,
+                         :times   => 1)
 
         expect(response).to have_attributes(
           :status      => 202,
