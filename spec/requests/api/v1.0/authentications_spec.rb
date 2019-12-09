@@ -6,7 +6,7 @@ RSpec.describe("v1.0 - Authentications") do
   let(:client) { instance_double("ManageIQ::Messaging::Client") }
   before do
     allow(client).to receive(:publish_topic)
-    allow(Sources::Api::Messaging).to receive(:client).and_return(client)
+    allow(Sources::Api::Events).to receive(:messaging_client).and_return(client)
   end
 
   let(:headers)         { {"CONTENT_TYPE" => "application/json", "x-rh-identity" => identity} }
