@@ -99,6 +99,9 @@ azure_json_schema = {
     :name   => "Tenant ID, Client ID, Client Secret",
     :fields => [
       {:component => "text-field", :name => "authentication.authtype", :hideField => true, :initializeOnMount => true, :initialValue => "tenant_id_client_id_client_secret"},
+      {:component => "text-field", :name => "billing_source.data_source.resource_group", :label => "Resource group name", :stepKey => 'azure-2'},
+      {:component => "text-field", :name => "billing_source.data_source.storage_account", :label => "Storage account name", :stepKey => 'azure-2'},
+      {:component => "text-field", :name => "credentials.subscription_id", :label => "Subscription ID", :stepKey => 'service-principle'},
       {:component => "text-field", :name => "authentication.extra.azure.tenant_id", :label => "Tenant ID"},
       {:component => "text-field", :name => "authentication.username", :label => "Client ID"},
       {:component => "text-field", :name => "authentication.password", :label => "Client Secret", :type => "password"}
