@@ -145,4 +145,39 @@ update_or_create(:name => "vsphere", :product_name => "VMware vSphere", :vendor 
 update_or_create(:name => "ovirt", :product_name => "Red Hat Virtualization", :vendor => "Red Hat")
 update_or_create(:name => "openstack", :product_name => "Red Hat OpenStack", :vendor => "Red Hat")
 update_or_create(:name => "cloudforms", :product_name => "Red Hat CloudForms", :vendor => "Red Hat")
-update_or_create(:name => "satellite", :product_name => "Red Hat Satellite", :vendor => "Red Hat")
+
+satellite_json_schema = {
+  :authentication => [
+    {
+      :type   => "receptor_node",
+      :name   => "Receptore node",
+      :fields => [
+        {
+          :component         => "text-field",
+          :name              => "authentication.authtype",
+          :hideField         => true,
+          :initializeOnMount => true,
+          :initialValue      => "receptor_node"
+        },
+        {
+          :component  => "text-field",
+          :name       => "source.source_ref",
+          :label      => "Satellite ID",
+          :isRequired => true,
+          :validate   => [
+            { :type => 'required-validator' },
+          ]
+        },
+      ]
+    }
+  ],
+  :endpoint       => {
+    :title  => "Configure Red Hat Satellite endpoint",
+    :fields => [
+      {:component => "text-field", :name => "endpoint.receptor_node", :label => "Receptor ID"},
+      {:component => "text-field", :name => "endpoint.role", :hideField => true, :initializeOnMount => true, :initialValue => "sattelite"},
+    ]
+  }
+}
+
+update_or_create(:name => "satellite", :product_name => "Red Hat Satellite", :vendor => "Red Hat", :schema => satellite_json_schema)
