@@ -39,3 +39,13 @@ update_or_create(
     "openshift"     => ["token"]
   }
 )
+
+update_or_create(
+  :name                           => "/insights/platform/fifi",
+  :display_name                   => "Find It Fix It",
+  :dependent_applications         => [],
+  :supported_source_types         => ["satellite"],
+  :supported_authentication_types => {
+    "satellite" => ["receptor_node"]
+  }
+)

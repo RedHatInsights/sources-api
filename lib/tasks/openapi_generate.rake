@@ -26,6 +26,37 @@ class OpenapiGenerator < Insights::API::Common::OpenApi::Generator
       )
     end
   end
+
+  def handle_custom_route_action(route_action, verb, primary_collection)
+    case [primary_collection, verb, route_action]
+    when ["Source", "post", "CheckAvailability"]
+      {
+        "summary"     => "Checks Availability of a Source",
+        "operationId" => "checkAvailabilitySource",
+        "description" => "Checks Availability of a Source",
+        "parameters"  => [
+          {
+            "$ref" => "#/components/parameters/ID"
+          }
+        ],
+        "responses"   => {
+          "202" => {
+            "description" => "Availability Check Accepted"
+          },
+          "404" => {
+            "description" => "Not found",
+            "content"     => {
+              "application/json" => {
+                "schema" => {
+                  "$ref" => "#/components/schemas/ErrorNotFound"
+                }
+              }
+            }
+          }
+        }
+      }
+    end
+  end
 end
 
 namespace :openapi do

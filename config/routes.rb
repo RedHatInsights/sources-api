@@ -28,6 +28,7 @@ Rails.application.routes.draw do
         resources :sources, :only => [:index]
       end
       resources :sources,         :only => [:create, :destroy, :index, :show, :update] do
+        post "check_availability", :to => "sources#check_availability", :action => "check_availability"
         resources :applications, :only => [:index]
         resources :application_types, :only => [:index]
         resources :endpoints, :only => [:index]
