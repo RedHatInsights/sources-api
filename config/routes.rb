@@ -40,8 +40,9 @@ Rails.application.routes.draw do
     routing_helper.redirect_major_version("v1.0", "internal", :via => [:get])
 
     namespace :v1x0, :path => "v1.0" do
-      resources :authentications, :only => [:show]
-      resources :tenants,         :only => [:index, :show]
+      resources :application_types, :only => [:update]
+      resources :authentications,   :only => [:show]
+      resources :tenants,           :only => [:index, :show]
     end
   end
 end

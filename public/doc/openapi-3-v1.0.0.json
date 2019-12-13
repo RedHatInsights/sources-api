@@ -85,6 +85,45 @@
             }
           }
         }
+      },
+      "patch": {
+        "summary": "Update an existing ApplicationType",
+        "operationId": "updateApplicationType",
+        "description": "Updates a ApplicationType object",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/ID"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ApplicationType"
+              }
+            }
+          },
+          "description": "ApplicationType attributes to update",
+          "required": true
+        },
+        "responses": {
+          "204": {
+            "description": "Updated, no content"
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorNotFound"
+                }
+              }
+            }
+          }
+        }
       }
     },
     "/application_types/{id}/sources": {
