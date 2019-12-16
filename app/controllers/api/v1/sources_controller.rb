@@ -42,7 +42,8 @@ module Api
 
       def check_application_availability(source)
         source.application_types.each do |app_type|
-          url = app_type.availability_check_url
+          app_env_prefix = app_type.name.split('/').last.upcase.tr('-', '_')
+          url = ENV["#{app_env_prefix}_AVAILABILITY_CHECK_URL"]
           next if url.blank?
 
           begin

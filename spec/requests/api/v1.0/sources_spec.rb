@@ -386,13 +386,14 @@ RSpec.describe("v1.0 - Sources") do
         attributes  = { "name" => "my_source", "source_type_id" => source_type.id.to_s }
         source      = Source.create!(attributes.merge("tenant" => tenant))
 
-        app_type1 = ApplicationType.create(:name                   => "ApplicationType1",
-                                           :display_name           => "Application Type One",
-                                           :availability_check_url => "http://app1.example.com:8001/availability_check")
+        app_type1 = ApplicationType.create(:name         => "/platform/application-type1",
+                                           :display_name => "Application Type One")
 
-        app_type2 = ApplicationType.create(:name                   => "ApplicationType2",
-                                           :display_name           => "Application Type Two",
-                                           :availability_check_url => "http://app2.example.com:8002/availability_check")
+        app_type2 = ApplicationType.create(:name         => "ApplicationType2",
+                                           :display_name => "Application Type Two")
+
+        app_type1_url = "http://app1.example.com:8001/availability_check"
+        app_type2_url = "http://app2.example.com:8002/availability_check"
 
         app1 = Application.create(:application_type => app_type1, :source => source, :tenant => tenant)
         app2 = Application.create(:application_type => app_type2, :source => source, :tenant => tenant)
@@ -411,29 +412,32 @@ RSpec.describe("v1.0 - Sources") do
 
         request_body = { :source_id => source.id.to_s }.to_json
 
-        stub_request(:post, app_type1.availability_check_url)
+        stub_request(:post, app_type1_url)
           .with do |request|
             request.headers = headers
             request.body    = request_body
           end
           .to_return(:status => 200, :body => "")
 
-        stub_request(:post, app_type2.availability_check_url)
+        stub_request(:post, app_type2_url)
           .with do |request|
             request.headers = headers
             request.body    = request_body
           end
           .to_return(:status => 200, :body => "")
+
+        ENV["APPLICATION_TYPE1_AVAILABILITY_CHECK_URL"] = app_type1_url
+        ENV["APPLICATIONTYPE2_AVAILABILITY_CHECK_URL"]  = app_type2_url
 
         post(check_availability_path(source.id), :headers => headers)
 
         assert_requested(:post,
-                         app_type1.availability_check_url,
+                         app_type1_url,
                          :headers => headers,
                          :body    => request_body,
                          :times   => 1)
         assert_requested(:post,
-                         app_type2.availability_check_url,
+                         app_type2_url,
                          :headers => headers,
                          :body    => request_body,
                          :times   => 1)

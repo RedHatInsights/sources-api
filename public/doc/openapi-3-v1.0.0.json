@@ -1304,9 +1304,6 @@
       "ApplicationType": {
         "type": "object",
         "properties": {
-          "availability_check_url": {
-            "type": "string"
-          },
           "created_at": {
             "format": "date-time",
             "readOnly": true,
