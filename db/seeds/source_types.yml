@@ -1,0 +1,236 @@
+---
+amazon:
+  :product_name: Amazon Web Services
+  :schema:
+    :authentication:
+    - :type: access_key_secret_key
+      :name: AWS Secret Key
+      :fields:
+      - :component: text-field
+        :name: authentication.authtype
+        :hideField: true
+        :initializeOnMount: true
+        :initialValue: access_key_secret_key
+      - :component: text-field
+        :name: authentication.username
+        :label: Access Key
+      - :component: text-field
+        :name: authentication.password
+        :label: Secret Key
+        :type: password
+    - :type: arn
+      :name: ARN
+      :fields:
+      - :component: text-field
+        :name: authentication.authtype
+        :hideField: true
+        :initializeOnMount: true
+        :initialValue: arn
+      - :name: billing_source.bucket
+        :stepKey: amazon-arn-additional-step
+        :component: text-field
+        :label: S3 bucket name
+        :isRequired: true
+        :validate:
+        - :type: required-validator
+        - :type: pattern-validator
+          :pattern: "^[A-Za-z0-9]+[A-Za-z0-9_-]*$"
+      - :name: authentication.password
+        :stepKey: arn
+        :component: text-field
+        :label: ARN
+        :isRequired: true
+        :validate:
+        - :type: required-validator
+        - :type: pattern-validator
+          :pattern: "^arn:aws:.*"
+        - :type: min-length-validator
+          :threshold: 10
+    :endpoint:
+      :hidden: true
+      :fields:
+      - :component: text-field
+        :name: endpoint.role
+        :hideField: true
+        :initializeOnMount: true
+        :initialValue: aws
+  :vendor: Amazon
+  :icon_url: "/aws_logo.png"
+ansible-tower:
+  :product_name: Ansible Tower
+  :vendor: Red Hat
+  :schema:
+    :authentication:
+    - :type: username_password
+      :name: Username and password
+      :fields:
+      - :component: text-field
+        :name: authentication.authtype
+        :hideField: true
+        :initializeOnMount: true
+        :initialValue: username_password
+      - :component: text-field
+        :name: authentication.username
+        :label: User name
+      - :component: text-field
+        :name: authentication.password
+        :label: Secret Key
+        :type: password
+    :endpoint:
+      :title: Configure Ansible Tower endpoint
+      :fields:
+      - :component: text-field
+        :name: endpoint.role
+        :hideField: true
+        :initializeOnMount: true
+        :initialValue: ansible
+      - :component: text-field
+        :name: url
+        :label: URL
+        :validate:
+        - :type: url-validator
+      - :component: switch-field
+        :name: endpoint.verify_ssl
+        :label: Verify SSL
+      - :component: text-field
+        :name: endpoint.certificate_authority
+        :label: Certificate Authority
+        :condition:
+          :when: endpoint.verify_ssl
+          :is: true
+      - :component: switch-field
+        :name: platform_receptor
+        :label: Use Platform Receptor and PKI (?)
+      - :component: text-field
+        :name: endpoint.receptor_node
+        :label: Receptor ID
+azure:
+  :product_name: Microsoft Azure
+  :vendor: Azure
+  :schema:
+    :authentication:
+    - :type: tenant_id_client_id_client_secret
+      :name: Tenant ID, Client ID, Client Secret
+      :fields:
+      - :component: text-field
+        :name: authentication.authtype
+        :hideField: true
+        :initializeOnMount: true
+        :initialValue: tenant_id_client_id_client_secret
+      - :component: text-field
+        :name: billing_source.data_source.resource_group
+        :label: Resource group name
+        :stepKey: azure-2
+      - :component: text-field
+        :name: billing_source.data_source.storage_account
+        :label: Storage account name
+        :stepKey: azure-2
+      - :component: text-field
+        :name: credentials.subscription_id
+        :label: Subscription ID
+        :stepKey: service-principle
+      - :component: text-field
+        :name: authentication.extra.azure.tenant_id
+        :label: Tenant ID
+      - :component: text-field
+        :name: authentication.username
+        :label: Client ID
+      - :component: text-field
+        :name: authentication.password
+        :label: Client Secret
+        :type: password
+    :endpoint:
+      :hidden: true
+      :fields:
+      - :component: text-field
+        :name: endpoint.role
+        :hideField: true
+        :initializeOnMount: true
+        :initialValue: azure
+cloudforms:
+  :product_name: Red Hat CloudForms
+  :vendor: Red Hat
+openshift:
+  :product_name: OpenShift Container Platform
+  :schema:
+    :authentication:
+    - :type: token
+      :name: Token
+      :fields:
+      - :component: text-field
+        :name: authentication.authtype
+        :hideField: true
+        :initializeOnMount: true
+        :initialValue: token
+      - :component: text-field
+        :name: source.source_ref
+        :label: Cluster ID
+        :stepKey: usageCollector
+      - :component: text-field
+        :name: authentication.password
+        :label: Token
+        :type: password
+    :endpoint:
+      :title: Configure OpenShift endpoint
+      :fields:
+      - :component: text-field
+        :name: endpoint.role
+        :hideField: true
+        :initializeOnMount: true
+        :initialValue: kubernetes
+      - :component: text-field
+        :name: url
+        :label: URL
+        :validate:
+        - :type: url-validator
+      - :component: switch-field
+        :name: endpoint.verify_ssl
+        :label: Verify SSL
+      - :component: text-field
+        :name: endpoint.certificate_authority
+        :label: Certificate Authority
+        :condition:
+          :when: endpoint.verify_ssl
+          :is: true
+  :vendor: Red Hat
+  :icon_url: "/openshift_logo.png"
+openstack:
+  :product_name: Red Hat OpenStack
+  :vendor: Red Hat
+ovirt:
+  :product_name: Red Hat Virtualization
+  :vendor: Red Hat
+satellite:
+  :product_name: Red Hat Satellite
+  :vendor: Red Hat
+  :schema:
+    :authentication:
+    - :type: receptor_node
+      :name: Receptore node
+      :fields:
+      - :component: text-field
+        :name: authentication.authtype
+        :hideField: true
+        :initializeOnMount: true
+        :initialValue: receptor_node
+      - :component: text-field
+        :name: source.source_ref
+        :label: Satellite ID
+        :isRequired: true
+        :validate:
+        - :type: required-validator
+    :endpoint:
+      :title: Configure Red Hat Satellite endpoint
+      :fields:
+      - :component: text-field
+        :name: endpoint.receptor_node
+        :label: Receptor ID
+      - :component: text-field
+        :name: endpoint.role
+        :hideField: true
+        :initializeOnMount: true
+        :initialValue: sattelite
+vsphere:
+  :product_name: VMware vSphere
+  :vendor: VMware
+  :icon_url: "/vsphere_logo.png"
