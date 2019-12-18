@@ -53,6 +53,27 @@ RSpec.describe("Sources Filtering") do
     it("version:not_nil")                          { expect_success("filter[version][not_nil]", source_1, source_2, source_4) }
   end
 
+  context "sorted results via sort_by" do
+    before do
+      Source.create!(:name => "sort_by_source_a", :source_type => source_type, :tenant => tenant)
+      Source.create!(:name => "sort_by_source_b", :source_type => source_type, :tenant => tenant)
+    end
+
+    it "available for sources with default order" do
+      get("/api/v1.0/sources?filter[name][starts_with]=sort_by_source&sort_by=name", :headers => headers)
+
+      expect(response.status).to eq(200)
+      expect(response.parsed_body["data"].collect { |source| source["name"] }).to eq(%w[sort_by_source_a sort_by_source_b])
+    end
+
+    it "available for sources with desc order" do
+      get("/api/v1.0/sources?filter[name][starts_with]=sort_by_source&sort_by=name:desc", :headers => headers)
+
+      expect(response.status).to eq(200)
+      expect(response.parsed_body["data"].collect { |source| source["name"] }).to eq(%w[sort_by_source_b sort_by_source_a])
+    end
+  end
+
   context "error cases" do
     let!(:source_1) { create_source("aaa", :version => "1") }
     let!(:source_2) { create_source("bbb") }
