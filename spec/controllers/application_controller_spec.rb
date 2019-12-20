@@ -84,7 +84,7 @@ RSpec.describe ApplicationController, :type => :request do
       headers = {
         "CONTENT_TYPE"  => "application/json",
         "x-rh-identity" => Base64.encode64(
-          {'identity' => { 'account_number' => external_tenant}, :entitlements => entitlements}.to_json
+          {'identity' => { 'account_number' => external_tenant, 'user' => { 'is_org_admin' => true }}, :entitlements => entitlements}.to_json
         )
       }
 
@@ -100,7 +100,7 @@ RSpec.describe ApplicationController, :type => :request do
       headers = {
         "CONTENT_TYPE"  => "application/json",
         "x-rh-identity" => Base64.encode64(
-          {'identity' => { 'account_number' => external_tenant}, :entitlements => entitlements}.to_json
+          {'identity' => { 'account_number' => external_tenant, 'user' => { 'is_org_admin' => true }}, :entitlements => entitlements}.to_json
         )
       }
 
