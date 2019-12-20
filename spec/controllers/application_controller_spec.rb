@@ -109,4 +109,77 @@ RSpec.describe ApplicationController, :type => :request do
       expect(response.status).to eq(403)
     end
   end
+
+  context "with rbac enforcement" do
+    it "accepts request not as org_admin without tenancy enforcement" do
+      stub_const("ENV", "BYPASS_TENANCY" => "true")
+
+      headers = {
+        "CONTENT_TYPE"  => "application/json",
+        "x-rh-identity" => Base64.encode64(
+          { "identity" => { "user" => { "is_org_admin" => false }}}.to_json
+        )
+      }
+
+      get("/api/v1.0/sources", :headers => headers)
+
+      expect(response.status).to eq(200)
+    end
+
+    it "accepts request as org_admin without tenancy enforcement" do
+      stub_const("ENV", "BYPASS_TENANCY" => "true")
+
+      headers = {
+        "CONTENT_TYPE"  => "application/json",
+        "x-rh-identity" => Base64.encode64(
+          { "identity" => { "user" => { "is_org_admin" => true }}}.to_json
+        )
+      }
+
+      get("/api/v1.0/sources", :headers => headers)
+
+      expect(response.status).to eq(200)
+    end
+
+    it "rejects request with tenancy enforcement and user not as org_admin" do
+      headers = {
+        "CONTENT_TYPE"  => "application/json",
+        "x-rh-identity" => Base64.encode64(
+          { "identity" => { "account_number" => external_tenant, "user" => { "is_org_admin" => false }}}.to_json
+        )
+      }
+
+      get("/api/v1.0/sources", :headers => headers)
+
+      expect(response.status).to eq(403)
+    end
+
+    it "accepts request with tenancy enforcement and user is an org_admin" do
+      headers = {
+        "CONTENT_TYPE"  => "application/json",
+        "x-rh-identity" => Base64.encode64(
+          { "identity" => { "account_number" => external_tenant, "user" => { "is_org_admin" => true }}}.to_json
+        )
+      }
+
+      get("/api/v1.0/sources", :headers => headers)
+
+      expect(response.status).to eq(200)
+    end
+
+    it "accepts request with tenancy enforcement and user not as org_admin when RBAC is bypassed" do
+      stub_const("ENV", "BYPASS_RBAC" => "true")
+
+      headers = {
+        "CONTENT_TYPE"  => "application/json",
+        "x-rh-identity" => Base64.encode64(
+          { "identity" => { "account_number" => external_tenant, "user" => { "is_org_admin" => false }}}.to_json
+        )
+      }
+
+      get("/api/v1.0/sources", :headers => headers)
+
+      expect(response.status).to eq(200)
+    end
+  end
 end
