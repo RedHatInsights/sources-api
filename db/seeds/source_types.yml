@@ -176,6 +176,9 @@ openshift:
         :name: authentication.password
         :label: Token
         :type: password
+        :isRequired: true
+        :validate:
+        - :type: required-validator
     :endpoint:
       :title: Configure OpenShift endpoint
       :fields:
