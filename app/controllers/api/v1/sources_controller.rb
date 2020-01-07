@@ -21,9 +21,11 @@ module Api
 
       def check_availability
         source = Source.find(params[:source_id])
+        topic  = "platform.topological-inventory.operations-#{source.source_type.name}"
 
+        logger.debug("publishing message to #{topic}...")
         Sources::Api::Messaging.client.publish_topic(
-          :service => "platform.topological-inventory.operations-#{source.source_type.name}",
+          :service => topic,
           :event   => "Source.availability_check",
           :payload => {
             :params => {
@@ -32,6 +34,7 @@ module Api
             }
           }
         )
+        logger.debug("publishing message to #{topic}...Complete")
 
         check_application_availability(source)
 
