@@ -72,10 +72,16 @@ ansible-tower:
       - :component: text-field
         :name: authentication.username
         :label: User name
+        :isRequired: true
+        :validate:
+        - :type: required-validator
       - :component: text-field
         :name: authentication.password
         :label: Secret Key
         :type: password
+        :isRequired: true
+        :validate:
+        - :type: required-validator
     :endpoint:
       :title: Configure Ansible Tower endpoint
       :fields:
@@ -170,6 +176,9 @@ openshift:
         :name: authentication.password
         :label: Token
         :type: password
+        :isRequired: true
+        :validate:
+        - :type: required-validator
     :endpoint:
       :title: Configure OpenShift endpoint
       :fields:
