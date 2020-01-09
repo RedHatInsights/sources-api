@@ -11,7 +11,7 @@ gem 'manageiq-messaging',   '~> 0.1.5', :require => false
 gem 'manageiq-password',    '~> 0.2', ">= 0.2.1"
 gem 'more_core_extensions', '~> 3.5'
 gem 'pg',                   '~> 1.0', :require => false
-gem 'puma',                 '~> 3.0'
+gem 'puma',                 '~> 3.12.2'
 gem 'rack-cors',            '>= 1.0.4', '~> 1.0'
 gem 'rails',                '~> 5.2.2'
 gem 'sprockets',            '~> 4.0'
