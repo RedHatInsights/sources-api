@@ -2,6 +2,11 @@ RSpec.describe ApplicationController, :type => :request do
   include ::Spec::Support::TenantIdentity
   let(:source_type) { SourceType.create!(:name => "openshift", :product_name => "OpenShift", :vendor => "Red Hat") }
   let!(:source)     { Source.create!(:source_type_id => source_type.id, :tenant_id => tenant.id , :name => "abc", :uid => "123") }
+  let(:client)      { instance_double("ManageIQ::Messaging::Client") }
+  before do
+    allow(client).to receive(:publish_topic)
+    allow(Sources::Api::Events).to receive(:messaging_client).and_return(client)
+  end
 
   context "with tenancy enforcement" do
     before { stub_const("ENV", "BYPASS_TENANCY" => nil) }
@@ -111,7 +116,7 @@ RSpec.describe ApplicationController, :type => :request do
   end
 
   context "with rbac enforcement" do
-    it "accepts request not as org_admin without tenancy enforcement" do
+    it "accepts GET request not as org_admin without tenancy enforcement" do
       stub_const("ENV", "BYPASS_TENANCY" => "true")
 
       headers = {
@@ -126,7 +131,22 @@ RSpec.describe ApplicationController, :type => :request do
       expect(response.status).to eq(200)
     end
 
-    it "accepts request as org_admin without tenancy enforcement" do
+    it "accepts PATCH request not as org_admin without tenancy enforcement" do
+      stub_const("ENV", "BYPASS_TENANCY" => "true")
+
+      headers = {
+        "CONTENT_TYPE"  => "application/json",
+        "x-rh-identity" => Base64.encode64(
+          { "identity" => { "user" => { "is_org_admin" => false }}}.to_json
+        )
+      }
+
+      patch("/api/v1.0/sources/#{source.id}", :params => { "name" => "updated_name" }.to_json, :headers => headers)
+
+      expect(response.status).to eq(204)
+    end
+
+    it "accepts GET request as org_admin without tenancy enforcement" do
       stub_const("ENV", "BYPASS_TENANCY" => "true")
 
       headers = {
@@ -141,7 +161,22 @@ RSpec.describe ApplicationController, :type => :request do
       expect(response.status).to eq(200)
     end
 
-    it "rejects request with tenancy enforcement and user not as org_admin" do
+    it "accepts PATCH request as org_admin without tenancy enforcement" do
+      stub_const("ENV", "BYPASS_TENANCY" => "true")
+
+      headers = {
+        "CONTENT_TYPE"  => "application/json",
+        "x-rh-identity" => Base64.encode64(
+          { "identity" => { "user" => { "is_org_admin" => true }}}.to_json
+        )
+      }
+
+      patch("/api/v1.0/sources/#{source.id}", :params => { "name" => "updated_name" }.to_json, :headers => headers)
+
+      expect(response.status).to eq(204)
+    end
+
+    it "accepts GET request with tenancy enforcement and user not as org_admin" do
       headers = {
         "CONTENT_TYPE"  => "application/json",
         "x-rh-identity" => Base64.encode64(
@@ -151,10 +186,36 @@ RSpec.describe ApplicationController, :type => :request do
 
       get("/api/v1.0/sources", :headers => headers)
 
+      expect(response.status).to eq(200)
+    end
+
+    it "rejects PATCH request with tenancy enforcement and user not as org_admin" do
+      headers = {
+        "CONTENT_TYPE"  => "application/json",
+        "x-rh-identity" => Base64.encode64(
+          { "identity" => { "account_number" => external_tenant, "user" => { "is_org_admin" => false }}}.to_json
+        )
+      }
+
+      patch("/api/v1.0/sources/#{source.id}", :params => { "name" => "updated_name" }.to_json, :headers => headers)
+
       expect(response.status).to eq(403)
     end
 
-    it "accepts request with tenancy enforcement and user is an org_admin" do
+    it "accepts HEAD request with tenancy enforcement and user not as org_admin" do
+      headers = {
+        "CONTENT_TYPE"  => "application/json",
+        "x-rh-identity" => Base64.encode64(
+          { "identity" => { "account_number" => external_tenant, "user" => { "is_org_admin" => false }}}.to_json
+        )
+      }
+
+      head("/api/v1.0/sources/#{source.id}", :headers => headers)
+
+      expect(response.status).to eq(200)
+    end
+
+    it "accepts GET request with tenancy enforcement and user is an org_admin" do
       headers = {
         "CONTENT_TYPE"  => "application/json",
         "x-rh-identity" => Base64.encode64(
@@ -167,7 +228,20 @@ RSpec.describe ApplicationController, :type => :request do
       expect(response.status).to eq(200)
     end
 
-    it "accepts request with tenancy enforcement and user not as org_admin when RBAC is bypassed" do
+    it "accepts PATCH request with tenancy enforcement and user is an org_admin" do
+      headers = {
+        "CONTENT_TYPE"  => "application/json",
+        "x-rh-identity" => Base64.encode64(
+          { "identity" => { "account_number" => external_tenant, "user" => { "is_org_admin" => true }}}.to_json
+        )
+      }
+
+      patch("/api/v1.0/sources/#{source.id}", :params => { "name" => "updated_name" }.to_json, :headers => headers)
+
+      expect(response.status).to eq(204)
+    end
+
+    it "accepts GET request with tenancy enforcement and user not as org_admin when RBAC is bypassed" do
       stub_const("ENV", "BYPASS_RBAC" => "true")
 
       headers = {
@@ -180,6 +254,21 @@ RSpec.describe ApplicationController, :type => :request do
       get("/api/v1.0/sources", :headers => headers)
 
       expect(response.status).to eq(200)
+    end
+
+    it "accepts PATCH request with tenancy enforcement and user not as org_admin when RBAC is bypassed" do
+      stub_const("ENV", "BYPASS_RBAC" => "true")
+
+      headers = {
+        "CONTENT_TYPE"  => "application/json",
+        "x-rh-identity" => Base64.encode64(
+          { "identity" => { "account_number" => external_tenant, "user" => { "is_org_admin" => false }}}.to_json
+        )
+      }
+
+      patch("/api/v1.0/sources/#{source.id}", :params => { "name" => "updated_name" }.to_json, :headers => headers)
+
+      expect(response.status).to eq(204)
     end
   end
 end

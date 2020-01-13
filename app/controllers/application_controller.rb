@@ -44,7 +44,7 @@ class ApplicationController < ActionController::API
     Insights::API::Common::Request.with_request(request) do |current|
       begin
         if Tenant.tenancy_enabled? && Insights::API::Common::RBAC::Access.enabled?
-          raise RbacError unless current.user.org_admin?
+          raise RbacError unless current.user.org_admin? || [:get, :head, :options].include?(request.request_method_symbol)
         end
         if Tenant.tenancy_enabled? && current.required_auth?
           raise Insights::API::Common::EntitlementError unless request_is_entitled?(current.entitlement)
