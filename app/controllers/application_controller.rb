@@ -43,10 +43,8 @@ class ApplicationController < ActionController::API
   def with_current_request
     Insights::API::Common::Request.with_request(request) do |current|
       begin
-        if Tenant.tenancy_enabled? && Insights::API::Common::RBAC::Access.enabled?
-          raise RbacError unless current.user.org_admin? || [:get, :head, :options].include?(request.request_method_symbol)
-        end
         if Tenant.tenancy_enabled? && current.required_auth?
+          raise RbacError if Insights::API::Common::RBAC::Access.enabled? && !current.user.org_admin? && !request_is_readonly
           raise Insights::API::Common::EntitlementError unless request_is_entitled?(current.entitlement)
 
           tenant = Tenant.find_or_create_by(:external_tenant => current.user.tenant)
@@ -65,6 +63,10 @@ class ApplicationController < ActionController::API
         render :json => error_document.to_h, :status => error_document.status
       end
     end
+  end
+
+  def request_is_readonly
+    [:get, :head, :options].include?(request.request_method_symbol)
   end
 
   def request_is_entitled?(entitlement)
