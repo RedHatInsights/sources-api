@@ -114,7 +114,7 @@ ansible-tower:
 azure:
   :product_name: Microsoft Azure
   :vendor: Azure
-  :icon_url: "/apps/chrome/assets/images/partners-icons/miscrosoft-azure.svg"
+  :icon_url: "/apps/chrome/assets/images/partners-icons/microsoft-azure.svg"
   :schema:
     :authentication:
     - :type: tenant_id_client_id_client_secret
