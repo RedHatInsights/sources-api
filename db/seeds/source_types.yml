@@ -55,10 +55,11 @@ amazon:
         :initializeOnMount: true
         :initialValue: aws
   :vendor: Amazon
-  :icon_url: "/aws_logo.png"
+  :icon_url: "/apps/chrome/assets/images/partners-icons/aws.svg"
 ansible-tower:
   :product_name: Ansible Tower
   :vendor: Red Hat
+  :icon_url: "/apps/chrome/assets/images/platform-icons/ansible-tower.svg"
   :schema:
     :authentication:
     - :type: username_password
@@ -113,6 +114,7 @@ ansible-tower:
 azure:
   :product_name: Microsoft Azure
   :vendor: Azure
+  :icon_url: "/apps/chrome/assets/images/partners-icons/microsoft-azure.svg"
   :schema:
     :authentication:
     - :type: tenant_id_client_id_client_secret
@@ -202,13 +204,15 @@ openshift:
           :when: endpoint.verify_ssl
           :is: true
   :vendor: Red Hat
-  :icon_url: "/openshift_logo.png"
+  :icon_url: "/apps/chrome/assets/images/platform-icons/openshift.svg"
 openstack:
   :product_name: Red Hat OpenStack
   :vendor: Red Hat
+  :icon_url: "/apps/chrome/assets/images/platform-icons/openstack.svg"
 ovirt:
   :product_name: Red Hat Virtualization
   :vendor: Red Hat
+  :icon_url: "/apps/chrome/assets/images/platform-icons/ovirt.svg"
 satellite:
   :product_name: Red Hat Satellite
   :vendor: Red Hat
@@ -242,4 +246,4 @@ satellite:
 vsphere:
   :product_name: VMware vSphere
   :vendor: VMware
-  :icon_url: "/vsphere_logo.png"
+  :icon_url: "/apps/chrome/assets/images/partners-icons/vmware.svg"
