@@ -35,7 +35,10 @@ describe "Swagger stuff" do
           {:path => "/internal/v1.0/tenants",             :verb => "GET"},
           {:path => "/internal/v1.0/tenants/:id",         :verb => "GET"}
         ]
-        expect(rails_routes).to match_array(swagger_routes + redirect_routes + internal_api_routes)
+        health_check_routes = [
+          {:path => "/health", :verb => "GET"}
+        ]
+        expect(rails_routes).to match_array(swagger_routes + redirect_routes + internal_api_routes + health_check_routes)
       end
     end
 

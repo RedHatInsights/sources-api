@@ -9,6 +9,8 @@ Rails.application.routes.draw do
     prefix = File.join(ENV["PATH_PREFIX"], ENV["APP_NAME"]).gsub(/^\/+|\/+$/, "")
   end
 
+  get "/health", :to => "status#health"
+
   scope :as => :api, :module => "api", :path => prefix do
     routing_helper.redirect_major_version("v1.0", prefix)
 
