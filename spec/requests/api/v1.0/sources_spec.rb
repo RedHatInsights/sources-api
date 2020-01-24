@@ -327,10 +327,12 @@ RSpec.describe("v1.0 - Sources") do
 
       allow(Sources::Api::Messaging).to receive(:client).and_return(messaging_client)
 
-      allow(kafka_client).to receive(:topics).and_return([
-        "platform.topological-inventory.operations-amazon",
-        "platform.topological-inventory.operations-openshift",
-      ])
+      allow(kafka_client).to receive(:topics).and_return(
+        [
+          "platform.topological-inventory.operations-amazon",
+          "platform.topological-inventory.operations-openshift",
+        ]
+      )
     end
 
     context "post" do
@@ -391,7 +393,7 @@ RSpec.describe("v1.0 - Sources") do
 
       it "success: with a source-type that topology doesn't support" do
         source_type = SourceType.create!(:name => "vsphere", :vendor => "VMware", :product_name => "VMware vSphere")
-        attributes  = { "name" => "my_source", "source_type_id" => source_type.id.to_s }
+        attributes  = {"name" => "my_source", "source_type_id" => source_type.id.to_s}
         source      = Source.create!(attributes.merge("tenant" => tenant))
 
         expect(messaging_client).not_to receive(:publish_topic)
