@@ -10,7 +10,7 @@ RSpec.describe("v1.0 - Sources") do
   let(:client)          { instance_double("ManageIQ::Messaging::Client") }
   before do
     allow(client).to receive(:publish_topic)
-    allow(Sources::Api::Events).to receive(:messaging_client).and_return(client)
+    allow(Sources::Api::Messaging).to receive(:client).and_return(client)
   end
 
   describe("/api/v1.0/sources") do
@@ -323,6 +323,13 @@ RSpec.describe("v1.0 - Sources") do
     before do
       allow(messaging_client).to receive(:publish_topic)
       allow(Sources::Api::Messaging).to receive(:client).and_return(messaging_client)
+
+      allow(Sources::Api::Messaging).to receive(:topics).and_return([
+        "platform.topological-inventory.operations-amazon",
+        "platform.topological-inventory.operations-openshift",
+      ]
+
+      )
     end
 
     context "post" do
@@ -373,6 +380,20 @@ RSpec.describe("v1.0 - Sources") do
                                  )
                                )))
 
+        post(check_availability_path(source.id), :headers => headers)
+
+        expect(response).to have_attributes(
+          :status      => 202,
+          :parsed_body => {}
+        )
+      end
+
+      it "success: with a source-type that topology doesn't support" do
+        source_type = SourceType.create!(:name => "vsphere", :vendor => "VMware", :product_name => "VMware vSphere")
+        attributes  = { "name" => "my_source", "source_type_id" => source_type.id.to_s }
+        source      = Source.create!(attributes.merge("tenant" => tenant))
+
+        expect(messaging_client).not_to receive(:publish_topic)
         post(check_availability_path(source.id), :headers => headers)
 
         expect(response).to have_attributes(
