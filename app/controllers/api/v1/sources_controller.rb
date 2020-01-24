@@ -23,19 +23,24 @@ module Api
         source = Source.find(params[:source_id])
         topic  = "platform.topological-inventory.operations-#{source.source_type.name}"
 
-        logger.debug("publishing message to #{topic}...")
-        messaging_client = Sources::Api::Messaging.client(topic)
-        messaging_client.publish_topic(
-          :service => topic,
-          :event   => "Source.availability_check",
-          :payload => {
-            :params => {
-              :source_id       => source.id.to_s,
-              :external_tenant => source.tenant.external_tenant
+        if Sources::Api::Messaging.topics.include?(topic)
+          logger.debug("publishing message to #{topic}...")
+
+          Sources::Api::Messaging.client.publish_topic(
+            :service => topic,
+            :event   => "Source.availability_check",
+            :payload => {
+              :params => {
+                :source_id       => source.id.to_s,
+                :external_tenant => source.tenant.external_tenant
+              }
             }
-          }
-        )
-        logger.debug("publishing message to #{topic}...Complete")
+          )
+
+          logger.debug("publishing message to #{topic}...Complete")
+        else
+          logger.error("not publishing message to non-existing topic: #{topic}")
+        end
 
         check_application_availability(source)
 
