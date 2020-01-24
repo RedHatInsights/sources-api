@@ -24,7 +24,8 @@ module Api
         topic  = "platform.topological-inventory.operations-#{source.source_type.name}"
 
         logger.debug("publishing message to #{topic}...")
-        Sources::Api::Messaging.client.publish_topic(
+        messaging_client = Sources::Api::Messaging.client(topic)
+        messaging_client.publish_topic(
           :service => topic,
           :event   => "Source.availability_check",
           :payload => {

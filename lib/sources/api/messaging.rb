@@ -1,10 +1,11 @@
 module Sources
   module Api
     module Messaging
-      def self.client
+      def self.client(topic)
         require "manageiq-messaging"
 
-        @client ||= ManageIQ::Messaging::Client.open(
+        @client ||= {}
+        @client[topic] ||= ManageIQ::Messaging::Client.open(
           :protocol => :Kafka,
           :host     => ENV["QUEUE_HOST"] || "localhost",
           :port     => ENV["QUEUE_PORT"] || "9092",
