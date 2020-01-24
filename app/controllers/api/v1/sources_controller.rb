@@ -39,7 +39,7 @@ module Api
 
           logger.debug("publishing message to #{topic}...Complete")
         else
-          logger.debug("not publishing message to non-existing topic: #{topic}")
+          logger.error("not publishing message to non-existing topic: #{topic}")
         end
 
         check_application_availability(source)
