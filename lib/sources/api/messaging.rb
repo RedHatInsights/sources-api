@@ -1,3 +1,5 @@
+require "more_core_extensions/core_ext/module/cache_with_timeout"
+
 module Sources
   module Api
     module Messaging
@@ -14,7 +16,7 @@ module Sources
         end
       end
 
-      def self.topics
+      cache_with_timeout(:topics) do
         # TODO add an interface to ManageIQ::Messaging::Client to get a topic list
         client.send(:kafka_client)&.topics || []
       end
