@@ -7,8 +7,8 @@ module Spec
         let!(:tenant)           { Tenant.create!(:name => "default", :external_tenant => external_tenant) }
         let!(:external_tenant)  { rand(1000).to_s }
         let!(:unknown_tenant)   { rand(1000).to_s }
-        let!(:identity)         { Base64.encode64({'identity' => { 'account_number' => external_tenant}}.to_json) }
-        let!(:unknown_identity) { Base64.encode64({'identity' => { 'account_number' => unknown_tenant}}.to_json) }
+        let!(:identity)         { Base64.encode64({'identity' => { 'account_number' => external_tenant, 'user' => { 'is_org_admin' => true }}}.to_json) }
+        let!(:unknown_identity) { Base64.encode64({'identity' => { 'account_number' => unknown_tenant,  'user' => { 'is_org_admin' => true }}}.to_json) }
 
         let!(:entitlements) do
           {
@@ -19,7 +19,7 @@ module Spec
 
         let!(:identity_with_entitlements) do
           Base64.encode64(
-            {'identity' => { 'account_number' => external_tenant}, :entitlements => entitlements}.to_json
+            {'identity' => { 'account_number' => external_tenant, 'user' => { 'is_org_admin' => true }}, :entitlements => entitlements}.to_json
           )
         end
       end

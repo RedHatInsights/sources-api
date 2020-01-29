@@ -5,6 +5,8 @@ class ApplicationController < ActionController::API
   include Insights::API::Common::ApplicationControllerMixins::RequestBodyValidation
   include Insights::API::Common::ApplicationControllerMixins::RequestPath
 
+  class RbacError < StandardError; end
+
   BLACKLIST_PARAMS = [:tenant].freeze
 
   around_action :with_current_request
@@ -42,6 +44,7 @@ class ApplicationController < ActionController::API
     Insights::API::Common::Request.with_request(request) do |current|
       begin
         if Tenant.tenancy_enabled? && current.required_auth?
+          raise RbacError if Insights::API::Common::RBAC::Access.enabled? && !current.user.org_admin? && !request_is_readonly
           raise Insights::API::Common::EntitlementError unless request_is_entitled?(current.entitlement)
 
           tenant = Tenant.find_or_create_by(:external_tenant => current.user.tenant)
@@ -55,8 +58,15 @@ class ApplicationController < ActionController::API
       rescue Insights::API::Common::EntitlementError
         error_document = Insights::API::Common::ErrorDocument.new.add(403, 'Forbidden')
         render :json => error_document.to_h, :status => error_document.status
+      rescue RbacError
+        error_document = Insights::API::Common::ErrorDocument.new.add(403, 'Forbidden due to Rbac')
+        render :json => error_document.to_h, :status => error_document.status
       end
     end
+  end
+
+  def request_is_readonly
+    [:get, :head, :options].include?(request.request_method_symbol)
   end
 
   def request_is_entitled?(entitlement)
