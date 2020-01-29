@@ -21,6 +21,13 @@ module Api
         )
         render :json => result
       end
+
+      private
+
+      # RBAC readonly access is allowed for graphql's POST
+      def request_is_readonly
+        true
+      end
     end
   end
 end
