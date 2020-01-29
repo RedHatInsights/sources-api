@@ -3,6 +3,8 @@ class Authentication < ApplicationRecord
   include TenancyConcern
   encrypt_column :password
 
+  acts_as_taggable_on
+
   belongs_to :resource, :polymorphic => true
 
   attribute :availability_status, :string

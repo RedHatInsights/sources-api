@@ -1,5 +1,8 @@
 class Endpoint < ApplicationRecord
   include TenancyConcern
+
+  acts_as_taggable_on
+
   belongs_to :source
 
   has_many   :authentications, :as => :resource, :dependent => :destroy

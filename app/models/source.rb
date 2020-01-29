@@ -1,5 +1,8 @@
 class Source < ApplicationRecord
   include TenancyConcern
+
+  acts_as_taggable_on
+
   attribute :uid, :string, :default => -> { SecureRandom.uuid }
 
   has_many :applications
