@@ -5,7 +5,7 @@ RSpec.describe ApplicationController, :type => :request do
   let(:client)      { instance_double("ManageIQ::Messaging::Client") }
   before do
     allow(client).to receive(:publish_topic)
-    allow(Sources::Api::Events).to receive(:messaging_client).and_return(client)
+    allow(Sources::Api::Messaging).to receive(:client).and_return(client)
   end
 
   context "with tenancy enforcement" do
