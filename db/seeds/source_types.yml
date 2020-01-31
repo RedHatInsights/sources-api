@@ -4,7 +4,7 @@ amazon:
   :schema:
     :authentication:
     - :type: access_key_secret_key
-      :name: AWS Secret Key
+      :name: AWS Secret key
       :fields:
       - :component: text-field
         :name: authentication.authtype
@@ -13,10 +13,10 @@ amazon:
         :initialValue: access_key_secret_key
       - :component: text-field
         :name: authentication.username
-        :label: Access Key
+        :label: Access key
       - :component: text-field
         :name: authentication.password
-        :label: Secret Key
+        :label: Secret key
         :type: password
     - :type: arn
       :name: ARN
@@ -78,7 +78,7 @@ ansible-tower:
         - :type: required-validator
       - :component: text-field
         :name: authentication.password
-        :label: Secret Key
+        :label: Secret key
         :type: password
         :isRequired: true
         :validate:
@@ -219,7 +219,7 @@ satellite:
   :schema:
     :authentication:
     - :type: receptor_node
-      :name: Receptore node
+      :name: Receptor node
       :fields:
       - :component: text-field
         :name: authentication.authtype
