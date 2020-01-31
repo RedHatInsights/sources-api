@@ -63,6 +63,8 @@ module Api
 
             uri = URI.parse(url)
             net_http = Net::HTTP.new(uri.host, uri.port)
+            net_http.open_timeout = net_http.read_timeout = 10
+
             request  = Net::HTTP::Post.new(uri.request_uri, headers)
             request.body = { "source_id" => source.id.to_s }.to_json
 
