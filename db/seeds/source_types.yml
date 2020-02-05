@@ -46,6 +46,25 @@ amazon:
           :pattern: "^arn:aws:.*"
         - :type: min-length-validator
           :threshold: 10
+    - :type: cloud-meter-arn
+      :name: Cloud Meter ARN
+      :fields:
+      - :component: text-field
+        :name: authentication.authtype
+        :hideField: true
+        :initializeOnMount: true
+        :initialValue: cloud-meter-arn
+      - :name: authentication.password
+        :stepKey: arn
+        :component: text-field
+        :label: ARN
+        :isRequired: true
+        :validate:
+        - :type: required-validator
+        - :type: pattern-validator
+          :pattern: "^arn:aws:.*"
+        - :type: min-length-validator
+          :threshold: 10
     :endpoint:
       :hidden: true
       :fields:
