@@ -55,7 +55,6 @@ amazon:
         :initializeOnMount: true
         :initialValue: cloud-meter-arn
       - :name: authentication.password
-        :stepKey: arn
         :component: text-field
         :label: ARN
         :isRequired: true
