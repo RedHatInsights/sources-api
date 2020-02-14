@@ -22,6 +22,14 @@
     - tenant_id_client_id_client_secret
     openshift:
     - token
+"/insights/platform/cloud-meter":
+  :display_name: Cloud Meter
+  :dependent_applications: []
+  :supported_source_types:
+  - amazon
+  :supported_authentication_types:
+    amazon:
+    - cloud-meter-arn
 "/insights/platform/topological-inventory":
   :display_name: Topological Inventory
   :dependent_applications: []

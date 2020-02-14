@@ -7,7 +7,7 @@ class ClientGenerator
   require 'uri'
 
   VERSION = "4.2.1".freeze
-  SOURCE_URL = "http://central.maven.org/maven2/org/openapitools/openapi-generator-cli".freeze
+  SOURCE_URL = "https://repo1.maven.org/maven2/org/openapitools/openapi-generator-cli".freeze
 
   def msg(message)
     STDOUT.puts(message)
@@ -43,7 +43,7 @@ class ClientGenerator
   end
 
   def openapi_file
-    @openapi_file ||= Pathname.new(Rails.root.join("public/doc/openapi-3-v#{api_version}.0.json")).to_s
+    @openapi_file ||= Pathname.new(Rails.root.join("public/doc/openapi-3-v#{api_version}.json")).to_s
   end
 
   def openapi_yaml_file
