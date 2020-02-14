@@ -1,5 +1,12 @@
 class AddTagsToModels < ActiveRecord::Migration[5.2]
   def change
+    create_table "application_tags" do |t|
+      t.references "tenant", :index => true, :null => false, :foreign_key => {:on_delete => :cascade}
+      t.references "tag", :index => true, :null => false, :foreign_key => {:on_delete => :cascade}
+      t.string "value", :null => false, :default => ""
+      t.references "application", :index => false, :null => false, :foreign_key => {:on_delete => :cascade}
+      t.index %w[application_id tag_id value], :unique => true, :name => "uniq_index_on_application_id_tag_id_value"
+    end
     create_table "authentication_tags" do |t|
       t.references "tenant", :index => true, :null => false, :foreign_key => {:on_delete => :cascade}
       t.references "tag", :index => true, :null => false, :foreign_key => {:on_delete => :cascade}
