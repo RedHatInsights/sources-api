@@ -8,8 +8,7 @@ class ApplicationRecord < ActiveRecord::Base
     super
   end
 
-  require 'act_as_taggable_on'
   ActiveSupport.on_load(:active_record) do
-    extend ActAsTaggableOn
+    extend Insights::API::Common::ActAsTaggableOn
   end
 end
