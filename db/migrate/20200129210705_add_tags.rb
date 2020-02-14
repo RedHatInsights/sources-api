@@ -5,7 +5,9 @@ class AddTags < ActiveRecord::Migration[5.2]
       t.string "name", :null => false
       t.string "namespace", :default => "", :null => false
       t.text "description"
-      t.index %w[tenant_id namespace name], :unique => true
+      t.string "value", default: "", null: false
+      t.timestamps
+      t.index %w[tenant_id namespace name value], :unique => true
     end
   end
 end

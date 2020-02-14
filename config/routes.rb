@@ -45,10 +45,15 @@ Rails.application.routes.draw do
       resources :application_types, :only => [:index, :show] do
         resources :sources, :only => [:index]
       end
-      resources :applications,      :only => [:create, :destroy, :index, :show, :update]
-      resources :authentications,   :only => [:create, :destroy, :index, :show, :update]
+      resources :applications,      :only => [:create, :destroy, :index, :show, :update] do
+        resources :tags, :only => [:index]
+      end
+      resources :authentications,   :only => [:create, :destroy, :index, :show, :update] do
+        resources :tags, :only => [:index]
+      end
       resources :endpoints,         :only => [:create, :destroy, :index, :show, :update] do
         resources :authentications, :only => [:index]
+        resources :tags,            :only => [:index]
       end
       resources :source_types,    :only => [:create, :index, :show] do
         resources :sources, :only => [:index]
@@ -58,6 +63,13 @@ Rails.application.routes.draw do
         resources :application_types, :only => [:index]
         resources :applications,      :only => [:index]
         resources :endpoints,         :only => [:index]
+        resources :tags,              :only => [:index]
+      end
+      resources :tags,            :only => [:index, :show] do
+        resources :authentications, :only => [:index]
+        resources :applications,    :only => [:index]
+        resources :endpoints,       :only => [:index]
+        resources :sources,         :only => [:index]
       end
     end
   end

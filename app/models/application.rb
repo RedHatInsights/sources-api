@@ -1,5 +1,8 @@
 class Application < ApplicationRecord
   include TenancyConcern
+
+  acts_as_taggable_on
+
   belongs_to :source
   belongs_to :application_type
 
