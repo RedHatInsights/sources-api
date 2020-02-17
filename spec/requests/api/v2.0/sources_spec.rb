@@ -134,16 +134,6 @@ RSpec.describe("v2.0 - Sources") do
           :parsed_body => Insights::API::Common::ErrorDocument.new.add(400, "Record not unique").to_h
         )
       end
-
-      it "ignores blacklisted params" do
-        post(collection_path, :params => attributes.merge("tenant" => "123456").to_json, :headers => headers)
-
-        expect(response).to have_attributes(
-          :status      => 201,
-          :location    => "http://www.example.com/api/v2.0/sources/#{response.parsed_body["id"]}",
-          :parsed_body => a_hash_including(attributes)
-        )
-      end
     end
   end
 
@@ -299,13 +289,13 @@ RSpec.describe("v2.0 - Sources") do
 
       it "rejects read_only attributes" do
         instance = Source.create!(attributes.merge("tenant" => tenant))
-        new_attributes = {"name" => "new name", "tenant" => "123456"}
+        new_attributes = {"name" => "new name", "created_at" => Time.now.utc}
 
         patch(instance_path(instance.id), :params => new_attributes.to_json, :headers => headers)
 
         expect(response).to have_attributes(
           :status      => 400,
-          :parsed_body => { "errors" => [{"detail" => "ActionController::UnpermittedParameters: found unpermitted parameter: :tenant", "status" => 400 }]}
+          :parsed_body => { "errors" => [{"detail" => "ActionController::UnpermittedParameters: found unpermitted parameter: :created_at", "status" => 400 }]}
         )
       end
     end

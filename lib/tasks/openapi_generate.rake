@@ -1,32 +1,5 @@
 require 'insights/api/common/open_api/generator'
 class OpenapiGenerator < Insights::API::Common::OpenApi::Generator
-  def generator_blacklist_allowed_attributes
-    @generator_blacklist_allowed_attributes ||= {
-      :tenant_id => ['Authentication', 'Application', 'Endpoint', 'Source'].to_set.freeze
-    }
-  end
-
-  def generator_blacklist_substitute_attributes
-    @generator_blacklist_substitute_attributes ||= {
-      :tenant_id => ["tenant", { "type" => "string", "readOnly" => true }].freeze
-    }
-  end
-
-  def schemas
-    @schemas ||= begin
-      super.merge(
-        "Tenant" => {
-          "type"       => "object",
-          "properties" => {
-            "name"            => {"type" => "string", "readOnly" => true, "example" => "Sample Tenant"},
-            "description"     => {"type" => "string", "readOnly" => true, "example" => "Description of the Tenant"},
-            "external_tenant" => {"type" => "string", "readOnly" => true, "example" => "External tenant identifier"}
-          }
-        }
-      )
-    end
-  end
-
   def handle_custom_route_action(route_action, verb, primary_collection)
     case [primary_collection, verb, route_action]
     when ["Source", "post", "CheckAvailability"]

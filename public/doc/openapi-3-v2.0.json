@@ -1261,10 +1261,6 @@
           "source_id": {
             "$ref": "#/components/schemas/ID"
           },
-          "tenant": {
-            "type": "string",
-            "readOnly": true
-          },
           "updated_at": {
             "format": "date-time",
             "readOnly": true,
@@ -1393,10 +1389,6 @@
           "status_details": {
             "type": "string"
           },
-          "tenant": {
-            "type": "string",
-            "readOnly": true
-          },
           "username": {
             "example": "user@example.com",
             "type": "string"
@@ -1506,10 +1498,6 @@
           },
           "source_id": {
             "$ref": "#/components/schemas/ID"
-          },
-          "tenant": {
-            "type": "string",
-            "readOnly": true
           },
           "updated_at": {
             "format": "date-time",
@@ -1640,10 +1628,6 @@
           "source_type_id": {
             "$ref": "#/components/schemas/ID"
           },
-          "tenant": {
-            "type": "string",
-            "readOnly": true
-          },
           "uid": {
             "readOnly": true,
             "title": "Unique ID of the inventory source installation",
@@ -1731,26 +1715,6 @@
             "items": {
               "$ref": "#/components/schemas/Source"
             }
-          }
-        }
-      },
-      "Tenant": {
-        "type": "object",
-        "properties": {
-          "name": {
-            "type": "string",
-            "readOnly": true,
-            "example": "Sample Tenant"
-          },
-          "description": {
-            "type": "string",
-            "readOnly": true,
-            "example": "Description of the Tenant"
-          },
-          "external_tenant": {
-            "type": "string",
-            "readOnly": true,
-            "example": "External tenant identifier"
           }
         }
       }
