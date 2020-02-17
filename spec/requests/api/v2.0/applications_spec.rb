@@ -143,4 +143,36 @@ RSpec.describe("v2.0 - Applications") do
       end
     end
   end
+
+  describe("/api/v2.0/applications/:id/authentications") do
+    def subcollection_path(id, subcollection)
+      File.join(collection_path, id.to_s, subcollection)
+    end
+
+    context "get" do
+      it "success: with a valid id" do
+        instance = Application.create!(payload.merge(:tenant => tenant))
+
+        get(subcollection_path(instance.id, "authentications"), :headers => headers)
+
+        expect(response).to have_attributes(
+          :status => 200,
+          :parsed_body => paginated_response(0, [])
+        )
+      end
+
+      it "failure: with an invalid id" do
+        instance = Application.create!(payload.merge(:tenant => tenant))
+        missing_id = (instance.id * 1000)
+        expect(Application.exists?(missing_id)).to eq(false)
+
+        get(subcollection_path(missing_id, "authentications"), :headers => headers)
+
+        expect(response).to have_attributes(
+          :status => 404,
+          :parsed_body => {"errors"=>[{"detail"=>"Record not found", "status"=>404}]}
+        )
+      end
+    end
+  end
 end
