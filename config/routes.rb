@@ -12,7 +12,31 @@ Rails.application.routes.draw do
   get "/health", :to => "status#health"
 
   scope :as => :api, :module => "api", :path => prefix do
+    routing_helper.redirect_major_version("v2.0", prefix)
     routing_helper.redirect_major_version("v1.0", prefix)
+
+    namespace :v2x0, :path => "v2.0" do
+      get "/openapi.json", :to => "root#openapi"
+      post "/graphql", :to => "graphql#query"
+
+      resources :application_types, :only => [:index, :show] do
+        resources :sources, :only => [:index]
+      end
+      resources :applications,      :only => [:create, :destroy, :index, :show, :update]
+      resources :authentications,   :only => [:create, :destroy, :index, :show, :update]
+      resources :endpoints,         :only => [:create, :destroy, :index, :show, :update] do
+        resources :authentications, :only => [:index]
+      end
+      resources :source_types,    :only => [:index, :show] do
+        resources :sources, :only => [:index]
+      end
+      resources :sources,         :only => [:create, :destroy, :index, :show, :update] do
+        post "check_availability", :to => "sources#check_availability", :action => "check_availability"
+        resources :application_types, :only => [:index]
+        resources :applications,      :only => [:index]
+        resources :endpoints,         :only => [:index]
+      end
+    end
 
     namespace :v1x0, :path => "v1.0" do
       get "/openapi.json", :to => "root#openapi"
@@ -31,9 +55,9 @@ Rails.application.routes.draw do
       end
       resources :sources,         :only => [:create, :destroy, :index, :show, :update] do
         post "check_availability", :to => "sources#check_availability", :action => "check_availability"
-        resources :applications, :only => [:index]
         resources :application_types, :only => [:index]
-        resources :endpoints, :only => [:index]
+        resources :applications,      :only => [:index]
+        resources :endpoints,         :only => [:index]
       end
     end
   end
