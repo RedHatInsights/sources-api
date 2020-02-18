@@ -23,7 +23,7 @@
     openshift:
     - token
 "/insights/platform/cloud-meter":
-  :display_name: Cloud Meter
+  :display_name: Subscription Watch
   :dependent_applications: []
   :supported_source_types:
   - amazon
