@@ -32,6 +32,7 @@ module Api
             :payload => {
               :params => {
                 :source_id       => source.id.to_s,
+                :source_uid      => source.uid.to_s,
                 :external_tenant => source.tenant.external_tenant
               }
             }
