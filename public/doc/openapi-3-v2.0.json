@@ -1216,18 +1216,10 @@
         "name": "sort_by",
         "description": "The list of attribute and order to sort the result set by.",
         "required": false,
+        "style": "deepObject",
+        "explode": true,
         "schema": {
-          "oneOf": [
-            {
-              "$ref": "#/components/schemas/SortByAttribute"
-            },
-            {
-              "type": "array",
-              "items": {
-                "$ref": "#/components/schemas/SortByAttribute"
-              }
-            }
-          ]
+          "type": "object"
         }
       }
     },
@@ -1594,11 +1586,6 @@
         "description": "ID of the resource",
         "pattern": "^\\d+$",
         "readOnly": true
-      },
-      "SortByAttribute": {
-        "type": "string",
-        "description": "Attribute with optional order to sort the result set by.",
-        "pattern": "^[a-z\\-_]+(:asc|:desc)?$"
       },
       "Source": {
         "type": "object",
