@@ -13,6 +13,5 @@ module Api
     class GraphqlController < Api::V1::GraphqlController; end
     class SourcesController < Api::V1::SourcesController; end
     class SourceTypesController < Api::V1::SourceTypesController; end
-    class TagsController < Api::V1::TagsController; end
   end
 end

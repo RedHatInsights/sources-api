@@ -22,29 +22,6 @@ Rails.application.routes.draw do
       resources :application_types, :only => [:index, :show] do
         resources :sources, :only => [:index]
       end
-      resources :applications,      :only => [:create, :destroy, :index, :show, :update]
-      resources :authentications,   :only => [:create, :destroy, :index, :show, :update]
-      resources :endpoints,         :only => [:create, :destroy, :index, :show, :update] do
-        resources :authentications, :only => [:index]
-      end
-      resources :source_types,    :only => [:index, :show] do
-        resources :sources, :only => [:index]
-      end
-      resources :sources,         :only => [:create, :destroy, :index, :show, :update] do
-        post "check_availability", :to => "sources#check_availability", :action => "check_availability"
-        resources :application_types, :only => [:index]
-        resources :applications,      :only => [:index]
-        resources :endpoints,         :only => [:index]
-      end
-    end
-
-    namespace :v1x0, :path => "v1.0" do
-      get "/openapi.json", :to => "root#openapi"
-      post "/graphql", :to => "graphql#query"
-
-      resources :application_types, :only => [:index, :show] do
-        resources :sources, :only => [:index]
-      end
       resources :applications,      :only => [:create, :destroy, :index, :show, :update] do
         resources :tags, :only => [:index]
       end
@@ -55,7 +32,7 @@ Rails.application.routes.draw do
         resources :authentications, :only => [:index]
         resources :tags,            :only => [:index]
       end
-      resources :source_types,    :only => [:create, :index, :show] do
+      resources :source_types,    :only => [:index, :show] do
         resources :sources, :only => [:index]
       end
       resources :sources,         :only => [:create, :destroy, :index, :show, :update] do
@@ -70,6 +47,29 @@ Rails.application.routes.draw do
         resources :applications,    :only => [:index]
         resources :endpoints,       :only => [:index]
         resources :sources,         :only => [:index]
+      end
+    end
+
+    namespace :v1x0, :path => "v1.0" do
+      get "/openapi.json", :to => "root#openapi"
+      post "/graphql", :to => "graphql#query"
+
+      resources :application_types, :only => [:index, :show] do
+        resources :sources, :only => [:index]
+      end
+      resources :applications,      :only => [:create, :destroy, :index, :show, :update]
+      resources :authentications,   :only => [:create, :destroy, :index, :show, :update]
+      resources :endpoints,         :only => [:create, :destroy, :index, :show, :update] do
+        resources :authentications, :only => [:index]
+      end
+      resources :source_types,    :only => [:create, :index, :show] do
+        resources :sources, :only => [:index]
+      end
+      resources :sources,         :only => [:create, :destroy, :index, :show, :update] do
+        post "check_availability", :to => "sources#check_availability", :action => "check_availability"
+        resources :application_types, :only => [:index]
+        resources :applications,      :only => [:index]
+        resources :endpoints,         :only => [:index]
       end
     end
   end
