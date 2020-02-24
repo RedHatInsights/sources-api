@@ -100,4 +100,6 @@ Rails.application.routes.draw do
       resources :tenants,         :only => [:index, :show]
     end
   end
+
+  match "*path", :to => "api/root#invalid_url_error", :via => ActionDispatch::Routing::HTTP_METHODS - [:head]
 end

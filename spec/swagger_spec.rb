@@ -4,6 +4,7 @@ describe "Swagger stuff" do
       r = ActionDispatch::Routing::RouteWrapper.new(route)
       next if r.internal? # Don't display rails routes
       next if r.engine? # Don't care right now...
+      next if r.action == "invalid_url_error"
 
       array << {:verb => r.verb, :path => r.path.split("(").first.sub(/:[_a-z]*id/, ":id")}
     end
