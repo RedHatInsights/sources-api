@@ -8,7 +8,7 @@
 This project exposes an API for accessing objects living in the Sources Service database
 
 ## Prerequisites
-You need to install ruby >= 2.4 and run:
+You need to install ruby >= 2.5 and run:
 
 ```
 bundle install
