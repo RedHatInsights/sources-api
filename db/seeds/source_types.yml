@@ -47,7 +47,7 @@ amazon:
         - :type: min-length-validator
           :threshold: 10
     - :type: cloud-meter-arn
-      :name: Cloud Meter ARN
+      :name: Subscription Watch ARN
       :fields:
       - :component: text-field
         :name: authentication.authtype
