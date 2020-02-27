@@ -44,10 +44,10 @@ class ApplicationController < ActionController::API
     Insights::API::Common::Request.with_request(request) do |current|
       begin
         if Tenant.tenancy_enabled? && current.required_auth?
-          raise RbacError if Insights::API::Common::RBAC::Access.enabled? && !current.user.org_admin? && !request_is_readonly
-          raise Insights::API::Common::EntitlementError unless request_is_entitled?(current.entitlement)
+          validate_request_allowed!(current)
+          validate_request_entitled!(current)
 
-          tenant = Tenant.find_or_create_by(:external_tenant => current.user.tenant)
+          tenant = Tenant.find_or_create_by(:external_tenant => current.tenant)
           ActsAsTenant.with_tenant(tenant) { yield }
         else
           ActsAsTenant.without_tenant { yield }
@@ -65,13 +65,34 @@ class ApplicationController < ActionController::API
     end
   end
 
-  def request_is_readonly
+  def request_is_readonly?
     [:get, :head, :options].include?(request.request_method_symbol)
   end
 
-  def request_is_entitled?(entitlement)
+  def request_is_create?
+    request.request_method_symbol == :post
+  end
+
+  def validate_request_entitled!(current)
     required_entitlements = %i[hybrid_cloud? insights?]
-    required_entitlements.any? { |e| entitlement.send(e) }
+    return if required_entitlements.any? { |e| current.entitlement.send(e) }
+
+    raise Insights::API::Common::EntitlementError
+  end
+
+  def validate_request_allowed!(current)
+    return unless Insights::API::Common::RBAC::Access.enabled?
+
+    return if request_is_readonly?
+
+    # If the request is using a machine credential we want to allow creates so that Satellite type
+    # sources able to be auto-registered with this service
+    return if request_is_create? && current.system.present?
+
+    # Otherwise only allow Org Admins to create/update/delete
+    return if current.user&.org_admin?
+
+    raise RbacError
   end
 
   def instance_link(instance)
