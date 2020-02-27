@@ -107,5 +107,17 @@ RSpec.describe("v2.0 - ApplicationAuthentications") do
         )
       end
     end
+
+
+    context "delete" do
+      it "success: with a valid paylod" do
+        record = ApplicationAuthentication.create!(payload)
+
+        delete(instance_path(record.id), :headers => headers)
+
+        expect(response.status).to eq(204)
+        expect(response.parsed_body).to be_empty
+      end
+    end
   end
 end
