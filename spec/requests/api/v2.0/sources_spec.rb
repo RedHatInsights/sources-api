@@ -15,24 +15,50 @@ RSpec.describe("v2.0 - Sources") do
 
   describe("/api/v2.0/sources") do
     context "get" do
-      it "success: empty collection" do
-        get(collection_path, :headers => headers)
+      context "user credentials" do
+        it "success: empty collection" do
+          get(collection_path, :headers => headers)
 
-        expect(response).to have_attributes(
-          :status => 200,
-          :parsed_body => paginated_response(0, [])
-        )
+          expect(response).to have_attributes(
+            :status => 200,
+            :parsed_body => paginated_response(0, [])
+          )
+        end
+
+        it "success: non-empty collection" do
+          Source.create!(attributes.merge("tenant" => tenant))
+
+          get(collection_path, :headers => headers)
+
+          expect(response).to have_attributes(
+            :status => 200,
+            :parsed_body => paginated_response(1, [a_hash_including(attributes)])
+          )
+        end
       end
 
-      it "success: non-empty collection" do
-        Source.create!(attributes.merge("tenant" => tenant))
+      context "system credentials" do
+        let(:headers) { {"CONTENT_TYPE" => "application/json", "x-rh-identity" => system_identity} }
 
-        get(collection_path, :headers => headers)
+        it "success: empty collection" do
+          get(collection_path, :headers => headers)
 
-        expect(response).to have_attributes(
-          :status => 200,
-          :parsed_body => paginated_response(1, [a_hash_including(attributes)])
-        )
+          expect(response).to have_attributes(
+            :status => 200,
+            :parsed_body => paginated_response(0, [])
+          )
+        end
+
+        it "success: non-empty collection" do
+          Source.create!(attributes.merge("tenant" => tenant))
+
+          get(collection_path, :headers => headers)
+
+          expect(response).to have_attributes(
+            :status => 200,
+            :parsed_body => paginated_response(1, [a_hash_including(attributes)])
+          )
+        end
       end
     end
 
@@ -133,6 +159,20 @@ RSpec.describe("v2.0 - Sources") do
           :location    => nil,
           :parsed_body => Insights::API::Common::ErrorDocument.new.add(400, "Record not unique").to_h
         )
+      end
+
+      context "with system credentials" do
+        let(:headers) { {"CONTENT_TYPE" => "application/json", "x-rh-identity" => system_identity} }
+
+        it "success: with valid body" do
+          post(collection_path, :params => attributes.to_json, :headers => headers)
+
+          expect(response).to have_attributes(
+            :status => 201,
+            :location => "http://www.example.com/api/v2.0/sources/#{response.parsed_body["id"]}",
+            :parsed_body => a_hash_including(attributes)
+          )
+        end
       end
     end
   end
