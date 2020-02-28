@@ -19,23 +19,29 @@ Rails.application.routes.draw do
       get "/openapi.json", :to => "root#openapi"
       post "/graphql", :to => "graphql#query"
 
+      concern :taggable do
+        post      :tag,   :controller => :taggings
+        post      :untag, :controller => :taggings
+        resources :tags,  :controller => :taggings, :only => [:index]
+      end
+
       resources :application_types, :only => [:index, :show] do
         resources :sources, :only => [:index]
       end
-      resources :applications,      :only => [:create, :destroy, :index, :show, :update] do
+      resources :applications,      :only => [:create, :destroy, :index, :show, :update], :concerns => [:taggable] do
         resources :tags, :only => [:index]
       end
-      resources :authentications,   :only => [:create, :destroy, :index, :show, :update] do
+      resources :authentications,   :only => [:create, :destroy, :index, :show, :update], :concerns => [:taggable] do
         resources :tags, :only => [:index]
       end
-      resources :endpoints,         :only => [:create, :destroy, :index, :show, :update] do
+      resources :endpoints,         :only => [:create, :destroy, :index, :show, :update], :concerns => [:taggable] do
         resources :authentications, :only => [:index]
         resources :tags,            :only => [:index]
       end
       resources :source_types,    :only => [:index, :show] do
         resources :sources, :only => [:index]
       end
-      resources :sources,         :only => [:create, :destroy, :index, :show, :update] do
+      resources :sources,         :only => [:create, :destroy, :index, :show, :update], :concerns => [:taggable] do
         post "check_availability", :to => "sources#check_availability", :action => "check_availability"
         resources :application_types, :only => [:index]
         resources :applications,      :only => [:index]

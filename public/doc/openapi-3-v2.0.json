@@ -292,6 +292,50 @@
         }
       }
     },
+    "/applications/{id}/tag": {
+      "post": {
+        "summary": "Tag a Application",
+        "operationId": "tagApplication",
+        "description": "Tags a Application object",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/ID"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Tag"
+                }
+              }
+            }
+          },
+          "description": "Tag attributes to add",
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Application tagged successful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Tag"
+                  }
+                }
+              }
+            }
+          },
+          "304": {
+            "description": "Not modified"
+          }
+        }
+      }
+    },
     "/applications/{id}/tags": {
       "get": {
         "summary": "List Tags for Application",
@@ -334,6 +378,37 @@
                 }
               }
             }
+          }
+        }
+      }
+    },
+    "/applications/{id}/untag": {
+      "post": {
+        "summary": "Untag a Application",
+        "operationId": "untagApplication",
+        "description": "Untags a Application object",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/ID"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Tag"
+                }
+              }
+            }
+          },
+          "description": "Tag attributes to removed",
+          "required": true
+        },
+        "responses": {
+          "204": {
+            "description": "Application untagged successfully"
           }
         }
       }
@@ -497,6 +572,50 @@
         }
       }
     },
+    "/authentications/{id}/tag": {
+      "post": {
+        "summary": "Tag a Authentication",
+        "operationId": "tagAuthentication",
+        "description": "Tags a Authentication object",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/ID"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Tag"
+                }
+              }
+            }
+          },
+          "description": "Tag attributes to add",
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Authentication tagged successful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Tag"
+                  }
+                }
+              }
+            }
+          },
+          "304": {
+            "description": "Not modified"
+          }
+        }
+      }
+    },
     "/authentications/{id}/tags": {
       "get": {
         "summary": "List Tags for Authentication",
@@ -539,6 +658,37 @@
                 }
               }
             }
+          }
+        }
+      }
+    },
+    "/authentications/{id}/untag": {
+      "post": {
+        "summary": "Untag a Authentication",
+        "operationId": "untagAuthentication",
+        "description": "Untags a Authentication object",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/ID"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Tag"
+                }
+              }
+            }
+          },
+          "description": "Tag attributes to removed",
+          "required": true
+        },
+        "responses": {
+          "204": {
+            "description": "Authentication untagged successfully"
           }
         }
       }
@@ -748,6 +898,50 @@
         }
       }
     },
+    "/endpoints/{id}/tag": {
+      "post": {
+        "summary": "Tag a Endpoint",
+        "operationId": "tagEndpoint",
+        "description": "Tags a Endpoint object",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/ID"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Tag"
+                }
+              }
+            }
+          },
+          "description": "Tag attributes to add",
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Endpoint tagged successful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Tag"
+                  }
+                }
+              }
+            }
+          },
+          "304": {
+            "description": "Not modified"
+          }
+        }
+      }
+    },
     "/endpoints/{id}/tags": {
       "get": {
         "summary": "List Tags for Endpoint",
@@ -790,6 +984,37 @@
                 }
               }
             }
+          }
+        }
+      }
+    },
+    "/endpoints/{id}/untag": {
+      "post": {
+        "summary": "Untag a Endpoint",
+        "operationId": "untagEndpoint",
+        "description": "Untags a Endpoint object",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/ID"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Tag"
+                }
+              }
+            }
+          },
+          "description": "Tag attributes to removed",
+          "required": true
+        },
+        "responses": {
+          "204": {
+            "description": "Endpoint untagged successfully"
           }
         }
       }
@@ -1279,6 +1504,50 @@
         }
       }
     },
+    "/sources/{id}/tag": {
+      "post": {
+        "summary": "Tag a Source",
+        "operationId": "tagSource",
+        "description": "Tags a Source object",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/ID"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Tag"
+                }
+              }
+            }
+          },
+          "description": "Tag attributes to add",
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Source tagged successful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Tag"
+                  }
+                }
+              }
+            }
+          },
+          "304": {
+            "description": "Not modified"
+          }
+        }
+      }
+    },
     "/sources/{id}/tags": {
       "get": {
         "summary": "List Tags for Source",
@@ -1321,6 +1590,37 @@
                 }
               }
             }
+          }
+        }
+      }
+    },
+    "/sources/{id}/untag": {
+      "post": {
+        "summary": "Untag a Source",
+        "operationId": "untagSource",
+        "description": "Untags a Source object",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/ID"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Tag"
+                }
+              }
+            }
+          },
+          "description": "Tag attributes to removed",
+          "required": true
+        },
+        "responses": {
+          "204": {
+            "description": "Source untagged successfully"
           }
         }
       }
