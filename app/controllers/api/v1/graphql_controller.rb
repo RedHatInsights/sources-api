@@ -25,7 +25,7 @@ module Api
       private
 
       # RBAC readonly access is allowed for graphql's POST
-      def request_is_readonly
+      def request_is_readonly?
         true
       end
     end
