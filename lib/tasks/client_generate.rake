@@ -39,7 +39,21 @@ class ClientGenerator
   end
 
   def generator_config
-    @generator_config ||= Pathname.new(Rails.root.join(".openapi_generator_config.json")).to_s
+    return @generator_config if @generator_config.present?
+
+    orig_config = Pathname.new(Rails.root.join(".openapi_generator_config.json")).to_s
+    json_settings = File.read(orig_config)
+
+    # Extend config by version used as client's Gem version
+    gem_version = "#{api_version}.0"
+    settings = JSON.parse(json_settings)
+    settings['gemVersion'] = gem_version
+    filepath = "/tmp/openapi_generator_#{gem_version}_#{Time.now.to_i}.json"
+    File.open(filepath, 'w') do |f|
+      f.write(settings.to_json)
+    end
+
+    @generator_config = Pathname.new(filepath).to_s
   end
 
   def openapi_file
