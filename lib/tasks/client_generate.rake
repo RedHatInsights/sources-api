@@ -22,6 +22,10 @@ class ClientGenerator
     end.max
   end
 
+  def gem_version
+    @gem_version ||= ::Insights::API::Common::OpenApi::Docs.instance[api_version].version.to_s
+  end
+
   def generator_cli_jar
     @generator_cli_jar ||= begin
       jar_path = Pathname.new(Rails.root.join("public/doc/openapi-generator-cli-#{VERSION}.jar"))
@@ -39,7 +43,19 @@ class ClientGenerator
   end
 
   def generator_config
-    @generator_config ||= Pathname.new(Rails.root.join(".openapi_generator_config.json")).to_s
+    return @generator_config if @generator_config.present?
+
+    orig_config = Pathname.new(Rails.root.join(".openapi_generator_config.json")).to_s
+    json_settings = File.read(orig_config)
+
+    # Extend config by version used as client's Gem version
+    settings = JSON.parse(json_settings)
+    settings['gemVersion'] = gem_version
+    @config_tempfile = Tempfile.new(%w[openapi_generator_ .json])
+    @config_tempfile.write(settings.to_json)
+    @config_tempfile.rewind
+
+    @generator_config = @config_tempfile.path
   end
 
   def openapi_file
