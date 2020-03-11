@@ -20,6 +20,165 @@
     }
   ],
   "paths": {
+    "/application_authentications": {
+      "get": {
+        "summary": "List ApplicationAuthentications",
+        "operationId": "listApplicationAuthentications",
+        "description": "Returns an array of ApplicationAuthentication objects",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/QueryLimit"
+          },
+          {
+            "$ref": "#/components/parameters/QueryOffset"
+          },
+          {
+            "$ref": "#/components/parameters/QueryFilter"
+          },
+          {
+            "$ref": "#/components/parameters/QuerySortBy"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "ApplicationAuthentications collection",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApplicationAuthenticationsCollection"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Create a new ApplicationAuthentication",
+        "operationId": "createApplicationAuthentication",
+        "description": "Creates a ApplicationAuthentication object",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ApplicationAuthentication"
+              }
+            }
+          },
+          "description": "ApplicationAuthentication attributes to create",
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "ApplicationAuthentication creation successful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApplicationAuthentication"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/application_authentications/{id}": {
+      "get": {
+        "summary": "Show an existing ApplicationAuthentication",
+        "operationId": "showApplicationAuthentication",
+        "description": "Returns a ApplicationAuthentication object",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/ID"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "ApplicationAuthentication info",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApplicationAuthentication"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorNotFound"
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "summary": "Update an existing ApplicationAuthentication",
+        "operationId": "updateApplicationAuthentication",
+        "description": "Updates a ApplicationAuthentication object",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/ID"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ApplicationAuthentication"
+              }
+            }
+          },
+          "description": "ApplicationAuthentication attributes to update",
+          "required": true
+        },
+        "responses": {
+          "204": {
+            "description": "Updated, no content"
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorNotFound"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete an existing ApplicationAuthentication",
+        "operationId": "deleteApplicationAuthentication",
+        "description": "Deletes a ApplicationAuthentication object",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/ID"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "ApplicationAuthentication deleted"
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorNotFound"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/application_types": {
       "get": {
         "summary": "List ApplicationTypes",
@@ -278,6 +437,52 @@
         "responses": {
           "204": {
             "description": "Application deleted"
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorNotFound"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/applications/{id}/authentications": {
+      "get": {
+        "summary": "List Authentications for Application",
+        "operationId": "listApplicationAuthentications",
+        "description": "Returns an array of Authentication objects",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/QueryLimit"
+          },
+          {
+            "$ref": "#/components/parameters/QueryOffset"
+          },
+          {
+            "$ref": "#/components/parameters/QueryFilter"
+          },
+          {
+            "$ref": "#/components/parameters/QuerySortBy"
+          },
+          {
+            "$ref": "#/components/parameters/ID"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Authentications collection",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthenticationsCollection"
+                }
+              }
+            }
           },
           "404": {
             "description": "Not found",
@@ -1268,6 +1473,48 @@
           }
         },
         "additionalProperties": false
+      },
+      "ApplicationAuthentication": {
+        "type": "object",
+        "properties": {
+          "application_id": {
+            "$ref": "#/components/schemas/ID"
+          },
+          "authentication_id": {
+            "$ref": "#/components/schemas/ID"
+          },
+          "created_at": {
+            "format": "date-time",
+            "readOnly": true,
+            "type": "string"
+          },
+          "id": {
+            "$ref": "#/components/schemas/ID"
+          },
+          "updated_at": {
+            "format": "date-time",
+            "readOnly": true,
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "ApplicationAuthenticationsCollection": {
+        "type": "object",
+        "properties": {
+          "meta": {
+            "$ref": "#/components/schemas/CollectionMetadata"
+          },
+          "links": {
+            "$ref": "#/components/schemas/CollectionLinks"
+          },
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ApplicationAuthentication"
+            }
+          }
+        }
       },
       "ApplicationType": {
         "type": "object",

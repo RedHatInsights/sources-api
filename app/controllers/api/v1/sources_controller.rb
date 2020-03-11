@@ -33,6 +33,7 @@ module Api
               :params => {
                 :source_id       => source.id.to_s,
                 :source_uid      => source.uid.to_s,
+                :source_ref      => source.source_ref.to_s,
                 :external_tenant => source.tenant.external_tenant
               }
             }

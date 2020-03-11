@@ -48,7 +48,7 @@
     openshift:
     - token
 "/insights/platform/fifi":
-  :display_name: Find It Fix It
+  :display_name: Remediations
   :dependent_applications: []
   :supported_source_types:
   - satellite

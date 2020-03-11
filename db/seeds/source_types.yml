@@ -123,12 +123,6 @@ ansible-tower:
         :condition:
           :when: endpoint.verify_ssl
           :is: true
-      - :component: switch-field
-        :name: platform_receptor
-        :label: Use Platform Receptor and PKI (?)
-      - :component: text-field
-        :name: endpoint.receptor_node
-        :label: Receptor ID
 azure:
   :product_name: Microsoft Azure
   :vendor: Azure

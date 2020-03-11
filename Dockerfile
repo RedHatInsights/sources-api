@@ -1,30 +1,29 @@
-FROM manageiq/ruby:latest
+FROM registry.access.redhat.com/ubi8/ubi
 
-RUN yum -y install centos-release-scl-rh && \
-    yum -y install --setopt=tsflags=nodocs \
-                   # To compile native gem extensions
-                   gcc-c++ \
-                   # For git based gems
-                   git \
-                   # For checking service status
-                   nmap-ncat \
-                   # To compile pg gem
-                   rh-postgresql10-postgresql-devel \
-                   rh-postgresql10-postgresql-libs \
-                   && \
-    yum clean all
+RUN dnf -y --disableplugin=subscription-manager module enable ruby:2.5 && \
+    dnf -y --disableplugin=subscription-manager --setopt=tsflags=nodocs install \
+      ruby-devel \
+      # To compile native gem extensions
+      gcc-c++ make redhat-rpm-config \
+      # For git based gems
+      git \
+      # For checking service status
+      nmap-ncat \
+      # Libraries
+      postgresql-devel openssl-devel libxml2-devel \
+      && \
+    dnf --disableplugin=subscription-manager clean all
 
 ENV WORKDIR /opt/sources-api/
 ENV RAILS_ROOT $WORKDIR
 WORKDIR $WORKDIR
 
 COPY Gemfile $WORKDIR
-RUN source /opt/rh/rh-postgresql10/enable && \
-    echo "gem: --no-document" > ~/.gemrc && \
+RUN echo "gem: --no-document" > ~/.gemrc && \
     gem install bundler --conservative --without development:test && \
     bundle install --jobs 8 --retry 3 && \
-    find ${RUBY_GEMS_ROOT}/gems/ | grep "\.s\?o$" | xargs rm -rvf && \
-    rm -rvf ${RUBY_GEMS_ROOT}/cache/* && \
+    find $(gem env gemdir)/gems/ | grep "\.s\?o$" | xargs rm -rvf && \
+    rm -rvf $(gem env gemdir)/cache/* && \
     rm -rvf /root/.bundle/cache
 
 COPY . $WORKDIR
