@@ -30,7 +30,8 @@ describe "Swagger stuff" do
       it "matches the routes" do
         redirect_routes = [
           {:path => "#{path_prefix}/#{app_name}/v1/*path", :verb => "DELETE|GET|OPTIONS|PATCH|POST"},
-          {:path => "#{path_prefix}/#{app_name}/v2/*path", :verb => "DELETE|GET|OPTIONS|PATCH|POST"}
+          {:path => "#{path_prefix}/#{app_name}/v2/*path", :verb => "DELETE|GET|OPTIONS|PATCH|POST"},
+          {:path => "#{path_prefix}/#{app_name}/v3/*path", :verb => "DELETE|GET|OPTIONS|PATCH|POST"}
         ]
         internal_api_routes = [
           {:path => "/internal/v1/*path",                 :verb => "GET"},
