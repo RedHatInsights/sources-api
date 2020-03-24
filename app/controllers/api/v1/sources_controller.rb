@@ -23,6 +23,8 @@ module Api
         source = Source.find(params[:source_id])
         topic  = "platform.topological-inventory.operations-#{source.source_type.name}"
 
+        logger.info("Initiating availability check for source #{source.id} on topic #{topic}")
+
         if Sources::Api::Messaging.topics.include?(topic)
           logger.debug("publishing message to #{topic}...")
 
@@ -56,6 +58,8 @@ module Api
           app_env_prefix = app_type.name.split('/').last.upcase.tr('-', '_')
           url = ENV["#{app_env_prefix}_AVAILABILITY_CHECK_URL"]
           next if url.blank?
+
+          logger.info("Requesting #{app_type.display_name} availability for source #{source.id} at #{url}")
 
           begin
             headers = {
