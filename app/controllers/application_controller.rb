@@ -182,7 +182,15 @@ class ApplicationController < ActionController::API
   end
 
   def filtered
-    Insights::API::Common::Filter.new(model, safe_params_for_list[:filter], api_doc_definition).apply
+    association_attribute_properties =
+      Insights::API::Common::Filter.association_attribute_properties(api_doc_definitions, safe_params_for_list[:filter])
+    extra_attribute_properties = extra_filter_attributes.merge(association_attribute_properties)
+
+    Insights::API::Common::Filter.new(model, safe_params_for_list[:filter], api_doc_definition, extra_attribute_properties).apply
+  end
+
+  def extra_filter_attributes
+    {}
   end
 
   def pagination_limit
