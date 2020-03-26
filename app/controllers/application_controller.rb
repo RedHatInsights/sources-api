@@ -115,7 +115,10 @@ class ApplicationController < ActionController::API
 
   def safe_params_for_list
     # :limit & :offset can be passed in for pagination purposes, but shouldn't show up as params for filtering purposes
-    @safe_params_for_list ||= params.merge(params_for_polymorphic_subcollection).permit(*permitted_params, :filter => {}, :sort_by => [])
+    @safe_params_for_list ||= begin
+      sort_by_default = (params[:sort_by].kind_of?(String) || params[:sort_by].kind_of?(Array)) ? [] : {}
+      params.merge(params_for_polymorphic_subcollection).permit(*permitted_params, :filter => {}, :sort_by => sort_by_default)
+    end
   end
 
   def permitted_params
