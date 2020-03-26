@@ -23,10 +23,10 @@ module Api
         source = Source.find(params[:source_id])
         topic  = "platform.topological-inventory.operations-#{source.source_type.name}"
 
-        logger.info("Initiating availability check for source #{source.id} on topic #{topic}")
+        logger.info("Initiating Source#availability_check [#{{"source_id" => source.id, "topic" => topic}}]")
 
         if Sources::Api::Messaging.topics.include?(topic)
-          logger.debug("publishing message to #{topic}...")
+          logger.debug("Publishing message for Source#availability_check [#{{"source_id" => source.id, "topic" => topic}}]")
 
           Sources::Api::Messaging.client.publish_topic(
             :service => topic,
@@ -41,9 +41,9 @@ module Api
             }
           )
 
-          logger.debug("publishing message to #{topic}...Complete")
+          logger.debug("Publishing message for Source#availability_check [#{{"source_id" => source.id, "topic" => topic}}]...Complete")
         else
-          logger.error("not publishing message to non-existing topic: #{topic}")
+          logger.error("Not publishing message to non-existing topic: Source#availability_check [#{{"source_id" => source.id, "topic" => topic}}]")
         end
 
         check_application_availability(source)
@@ -59,7 +59,7 @@ module Api
           url = ENV["#{app_env_prefix}_AVAILABILITY_CHECK_URL"]
           next if url.blank?
 
-          logger.info("Requesting #{app_type.display_name} availability for source #{source.id} at #{url}")
+          logger.info("Requesting #{app_type.display_name} Source#availability_check [#{{"source_id" => source.id, "url" => url}}]")
 
           begin
             headers = {
@@ -77,7 +77,7 @@ module Api
             response = net_http.request(request)
             raise response.message unless response.kind_of?(Net::HTTPSuccess)
           rescue => e
-            logger.error("Failed to request application availability check of #{app_type.display_name} for Source id: #{source.id} - #{url} Error: #{e.message}")
+            logger.error("Failed to request #{app_type.display_name} Source#availability_check [#{{"source_id" => source.id, "url" => url}}] Error: #{e.message}")
           end
         end
       end
