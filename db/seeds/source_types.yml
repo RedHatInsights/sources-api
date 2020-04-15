@@ -32,8 +32,8 @@ amazon:
         :label: S3 bucket name
         :isRequired: true
         :validate:
-        - :type: required-validator
-        - :type: pattern-validator
+        - :type: required
+        - :type: pattern
           :pattern: "^[A-Za-z0-9]+[A-Za-z0-9_-]*$"
       - :name: authentication.password
         :stepKey: arn
@@ -41,10 +41,10 @@ amazon:
         :label: ARN
         :isRequired: true
         :validate:
-        - :type: required-validator
-        - :type: pattern-validator
+        - :type: required
+        - :type: pattern
           :pattern: "^arn:aws:.*"
-        - :type: min-length-validator
+        - :type: min-length
           :threshold: 10
     - :type: cloud-meter-arn
       :name: Subscription Watch ARN
@@ -59,10 +59,10 @@ amazon:
         :label: ARN
         :isRequired: true
         :validate:
-        - :type: required-validator
-        - :type: pattern-validator
+        - :type: required
+        - :type: pattern
           :pattern: "^arn:aws:.*"
-        - :type: min-length-validator
+        - :type: min-length
           :threshold: 10
     :endpoint:
       :hidden: true
@@ -93,14 +93,14 @@ ansible-tower:
         :label: User name
         :isRequired: true
         :validate:
-        - :type: required-validator
+        - :type: required
       - :component: text-field
         :name: authentication.password
         :label: Secret key
         :type: password
         :isRequired: true
         :validate:
-        - :type: required-validator
+        - :type: required
     :endpoint:
       :title: Configure Ansible Tower endpoint
       :fields:
@@ -113,8 +113,8 @@ ansible-tower:
         :name: url
         :label: URL
         :validate:
-        - :type: url-validator
-      - :component: switch-field
+        - :type: url
+      - :component: switch
         :name: endpoint.verify_ssl
         :label: Verify SSL
       - :component: text-field
@@ -192,7 +192,7 @@ openshift:
         :type: password
         :isRequired: true
         :validate:
-        - :type: required-validator
+        - :type: required
     :endpoint:
       :title: Configure OpenShift endpoint
       :fields:
@@ -205,8 +205,8 @@ openshift:
         :name: url
         :label: URL
         :validate:
-        - :type: url-validator
-      - :component: switch-field
+        - :type: url
+      - :component: switch
         :name: endpoint.verify_ssl
         :label: Verify SSL
       - :component: text-field
@@ -243,7 +243,7 @@ satellite:
         :label: Satellite ID
         :isRequired: true
         :validate:
-        - :type: required-validator
+        - :type: required
     :endpoint:
       :title: Configure Red Hat Satellite endpoint
       :fields:
