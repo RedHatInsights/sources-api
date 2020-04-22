@@ -43,6 +43,6 @@ module Sources
     config.autoload_paths << Rails.root.join("lib").to_s
 
     Insights::API::Common::Logging.activate(config)
-    Insights::API::Common::Metrics.activate(config, "sources_api")
+    #Insights::API::Common::Metrics.activate(config, "sources_api")
   end
 end

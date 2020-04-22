@@ -13,12 +13,18 @@
   :dependent_applications: []
   :supported_source_types:
   - amazon
+  - amazon-local
   - azure
+  - azure-local
   - openshift
   :supported_authentication_types:
     amazon:
     - arn
+    amazon-local:
+    - arn
     azure:
+    - tenant_id_client_id_client_secret
+    azure-local:
     - tenant_id_client_id_client_secret
     openshift:
     - token
