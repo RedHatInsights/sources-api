@@ -1,6 +1,6 @@
 .git
 Gemfile.lock
-#v2_key
+v2_key
 /.bundle/
 /.rspec_status
 /.ruby-gemset
@@ -8,11 +8,11 @@ Gemfile.lock
 /.yardoc
 /_yardoc/
 /bundler.d/*
-#/config/database.yml
+/config/database.yml
 /coverage/
-#/db/schema.rb
+/db/schema.rb
 /doc/
-#/log/
+/log/
 /pkg/
 /spec/reports/
 /tmp/
