@@ -1,6 +1,6 @@
 ---
 "/insights/platform/catalog":
-  :display_name: Catalog
+  :display_name: Automation Services Catalog
   :dependent_applications:
   - "/insights/platform/topological-inventory"
   :supported_source_types:
