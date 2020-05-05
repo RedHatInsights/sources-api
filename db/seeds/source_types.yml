@@ -254,7 +254,7 @@ satellite:
         :name: endpoint.role
         :hideField: true
         :initializeOnMount: true
-        :initialValue: sattelite
+        :initialValue: satellite
   :icon_url: "/apps/frontend-assets/platform-logos/satellite.svg"
 vsphere:
   :product_name: VMware vSphere
