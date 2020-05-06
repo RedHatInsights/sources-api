@@ -171,7 +171,7 @@ cloudforms:
   :product_name: Red Hat CloudForms
   :vendor: Red Hat
 openshift:
-  :product_name: OpenShift Container Platform
+  :product_name: Red Hat OpenShift Container Platform
   :schema:
     :authentication:
     - :type: token
