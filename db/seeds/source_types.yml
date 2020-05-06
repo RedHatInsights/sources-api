@@ -73,11 +73,11 @@ amazon:
         :initializeOnMount: true
         :initialValue: aws
   :vendor: Amazon
-  :icon_url: "/apps/chrome/assets/images/partners-icons/aws.svg"
+  :icon_url: "/apps/frontend-assets/partners-icons/aws-long.svg"
 ansible-tower:
   :product_name: Ansible Tower
   :vendor: Red Hat
-  :icon_url: "/apps/chrome/assets/images/platform-icons/ansible-tower.svg"
+  :icon_url: "/apps/frontend-assets/platform-logos/ansible-automation-platform.svg"
   :schema:
     :authentication:
     - :type: username_password
@@ -216,7 +216,7 @@ openshift:
           :when: endpoint.verify_ssl
           :is: true
   :vendor: Red Hat
-  :icon_url: "/apps/chrome/assets/images/platform-icons/openshift.svg"
+  :icon_url: "/apps/frontend-assets/platform-logos/openshift-container-platform.svg"
 openstack:
   :product_name: Red Hat OpenStack
   :vendor: Red Hat
@@ -254,7 +254,8 @@ satellite:
         :name: endpoint.role
         :hideField: true
         :initializeOnMount: true
-        :initialValue: sattelite
+        :initialValue: satellite
+  :icon_url: "/apps/frontend-assets/platform-logos/satellite.svg"
 vsphere:
   :product_name: VMware vSphere
   :vendor: VMware
