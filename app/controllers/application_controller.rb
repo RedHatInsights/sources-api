@@ -12,29 +12,29 @@ class ApplicationController < ActionController::API
   around_action :with_current_request
 
   rescue_from ActiveRecord::RecordNotFound do |exception|
-    error_document = Insights::API::Common::ErrorDocument.new.add(404, "Record not found")
+    error_document = Insights::API::Common::ErrorDocument.new.add("404", "Record not found")
     render :json => error_document.to_h, :status => :not_found
   end
 
   rescue_from ActiveRecord::RecordInvalid do |exception|
     exception_msg = exception.message.split("\n").first.gsub("ActiveRecord::RecordInvalid: ", "")
-    error_document = Insights::API::Common::ErrorDocument.new.add(400, "Invalid parameter - #{exception_msg}")
+    error_document = Insights::API::Common::ErrorDocument.new.add("400", "Invalid parameter - #{exception_msg}")
     render :json => error_document.to_h, :status => :bad_request
   end
 
   rescue_from ActiveRecord::RecordNotUnique do |_exception|
-    error_document = Insights::API::Common::ErrorDocument.new.add(400, "Record not unique")
+    error_document = Insights::API::Common::ErrorDocument.new.add("400", "Record not unique")
     render :json => error_document.to_h, :status => :bad_request
   end
 
   rescue_from Insights::API::Common::Filter::Error do |exception|
-    error_document = Insights::API::Common::ErrorDocument.new.add(400, exception)
+    error_document = Insights::API::Common::ErrorDocument.new.add("400", exception)
     render :json => error_document.to_h, :status => error_document.status
   end
 
   rescue_from ActiveRecord::NotNullViolation do |exception|
     exception_msg = exception.message.split("\n").first.gsub("PG::NotNullViolation: ERROR:  ", "")
-    error_document = Insights::API::Common::ErrorDocument.new.add(400, "Missing parameter - #{exception_msg}")
+    error_document = Insights::API::Common::ErrorDocument.new.add("400", "Missing parameter - #{exception_msg}")
     render :json => error_document.to_h, :status => :bad_request
   end
 
@@ -53,13 +53,13 @@ class ApplicationController < ActionController::API
           ActsAsTenant.without_tenant { yield }
         end
       rescue KeyError, Insights::API::Common::IdentityError
-        error_document = Insights::API::Common::ErrorDocument.new.add(401, 'Unauthorized')
+        error_document = Insights::API::Common::ErrorDocument.new.add("401", 'Unauthorized')
         render :json => error_document.to_h, :status => error_document.status
       rescue Insights::API::Common::EntitlementError
-        error_document = Insights::API::Common::ErrorDocument.new.add(403, 'Forbidden')
+        error_document = Insights::API::Common::ErrorDocument.new.add("403", 'Forbidden')
         render :json => error_document.to_h, :status => error_document.status
       rescue RbacError
-        error_document = Insights::API::Common::ErrorDocument.new.add(403, 'Forbidden due to Rbac')
+        error_document = Insights::API::Common::ErrorDocument.new.add("403", 'Forbidden due to Rbac')
         render :json => error_document.to_h, :status => error_document.status
       end
     end

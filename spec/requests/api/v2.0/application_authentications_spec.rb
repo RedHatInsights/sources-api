@@ -63,7 +63,7 @@ RSpec.describe("v2.0 - ApplicationAuthentications") do
         expect(response).to have_attributes(
           :status => 400,
           :location => nil,
-          :parsed_body => Insights::API::Common::ErrorDocument.new.add(400, "OpenAPIParser::NotExistPropertyDefinition: #/components/schemas/ApplicationAuthentication does not define properties: aaa").to_h
+          :parsed_body => Insights::API::Common::ErrorDocument.new.add("400", "OpenAPIParser::NotExistPropertyDefinition: #/components/schemas/ApplicationAuthentication does not define properties: aaa").to_h
         )
       end
 
@@ -73,7 +73,7 @@ RSpec.describe("v2.0 - ApplicationAuthentications") do
         expect(response).to have_attributes(
           :status      => 400,
           :location    => nil,
-          :parsed_body => Insights::API::Common::ErrorDocument.new.add(400, "OpenAPIParser::ValidateError: #/components/schemas/ID expected string, but received Integer: 123").to_h
+          :parsed_body => Insights::API::Common::ErrorDocument.new.add("400", "OpenAPIParser::ValidateError: #/components/schemas/ID expected string, but received Integer: 123").to_h
         )
       end
     end
