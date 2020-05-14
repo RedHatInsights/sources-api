@@ -79,7 +79,7 @@ RSpec.describe("v1.0 - Sources") do
         expect(response).to have_attributes(
           :status      => 400,
           :location    => nil,
-          :parsed_body => Insights::API::Common::ErrorDocument.new.add(400, "Invalid parameter - Validation failed: Name can't be blank").to_h
+          :parsed_body => Insights::API::Common::ErrorDocument.new.add("400", "Invalid parameter - Validation failed: Name can't be blank").to_h
         )
       end
 
@@ -89,7 +89,7 @@ RSpec.describe("v1.0 - Sources") do
         expect(response).to have_attributes(
           :status => 400,
           :location => nil,
-          :parsed_body => Insights::API::Common::ErrorDocument.new.add(400, "OpenAPIParser::NotExistPropertyDefinition: #/components/schemas/Source does not define properties: aaa").to_h
+          :parsed_body => Insights::API::Common::ErrorDocument.new.add("400", "OpenAPIParser::NotExistPropertyDefinition: #/components/schemas/Source does not define properties: aaa").to_h
         )
       end
 
@@ -99,7 +99,7 @@ RSpec.describe("v1.0 - Sources") do
         expect(response).to have_attributes(
           :status      => 400,
           :location    => nil,
-          :parsed_body => Insights::API::Common::ErrorDocument.new.add(400, "Invalid parameter - Validation failed: Name can't be blank").to_h
+          :parsed_body => Insights::API::Common::ErrorDocument.new.add("400", "Invalid parameter - Validation failed: Name can't be blank").to_h
         )
       end
 
@@ -109,7 +109,7 @@ RSpec.describe("v1.0 - Sources") do
         expect(response).to have_attributes(
           :status      => 400,
           :location    => nil,
-          :parsed_body => Insights::API::Common::ErrorDocument.new.add(400, "OpenAPIParser::NotNullError: #/components/schemas/Source/properties/name does not allow null values").to_h
+          :parsed_body => Insights::API::Common::ErrorDocument.new.add("400", "OpenAPIParser::NotNullError: #/components/schemas/Source/properties/name does not allow null values").to_h
         )
       end
 
@@ -119,7 +119,7 @@ RSpec.describe("v1.0 - Sources") do
         expect(response).to have_attributes(
           :status      => 400,
           :location    => nil,
-          :parsed_body => Insights::API::Common::ErrorDocument.new.add(400, "OpenAPIParser::InvalidPattern: #/components/schemas/ID pattern ^\\d+$ does not match value: xxx").to_h
+          :parsed_body => Insights::API::Common::ErrorDocument.new.add("400", "OpenAPIParser::InvalidPattern: #/components/schemas/ID pattern ^\\d+$ does not match value: xxx").to_h
         )
       end
 
@@ -132,7 +132,7 @@ RSpec.describe("v1.0 - Sources") do
           :status      => 400,
           :location    => nil,
           :parsed_body => Insights::API::Common::ErrorDocument.new.add(
-            400, "Invalid parameter - Validation failed: Name has already been taken").to_h
+            "400", "Invalid parameter - Validation failed: Name has already been taken").to_h
         )
       end
 
@@ -157,7 +157,7 @@ RSpec.describe("v1.0 - Sources") do
         expect(response).to have_attributes(
           :status      => 400,
           :location    => nil,
-          :parsed_body => Insights::API::Common::ErrorDocument.new.add(400, "Record not unique").to_h
+          :parsed_body => Insights::API::Common::ErrorDocument.new.add("400", "Record not unique").to_h
         )
       end
 
@@ -211,7 +211,7 @@ RSpec.describe("v1.0 - Sources") do
 
         expect(response).to have_attributes(
           :status => 404,
-          :parsed_body => {"errors"=>[{"detail"=>"Record not found", "status"=>404}]}
+          :parsed_body => {"errors"=>[{"detail"=>"Record not found", "status"=>"404"}]}
         )
       end
     end
@@ -239,7 +239,7 @@ RSpec.describe("v1.0 - Sources") do
 
         expect(response).to have_attributes(
           :status => 400,
-          :parsed_body => {"errors"=>[{"detail"=>"OpenAPIParser::NotNullError: #/components/schemas/Source/properties/name does not allow null values", "status"=>400}]}
+          :parsed_body => {"errors"=>[{"detail"=>"OpenAPIParser::NotNullError: #/components/schemas/Source/properties/name does not allow null values", "status"=>"400"}]}
         )
 
         expect(instance.reload).to have_attributes(:name => "my source")
@@ -253,7 +253,7 @@ RSpec.describe("v1.0 - Sources") do
 
         expect(response).to have_attributes(
           :status => 404,
-          :parsed_body => {"errors"=>[{"detail"=>"Record not found", "status"=>404}]}
+          :parsed_body => {"errors"=>[{"detail"=>"Record not found", "status"=>"404"}]}
         )
       end
 
@@ -265,7 +265,7 @@ RSpec.describe("v1.0 - Sources") do
 
         expect(response).to have_attributes(
           :status => 400,
-          :parsed_body => {"errors" => [{"detail" => "OpenAPIParser::NotExistPropertyDefinition: #/components/schemas/Source does not define properties: aaaaa", "status" => 400}]}
+          :parsed_body => {"errors" => [{"detail" => "OpenAPIParser::NotExistPropertyDefinition: #/components/schemas/Source does not define properties: aaaaa", "status" => "400"}]}
         )
       end
 
@@ -277,7 +277,7 @@ RSpec.describe("v1.0 - Sources") do
 
         expect(response).to have_attributes(
           :status => 400,
-          :parsed_body => {"errors" => [{"detail" => "ActionController::UnpermittedParameters: found unpermitted parameter: :uid", "status" => 400}]}
+          :parsed_body => {"errors" => [{"detail" => "ActionController::UnpermittedParameters: found unpermitted parameter: :uid", "status" => "400"}]}
         )
       end
 
@@ -287,7 +287,7 @@ RSpec.describe("v1.0 - Sources") do
         expect(response).to have_attributes(
           :status      => 400,
           :location    => nil,
-          :parsed_body => Insights::API::Common::ErrorDocument.new.add(400, "OpenAPIParser::ValidateError: #/components/schemas/ID expected string, but received Integer: 4").to_h
+          :parsed_body => Insights::API::Common::ErrorDocument.new.add("400", "OpenAPIParser::ValidateError: #/components/schemas/ID expected string, but received Integer: 4").to_h
         )
       end
 
@@ -297,7 +297,7 @@ RSpec.describe("v1.0 - Sources") do
         expect(response).to have_attributes(
           :status      => 400,
           :location    => nil,
-          :parsed_body => Insights::API::Common::ErrorDocument.new.add(400, "Invalid parameter - Validation failed: Availability status is not included in the list").to_h
+          :parsed_body => Insights::API::Common::ErrorDocument.new.add("400", "Invalid parameter - Validation failed: Availability status is not included in the list").to_h
         )
       end
 
@@ -345,7 +345,7 @@ RSpec.describe("v1.0 - Sources") do
 
         expect(response).to have_attributes(
           :status      => 400,
-          :parsed_body => { "errors" => [{"detail" => "ActionController::UnpermittedParameters: found unpermitted parameter: :tenant", "status" => 400 }]}
+          :parsed_body => { "errors" => [{"detail" => "ActionController::UnpermittedParameters: found unpermitted parameter: :tenant", "status" => "400" }]}
         )
       end
     end
@@ -381,7 +381,7 @@ RSpec.describe("v1.0 - Sources") do
 
         expect(response).to have_attributes(
           :status      => 404,
-          :parsed_body => {"errors"=>[{"detail" => "Record not found", "status" => 404}]}
+          :parsed_body => {"errors"=>[{"detail" => "Record not found", "status" => "404"}]}
         )
       end
 
@@ -548,7 +548,7 @@ RSpec.describe("v1.0 - Sources") do
 
             expect(response).to have_attributes(
               :status => 404,
-              :parsed_body => {"errors"=>[{"detail"=>"Record not found", "status"=>404}]}
+              :parsed_body => {"errors"=>[{"detail"=>"Record not found", "status"=>"404"}]}
             )
           end
         end

@@ -60,7 +60,7 @@ RSpec.describe("v2.0 - Applications") do
         expect(response).to have_attributes(
           :status => 400,
           :location => nil,
-          :parsed_body => Insights::API::Common::ErrorDocument.new.add(400, "OpenAPIParser::NotExistPropertyDefinition: #/components/schemas/Application does not define properties: aaa").to_h
+          :parsed_body => Insights::API::Common::ErrorDocument.new.add("400", "OpenAPIParser::NotExistPropertyDefinition: #/components/schemas/Application does not define properties: aaa").to_h
         )
       end
 
@@ -70,7 +70,7 @@ RSpec.describe("v2.0 - Applications") do
         expect(response).to have_attributes(
           :status      => 400,
           :location    => nil,
-          :parsed_body => Insights::API::Common::ErrorDocument.new.add(400, "OpenAPIParser::ValidateError: #/components/schemas/Application/properties/availability_status expected string, but received Integer: 123").to_h
+          :parsed_body => Insights::API::Common::ErrorDocument.new.add("400", "OpenAPIParser::ValidateError: #/components/schemas/Application/properties/availability_status expected string, but received Integer: 123").to_h
         )
       end
     end
@@ -100,7 +100,7 @@ RSpec.describe("v2.0 - Applications") do
 
         expect(response).to have_attributes(
           :status => 404,
-          :parsed_body => {"errors"=>[{"detail"=>"Record not found", "status"=>404}]}
+          :parsed_body => {"errors"=>[{"detail"=>"Record not found", "status"=>"404"}]}
         )
       end
     end
@@ -127,7 +127,7 @@ RSpec.describe("v2.0 - Applications") do
         expect(response).to have_attributes(
           :status => 400,
           :location => nil,
-          :parsed_body => Insights::API::Common::ErrorDocument.new.add(400, "OpenAPIParser::NotExistPropertyDefinition: #/components/schemas/Application does not define properties: aaa").to_h
+          :parsed_body => Insights::API::Common::ErrorDocument.new.add("400", "OpenAPIParser::NotExistPropertyDefinition: #/components/schemas/Application does not define properties: aaa").to_h
         )
       end
 
@@ -138,7 +138,7 @@ RSpec.describe("v2.0 - Applications") do
 
         expect(response).to have_attributes(
           :status      => 404,
-          :parsed_body => {"errors" => [{"detail" => "Record not found", "status" => 404}]}
+          :parsed_body => {"errors" => [{"detail" => "Record not found", "status" => "404"}]}
         )
       end
     end
@@ -170,7 +170,7 @@ RSpec.describe("v2.0 - Applications") do
 
         expect(response).to have_attributes(
           :status => 404,
-          :parsed_body => {"errors"=>[{"detail"=>"Record not found", "status"=>404}]}
+          :parsed_body => {"errors"=>[{"detail"=>"Record not found", "status"=>"404"}]}
         )
       end
     end
