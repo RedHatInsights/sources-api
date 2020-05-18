@@ -23,7 +23,7 @@
     "/application_authentications": {
       "get": {
         "summary": "List ApplicationAuthentications",
-        "operationId": "listApplicationAuthentications",
+        "operationId": "listAllApplicationAuthentications",
         "description": "Returns an array of ApplicationAuthentication objects",
         "parameters": [
           {
@@ -1777,8 +1777,8 @@
               "type": "object",
               "properties": {
                 "status": {
-                  "type": "integer",
-                  "example": 404
+                  "type": "string",
+                  "example": "404"
                 },
                 "detail": {
                   "type": "string",

@@ -53,7 +53,7 @@ RSpec.describe("v3.0 - ApplicationTypes") do
 
         expect(response).to have_attributes(
           :status      => 404,
-          :parsed_body => {"errors" => [{"detail" => "Record not found", "status" => 404}]}
+          :parsed_body => {"errors" => [{"detail" => "Record not found", "status" => "404"}]}
         )
       end
     end
@@ -93,7 +93,7 @@ RSpec.describe("v3.0 - ApplicationTypes") do
 
             expect(response).to have_attributes(
               :status      => 404,
-              :parsed_body => {"errors" => [{"detail" => "Record not found", "status" => 404}]}
+              :parsed_body => {"errors" => [{"detail" => "Record not found", "status" => "404"}]}
             )
           end
         end

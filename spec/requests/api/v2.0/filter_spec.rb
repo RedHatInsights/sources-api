@@ -26,7 +26,7 @@ RSpec.describe("Sources Filtering") do
 
     expect(response).to(
       have_attributes(
-        :parsed_body => { "errors" => errors.collect { |e| {"detail" => e, "status" => 400} } },
+        :parsed_body => { "errors" => errors.collect { |e| {"detail" => e, "status" => "400"} } },
         :status      => 400,
       )
     )
@@ -85,7 +85,7 @@ RSpec.describe("Sources Filtering") do
       get("#{source_collection}?filter[bogus_attribute]=a", :headers => headers)
 
       expect(response.status).to(eq(400))
-      expect(response.parsed_body["errors"]).to(eq([{"detail" => "found unpermitted parameter: bogus_attribute", "status" => 400}]))
+      expect(response.parsed_body["errors"]).to(eq([{"detail" => "found unpermitted parameter: bogus_attribute", "status" => "400"}]))
     end
   end
 end
