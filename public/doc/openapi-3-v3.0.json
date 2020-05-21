@@ -1442,7 +1442,8 @@
             "$ref": "#/components/schemas/ID"
           },
           "availability_status": {
-            "type": "string"
+            "type": "string",
+            "nullable": true
           },
           "availability_status_error": {
             "type": "string"
