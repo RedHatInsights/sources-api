@@ -10,6 +10,8 @@ addons:
 env:
   global:
   - DATABASE_URL="postgresql://postgres:@localhost:5432/sources_api_test?encoding=utf8&pool=5&wait_timeout=5"
+jdk:
+  - openjdk8
 before_install:
 - 'echo ''gem: --no-ri --no-rdoc --no-document'' > ~/.gemrc'
 - gem install bundler
@@ -19,6 +21,11 @@ before_script:
 - chmod +x ./cc-test-reporter
 - "./cc-test-reporter before-build"
 - cp ./v2_key.dev ./v2_key
+- curl -L https://raw.githubusercontent.com/OpenAPITools/openapi-generator/master/bin/utils/openapi-generator-cli.sh
+  > ./openapi-generator-cli
+- chmod +x ./openapi-generator-cli
+- chmod +x ./.travis_scripts/openapi-validator.sh
+- ./.travis_scripts/openapi-validator.sh
 - bundle exec rake db:create db:migrate
 after_script:
 - "./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT"
