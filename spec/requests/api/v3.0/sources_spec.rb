@@ -370,7 +370,20 @@ RSpec.describe("v3.0 - Sources") do
         app1 = Application.create(:application_type => app_type1, :source => instance, :tenant => tenant)
         app2 = Application.create(:application_type => app_type2, :source => instance, :tenant => tenant)
 
-        expect(Sources::Api::Events).to receive(:raise_event).exactly(3).times
+        tenant_payload = {
+          "host"                  => "example.com",
+          "port"                  => 443,
+          "role"                  => "default",
+          "path"                  => "api",
+          "source_id"             => instance.id.to_s,
+          "scheme"                => "https",
+          "verify_ssl"            => true,
+          "certificate_authority" => "-----BEGIN CERTIFICATE-----\nabcd\n-----END CERTIFICATE-----",
+        }
+
+        Endpoint.create!(tenant_payload.merge(:tenant => tenant, :source => instance))
+
+        expect(Sources::Api::Events).to receive(:raise_event).exactly(4).times
         delete(instance_path(instance.id), :headers => headers)
 
         expect(response).to have_attributes(

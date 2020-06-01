@@ -1,6 +1,7 @@
 class Authentication < ApplicationRecord
   include PasswordConcern
   include TenancyConcern
+  include EventConcern
   encrypt_column :password
 
   belongs_to :resource, :polymorphic => true

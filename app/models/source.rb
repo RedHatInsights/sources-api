@@ -1,5 +1,6 @@
 class Source < ApplicationRecord
   include TenancyConcern
+  include EventConcern
   attribute :uid, :string, :default => -> { SecureRandom.uuid }
 
   has_many :applications, :dependent => :destroy
