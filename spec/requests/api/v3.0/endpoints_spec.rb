@@ -150,5 +150,37 @@ RSpec.describe("v3.0 - Endpoints") do
         )
       end
     end
+
+    context "delete" do
+      let(:instance) { Endpoint.create!(payload.merge(:tenant => tenant)) }
+
+      it "success: with a valid id" do
+        expect(Sources::Api::Events).to receive(:raise_event).once
+        delete(instance_path(instance.id), :headers => headers)
+
+        expect(response).to have_attributes(
+          :status      => 204,
+          :parsed_body => ""
+        )
+      end
+
+      it "success: with associated authentications" do
+        authentication_payload = {
+            "username"      => "test_name",
+            "password"      => "Test Password",
+            "resource_type" => "Tenant",
+            "resource_id"   => tenant.id.to_s
+          }
+        authentication = Authentication.create!(authentication_payload.merge(:tenant => tenant, :resource => instance))
+
+        expect(Sources::Api::Events).to receive(:raise_event).twice
+        delete(instance_path(instance.id), :headers => headers)
+
+        expect(response).to have_attributes(
+          :status      => 204,
+          :parsed_body => ""
+        )
+      end
+    end
   end
 end

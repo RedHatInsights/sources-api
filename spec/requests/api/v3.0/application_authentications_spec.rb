@@ -113,6 +113,7 @@ RSpec.describe("v3.0 - ApplicationAuthentications") do
       it "success: with a valid paylod" do
         record = ApplicationAuthentication.create!(payload)
 
+        expect(Sources::Api::Events).to receive(:raise_event).once
         delete(instance_path(record.id), :headers => headers)
 
         expect(response.status).to eq(204)

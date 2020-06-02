@@ -142,6 +142,20 @@ RSpec.describe("v3.0 - Applications") do
         )
       end
     end
+
+    context "delete" do
+      it "success: with a valid id" do
+        instance = Application.create!(payload.merge(:tenant => tenant))
+
+        expect(Sources::Api::Events).to receive(:raise_event).once
+        delete(instance_path(instance.id), :headers => headers)
+
+        expect(response).to have_attributes(
+          :status      => 204,
+          :parsed_body => ""
+        )
+      end
+    end
   end
 
   describe("/api/v3.0/applications/:id/authentications") do

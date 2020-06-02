@@ -162,5 +162,19 @@ RSpec.describe("v3.0 - Authentications") do
         )
       end
     end
+
+    context "delete" do
+      let(:instance) { Authentication.create!(payload.merge(:tenant => tenant)) }
+
+      it "success: with a valid id" do
+        expect(Sources::Api::Events).to receive(:raise_event).once
+        delete(instance_path(instance.id), :headers => headers)
+
+        expect(response).to have_attributes(
+          :status      => 204,
+          :parsed_body => ""
+        )
+      end
+    end
   end
 end

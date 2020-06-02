@@ -339,6 +339,60 @@ RSpec.describe("v3.0 - Sources") do
         )
       end
     end
+
+    context "delete" do
+      it "success: with a valid id" do
+        instance = Source.create!(attributes.merge("tenant" => tenant))
+
+        expect(Sources::Api::Events).to receive(:raise_event).once
+        delete(instance_path(instance.id), :headers => headers)
+
+        expect(response).to have_attributes(
+          :status => 204,
+          :parsed_body => ""
+        )
+      end
+
+      it "success: with associated applications" do
+        source_type = SourceType.create!(:name => "openshift", :vendor => "RedHat", :product_name => "OpenShift")
+        attributes  = { "name" => "my_source", "source_type_id" => source_type.id.to_s }
+        instance    = Source.create!(attributes.merge("tenant" => tenant))
+
+        app_type1 = ApplicationType.create(:name         => "/platform/application-type1",
+                                           :display_name => "Application Type One")
+
+        app_type2 = ApplicationType.create(:name         => "ApplicationType2",
+                                           :display_name => "Application Type Two")
+
+        app_type1_url = "http://app1.example.com:8001/availability_check"
+        app_type2_url = "http://app2.example.com:8002/availability_check"
+
+        app1 = Application.create(:application_type => app_type1, :source => instance, :tenant => tenant)
+        app2 = Application.create(:application_type => app_type2, :source => instance, :tenant => tenant)
+
+        tenant_payload = {
+          "host"                  => "example.com",
+          "port"                  => 443,
+          "role"                  => "default",
+          "path"                  => "api",
+          "source_id"             => instance.id.to_s,
+          "scheme"                => "https",
+          "verify_ssl"            => true,
+          "certificate_authority" => "-----BEGIN CERTIFICATE-----\nabcd\n-----END CERTIFICATE-----",
+        }
+
+        Endpoint.create!(tenant_payload.merge(:tenant => tenant, :source => instance))
+
+        expect(Sources::Api::Events).to receive(:raise_event).exactly(4).times
+        delete(instance_path(instance.id), :headers => headers)
+
+        expect(response).to have_attributes(
+          :status => 204,
+          :parsed_body => ""
+        )
+        expect(Application.count).to eq(0)
+      end
+    end
   end
 
   describe("/api/v3.0/sources/:id/check_availability") do

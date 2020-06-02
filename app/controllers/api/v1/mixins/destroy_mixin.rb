@@ -3,8 +3,7 @@ module Api
     module Mixins
       module DestroyMixin
         def destroy
-          record = model.destroy(params.require(:id))
-          raise_event("#{model}.destroy", record.as_json)
+          model.destroy(params.require(:id))
           head :no_content
         end
       end
