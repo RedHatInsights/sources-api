@@ -1445,6 +1445,7 @@
             "type": "string"
           },
           "availability_status_error": {
+            "nullable": true,
             "type": "string"
           },
           "created_at": {
@@ -1595,6 +1596,7 @@
             "type": "string"
           },
           "availability_status_error": {
+            "nullable": true,
             "type": "string"
           },
           "extra": {
@@ -1706,6 +1708,7 @@
             "type": "string"
           },
           "availability_status_error": {
+            "nullable": true,
             "type": "string"
           },
           "certificate_authority": {
