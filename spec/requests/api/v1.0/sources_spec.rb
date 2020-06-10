@@ -451,10 +451,12 @@ RSpec.describe("v1.0 - Sources") do
         source      = Source.create!(attributes.merge("tenant" => tenant))
 
         app_type1 = ApplicationType.create(:name         => "/platform/application-type1",
-                                           :display_name => "Application Type One")
+                                           :display_name => "Application Type One",
+                                           :supported_source_types => ["openshift"])
 
         app_type2 = ApplicationType.create(:name         => "ApplicationType2",
-                                           :display_name => "Application Type Two")
+                                           :display_name => "Application Type Two",
+                                           :supported_source_types => ["openshift"])
 
         app_type1_url = "http://app1.example.com:8001/availability_check"
         app_type2_url = "http://app2.example.com:8002/availability_check"
