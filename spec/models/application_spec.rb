@@ -16,15 +16,17 @@ RSpec.describe("Application") do
     }
   end
 
-  describe "Application" do
-    context "create!" do
-      it "Should return an instance of Application on success" do
+  describe "create!" do
+    context "when the application supports the given source type" do
+      it "should return an instance of Application" do
         expect(
           Application.create!(attributes.merge(:source_id => compatible_source.id))
         ).to be_an_instance_of(Application)
       end
+    end
 
-      it "Should raise RecordInvalid when given an incompatible source" do
+    context "when the application does not support the given source type" do
+      it "should raise RecordInvalid" do
         expect do
           Application.create!(attributes.merge(:source_id => incompatible_source.id))
         end.to raise_error(ActiveRecord::RecordInvalid, "Validation failed: Source is not compatible with this application type")
