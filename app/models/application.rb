@@ -17,6 +17,6 @@ class Application < ApplicationRecord
 
   def source_must_be_compatible
   	return if application_type.supported_source_types.include?(source.source_type.name)
-  	errors.add(:source, "is not compatible with this application type")
+  	errors.add(:source, "of type: #{source.source_type.name}, is not compatible with this application type")
   end
 end

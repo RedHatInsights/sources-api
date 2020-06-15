@@ -32,7 +32,7 @@ RSpec.describe("Application") do
       it "should raise RecordInvalid" do
         expect do
           subject
-        end.to raise_error(ActiveRecord::RecordInvalid, "Validation failed: Source is not compatible with this application type")
+        end.to raise_error(ActiveRecord::RecordInvalid, /^.* is not compatible with this application type/)
       end
     end
   end
