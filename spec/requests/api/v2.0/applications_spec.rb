@@ -11,7 +11,7 @@ RSpec.describe("v2.0 - Applications") do
   let(:collection_path)  { "/api/v2.0/applications" }
   let(:source)           { Source.create!(:source_type => source_type, :tenant => tenant, :uid => SecureRandom.uuid, :name => "my-source") }
   let(:source_type)      { SourceType.create!(:name => "my-source-type", :product_name => "My Source Type", :vendor => "ACME") }
-  let(:application_type) { ApplicationType.create!("name" => "my-application") }
+  let(:application_type) { ApplicationType.create!("name" => "my-application", :supported_source_types => ["my-source-type"]) }
   let(:payload) do
     {
       "source_id" => source.id.to_s,
