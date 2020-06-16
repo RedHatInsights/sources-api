@@ -11,7 +11,7 @@ RSpec.describe("v3.0 - Applications") do
   let(:collection_path)  { "/api/v3.0/applications" }
   let(:source)           { Source.create!(:source_type => source_type, :tenant => tenant, :uid => SecureRandom.uuid, :name => "my-source") }
   let(:source_type)      { SourceType.create!(:name => "my-source-type", :product_name => "My Source Type", :vendor => "ACME") }
-  let(:application_type) { ApplicationType.create!("name" => "my-application") }
+  let(:application_type) { ApplicationType.create!("name" => "my-application", :supported_source_types => ["my-source-type"]) }
   let(:payload) do
     {
       "source_id" => source.id.to_s,
@@ -139,6 +139,20 @@ RSpec.describe("v3.0 - Applications") do
         expect(response).to have_attributes(
           :status      => 404,
           :parsed_body => {"errors" => [{"detail" => "Record not found", "status" => "404"}]}
+        )
+      end
+    end
+
+    context "delete" do
+      it "success: with a valid id" do
+        instance = Application.create!(payload.merge(:tenant => tenant))
+
+        expect(Sources::Api::Events).to receive(:raise_event).once
+        delete(instance_path(instance.id), :headers => headers)
+
+        expect(response).to have_attributes(
+          :status      => 204,
+          :parsed_body => ""
         )
       end
     end

@@ -10,7 +10,7 @@ RSpec.describe("v3.0 - ApplicationAuthentications") do
   let(:headers)          { {"CONTENT_TYPE" => "application/json", "x-rh-identity" => identity} }
   let(:source_type)      { SourceType.create!(:name => "my-source-type", :product_name => "My Source Type", :vendor => "ACME") }
   let(:source)           { Source.create!(:source_type => source_type, :tenant => tenant, :uid => SecureRandom.uuid, :name => "my-source") }
-  let(:application_type) { ApplicationType.create!(:name => "my-app") }
+  let(:application_type) { ApplicationType.create!(:name => "my-app", :supported_source_types => ["my-source-type"]) }
   let(:endpoint)         { Endpoint.create!(:source => source, :tenant => tenant) }
   let(:authentication)   { Authentication.create!(:tenant => tenant, :resource => endpoint) }
   let(:application)      { Application.create!(:application_type => application_type, :source => source, :tenant => tenant) }
@@ -113,6 +113,7 @@ RSpec.describe("v3.0 - ApplicationAuthentications") do
       it "success: with a valid paylod" do
         record = ApplicationAuthentication.create!(payload)
 
+        expect(Sources::Api::Events).to receive(:raise_event).once
         delete(instance_path(record.id), :headers => headers)
 
         expect(response.status).to eq(204)

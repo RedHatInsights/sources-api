@@ -1455,6 +1455,14 @@
           "id": {
             "$ref": "#/components/schemas/ID"
           },
+          "last_available_at": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "last_checked_at": {
+            "format": "date-time",
+            "type": "string"
+          },
           "source_id": {
             "$ref": "#/components/schemas/ID"
           },
@@ -1607,6 +1615,14 @@
           "id": {
             "$ref": "#/components/schemas/ID"
           },
+          "last_available_at": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "last_checked_at": {
+            "format": "date-time",
+            "type": "string"
+          },
           "name": {
             "example": "OpenShift default",
             "type": "string"
@@ -1711,6 +1727,14 @@
           },
           "id": {
             "$ref": "#/components/schemas/ID"
+          },
+          "last_available_at": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "last_checked_at": {
+            "format": "date-time",
+            "type": "string"
           },
           "path": {
             "description": "URI path component",
@@ -1849,6 +1873,14 @@
             "$ref": "#/components/schemas/ID"
           },
           "imported": {
+            "type": "string"
+          },
+          "last_available_at": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "last_checked_at": {
+            "format": "date-time",
             "type": "string"
           },
           "name": {
