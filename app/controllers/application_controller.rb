@@ -55,8 +55,9 @@ class ApplicationController < ActionController::API
         else
           ActsAsTenant.without_tenant { yield }
         end
-      rescue KeyError, Insights::API::Common::IdentityError
+      rescue KeyError, Insights::API::Common::IdentityError => e
         logger.debug("Key Error or Insights::API::Common::IdentityError")
+        logger.debug(e.backtrace.join("\n"))
         error_document = Insights::API::Common::ErrorDocument.new.add('401', 'Unauthorized')
         render :json => error_document.to_h, :status => error_document.status
       rescue Insights::API::Common::EntitlementError
