@@ -44,28 +44,21 @@ class ApplicationController < ActionController::API
     Insights::API::Common::Request.with_request(request) do |current|
       begin
         if Tenant.tenancy_enabled? && current.required_auth?
-          logger.debug("Check if the request is allowed")
           validate_request_allowed!(current)
-          logger.debug("Check if the request is entitled")
           validate_request_entitled!(current)
 
-          logger.debug("Locating the tenant #{current.tenant}")
           tenant = Tenant.find_or_create_by(:external_tenant => current.tenant)
           ActsAsTenant.with_tenant(tenant) { yield }
         else
           ActsAsTenant.without_tenant { yield }
         end
       rescue KeyError, Insights::API::Common::IdentityError => e
-        logger.debug("Key Error or Insights::API::Common::IdentityError")
-        logger.debug(e.backtrace.join("\n"))
         error_document = Insights::API::Common::ErrorDocument.new.add('401', 'Unauthorized')
         render :json => error_document.to_h, :status => error_document.status
       rescue Insights::API::Common::EntitlementError
-        logger.debug("Entitlement Error")
         error_document = Insights::API::Common::ErrorDocument.new.add('403', 'Forbidden')
         render :json => error_document.to_h, :status => error_document.status
       rescue RbacError
-        logger.debug("Rbac Error")
         error_document = Insights::API::Common::ErrorDocument.new.add('403', 'Forbidden due to Rbac')
         render :json => error_document.to_h, :status => error_document.status
       end
