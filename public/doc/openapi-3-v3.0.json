@@ -1589,7 +1589,8 @@
         "properties": {
           "authtype": {
             "example": "openshift_default",
-            "type": "string"
+            "type": "string",
+            "readOnly": true
           },
           "availability_status": {
             "type": "string"
