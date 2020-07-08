@@ -11,4 +11,12 @@ class Authentication < ApplicationRecord
 
   attribute :availability_status, :string
   validates :availability_status, :inclusion => { :in => %w[available unavailable] }, :allow_nil => true
+
+  validate :authtype_not_updated
+
+  def authtype_not_updated
+    if !new_record? && authtype_changed?
+      errors.add(:authtype, "cannot be updated")
+    end
+  end
 end

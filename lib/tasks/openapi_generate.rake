@@ -31,11 +31,12 @@ class OpenapiGenerator < Insights::API::Common::OpenApi::Generator
     end
   end
 
-  def schema_overrides
-    authentication = schemas['Authentication']
-    authentication['properties']['authtype']['readOnly'] = true
-    super.merge('Authentication' => authentication)
-  end
+  # TODO: make readOnly authtype only for update
+  # def schema_overrides
+  #   authentication = schemas['Authentication']
+  #   authentication['properties']['authtype']['readOnly'] = true
+  #   super.merge('Authentication' => authentication)
+  # end
 end
 
 namespace :openapi do
