@@ -2,8 +2,14 @@ RSpec.describe("v1.0 - ApplicationTypes") do
   include ::Spec::Support::TenantIdentity
 
   let(:headers)         { {"CONTENT_TYPE" => "application/json", "x-rh-identity" => identity} }
-  let(:attributes)      { {"name" => "my application type"} }
   let(:collection_path) { "/api/v1.0/application_types" }
+
+  let(:attributes) do
+    {
+      "name"                   => "my-application-type",
+      "supported_source_types" => ["my-source-type"]
+    }
+  end
 
   describe("/api/v1.0/application_types") do
     context "get" do
@@ -17,7 +23,7 @@ RSpec.describe("v1.0 - ApplicationTypes") do
       end
 
       it "success: non-empty collection" do
-        ApplicationType.create!(attributes)
+        create(:application_type, attributes)
 
         get(collection_path, :headers => headers)
 
@@ -36,7 +42,7 @@ RSpec.describe("v1.0 - ApplicationTypes") do
 
     context "get" do
       it "success: with a valid id" do
-        instance = ApplicationType.create!(attributes)
+        instance = create(:application_type, attributes)
 
         get(instance_path(instance.id), :headers => headers)
 
@@ -47,7 +53,7 @@ RSpec.describe("v1.0 - ApplicationTypes") do
       end
 
       it "failure: with an invalid id" do
-        instance = ApplicationType.create!(attributes)
+        instance = create(:application_type, attributes)
 
         get(instance_path(instance.id * 1000), :headers => headers)
 
@@ -74,7 +80,7 @@ RSpec.describe("v1.0 - ApplicationTypes") do
 
         context "get" do
           it "success: with a valid id" do
-            instance = ApplicationType.create!(attributes)
+            instance = create(:application_type, attributes)
 
             get(subcollection_path(instance.id), :headers => headers)
 
@@ -85,7 +91,7 @@ RSpec.describe("v1.0 - ApplicationTypes") do
           end
 
           it "failure: with an invalid id" do
-            instance   = ApplicationType.create!(attributes)
+            instance   = create(:application_type, attributes)
             missing_id = (instance.id * 1000)
             expect(ApplicationType.exists?(missing_id)).to eq(false)
 

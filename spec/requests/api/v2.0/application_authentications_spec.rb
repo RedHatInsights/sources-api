@@ -8,12 +8,9 @@ RSpec.describe("v2.0 - ApplicationAuthentications") do
   end
 
   let(:headers)          { {"CONTENT_TYPE" => "application/json", "x-rh-identity" => identity} }
-  let(:source_type)      { SourceType.create!(:name => "my-source-type", :product_name => "My Source Type", :vendor => "ACME") }
-  let(:source)           { Source.create!(:source_type => source_type, :tenant => tenant, :uid => SecureRandom.uuid, :name => "my-source") }
-  let(:application_type) { ApplicationType.create!(:name => "my-app", :supported_source_types => ["my-source-type"]) }
-  let(:endpoint)         { Endpoint.create!(:source => source, :tenant => tenant) }
-  let(:authentication)   { Authentication.create!(:tenant => tenant, :resource => endpoint) }
-  let(:application)      { Application.create!(:application_type => application_type, :source => source, :tenant => tenant) }
+  let(:endpoint)         { create(:endpoint) }
+  let(:authentication)   { create(:authentication, resource: endpoint) }
+  let(:application)      { create(:application) }
   let(:attributes)       { {"application_id" => application.id.to_s, "authentication_id" => authentication.id.to_s } }
   let(:collection_path)  { "/api/v2.0/application_authentications" }
   let(:payload) do
@@ -35,7 +32,7 @@ RSpec.describe("v2.0 - ApplicationAuthentications") do
       end
 
       it "success: non-empty collection" do
-        ApplicationAuthentication.create!(attributes.merge(:tenant => tenant))
+        create(:application_authentication, attributes)
 
         get(collection_path, :headers => headers)
 
@@ -86,7 +83,7 @@ RSpec.describe("v2.0 - ApplicationAuthentications") do
 
     context "get" do
       it "success: with a valid id" do
-        instance = ApplicationAuthentication.create!(attributes.merge(:tenant => tenant))
+        instance = create(:application_authentication, attributes)
 
         get(instance_path(instance.id), :headers => headers)
 
@@ -97,7 +94,7 @@ RSpec.describe("v2.0 - ApplicationAuthentications") do
       end
 
       it "failure: with an invalid id" do
-        instance = ApplicationAuthentication.create!(attributes.merge(:tenant => tenant))
+        instance = create(:application_authentication, attributes)
 
         get(instance_path(instance.id * 1000), :headers => headers)
 
@@ -111,7 +108,7 @@ RSpec.describe("v2.0 - ApplicationAuthentications") do
 
     context "delete" do
       it "success: with a valid paylod" do
-        record = ApplicationAuthentication.create!(payload)
+        record = create(:application_authentication, payload)
 
         delete(instance_path(record.id), :headers => headers)
 

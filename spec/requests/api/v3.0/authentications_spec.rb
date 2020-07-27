@@ -32,7 +32,7 @@ RSpec.describe("v3.0 - Authentications") do
       end
 
       it "success: non-empty collection" do
-        Authentication.create!(payload.merge(:tenant => tenant))
+        create(:authentication, payload.merge(:tenant => tenant))
 
         get(collection_path, :headers => headers)
 
@@ -106,7 +106,7 @@ RSpec.describe("v3.0 - Authentications") do
 
     context "get" do
       it "success: with a valid id" do
-        instance = Authentication.create!(payload.merge(:tenant => tenant))
+        instance = create(:authentication, payload.merge(:tenant => tenant))
 
         get(instance_path(instance.id), :headers => headers)
 
@@ -117,7 +117,7 @@ RSpec.describe("v3.0 - Authentications") do
       end
 
       it "failure: with an invalid id" do
-        instance = Authentication.create!(payload.merge(:tenant => tenant))
+        instance = create(:authentication, payload.merge(:tenant => tenant))
 
         get(instance_path(instance.id * 1000), :headers => headers)
 
@@ -129,7 +129,7 @@ RSpec.describe("v3.0 - Authentications") do
     end
 
     context "patch" do
-      let(:instance) { Authentication.create!(payload.merge(:tenant => tenant)) }
+      let(:instance) { create(:authentication, payload.merge(:tenant => tenant)) }
       it "success: with a valid id" do
         new_attributes = {"name" => "new name"}
         patch(instance_path(instance.id), :params => new_attributes.to_json, :headers => headers)
@@ -164,7 +164,7 @@ RSpec.describe("v3.0 - Authentications") do
     end
 
     context "delete" do
-      let(:instance) { Authentication.create!(payload.merge(:tenant => tenant)) }
+      let(:instance) { create(:authentication, payload.merge(:tenant => tenant)) }
 
       it "success: with a valid id" do
         expect(Sources::Api::Events).to receive(:raise_event).once

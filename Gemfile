@@ -25,4 +25,5 @@ end
 group :test do
   gem 'rspec-rails', '~>3.8'
   gem 'webmock'
+  gem "factory_bot_rails"
 end

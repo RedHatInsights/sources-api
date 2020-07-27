@@ -6,7 +6,7 @@ RSpec.describe("v1.0 - Sources") do
   let(:headers)         { {"CONTENT_TYPE" => "application/json", "x-rh-identity" => identity} }
   let(:attributes)      { {"name" => "my source", "source_type_id" => source_type.id.to_s} }
   let(:collection_path) { "/api/v1.0/sources" }
-  let(:source_type)     { SourceType.create!(:name => "SourceType", :vendor => "Some Vendor", :product_name => "Product Name") }
+  let(:source_type)     { create(:source_type, name: "SourceType", vendor: "Some Vendor", product_name: "Product Name") }
   let(:client)          { instance_double("ManageIQ::Messaging::Client") }
   before do
     allow(client).to receive(:publish_topic)
@@ -26,7 +26,7 @@ RSpec.describe("v1.0 - Sources") do
         end
 
         it "success: non-empty collection" do
-          Source.create!(attributes.merge("tenant" => tenant))
+          create(:source, attributes.merge("tenant" => tenant))
 
           get(collection_path, :headers => headers)
 
@@ -50,7 +50,7 @@ RSpec.describe("v1.0 - Sources") do
         end
 
         it "success: non-empty collection" do
-          Source.create!(attributes.merge("tenant" => tenant))
+          create(:source, attributes.merge("tenant" => tenant))
 
           get(collection_path, :headers => headers)
 
@@ -194,7 +194,7 @@ RSpec.describe("v1.0 - Sources") do
 
     context "get" do
       it "success: with a valid id" do
-        instance = Source.create!(attributes.merge("tenant" => tenant))
+        instance = create(:source, attributes.merge("tenant" => tenant))
 
         get(instance_path(instance.id), :headers => headers)
 
@@ -205,7 +205,7 @@ RSpec.describe("v1.0 - Sources") do
       end
 
       it "failure: with an invalid id" do
-        instance = Source.create!(attributes.merge("tenant" => tenant))
+        instance = create(:source, attributes.merge("tenant" => tenant))
 
         get(instance_path(instance.id * 1000), :headers => headers)
 
@@ -218,7 +218,7 @@ RSpec.describe("v1.0 - Sources") do
 
     context "patch" do
       it "success: with a valid id" do
-        instance = Source.create!(attributes.merge("tenant" => tenant))
+        instance = create(:source, attributes.merge("tenant" => tenant))
         new_attributes = {"name" => "new name"}
 
         patch(instance_path(instance.id), :params => new_attributes.to_json, :headers => headers)
@@ -232,7 +232,7 @@ RSpec.describe("v1.0 - Sources") do
       end
 
       it "failure: with a null value" do
-        instance = Source.create!(attributes.merge("tenant" => tenant))
+        instance = create(:source, attributes.merge("tenant" => tenant))
         new_attributes = {"name" => nil}
 
         patch(instance_path(instance.id), :params => new_attributes.to_json, :headers => headers)
@@ -246,7 +246,7 @@ RSpec.describe("v1.0 - Sources") do
       end
 
       it "failure: with an invalid id" do
-        instance = Source.create!(attributes.merge("tenant" => tenant))
+        instance = create(:source, attributes.merge("tenant" => tenant))
         new_attributes = {"name" => "new name"}
 
         patch(instance_path(instance.id * 1000), :params => new_attributes.to_json, :headers => headers)
@@ -258,7 +258,7 @@ RSpec.describe("v1.0 - Sources") do
       end
 
       it "failure: with extra parameters" do
-        instance = Source.create!(attributes.merge("tenant" => tenant))
+        instance = create(:source, attributes.merge("tenant" => tenant))
         new_attributes = {"aaaaa" => "bbbbb"}
 
         patch(instance_path(instance.id), :params => new_attributes.to_json, :headers => headers)
@@ -270,7 +270,7 @@ RSpec.describe("v1.0 - Sources") do
       end
 
       it "failure: with read-only parameters" do
-        instance = Source.create!(attributes.merge("tenant" => tenant))
+        instance = create(:source, attributes.merge("tenant" => tenant))
         new_attributes = {"uid" => "xxxxx"}
 
         patch(instance_path(instance.id), :params => new_attributes.to_json, :headers => headers)
@@ -338,7 +338,7 @@ RSpec.describe("v1.0 - Sources") do
       end
 
       it "rejects read_only attributes" do
-        instance = Source.create!(attributes.merge("tenant" => tenant))
+        instance = create(:source, attributes.merge("tenant" => tenant))
         new_attributes = {"name" => "new name", "tenant" => "123456"}
 
         patch(instance_path(instance.id), :params => new_attributes.to_json, :headers => headers)
@@ -386,9 +386,9 @@ RSpec.describe("v1.0 - Sources") do
       end
 
       it "success: with valid openshift source" do
-        source_type = SourceType.create!(:name => "openshift", :vendor => "RedHat", :product_name => "OpenShift")
+        source_type = create(:source_type, :name => "openshift", :vendor => "RedHat", :product_name => "OpenShift")
         attributes  = { "name" => "my_source", "source_type_id" => source_type.id.to_s }
-        source      = Source.create!(attributes.merge("tenant" => tenant))
+        source      = create(:source, attributes.merge("tenant" => tenant))
 
         expect(messaging_client).to receive(:publish_topic)
           .with(hash_including(:service => openshift_topic,
@@ -409,9 +409,9 @@ RSpec.describe("v1.0 - Sources") do
       end
 
       it "success: with valid amazon source" do
-        source_type = SourceType.create!(:name => "amazon", :vendor => "Amazon", :product_name => "Amazon Web Services")
+        source_type = create(:source_type, :name => "amazon", :vendor => "Amazon", :product_name => "Amazon Web Services")
         attributes  = { "name" => "my_source", "source_type_id" => source_type.id.to_s }
-        source      = Source.create!(attributes.merge("tenant" => tenant))
+        source      = create(:source, attributes.merge("tenant" => tenant))
 
         expect(messaging_client).to receive(:publish_topic)
           .with(hash_including(:service => amazon_topic,
@@ -432,9 +432,9 @@ RSpec.describe("v1.0 - Sources") do
       end
 
       it "success: with a source-type that topology doesn't support" do
-        source_type = SourceType.create!(:name => "vsphere", :vendor => "VMware", :product_name => "VMware vSphere")
+        source_type = create(:source_type, :name => "vsphere", :vendor => "VMware", :product_name => "VMware vSphere")
         attributes  = {"name" => "my_source", "source_type_id" => source_type.id.to_s}
-        source      = Source.create!(attributes.merge("tenant" => tenant))
+        source      = create(:source, attributes.merge("tenant" => tenant))
 
         expect(messaging_client).not_to receive(:publish_topic)
         post(check_availability_path(source.id), :headers => headers)
@@ -446,23 +446,25 @@ RSpec.describe("v1.0 - Sources") do
       end
 
       it "success: with valid openshift source querying associated applications" do
-        source_type = SourceType.create!(:name => "openshift", :vendor => "RedHat", :product_name => "OpenShift")
+        source_type = create(:source_type, :name => "openshift", :vendor => "RedHat", :product_name => "OpenShift")
         attributes  = { "name" => "my_source", "source_type_id" => source_type.id.to_s }
-        source      = Source.create!(attributes.merge("tenant" => tenant))
+        source      = create(:source, attributes.merge("tenant" => tenant))
 
-        app_type1 = ApplicationType.create(:name         => "/platform/application-type1",
-                                           :display_name => "Application Type One",
-                                           :supported_source_types => ["openshift"])
+        app_type1 = create(:application_type,
+                           name:                   "/platform/application-type1",
+                           display_name:           "Application Type One",
+                           supported_source_types: ["openshift"])
 
-        app_type2 = ApplicationType.create(:name         => "ApplicationType2",
-                                           :display_name => "Application Type Two",
-                                           :supported_source_types => ["openshift"])
+        app_type2 = create(:application_type,
+                           name:                   "ApplicationType2",
+                           display_name:           "Application Type Two",
+                           supported_source_types: ["openshift"])
 
         app_type1_url = "http://app1.example.com:8001/availability_check"
         app_type2_url = "http://app2.example.com:8002/availability_check"
 
-        app1 = Application.create(:application_type => app_type1, :source => source, :tenant => tenant)
-        app2 = Application.create(:application_type => app_type2, :source => source, :tenant => tenant)
+        app1 = create(:application, application_type: app_type1, source: source, tenant: tenant)
+        app2 = create(:application, application_type: app_type2, source: source, tenant: tenant)
 
         source.applications = [app1, app2]
 
@@ -531,7 +533,7 @@ RSpec.describe("v1.0 - Sources") do
 
         context "get" do
           it "success: with a valid id" do
-            instance = Source.create!(attributes.merge("tenant" => tenant))
+            instance = create(:source, attributes.merge("tenant" => tenant))
 
             get(subcollection_path(instance.id), :headers => headers)
 
@@ -542,7 +544,7 @@ RSpec.describe("v1.0 - Sources") do
           end
 
           it "failure: with an invalid id" do
-            instance = Source.create!(attributes.merge("tenant" => tenant))
+            instance = create(:source, attributes.merge("tenant" => tenant))
             missing_id = (instance.id * 1000)
             expect(Source.exists?(missing_id)).to eq(false)
 

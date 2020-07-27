@@ -17,7 +17,7 @@ RSpec.describe("v3.0 - ApplicationTypes") do
       end
 
       it "success: non-empty collection" do
-        ApplicationType.create!(attributes)
+        create(:application_type, attributes)
 
         get(collection_path, :headers => headers)
 
@@ -36,7 +36,7 @@ RSpec.describe("v3.0 - ApplicationTypes") do
 
     context "get" do
       it "success: with a valid id" do
-        instance = ApplicationType.create!(attributes)
+        instance = create(:application_type, attributes)
 
         get(instance_path(instance.id), :headers => headers)
 
@@ -47,7 +47,7 @@ RSpec.describe("v3.0 - ApplicationTypes") do
       end
 
       it "failure: with an invalid id" do
-        instance = ApplicationType.create!(attributes)
+        instance = create(:application_type, attributes)
 
         get(instance_path(instance.id * 1000), :headers => headers)
 
@@ -74,7 +74,7 @@ RSpec.describe("v3.0 - ApplicationTypes") do
 
         context "get" do
           it "success: with a valid id" do
-            instance = ApplicationType.create!(attributes)
+            instance = create(:application_type, attributes)
 
             get(subcollection_path(instance.id), :headers => headers)
 
@@ -85,7 +85,7 @@ RSpec.describe("v3.0 - ApplicationTypes") do
           end
 
           it "failure: with an invalid id" do
-            instance   = ApplicationType.create!(attributes)
+            instance   = create(:application_type, attributes)
             missing_id = (instance.id * 1000)
             expect(ApplicationType.exists?(missing_id)).to eq(false)
 

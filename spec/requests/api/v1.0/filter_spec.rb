@@ -4,10 +4,9 @@ RSpec.describe("Sources Filtering") do
   let(:headers)           { {"CONTENT_TYPE" => "application/json", "x-rh-identity" => identity} }
   let(:api_version)       { "v1.0" }
   let(:source_collection) { "/api/#{api_version}/sources" }
-  let(:source_type)       { SourceType.create!(:name => "SampleSourceType", :vendor => "Sample Vendor", :product_name => "Sample Product Name") }
 
   def create_source(source_name, opt_params = {})
-    Source.create!({:name => source_name, :source_type_id => source_type.id, :tenant => tenant}.merge(opt_params))
+    create(:source, {:name => source_name}.merge(opt_params))
   end
 
   def expect_success(query, *results)
@@ -55,8 +54,8 @@ RSpec.describe("Sources Filtering") do
 
   context "sorted results via sort_by" do
     before do
-      Source.create!(:name => "sort_by_source_a", :source_type => source_type, :tenant => tenant)
-      Source.create!(:name => "sort_by_source_b", :source_type => source_type, :tenant => tenant)
+      create_source("sort_by_source_a")
+      create_source("sort_by_source_b")
     end
 
     it "available for sources with default order" do

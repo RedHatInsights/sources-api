@@ -3,9 +3,8 @@ describe Api::V1::Mixins::IndexMixin do
     include ::Spec::Support::TenantIdentity
 
     let(:headers)      { {"CONTENT_TYPE" => "application/json", "x-rh-identity" => identity} }
-    let!(:source_1)    { Source.create!(:source_type => source_type, :tenant => tenant, :name => "test_source 1", :uid => SecureRandom.uuid) }
-    let!(:source_2)    { Source.create!(:source_type => source_type, :tenant => tenant, :name => "test_source 2", :uid => SecureRandom.uuid) }
-    let!(:source_type) { SourceType.create!(:name => "openshift", :product_name => "OpenShift", :vendor => "Red Hat") }
+    let!(:source_1)    { create(:source, name: "test_source 1") }
+    let!(:source_2)    { create(:source, name: "test_source 2") }
 
     it "Primary Collection: get /sources lists all Sources" do
       get(api_v1x0_sources_url, :headers => headers)
@@ -15,9 +14,9 @@ describe Api::V1::Mixins::IndexMixin do
     end
 
     context "Sub-collection:" do
-      let!(:endpoint_1) { Endpoint.create!(:role => "a", :source => source_1, :tenant => tenant) }
-      let!(:endpoint_2) { Endpoint.create!(:role => "b", :source => source_1, :tenant => tenant) }
-      let!(:endpoint_3) { Endpoint.create!(:role => "c", :source => source_2, :tenant => tenant) }
+      let!(:endpoint_1) { create(:endpoint, role: "a", source: source_1) }
+      let!(:endpoint_2) { create(:endpoint, role: "b", source: source_1) }
+      let!(:endpoint_3) { create(:endpoint, role: "c", source: source_2) }
 
       it "get /sources/:id/endpoints lists all Endpoints for a source" do
         get(api_v1x0_source_endpoints_url(source_1.id), :headers => headers)
