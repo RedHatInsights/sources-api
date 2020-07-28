@@ -14,7 +14,7 @@ describe Api::V1::Mixins::ShowMixin do
     end
 
     context "Sub-collection:" do
-      let!(:endpoint_1) { create(:endpoint, role: "a", :source => source_1) }
+      let!(:endpoint_1) { create(:endpoint, role: "a", source: source_1) }
 
       it "get /sources/:id/endpoints/:id doesn't exist" do
         get(api_v1x0_source_endpoints_url(source_1.id) + "/#{endpoint_1.id}", :headers => headers)

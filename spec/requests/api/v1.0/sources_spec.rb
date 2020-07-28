@@ -386,7 +386,7 @@ RSpec.describe("v1.0 - Sources") do
       end
 
       it "success: with valid openshift source" do
-        source_type = create(:source_type, :name => "openshift", :vendor => "RedHat", :product_name => "OpenShift")
+        source_type = create(:source_type, name: "openshift", vendor: "RedHat", product_name: "OpenShift")
         attributes  = { "name" => "my_source", "source_type_id" => source_type.id.to_s }
         source      = create(:source, attributes.merge("tenant" => tenant))
 
@@ -409,7 +409,7 @@ RSpec.describe("v1.0 - Sources") do
       end
 
       it "success: with valid amazon source" do
-        source_type = create(:source_type, :name => "amazon", :vendor => "Amazon", :product_name => "Amazon Web Services")
+        source_type = create(:source_type, name: "amazon", vendor: "Amazon", product_name: "Amazon Web Services")
         attributes  = { "name" => "my_source", "source_type_id" => source_type.id.to_s }
         source      = create(:source, attributes.merge("tenant" => tenant))
 
@@ -432,7 +432,7 @@ RSpec.describe("v1.0 - Sources") do
       end
 
       it "success: with a source-type that topology doesn't support" do
-        source_type = create(:source_type, :name => "vsphere", :vendor => "VMware", :product_name => "VMware vSphere")
+        source_type = create(:source_type, name: "vsphere", vendor: "VMware", product_name: "VMware vSphere")
         attributes  = {"name" => "my_source", "source_type_id" => source_type.id.to_s}
         source      = create(:source, attributes.merge("tenant" => tenant))
 
@@ -446,7 +446,7 @@ RSpec.describe("v1.0 - Sources") do
       end
 
       it "success: with valid openshift source querying associated applications" do
-        source_type = create(:source_type, :name => "openshift", :vendor => "RedHat", :product_name => "OpenShift")
+        source_type = create(:source_type, name: "openshift", vendor: "RedHat", product_name: "OpenShift")
         attributes  = { "name" => "my_source", "source_type_id" => source_type.id.to_s }
         source      = create(:source, attributes.merge("tenant" => tenant))
 

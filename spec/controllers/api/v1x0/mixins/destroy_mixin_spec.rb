@@ -20,7 +20,7 @@ describe Api::V1::Mixins::DestroyMixin do
     end
 
     context "Sub-collection:" do
-      let!(:endpoint_1) { create(:endpoint, role: "a", :source => source_1) }
+      let!(:endpoint_1) { create(:endpoint, role: "a", source: source_1) }
 
       it "delete /sources/:id/endpoint/:id fails with 404" do
         delete(api_v1x0_source_endpoints_url(source_1.id) + "/#{endpoint_1.id}", :headers => headers)
