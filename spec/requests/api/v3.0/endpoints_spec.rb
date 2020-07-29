@@ -170,7 +170,7 @@ RSpec.describe("v3.0 - Endpoints") do
             "resource_type" => "Tenant",
             "resource_id"   => tenant.id.to_s
           }
-        authentication = create(:authentication, authentication_payload.merge(:tenant => tenant, :resource => instance))
+        create(:authentication, authentication_payload.merge(:tenant => tenant, :resource => instance))
 
         expect(Sources::Api::Events).to receive(:raise_event).twice
         delete(instance_path(instance.id), :headers => headers)

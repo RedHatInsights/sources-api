@@ -1,8 +1,8 @@
 RSpec.describe Internal::V1x0::AuthenticationsController, :type => :request do
   include ::Spec::Support::TenantIdentity
-  
+ 
   let(:headers)        { {"CONTENT_TYPE" => "application/json", "x-rh-identity" => identity} }
-  let(:authentication) { create(:authentication, resource: endpoint, password: "abcdefg") }
+  let(:authentication) { create(:authentication, :resource => endpoint, :password => "abcdefg") }
   let(:endpoint)       { create(:endpoint) }
 
   it "GET an instance" do

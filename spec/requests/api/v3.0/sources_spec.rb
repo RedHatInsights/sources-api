@@ -371,8 +371,8 @@ RSpec.describe("v3.0 - Sources") do
         app_type1_url = "http://app1.example.com:8001/availability_check"
         app_type2_url = "http://app2.example.com:8002/availability_check"
 
-        app1 = create(:application, :application_type => app_type1, :source => instance, :tenant => tenant)
-        app2 = create(:application, :application_type => app_type2, :source => instance, :tenant => tenant)
+        create(:application, :application_type => app_type1, :source => instance, :tenant => tenant)
+        create(:application, :application_type => app_type2, :source => instance, :tenant => tenant)
 
         tenant_payload = {
           "host"                  => "example.com",
