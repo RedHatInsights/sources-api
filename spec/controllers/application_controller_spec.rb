@@ -1,6 +1,6 @@
 RSpec.describe ApplicationController, :type => :request do
   include ::Spec::Support::TenantIdentity
-  let!(:source)     { create(:source, tenant: tenant, name: "abc", uid: "123") }
+  let!(:source)     { create(:source, :tenant => tenant, :name => "abc", :uid => "123") }
   let(:client)      { instance_double("ManageIQ::Messaging::Client") }
   before do
     allow(client).to receive(:publish_topic)

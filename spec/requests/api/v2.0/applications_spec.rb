@@ -9,7 +9,7 @@ RSpec.describe("v2.0 - Applications") do
 
   let(:headers)          { {"CONTENT_TYPE" => "application/json", "x-rh-identity" => identity} }
   let(:collection_path)  { "/api/v2.0/applications" }
-  let(:source)           { create(:source, tenant: tenant, uid: SecureRandom.uuid) }
+  let(:source)           { create(:source, :tenant => tenant, :uid => SecureRandom.uuid) }
   let(:application_type) { create(:application_type) }
   let(:payload) do
     {

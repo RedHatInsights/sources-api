@@ -24,7 +24,7 @@ RSpec.describe AvailabilityStatusListener do
 
     context "when body contains valid resource_type and id" do
       let(:endpoint) do
-        create(:endpoint, role: "first", default: true)
+        create(:endpoint, :role => "first", :default => true)
       end
       let(:resource_type) { "endpoint" }
       let(:resource_id)   { endpoint.id.to_s }

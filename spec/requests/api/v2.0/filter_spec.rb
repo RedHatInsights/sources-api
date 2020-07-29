@@ -54,8 +54,8 @@ RSpec.describe("Sources Filtering") do
 
   context "sorted results via sort_by" do
     before do
-      create(:source, name: "sort_by_source_a")
-      create(:source, name: "sort_by_source_b")
+      create(:source, :name => "sort_by_source_a")
+      create(:source, :name => "sort_by_source_b")
     end
 
     it "available for sources with default order" do

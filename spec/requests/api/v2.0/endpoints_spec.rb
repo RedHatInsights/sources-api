@@ -11,7 +11,7 @@ RSpec.describe("v2.0 - Endpoints") do
 
   let(:headers)         { {"CONTENT_TYPE" => "application/json", "x-rh-identity" => identity} }
   let(:collection_path) { "/api/v2.0/endpoints" }
-  let(:source)          { create(:source, tenant: tenant) }
+  let(:source)          { create(:source, :tenant => tenant) }
 
   let(:payload) do
     {

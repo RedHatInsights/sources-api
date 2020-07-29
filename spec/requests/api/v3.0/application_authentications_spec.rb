@@ -9,7 +9,7 @@ RSpec.describe("v3.0 - ApplicationAuthentications") do
 
   let(:headers)          { {"CONTENT_TYPE" => "application/json", "x-rh-identity" => identity} }
   let(:endpoint)         { create(:endpoint) }
-  let(:authentication)   { create(:authentication, resource: endpoint) }
+  let(:authentication)   { create(:authentication, :resource => endpoint) }
   let(:application)      { create(:application) }
   let(:attributes)       { {"application_id" => application.id.to_s, "authentication_id" => authentication.id.to_s } }
   let(:collection_path)  { "/api/v3.0/application_authentications" }

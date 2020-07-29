@@ -3,9 +3,9 @@ RSpec.describe("v3.0 - GraphQL") do
 
   let!(:graphql_endpoint) { "/api/v3.0/graphql" }
   let!(:headers)          { { "CONTENT_TYPE" => "application/json", "x-rh-identity" => identity } }
-  let!(:source_typeR) { create(:source_type, name: "rhev_sample", product_name: "RedHat Virtualization", vendor: "redhat") }
-  let!(:source_typeV) { create(:source_type, name: "vmware_sample", product_name: "VmWare vCenter", vendor: "vmware") }
-  let!(:source_typeO) { create(:source_type, name: "openstack_sample", product_name: "OpenStack", vendor: "redhat") }
+  let!(:source_typeR) { create(:source_type, :name => "rhev_sample", :product_name => "RedHat Virtualization", :vendor => "redhat") }
+  let!(:source_typeV) { create(:source_type, :name => "vmware_sample", :product_name => "VmWare vCenter", :vendor => "vmware") }
+  let!(:source_typeO) { create(:source_type, :name => "openstack_sample", :product_name => "OpenStack", :vendor => "redhat") }
 
   context "support result sorting using the v2 interface" do
     before { stub_const("ENV", "BYPASS_TENANCY" => nil) }

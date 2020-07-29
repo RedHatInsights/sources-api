@@ -10,7 +10,7 @@ describe Endpoint do
   end
 
   describe "#default" do
-    let(:source) { create(:source, tenant: tenant) }
+    let(:source) { create(:source, :tenant => tenant) }
 
     it "allows only one default endpoint" do
       described_class.create!(:role => "first", :default => true, :tenant => tenant, :source => source)

@@ -13,7 +13,7 @@ describe Api::V1::Mixins::UpdateMixin do
     end
 
     it "patch /sources/:id updates a Source" do
-      source = create(:source, name: "abc")
+      source = create(:source, :name => "abc")
 
       patch(api_v1x0_source_url(source.id), :params => {:name => "xyz"}.to_json, :headers => headers)
 

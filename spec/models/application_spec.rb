@@ -1,7 +1,7 @@
 RSpec.describe("Application") do
   describe "create!" do
     subject do
-      create(:application, source: source)
+      create(:application, :source => source)
     end
 
     context "when the application supports the given source type" do
@@ -13,7 +13,7 @@ RSpec.describe("Application") do
     end
 
     context "when the application does not support the given source type" do
-      let(:source) { create(:source, compatible: false) }
+      let(:source) { create(:source, :compatible => false) }
 
       it "should raise RecordInvalid" do
         expect do
