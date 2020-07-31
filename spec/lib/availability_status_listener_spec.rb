@@ -24,10 +24,7 @@ RSpec.describe AvailabilityStatusListener do
 
     context "when body contains valid resource_type and id" do
       let(:endpoint) do
-        source_type = SourceType.find_or_create_by!(:name => "amazon", :product_name => "Amazon Web Services", :vendor => "Amazon")
-        tenant = Tenant.create!(:external_tenant => SecureRandom.uuid)
-        source = Source.create!(:name => "my-source", :tenant => tenant, :source_type => source_type)
-        Endpoint.create!(:role => "first", :default => true, :tenant => tenant, :source => source)
+        create(:endpoint, :role => "first", :default => true)
       end
       let(:resource_type) { "endpoint" }
       let(:resource_id)   { endpoint.id.to_s }

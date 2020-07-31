@@ -11,6 +11,8 @@ RSpec.describe("v1.0 - Authentications") do
 
   let(:headers)         { {"CONTENT_TYPE" => "application/json", "x-rh-identity" => identity} }
   let(:collection_path) { "/api/v1.0/authentications" }
+
+  # Payload for the API request
   let(:payload) do
     {
       "username"      => "test_name",
@@ -32,7 +34,7 @@ RSpec.describe("v1.0 - Authentications") do
       end
 
       it "success: non-empty collection" do
-        Authentication.create!(payload.merge(:tenant => tenant))
+        create(:authentication, payload)
 
         get(collection_path, :headers => headers)
 
@@ -106,7 +108,7 @@ RSpec.describe("v1.0 - Authentications") do
 
     context "get" do
       it "success: with a valid id" do
-        instance = Authentication.create!(payload.merge(:tenant => tenant))
+        instance = create(:authentication, payload)
 
         get(instance_path(instance.id), :headers => headers)
 
@@ -117,7 +119,7 @@ RSpec.describe("v1.0 - Authentications") do
       end
 
       it "failure: with an invalid id" do
-        instance = Authentication.create!(payload.merge(:tenant => tenant))
+        instance = create(:authentication, payload)
 
         get(instance_path(instance.id * 1000), :headers => headers)
 
@@ -129,7 +131,7 @@ RSpec.describe("v1.0 - Authentications") do
     end
 
     context "patch" do
-      let(:instance) { Authentication.create!(payload.merge(:tenant => tenant)) }
+      let(:instance) { create(:authentication, payload) }
       it "success: with a valid id" do
         new_attributes = {"name" => "new name"}
         patch(instance_path(instance.id), :params => new_attributes.to_json, :headers => headers)

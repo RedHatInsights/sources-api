@@ -19,7 +19,7 @@ RSpec.describe("v1.0 - SourceTypes") do
       end
 
       it "success: non-empty collection" do
-        SourceType.create!(attributes)
+        create(:source_type, attributes)
 
         get(collection_path, :headers => headers)
 
@@ -76,7 +76,7 @@ RSpec.describe("v1.0 - SourceTypes") do
 
     context "get" do
       it "success: with a valid id" do
-        instance = SourceType.create!(attributes)
+        instance = create(:source_type, attributes)
 
         get(instance_path(instance.id), :headers => headers)
 
@@ -87,7 +87,7 @@ RSpec.describe("v1.0 - SourceTypes") do
       end
 
       it "failure: with an invalid id" do
-        instance = SourceType.create!(attributes)
+        instance = create(:source_type, attributes)
 
         get(instance_path(instance.id * 1000), :headers => headers)
 
@@ -106,7 +106,7 @@ RSpec.describe("v1.0 - SourceTypes") do
 
     context "get" do
       it "success: with a valid id" do
-        instance = SourceType.create!(attributes)
+        instance = create(:source_type, attributes)
 
         get(subcollection_path(instance.id, "sources"), :headers => headers)
 
@@ -117,7 +117,7 @@ RSpec.describe("v1.0 - SourceTypes") do
       end
 
       it "failure: with an invalid id" do
-        instance = SourceType.create!(attributes)
+        instance = create(:source_type, attributes)
         missing_id = (instance.id * 1000)
         expect(Source.exists?(missing_id)).to eq(false)
 
