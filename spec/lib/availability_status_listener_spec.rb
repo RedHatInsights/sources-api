@@ -5,14 +5,17 @@ RSpec.describe AvailabilityStatusListener do
   let(:status)     { "unavailable" }
   let(:reason)     { "host unreachable" }
   let(:now)        { Time.new(2020).utc }
+  let(:subject)    { described_class.new(:host => 'localhost', :port => 9092) }
 
   describe "#subscribe_to_availability_status" do
     let(:message) { ManageIQ::Messaging::ReceivedMessage.new(nil, event_type, payload, {}, nil, client) }
 
     before do
       allow(ManageIQ::Messaging::Client).to receive(:open).with(
-        :protocol => :Kafka,
-        :encoding => 'json'
+        :encoding => "json",
+        :host     => "localhost",
+        :port     => 9092,
+        :protocol => :Kafka
       ).and_yield(client)
 
       allow(client).to receive(:subscribe_topic).with(
@@ -99,6 +102,23 @@ RSpec.describe AvailabilityStatusListener do
 
         subject.subscribe_to_availability_status
       end
+    end
+  end
+
+  context "when kafka at localhost is not available" do
+    before do
+      allow(ManageIQ::Messaging::Client).to receive(:open).with(
+        :encoding => "json",
+        :host     => "localhost",
+        :port     => 9092,
+        :protocol => :Kafka
+      ).and_raise(Kafka::ConnectionError)
+    end
+
+    it "logs the error and exits" do
+      expect(Rails.logger).to receive(:error).once.with(/Cannot connect to Kafka/)
+
+      subject.subscribe_to_availability_status
     end
   end
 end
