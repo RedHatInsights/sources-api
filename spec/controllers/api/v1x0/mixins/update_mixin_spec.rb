@@ -5,7 +5,6 @@ describe Api::V1::Mixins::UpdateMixin do
     include ::Spec::Support::TenantIdentity
 
     let(:headers)     { {"CONTENT_TYPE" => "application/json", "x-rh-identity" => identity} }
-    let(:source_type) { SourceType.create!(:name => "openshift", :product_name => "OpenShift", :vendor => "Red Hat") }
     let(:client)      { instance_double("ManageIQ::Messaging::Client") }
 
     before do
@@ -14,7 +13,7 @@ describe Api::V1::Mixins::UpdateMixin do
     end
 
     it "patch /sources/:id updates a Source" do
-      source = Source.create!(:source_type => source_type, :tenant => tenant, :name => "abc", :uid => SecureRandom.uuid)
+      source = create(:source, :name => "abc")
 
       patch(api_v1x0_source_url(source.id), :params => {:name => "xyz"}.to_json, :headers => headers)
 

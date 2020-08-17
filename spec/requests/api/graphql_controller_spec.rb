@@ -1,7 +1,6 @@
 RSpec.describe("v1.0 - GraphQL") do
   include ::Spec::Support::TenantIdentity
-  let!(:source_type) { SourceType.create!(:name => "SourceType", :vendor => "Some Vendor", :product_name => "Product Name") }
-  let!(:source)      { Source.create!(:tenant_id => tenant.id, :name => "sample_source", :source_type => source_type, :uid => "123") }
+  let!(:source) { create(:source, :tenant => tenant, :name => "sample_source", :uid => "123") }
 
   let!(:graphql_source_query) { { "query" => "{ sources(id: \"#{source.id}\") { tenant } }" }.to_json }
 

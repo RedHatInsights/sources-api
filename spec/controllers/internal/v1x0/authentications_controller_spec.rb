@@ -1,10 +1,9 @@
 RSpec.describe Internal::V1x0::AuthenticationsController, :type => :request do
   include ::Spec::Support::TenantIdentity
+ 
   let(:headers)        { {"CONTENT_TYPE" => "application/json", "x-rh-identity" => identity} }
-  let(:authentication) { Authentication.create!(:resource => endpoint, :tenant => tenant, :password => "abcdefg") }
-  let(:endpoint)       { Endpoint.create!(:source => source, :tenant => tenant) }
-  let(:source)         { Source.create!(:source_type => source_type, :tenant => tenant, :uid => SecureRandom.uuid, :name => "test_source") }
-  let(:source_type)    { SourceType.create!(:name => "openshift", :product_name => "OpenShift", :vendor => "Red Hat") }
+  let(:authentication) { create(:authentication, :resource => endpoint, :password => "abcdefg") }
+  let(:endpoint)       { create(:endpoint) }
 
   it "GET an instance" do
     get(internal_v1x0_authentication_url(authentication.id), :headers => headers)
