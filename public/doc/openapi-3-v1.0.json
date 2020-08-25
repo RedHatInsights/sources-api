@@ -735,34 +735,6 @@
             }
           }
         }
-      },
-      "post": {
-        "summary": "Create a new SourceType",
-        "operationId": "createSourceType",
-        "description": "Creates a SourceType object",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/SourceType"
-              }
-            }
-          },
-          "description": "SourceType attributes to create",
-          "required": true
-        },
-        "responses": {
-          "201": {
-            "description": "SourceType creation successful",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/SourceType"
-                }
-              }
-            }
-          }
-        }
       }
     },
     "/source_types/{id}": {

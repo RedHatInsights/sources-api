@@ -80,7 +80,7 @@ Rails.application.routes.draw do
       resources :endpoints,         :only => [:create, :destroy, :index, :show, :update] do
         resources :authentications, :only => [:index]
       end
-      resources :source_types,    :only => [:create, :index, :show] do
+      resources :source_types,    :only => [:index, :show] do
         resources :sources, :only => [:index]
       end
       resources :sources,         :only => [:create, :destroy, :index, :show, :update] do
