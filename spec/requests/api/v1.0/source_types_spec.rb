@@ -29,44 +29,6 @@ RSpec.describe("v1.0 - SourceTypes") do
         )
       end
     end
-
-    context "post" do
-      let(:client) { instance_double("ManageIQ::Messaging::Client") }
-      before do
-        allow(client).to receive(:publish_topic)
-        allow(Sources::Api::Messaging).to receive(:client).and_return(client)
-      end
-
-      it "success: with valid body" do
-        post(collection_path, :params => attributes.to_json, :headers => headers)
-
-        expect(response).to have_attributes(
-          :status => 201,
-          :location => "http://www.example.com/api/v1.0/source_types/#{response.parsed_body["id"]}",
-          :parsed_body => a_hash_including(attributes)
-        )
-      end
-
-      it "failure: with extra attributes" do
-        post(collection_path, :params => attributes.merge("aaa" => "bbb").to_json, :headers => headers)
-
-        expect(response).to have_attributes(
-          :status => 400,
-          :location => nil,
-          :parsed_body => Insights::API::Common::ErrorDocument.new.add("400", "OpenAPIParser::NotExistPropertyDefinition: #/components/schemas/SourceType does not define properties: aaa").to_h
-        )
-      end
-
-      it "failure: with an invalid attribute value" do
-        post(collection_path, :params => attributes.merge("name" => 123).to_json, :headers => headers)
-
-        expect(response).to have_attributes(
-          :status      => 400,
-          :location    => nil,
-          :parsed_body => Insights::API::Common::ErrorDocument.new.add("400", "OpenAPIParser::ValidateError: #/components/schemas/SourceType/properties/name expected string, but received Integer: 123").to_h
-        )
-      end
-    end
   end
 
   describe("/api/v1.0/source_types/:id") do
