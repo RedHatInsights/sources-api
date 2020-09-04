@@ -75,7 +75,7 @@ amazon:
   :vendor: Amazon
   :icon_url: "/apps/frontend-assets/partners-icons/aws-long.svg"
 ansible-tower:
-  :product_name: Ansible Tower
+  :product_name: Red Hat Ansible Automation Platform
   :vendor: Red Hat
   :icon_url: "/apps/frontend-assets/platform-logos/ansible-automation-platform.svg"
   :schema:
@@ -102,7 +102,7 @@ ansible-tower:
         :validate:
         - :type: required
     :endpoint:
-      :title: Configure Ansible Tower endpoint
+      :title: Ansible Tower endpoint
       :fields:
       - :component: text-field
         :name: endpoint.role
@@ -191,7 +191,7 @@ openshift:
         :validate:
         - :type: required
     :endpoint:
-      :title: Configure OpenShift endpoint
+      :title: OpenShift endpoint
       :fields:
       - :component: text-field
         :name: endpoint.role
@@ -242,7 +242,7 @@ satellite:
         :validate:
         - :type: required
     :endpoint:
-      :title: Configure Red Hat Satellite endpoint
+      :title: Red Hat Satellite endpoint
       :fields:
       - :component: text-field
         :name: endpoint.receptor_node
