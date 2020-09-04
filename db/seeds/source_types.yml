@@ -75,7 +75,7 @@ amazon:
   :vendor: Amazon
   :icon_url: "/apps/frontend-assets/partners-icons/aws-long.svg"
 ansible-tower:
-  :product_name: Ansible Tower
+  :product_name: Red Hat Ansible Automation Platform
   :vendor: Red Hat
   :icon_url: "/apps/frontend-assets/platform-logos/ansible-automation-platform.svg"
   :schema:
