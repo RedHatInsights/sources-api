@@ -26,7 +26,7 @@ amazon:
         :hideField: true
         :initializeOnMount: true
         :initialValue: arn
-      - :name: billing_source.bucket
+      - :name: billing_source.data_source.bucket
         :stepKey: amazon-arn-additional-step
         :component: text-field
         :label: S3 bucket name
