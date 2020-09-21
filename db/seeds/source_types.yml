@@ -19,7 +19,7 @@ amazon:
         :label: Secret key
         :type: password
     - :type: arn
-      :name: ARN
+      :name: Cost Management ARN
       :fields:
       - :component: text-field
         :name: authentication.authtype
