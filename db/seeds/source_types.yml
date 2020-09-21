@@ -27,7 +27,7 @@ amazon:
         :initializeOnMount: true
         :initialValue: arn
       - :name: billing_source.data_source.bucket
-        :stepKey: amazon-arn-additional-step
+        :stepKey: cost-management
         :component: text-field
         :label: S3 bucket name
         :isRequired: true
