@@ -17,8 +17,7 @@ module Sources
       end
 
       cache_with_timeout(:topics) do
-        # TODO add an interface to ManageIQ::Messaging::Client to get a topic list
-        client.send(:kafka_client)&.topics || []
+        client.topics || []
       end
     end
   end

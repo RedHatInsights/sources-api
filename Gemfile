@@ -8,7 +8,7 @@ gem 'insights-api-common',  '~> 4.0'
 gem 'jbuilder',             '~> 2.0'
 gem 'json-schema',          '~> 2.8'
 gem 'manageiq-loggers',     '~> 0.4', ">= 0.4.2"
-gem 'manageiq-messaging',   '~> 0.1.6', :require => false
+gem 'manageiq-messaging',   '~> 1.0.0'
 gem 'manageiq-password',    '~> 0.2', ">= 0.2.1"
 gem 'more_core_extensions', '~> 3.5'
 gem 'pg',                   '~> 1.0', :require => false
