@@ -214,14 +214,6 @@ openshift:
           :is: true
   :vendor: Red Hat
   :icon_url: "/apps/frontend-assets/platform-logos/openshift-container-platform.svg"
-openstack:
-  :product_name: Red Hat OpenStack
-  :vendor: Red Hat
-  :icon_url: "/apps/chrome/assets/images/platform-icons/openstack.svg"
-ovirt:
-  :product_name: Red Hat Virtualization
-  :vendor: Red Hat
-  :icon_url: "/apps/chrome/assets/images/platform-icons/ovirt.svg"
 satellite:
   :product_name: Red Hat Satellite
   :vendor: Red Hat
@@ -253,7 +245,3 @@ satellite:
         :initializeOnMount: true
         :initialValue: satellite
   :icon_url: "/apps/frontend-assets/platform-logos/satellite.svg"
-vsphere:
-  :product_name: VMware vSphere
-  :vendor: VMware
-  :icon_url: "/apps/chrome/assets/images/partners-icons/vmware.svg"
