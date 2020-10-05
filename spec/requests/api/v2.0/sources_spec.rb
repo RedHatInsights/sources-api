@@ -343,7 +343,6 @@ RSpec.describe("v2.0 - Sources") do
 
   describe("/api/v2.0/sources/:id/check_availability") do
     let(:messaging_client)  { double("Sources::Api::Messaging") }
-    let(:kafka_client)      { double("Kafka::Client") }
     let(:openshift_topic)   { "platform.topological-inventory.operations-openshift" }
     let(:amazon_topic)      { "platform.topological-inventory.operations-amazon" }
 
@@ -353,11 +352,8 @@ RSpec.describe("v2.0 - Sources") do
 
     before do
       allow(messaging_client).to receive(:publish_topic)
-      allow(messaging_client).to receive(:kafka_client).and_return(kafka_client)
-
       allow(Sources::Api::Messaging).to receive(:client).and_return(messaging_client)
-
-      allow(kafka_client).to receive(:topics).and_return(
+      allow(Sources::Api::Messaging).to receive(:topics).and_return(
         [
           "platform.topological-inventory.operations-amazon",
           "platform.topological-inventory.operations-openshift",
