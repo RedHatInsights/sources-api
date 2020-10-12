@@ -1,4 +1,4 @@
-if Rails.env != "test" && ENV['METRICS_PORT'].to_i != 0
+if Rails.env != "test" && ENV['METRICS_PORT'].to_s != '0'
   require 'prometheus_exporter/middleware'
 
   # This reports stats per request like HTTP status and timings
