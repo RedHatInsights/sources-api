@@ -4,8 +4,7 @@ class ApplicationController < ActionController::API
   include Insights::API::Common::ApplicationControllerMixins::ExceptionHandling
   include Insights::API::Common::ApplicationControllerMixins::RequestBodyValidation
   include Insights::API::Common::ApplicationControllerMixins::RequestPath
-
-  class RbacError < StandardError; end
+  include Pundit
 
   BLACKLIST_PARAMS = [:tenant].freeze
 
@@ -44,7 +43,6 @@ class ApplicationController < ActionController::API
     Insights::API::Common::Request.with_request(request) do |current|
       begin
         if Tenant.tenancy_enabled? && current.required_auth?
-          validate_request_allowed!(current)
           validate_request_entitled!(current)
 
           tenant = Tenant.find_or_create_by(:external_tenant => current.tenant)
@@ -58,19 +56,8 @@ class ApplicationController < ActionController::API
       rescue Insights::API::Common::EntitlementError
         error_document = Insights::API::Common::ErrorDocument.new.add('403', 'Forbidden')
         render :json => error_document.to_h, :status => error_document.status
-      rescue RbacError
-        error_document = Insights::API::Common::ErrorDocument.new.add('403', 'Forbidden due to Rbac')
-        render :json => error_document.to_h, :status => error_document.status
       end
     end
-  end
-
-  def request_is_readonly?
-    [:get, :head, :options].include?(request.request_method_symbol)
-  end
-
-  def request_is_create?
-    request.request_method_symbol == :post
   end
 
   def validate_request_entitled!(current)
@@ -78,21 +65,6 @@ class ApplicationController < ActionController::API
     return if required_entitlements.any? { |e| current.entitlement.send(e) }
 
     raise Insights::API::Common::EntitlementError
-  end
-
-  def validate_request_allowed!(current)
-    return unless Insights::API::Common::RBAC::Access.enabled?
-
-    return if request_is_readonly?
-
-    # If the request is using a machine credential we want to allow creates so that Satellite type
-    # sources able to be auto-registered with this service
-    return if request_is_create? && current.system.present?
-
-    # Otherwise only allow Org Admins to create/update/delete
-    return if current.user&.org_admin?
-
-    raise RbacError
   end
 
   def instance_link(instance)
@@ -207,5 +179,9 @@ class ApplicationController < ActionController::API
 
   def params_for_update
     body_params.permit(*api_doc_definition.all_attributes - api_doc_definition.read_only_attributes)
+  end
+
+  def pundit_user
+    Insights::API::Common::Request.current!
   end
 end

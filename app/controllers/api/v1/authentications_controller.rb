@@ -7,7 +7,9 @@ module Api
       include Api::V1::Mixins::UpdateMixin
 
       def create
-        authentication = model.create!(params_for_create)
+        authentication = Authentication.new(params_for_create).tap { |auth| authorize(auth) }
+        authentication.save!
+
         raise_event("#{model}.create", authentication.as_json)
         render :json => authentication, :status => :created, :location => instance_link(authentication)
       end

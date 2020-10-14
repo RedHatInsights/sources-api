@@ -7,7 +7,9 @@ module Api
       include Api::V1::Mixins::UpdateMixin
 
       def create
-        endpoint = Endpoint.create!(params_for_create)
+        endpoint = Endpoint.new(params_for_create).tap { |endpt| authorize(endpt) }
+        endpoint.save!
+
         raise_event("#{model}.create", endpoint.as_json)
         render :json => endpoint, :status => :created, :location => instance_link(endpoint)
       end

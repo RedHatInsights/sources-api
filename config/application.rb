@@ -40,6 +40,7 @@ module Sources
     #
     config.autoload_paths << Rails.root.join("app", "models", "mixins").to_s
     config.autoload_paths << Rails.root.join("app", "controllers", "mixins").to_s
+    config.autoload_paths << Rails.root.join("app", "policies", "mixins").to_s
     config.autoload_paths << Rails.root.join("lib").to_s
 
     config.log_level = (ENV['RAILS_LOG_LEVEL'] || 'debug').downcase.to_sym
