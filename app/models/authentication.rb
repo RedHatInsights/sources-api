@@ -6,7 +6,7 @@ class Authentication < ApplicationRecord
 
   belongs_to :resource, :polymorphic => true
 
-  has_many :application_authentications
+  has_many :application_authentications, :dependent => :destroy
   has_many :applications, :through => :application_authentications
 
   attribute :availability_status, :string
