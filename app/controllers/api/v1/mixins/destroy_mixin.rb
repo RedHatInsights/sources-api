@@ -3,7 +3,10 @@ module Api
     module Mixins
       module DestroyMixin
         def destroy
-          model.destroy(params.require(:id))
+          record = model.find(params.require(:id))
+          authorize(record)
+
+          record.destroy
           head :no_content
         end
       end
