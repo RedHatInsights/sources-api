@@ -2,9 +2,9 @@
 version: '2'
 prepare:
   fetch:
-  - url: https://raw.githubusercontent.com/ManageIQ/guides/master/.rubocop_base.yml
+  - url: https://raw.githubusercontent.com/RedHatInsights/insights-api-common-rails/master/.rubocop_base.yml
     path: ".rubocop_base.yml"
-  - url: https://raw.githubusercontent.com/ManageIQ/guides/master/.rubocop_cc_base.yml
+  - url: https://raw.githubusercontent.com/RedHatInsights/insights-api-common-rails/master/.rubocop_cc_base.yml
     path: ".rubocop_cc_base.yml"
 checks:
   argument-count:
