@@ -411,12 +411,6 @@ RSpec.describe("v3.0 - Sources") do
     before do
       allow(messaging_client).to receive(:publish_topic)
       allow(Sources::Api::Messaging).to receive(:client).and_return(messaging_client)
-      allow(Sources::Api::Messaging).to receive(:topics).and_return(
-        [
-          "platform.topological-inventory.operations-amazon",
-          "platform.topological-inventory.operations-openshift",
-        ]
-      )
     end
 
     context "post" do
@@ -480,7 +474,6 @@ RSpec.describe("v3.0 - Sources") do
         attributes  = {"name" => "my_source", "source_type_id" => source_type.id.to_s}
         source      = create(:source, attributes.merge("tenant" => tenant))
 
-        expect(messaging_client).not_to receive(:publish_topic)
         post(check_availability_path(source.id), :headers => headers)
 
         expect(response).to have_attributes(
