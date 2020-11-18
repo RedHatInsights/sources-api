@@ -12,7 +12,8 @@ module Api
       def create
         source_data = params_for_create
         source_data["uid"] = SecureRandom.uuid if source_data["uid"].nil?
-        source = Source.create!(source_data)
+        source = Source.new(source_data).tap { |src| authorize(src) }
+        source.save!
 
         raise_event("#{model}.create", source.as_json)
 

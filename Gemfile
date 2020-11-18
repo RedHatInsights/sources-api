@@ -13,13 +13,15 @@ gem 'manageiq-password',    '~> 0.2', ">= 0.2.1"
 gem 'more_core_extensions', '~> 3.5'
 gem 'pg',                   '~> 1.0', :require => false
 gem 'puma',                 '~> 4.3.5', '>= 4.3.5'
+gem 'pundit',               '~> 2.1'
 gem 'rack-cors',            '>= 1.1.1', '~> 1.1'
 gem 'rails',                '~> 5.2.2'
 gem 'sprockets',            '~> 4.0'
 
 group :development, :test do
-  gem 'rubocop',             '~>0.69.0', :require => false
-  gem 'rubocop-performance', '~>1.3',    :require => false
+  gem "rubocop",             "~> 1.0.0", :require => false
+  gem "rubocop-performance", "~> 1.8",   :require => false
+  gem "rubocop-rails",       "~> 2.8",   :require => false
   gem 'simplecov', '~> 0.17.1'
 end
 

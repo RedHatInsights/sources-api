@@ -3,7 +3,10 @@ module Api
     module Mixins
       module UpdateMixin
         def update
-          record = model.update(params.require(:id), params_for_update)
+          record = model.find(params.require(:id))
+          authorize(record)
+
+          record.update!(params_for_update)
           raise_event("#{model}.update", record.as_json)
           head :no_content
         end
