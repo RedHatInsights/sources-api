@@ -189,19 +189,6 @@ RSpec.describe ApplicationController, :type => :request do
       expect(response.status).to eq(200)
     end
 
-    it "rejects PATCH request with tenancy enforcement and user not as org_admin" do
-      headers = {
-        "CONTENT_TYPE"  => "application/json",
-        "x-rh-identity" => Base64.encode64(
-          { "identity" => { "account_number" => external_tenant, "user" => { "is_org_admin" => false }}}.to_json
-        )
-      }
-
-      patch("/api/v1.0/sources/#{source.id}", :params => { "name" => "updated_name" }.to_json, :headers => headers)
-
-      expect(response.status).to eq(403)
-    end
-
     it "accepts HEAD request with tenancy enforcement and user not as org_admin" do
       headers = {
         "CONTENT_TYPE"  => "application/json",

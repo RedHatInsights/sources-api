@@ -30,10 +30,12 @@ class DefaultPolicy
   alias delete? destroy?
 
   def admin?
-    return true unless Insights::API::Common::RBAC::Access.enabled?
+    return true unless Sources::RBAC::Access.enabled?
 
-    user.system.present? || user.user&.org_admin?
+    user.system.present? || user.user&.org_admin? || write_access?
   end
+
+  delegate :write_access?, :to => Sources::RBAC::Access
 
   class Scope
     attr_reader :user, :scope
