@@ -1638,6 +1638,9 @@
             "example": "Endpoint",
             "type": "string"
           },
+          "source_id": {
+            "$ref": "#/components/schemas/ID"
+          },
           "status": {
             "example": "valid",
             "type": "string"

@@ -6,6 +6,7 @@ class Source < ApplicationRecord
   has_many :applications, :dependent => :destroy
   has_many :application_types, :through => :applications
   has_many :endpoints, :autosave => true, :dependent => :destroy
+  has_many :authentications
 
   attribute :availability_status, :string
   validates :availability_status, :inclusion => { :in => %w[available partially_available unavailable] }, :allow_nil => true
