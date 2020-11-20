@@ -38,6 +38,7 @@ Rails.application.routes.draw do
         post "check_availability", :to => "sources#check_availability", :action => "check_availability"
         resources :application_types, :only => [:index]
         resources :applications,      :only => [:index]
+        resources :authentications,   :only => [:index]
         resources :endpoints,         :only => [:index]
       end
     end
@@ -64,6 +65,7 @@ Rails.application.routes.draw do
         post "check_availability", :to => "sources#check_availability", :action => "check_availability"
         resources :application_types, :only => [:index]
         resources :applications,      :only => [:index]
+        resources :authentications,   :only => [:index]
         resources :endpoints,         :only => [:index]
       end
     end
@@ -87,6 +89,7 @@ Rails.application.routes.draw do
         post "check_availability", :to => "sources#check_availability", :action => "check_availability"
         resources :application_types, :only => [:index]
         resources :applications,      :only => [:index]
+        resources :authentications,   :only => [:index]
         resources :endpoints,         :only => [:index]
       end
     end

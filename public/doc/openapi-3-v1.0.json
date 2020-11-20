@@ -1068,6 +1068,52 @@
         }
       }
     },
+    "/sources/{id}/authentications": {
+      "get": {
+        "summary": "List Authentications for Source",
+        "operationId": "listSourceAuthentications",
+        "description": "Returns an array of Authentication objects",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/QueryLimit"
+          },
+          {
+            "$ref": "#/components/parameters/QueryOffset"
+          },
+          {
+            "$ref": "#/components/parameters/QueryFilter"
+          },
+          {
+            "$ref": "#/components/parameters/QuerySortBy"
+          },
+          {
+            "$ref": "#/components/parameters/ID"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Authentications collection",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthenticationsCollection"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorNotFound"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/sources/{id}/check_availability": {
       "post": {
         "summary": "Checks Availability of a Source",
@@ -1385,6 +1431,9 @@
           "resource_type": {
             "example": "Endpoint",
             "type": "string"
+          },
+          "source_id": {
+            "$ref": "#/components/schemas/ID"
           },
           "status": {
             "example": "valid",
