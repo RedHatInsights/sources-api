@@ -11,7 +11,7 @@ module Sources
         end
 
         def access
-          @access ||= Insights::API::Common::RBAC::Access.new.process
+          Insights::API::Common::RBAC::Access.new.process
         end
       end
     end
