@@ -18,7 +18,7 @@ data:
       "editable": true,
       "gnetId": null,
       "graphTooltip": 0,
-      "iteration": 1606837284906,
+      "iteration": 1606928796069,
       "links": [],
       "panels": [
         {
@@ -87,7 +87,7 @@ data:
           "pluginVersion": "7.1.0",
           "timeFrom": null,
           "timeShift": null,
-          "title": "Restarts count / chosen range",
+          "title": "Restarts Count",
           "type": "text"
         },
         {
@@ -254,7 +254,7 @@ data:
                 "h": 6,
                 "w": 24,
                 "x": 0,
-                "y": 2
+                "y": 6
               },
               "hiddenSeries": false,
               "id": 18,
@@ -333,7 +333,7 @@ data:
               }
             }
           ],
-          "title": "Kafka lag",
+          "title": "Kafka Lag",
           "type": "row"
         },
         {
@@ -347,7 +347,7 @@ data:
           },
           "id": 20,
           "panels": [],
-          "title": "Sources API Request duration",
+          "title": "Sources API Requests Duration",
           "type": "row"
         },
         {
@@ -426,7 +426,7 @@ data:
           "timeFrom": null,
           "timeRegions": [],
           "timeShift": null,
-          "title": "Request duration",
+          "title": "Request Duration",
           "tooltip": {
             "shared": true,
             "sort": 0,
@@ -610,7 +610,7 @@ data:
                 "h": 7,
                 "w": 12,
                 "x": 0,
-                "y": 15
+                "y": 8
               },
               "hiddenSeries": false,
               "id": 24,
@@ -652,7 +652,7 @@ data:
               "timeFrom": null,
               "timeRegions": [],
               "timeShift": null,
-              "title": "Requests count / s",
+              "title": "Requests / s",
               "tooltip": {
                 "shared": true,
                 "sort": 0,
@@ -707,7 +707,7 @@ data:
                 "h": 7,
                 "w": 12,
                 "x": 12,
-                "y": 15
+                "y": 8
               },
               "hiddenSeries": false,
               "id": 28,
@@ -785,7 +785,7 @@ data:
               }
             }
           ],
-          "title": "Sources API Request counter",
+          "title": "Sources API Requests Count",
           "type": "row"
         },
         {
@@ -818,7 +818,7 @@ data:
                 "h": 6,
                 "w": 12,
                 "x": 0,
-                "y": 5
+                "y": 16
               },
               "hiddenSeries": false,
               "id": 30,
@@ -915,7 +915,7 @@ data:
                 "h": 6,
                 "w": 12,
                 "x": 12,
-                "y": 5
+                "y": 16
               },
               "hiddenSeries": false,
               "id": 32,
@@ -1084,7 +1084,7 @@ data:
       "timezone": "",
       "title": "Sources",
       "uid": "zxZKNnAMz",
-      "version": 4
+      "version": 5
     }
 kind: ConfigMap
 metadata:
