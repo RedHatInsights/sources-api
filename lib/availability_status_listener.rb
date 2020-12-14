@@ -38,25 +38,26 @@ class AvailabilityStatusListener
     Rails.logger.info("Kafka message #{event.message} received with payload: #{event.payload}")
     return unless event.message == EVENT_AVAILABILITY_STATUS
 
-    model_class = event.payload["resource_type"].classify.constantize
+    payload = JSON.parse(event.payload)
+    model_class = payload["resource_type"].classify.constantize
     validate_resource_type(model_class)
-    record_id = event.payload["resource_id"]
+    record_id = payload["resource_id"]
     object = model_class.find(record_id)
     options = {
-      :availability_status       => event.payload["status"],
-      :availability_status_error => event.payload["error"],
-      :last_checked_at           => Time.now.utc
+      :availability_status => payload["status"],
+      :last_checked_at     => Time.now.utc
     }
+    options[:availability_status_error] = payload["error"] if %(Endpoint Application).include?(model_class.name)
     options[:last_available_at] = options[:last_checked_at] if options[:availability_status] == 'available'
 
     object.update!(options)
     raise_event("#{model_class}.update", object.as_json)
   rescue NameError
-    Rails.logger.error("Invalid resource_type #{event.payload["resource_type"]}")
+    Rails.logger.error("Invalid resource_type #{payload["resource_type"]}")
   rescue ActiveRecord::RecordNotFound
     Rails.logger.error("Could not find #{model_class} with id #{record_id}")
   rescue ActiveRecord::RecordInvalid
-    Rails.logger.error("Invalid status #{event.payload["status"]}")
+    Rails.logger.error("Invalid status #{payload["status"]}")
   rescue => e
     Rails.logger.error(["Something is wrong when processing Kafka message: ", e.message, *e.backtrace].join($RS))
   end
