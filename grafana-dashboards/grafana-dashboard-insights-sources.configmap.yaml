@@ -1006,8 +1006,8 @@ data:
           {
             "current": {
               "selected": false,
-              "text": "crc-stg-01-prometheus",
-              "value": "crc-stg-01-prometheus"
+              "text": "crcs02ue1-prometheus",
+              "value": "crcs02ue1-prometheus"
             },
             "hide": 0,
             "includeAll": false,
@@ -1018,7 +1018,7 @@ data:
             "query": "prometheus",
             "queryValue": "",
             "refresh": 1,
-            "regex": "/(crcp01ue1|crc-stg-01)-prometheus/",
+            "regex": "/(crcp01ue1|crcs02ue1)-prometheus/",
             "skipUrlSync": false,
             "type": "datasource"
           },
@@ -1084,7 +1084,7 @@ data:
       "timezone": "",
       "title": "Sources",
       "uid": "zxZKNnAMz",
-      "version": 5
+      "version": 6
     }
 kind: ConfigMap
 metadata:
