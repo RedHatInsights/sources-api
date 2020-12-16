@@ -18,7 +18,7 @@ data:
       "editable": true,
       "gnetId": null,
       "graphTooltip": 0,
-      "iteration": 1606928796069,
+      "iteration": 1608116046168,
       "links": [],
       "panels": [
         {
@@ -224,7 +224,7 @@ data:
           "type": "stat"
         },
         {
-          "collapsed": true,
+          "collapsed": false,
           "datasource": null,
           "gridPos": {
             "h": 1,
@@ -233,6 +233,118 @@ data:
             "y": 5
           },
           "id": 10,
+          "panels": [],
+          "title": "Kafka Lag",
+          "type": "row"
+        },
+        {
+          "aliasColors": {},
+          "bars": false,
+          "dashLength": 10,
+          "dashes": false,
+          "datasource": "$Datasource",
+          "description": "",
+          "fieldConfig": {
+            "defaults": {
+              "custom": {},
+              "links": []
+            },
+            "overrides": []
+          },
+          "fill": 1,
+          "fillGradient": 0,
+          "gridPos": {
+            "h": 6,
+            "w": 24,
+            "x": 0,
+            "y": 6
+          },
+          "hiddenSeries": false,
+          "id": 18,
+          "interval": "",
+          "legend": {
+            "avg": false,
+            "current": false,
+            "max": false,
+            "min": false,
+            "show": true,
+            "total": false,
+            "values": false
+          },
+          "lines": true,
+          "linewidth": 1,
+          "nullPointMode": "null",
+          "options": {
+            "alertThreshold": true
+          },
+          "percentage": false,
+          "pluginVersion": "7.2.1",
+          "pointradius": 2,
+          "points": false,
+          "renderer": "flot",
+          "seriesOverrides": [],
+          "spaceLength": 10,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [
+            {
+              "expr": "sum(kafka_consumergroup_group_lag{topic=~'platform.sources..*'}) by (group, topic)",
+              "interval": "",
+              "legendFormat": "{{topic}}/{{group}}",
+              "refId": "A"
+            }
+          ],
+          "thresholds": [],
+          "timeFrom": null,
+          "timeRegions": [],
+          "timeShift": null,
+          "title": "Kafka lag",
+          "tooltip": {
+            "shared": true,
+            "sort": 0,
+            "value_type": "individual"
+          },
+          "type": "graph",
+          "xaxis": {
+            "buckets": null,
+            "mode": "time",
+            "name": null,
+            "show": true,
+            "values": []
+          },
+          "yaxes": [
+            {
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            },
+            {
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            }
+          ],
+          "yaxis": {
+            "align": false,
+            "alignLevel": null
+          }
+        },
+        {
+          "collapsed": true,
+          "datasource": null,
+          "gridPos": {
+            "h": 1,
+            "w": 24,
+            "x": 0,
+            "y": 12
+          },
+          "id": 20,
           "panels": [
             {
               "aliasColors": {},
@@ -243,22 +355,37 @@ data:
               "description": "",
               "fieldConfig": {
                 "defaults": {
-                  "custom": {},
-                  "links": []
+                  "custom": {
+                    "align": null,
+                    "filterable": false
+                  },
+                  "mappings": [],
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "color": "green",
+                        "value": null
+                      },
+                      {
+                        "color": "red",
+                        "value": 80
+                      }
+                    ]
+                  }
                 },
                 "overrides": []
               },
               "fill": 1,
               "fillGradient": 0,
               "gridPos": {
-                "h": 6,
-                "w": 24,
+                "h": 7,
+                "w": 12,
                 "x": 0,
-                "y": 6
+                "y": 7
               },
               "hiddenSeries": false,
-              "id": 18,
-              "interval": "",
+              "id": 22,
               "legend": {
                 "avg": false,
                 "current": false,
@@ -285,9 +412,9 @@ data:
               "steppedLine": false,
               "targets": [
                 {
-                  "expr": "sum(kafka_consumergroup_group_lag{topic=~'platform.sources..*'}) by (group, topic)",
+                  "expr": "rate(sources_api_http_duration_seconds_sum{controller!=\"status\",controller=~\"$controller\",action=~\"$action\"}[5m]) / rate(sources_api_http_duration_seconds_count{controller!=\"status\",controller=~\"$controller\",action=~\"$action\"}[5m]) * 1000 > 0",
                   "interval": "",
-                  "legendFormat": "{{topic}}/{{group}}",
+                  "legendFormat": "{{controller}}/{{action}}",
                   "refId": "A"
                 }
               ],
@@ -295,7 +422,7 @@ data:
               "timeFrom": null,
               "timeRegions": [],
               "timeShift": null,
-              "title": "Kafka lag",
+              "title": "Request Duration",
               "tooltip": {
                 "shared": true,
                 "sort": 0,
@@ -311,7 +438,7 @@ data:
               },
               "yaxes": [
                 {
-                  "format": "short",
+                  "format": "ms",
                   "label": null,
                   "logBase": 1,
                   "max": null,
@@ -331,253 +458,126 @@ data:
                 "align": false,
                 "alignLevel": null
               }
+            },
+            {
+              "aliasColors": {},
+              "bars": false,
+              "dashLength": 10,
+              "dashes": false,
+              "datasource": "$Datasource",
+              "description": "",
+              "fieldConfig": {
+                "defaults": {
+                  "custom": {},
+                  "links": []
+                },
+                "overrides": []
+              },
+              "fill": 1,
+              "fillGradient": 0,
+              "gridPos": {
+                "h": 7,
+                "w": 12,
+                "x": 12,
+                "y": 7
+              },
+              "hiddenSeries": false,
+              "id": 26,
+              "legend": {
+                "avg": false,
+                "current": false,
+                "max": false,
+                "min": false,
+                "show": true,
+                "total": false,
+                "values": false
+              },
+              "lines": true,
+              "linewidth": 1,
+              "nullPointMode": "null",
+              "options": {
+                "alertThreshold": true
+              },
+              "percentage": false,
+              "pluginVersion": "7.2.1",
+              "pointradius": 2,
+              "points": false,
+              "renderer": "flot",
+              "seriesOverrides": [],
+              "spaceLength": 10,
+              "stack": false,
+              "steppedLine": false,
+              "targets": [
+                {
+                  "expr": "max(rate(sources_api_http_duration_seconds_sum{controller!=\"status\",controller=~\"$controller\",action=~\"$action\"}[5m]) / rate(sources_api_http_duration_seconds_count{controller!=\"status\",controller=~\"$controller\",action=~\"$action\"}[5m]) > 0)",
+                  "interval": "",
+                  "legendFormat": "Max Request",
+                  "refId": "A"
+                },
+                {
+                  "expr": "max(rate(sources_api_http_sql_duration_seconds_sum{controller!=\"status\",controller=~\"$controller\",action=~\"$action\"}[5m]) / rate(sources_inventory_api_http_sql_duration_seconds_count{controller!=\"status\",controller=~\"$controller\",action=~\"$action\"}[5m]) > 0)",
+                  "interval": "",
+                  "legendFormat": "Max SQL",
+                  "refId": "B"
+                },
+                {
+                  "expr": "avg(rate(sources_api_http_duration_seconds_sum{controller!=\"status\",controller=~\"$controller\",action=~\"$action\"}[5m]) / rate(sources_api_http_duration_seconds_count{controller!=\"status\",controller=~\"$controller\",action=~\"$action\"}[5m]) > 0)",
+                  "interval": "",
+                  "legendFormat": "Avg Request",
+                  "refId": "C"
+                },
+                {
+                  "expr": "avg(rate(sources_api_http_sql_duration_seconds_sum{controller!=\"status\",controller=~\"$controller\",action=~\"$action\"}[5m]) / rate(sources_inventory_api_http_sql_duration_seconds_count{controller!=\"status\",controller=~\"$controller\",action=~\"$action\"}[5m]) > 0)",
+                  "interval": "",
+                  "legendFormat": "Avg SQL",
+                  "refId": "D"
+                }
+              ],
+              "thresholds": [],
+              "timeFrom": null,
+              "timeRegions": [],
+              "timeShift": null,
+              "title": "Avg/Max Request Duration",
+              "tooltip": {
+                "shared": true,
+                "sort": 0,
+                "value_type": "individual"
+              },
+              "type": "graph",
+              "xaxis": {
+                "buckets": null,
+                "mode": "time",
+                "name": null,
+                "show": true,
+                "values": []
+              },
+              "yaxes": [
+                {
+                  "decimals": null,
+                  "format": "s",
+                  "label": "",
+                  "logBase": 1,
+                  "max": null,
+                  "min": "0",
+                  "show": true
+                },
+                {
+                  "format": "short",
+                  "label": null,
+                  "logBase": 1,
+                  "max": null,
+                  "min": null,
+                  "show": true
+                }
+              ],
+              "yaxis": {
+                "align": false,
+                "alignLevel": null
+              }
             }
           ],
-          "title": "Kafka Lag",
-          "type": "row"
-        },
-        {
-          "collapsed": false,
-          "datasource": null,
-          "gridPos": {
-            "h": 1,
-            "w": 24,
-            "x": 0,
-            "y": 6
-          },
-          "id": 20,
-          "panels": [],
           "title": "Sources API Requests Duration",
           "type": "row"
-        },
-        {
-          "aliasColors": {},
-          "bars": false,
-          "dashLength": 10,
-          "dashes": false,
-          "datasource": "$Datasource",
-          "description": "",
-          "fieldConfig": {
-            "defaults": {
-              "custom": {
-                "align": null,
-                "filterable": false
-              },
-              "mappings": [],
-              "thresholds": {
-                "mode": "absolute",
-                "steps": [
-                  {
-                    "color": "green",
-                    "value": null
-                  },
-                  {
-                    "color": "red",
-                    "value": 80
-                  }
-                ]
-              }
-            },
-            "overrides": []
-          },
-          "fill": 1,
-          "fillGradient": 0,
-          "gridPos": {
-            "h": 7,
-            "w": 12,
-            "x": 0,
-            "y": 7
-          },
-          "hiddenSeries": false,
-          "id": 22,
-          "legend": {
-            "avg": false,
-            "current": false,
-            "max": false,
-            "min": false,
-            "show": true,
-            "total": false,
-            "values": false
-          },
-          "lines": true,
-          "linewidth": 1,
-          "nullPointMode": "null",
-          "options": {
-            "alertThreshold": true
-          },
-          "percentage": false,
-          "pluginVersion": "7.2.1",
-          "pointradius": 2,
-          "points": false,
-          "renderer": "flot",
-          "seriesOverrides": [],
-          "spaceLength": 10,
-          "stack": false,
-          "steppedLine": false,
-          "targets": [
-            {
-              "expr": "rate(sources_api_http_duration_seconds_sum{controller!=\"status\",controller=~\"$controller\",action=~\"$action\"}[5m]) / rate(sources_api_http_duration_seconds_count{controller!=\"status\",controller=~\"$controller\",action=~\"$action\"}[5m]) * 1000 > 0",
-              "interval": "",
-              "legendFormat": "{{controller}}/{{action}}",
-              "refId": "A"
-            }
-          ],
-          "thresholds": [],
-          "timeFrom": null,
-          "timeRegions": [],
-          "timeShift": null,
-          "title": "Request Duration",
-          "tooltip": {
-            "shared": true,
-            "sort": 0,
-            "value_type": "individual"
-          },
-          "type": "graph",
-          "xaxis": {
-            "buckets": null,
-            "mode": "time",
-            "name": null,
-            "show": true,
-            "values": []
-          },
-          "yaxes": [
-            {
-              "format": "ms",
-              "label": null,
-              "logBase": 1,
-              "max": null,
-              "min": null,
-              "show": true
-            },
-            {
-              "format": "short",
-              "label": null,
-              "logBase": 1,
-              "max": null,
-              "min": null,
-              "show": true
-            }
-          ],
-          "yaxis": {
-            "align": false,
-            "alignLevel": null
-          }
-        },
-        {
-          "aliasColors": {},
-          "bars": false,
-          "dashLength": 10,
-          "dashes": false,
-          "datasource": "$Datasource",
-          "description": "",
-          "fieldConfig": {
-            "defaults": {
-              "custom": {},
-              "links": []
-            },
-            "overrides": []
-          },
-          "fill": 1,
-          "fillGradient": 0,
-          "gridPos": {
-            "h": 7,
-            "w": 12,
-            "x": 12,
-            "y": 7
-          },
-          "hiddenSeries": false,
-          "id": 26,
-          "legend": {
-            "avg": false,
-            "current": false,
-            "max": false,
-            "min": false,
-            "show": true,
-            "total": false,
-            "values": false
-          },
-          "lines": true,
-          "linewidth": 1,
-          "nullPointMode": "null",
-          "options": {
-            "alertThreshold": true
-          },
-          "percentage": false,
-          "pluginVersion": "7.2.1",
-          "pointradius": 2,
-          "points": false,
-          "renderer": "flot",
-          "seriesOverrides": [],
-          "spaceLength": 10,
-          "stack": false,
-          "steppedLine": false,
-          "targets": [
-            {
-              "expr": "max(rate(sources_api_http_duration_seconds_sum{controller!=\"status\",controller=~\"$controller\",action=~\"$action\"}[5m]) / rate(sources_api_http_duration_seconds_count{controller!=\"status\",controller=~\"$controller\",action=~\"$action\"}[5m]) > 0)",
-              "interval": "",
-              "legendFormat": "Max Request",
-              "refId": "A"
-            },
-            {
-              "expr": "max(rate(sources_api_http_sql_duration_seconds_sum{controller!=\"status\",controller=~\"$controller\",action=~\"$action\"}[5m]) / rate(sources_inventory_api_http_sql_duration_seconds_count{controller!=\"status\",controller=~\"$controller\",action=~\"$action\"}[5m]) > 0)",
-              "interval": "",
-              "legendFormat": "Max SQL",
-              "refId": "B"
-            },
-            {
-              "expr": "avg(rate(sources_api_http_duration_seconds_sum{controller!=\"status\",controller=~\"$controller\",action=~\"$action\"}[5m]) / rate(sources_api_http_duration_seconds_count{controller!=\"status\",controller=~\"$controller\",action=~\"$action\"}[5m]) > 0)",
-              "interval": "",
-              "legendFormat": "Avg Request",
-              "refId": "C"
-            },
-            {
-              "expr": "avg(rate(sources_api_http_sql_duration_seconds_sum{controller!=\"status\",controller=~\"$controller\",action=~\"$action\"}[5m]) / rate(sources_inventory_api_http_sql_duration_seconds_count{controller!=\"status\",controller=~\"$controller\",action=~\"$action\"}[5m]) > 0)",
-              "interval": "",
-              "legendFormat": "Avg SQL",
-              "refId": "D"
-            }
-          ],
-          "thresholds": [],
-          "timeFrom": null,
-          "timeRegions": [],
-          "timeShift": null,
-          "title": "Avg/Max Request Duration",
-          "tooltip": {
-            "shared": true,
-            "sort": 0,
-            "value_type": "individual"
-          },
-          "type": "graph",
-          "xaxis": {
-            "buckets": null,
-            "mode": "time",
-            "name": null,
-            "show": true,
-            "values": []
-          },
-          "yaxes": [
-            {
-              "decimals": null,
-              "format": "s",
-              "label": "",
-              "logBase": 1,
-              "max": null,
-              "min": "0",
-              "show": true
-            },
-            {
-              "format": "short",
-              "label": null,
-              "logBase": 1,
-              "max": null,
-              "min": null,
-              "show": true
-            }
-          ],
-          "yaxis": {
-            "align": false,
-            "alignLevel": null
-          }
         },
         {
           "collapsed": true,
@@ -586,7 +586,7 @@ data:
             "h": 1,
             "w": 24,
             "x": 0,
-            "y": 14
+            "y": 13
           },
           "id": 34,
           "panels": [
@@ -795,7 +795,7 @@ data:
             "h": 1,
             "w": 24,
             "x": 0,
-            "y": 15
+            "y": 14
           },
           "id": 36,
           "panels": [
@@ -996,6 +996,879 @@ data:
           ],
           "title": "Sources API CPU & Memory",
           "type": "row"
+        },
+        {
+          "collapsed": true,
+          "datasource": null,
+          "gridPos": {
+            "h": 1,
+            "w": 24,
+            "x": 0,
+            "y": 15
+          },
+          "id": 38,
+          "panels": [
+            {
+              "aliasColors": {},
+              "bars": false,
+              "dashLength": 10,
+              "dashes": false,
+              "datasource": "$DatasourceRDS",
+              "fieldConfig": {
+                "defaults": {
+                  "custom": {}
+                },
+                "overrides": []
+              },
+              "fill": 1,
+              "fillGradient": 0,
+              "gridPos": {
+                "h": 8,
+                "w": 12,
+                "x": 0,
+                "y": 6
+              },
+              "hiddenSeries": false,
+              "id": 40,
+              "legend": {
+                "avg": false,
+                "current": false,
+                "max": false,
+                "min": false,
+                "show": true,
+                "total": false,
+                "values": false
+              },
+              "lines": true,
+              "linewidth": 1,
+              "nullPointMode": "null",
+              "options": {
+                "alertThreshold": true
+              },
+              "percentage": false,
+              "pluginVersion": "7.2.1",
+              "pointradius": 2,
+              "points": false,
+              "renderer": "flot",
+              "seriesOverrides": [],
+              "spaceLength": 10,
+              "stack": false,
+              "steppedLine": false,
+              "targets": [
+                {
+                  "expr": "sum(aws_rds_database_connections_average{dbinstance_identifier=\"$namespace\"})",
+                  "interval": "",
+                  "legendFormat": "Connections",
+                  "refId": "A"
+                }
+              ],
+              "thresholds": [],
+              "timeFrom": null,
+              "timeRegions": [],
+              "timeShift": null,
+              "title": "RDS database connections average",
+              "tooltip": {
+                "shared": true,
+                "sort": 0,
+                "value_type": "individual"
+              },
+              "type": "graph",
+              "xaxis": {
+                "buckets": null,
+                "mode": "time",
+                "name": null,
+                "show": true,
+                "values": []
+              },
+              "yaxes": [
+                {
+                  "format": "short",
+                  "label": null,
+                  "logBase": 1,
+                  "max": null,
+                  "min": null,
+                  "show": true
+                },
+                {
+                  "format": "short",
+                  "label": null,
+                  "logBase": 1,
+                  "max": null,
+                  "min": null,
+                  "show": true
+                }
+              ],
+              "yaxis": {
+                "align": false,
+                "alignLevel": null
+              }
+            },
+            {
+              "aliasColors": {},
+              "bars": false,
+              "dashLength": 10,
+              "dashes": false,
+              "datasource": "$DatasourceRDS",
+              "description": "",
+              "fieldConfig": {
+                "defaults": {
+                  "custom": {}
+                },
+                "overrides": []
+              },
+              "fill": 1,
+              "fillGradient": 0,
+              "gridPos": {
+                "h": 8,
+                "w": 12,
+                "x": 12,
+                "y": 6
+              },
+              "hiddenSeries": false,
+              "id": 42,
+              "legend": {
+                "avg": false,
+                "current": false,
+                "max": false,
+                "min": false,
+                "show": true,
+                "total": false,
+                "values": false
+              },
+              "lines": true,
+              "linewidth": 1,
+              "nullPointMode": "null",
+              "options": {
+                "alertThreshold": true
+              },
+              "percentage": false,
+              "pluginVersion": "7.2.1",
+              "pointradius": 2,
+              "points": false,
+              "renderer": "flot",
+              "seriesOverrides": [],
+              "spaceLength": 10,
+              "stack": false,
+              "steppedLine": false,
+              "targets": [
+                {
+                  "expr": "sum(aws_rds_cpuutilization_average{dbinstance_identifier=\"$namespace\"})",
+                  "hide": false,
+                  "interval": "",
+                  "legendFormat": "CPU utilization average",
+                  "refId": "A"
+                },
+                {
+                  "expr": "sum(rdsosmetrics_cpuUtilization_total{exported_instance=\"$namespace\"})",
+                  "hide": false,
+                  "instant": false,
+                  "interval": "",
+                  "legendFormat": "OS Metrics Total Util",
+                  "refId": "B"
+                },
+                {
+                  "expr": "sum(rdsosmetrics_cpuUtilization_system{exported_instance=\"$namespace\"})",
+                  "interval": "",
+                  "legendFormat": "OS Metrics System Util",
+                  "refId": "C"
+                }
+              ],
+              "thresholds": [],
+              "timeFrom": null,
+              "timeRegions": [],
+              "timeShift": null,
+              "title": "RDS CPU Utilization",
+              "tooltip": {
+                "shared": true,
+                "sort": 0,
+                "value_type": "individual"
+              },
+              "type": "graph",
+              "xaxis": {
+                "buckets": null,
+                "mode": "time",
+                "name": null,
+                "show": true,
+                "values": []
+              },
+              "yaxes": [
+                {
+                  "format": "short",
+                  "label": null,
+                  "logBase": 1,
+                  "max": null,
+                  "min": null,
+                  "show": true
+                },
+                {
+                  "format": "short",
+                  "label": null,
+                  "logBase": 1,
+                  "max": null,
+                  "min": null,
+                  "show": true
+                }
+              ],
+              "yaxis": {
+                "align": false,
+                "alignLevel": null
+              }
+            },
+            {
+              "aliasColors": {},
+              "bars": false,
+              "dashLength": 10,
+              "dashes": false,
+              "datasource": "$DatasourceRDS",
+              "fieldConfig": {
+                "defaults": {
+                  "custom": {}
+                },
+                "overrides": []
+              },
+              "fill": 1,
+              "fillGradient": 0,
+              "gridPos": {
+                "h": 8,
+                "w": 12,
+                "x": 0,
+                "y": 14
+              },
+              "hiddenSeries": false,
+              "id": 44,
+              "legend": {
+                "avg": false,
+                "current": false,
+                "max": false,
+                "min": false,
+                "show": true,
+                "total": false,
+                "values": false
+              },
+              "lines": true,
+              "linewidth": 1,
+              "nullPointMode": "null",
+              "options": {
+                "alertThreshold": true
+              },
+              "percentage": false,
+              "pluginVersion": "7.2.1",
+              "pointradius": 2,
+              "points": false,
+              "renderer": "flot",
+              "seriesOverrides": [],
+              "spaceLength": 10,
+              "stack": false,
+              "steppedLine": false,
+              "targets": [
+                {
+                  "expr": "max(rdsosmetrics_fileSys_total{exported_instance=\"$namespace\", mount_point=\"/rdsdbdata\"})",
+                  "interval": "",
+                  "legendFormat": "Storage total ",
+                  "refId": "A"
+                },
+                {
+                  "expr": "max(rdsosmetrics_fileSys_used{exported_instance=\"$namespace\", mount_point=\"/rdsdbdata\"})",
+                  "interval": "",
+                  "legendFormat": "Storage used",
+                  "refId": "B"
+                }
+              ],
+              "thresholds": [],
+              "timeFrom": null,
+              "timeRegions": [],
+              "timeShift": null,
+              "title": "RDS storage space",
+              "tooltip": {
+                "shared": true,
+                "sort": 0,
+                "value_type": "individual"
+              },
+              "type": "graph",
+              "xaxis": {
+                "buckets": null,
+                "mode": "time",
+                "name": null,
+                "show": true,
+                "values": []
+              },
+              "yaxes": [
+                {
+                  "format": "short",
+                  "label": null,
+                  "logBase": 1,
+                  "max": null,
+                  "min": null,
+                  "show": true
+                },
+                {
+                  "format": "short",
+                  "label": null,
+                  "logBase": 1,
+                  "max": null,
+                  "min": null,
+                  "show": true
+                }
+              ],
+              "yaxis": {
+                "align": false,
+                "alignLevel": null
+              }
+            },
+            {
+              "aliasColors": {},
+              "bars": false,
+              "dashLength": 10,
+              "dashes": false,
+              "datasource": "$DatasourceRDS",
+              "fieldConfig": {
+                "defaults": {
+                  "custom": {},
+                  "links": []
+                },
+                "overrides": []
+              },
+              "fill": 1,
+              "fillGradient": 0,
+              "gridPos": {
+                "h": 8,
+                "w": 12,
+                "x": 12,
+                "y": 14
+              },
+              "hiddenSeries": false,
+              "id": 46,
+              "legend": {
+                "avg": false,
+                "current": false,
+                "max": false,
+                "min": false,
+                "show": true,
+                "total": false,
+                "values": false
+              },
+              "lines": true,
+              "linewidth": 1,
+              "nullPointMode": "null",
+              "options": {
+                "alertThreshold": true
+              },
+              "percentage": false,
+              "pluginVersion": "7.2.1",
+              "pointradius": 2,
+              "points": false,
+              "renderer": "flot",
+              "seriesOverrides": [],
+              "spaceLength": 10,
+              "stack": false,
+              "steppedLine": false,
+              "targets": [
+                {
+                  "expr": "max(rdsosmetrics_memory_total{exported_instance=\"$namespace\"})",
+                  "interval": "",
+                  "legendFormat": "Memory total",
+                  "refId": "A"
+                },
+                {
+                  "expr": "max(rdsosmetrics_memory_free{exported_instance=\"$namespace\"})",
+                  "interval": "",
+                  "legendFormat": "Memory free",
+                  "refId": "B"
+                },
+                {
+                  "expr": "max(rdsosmetrics_memory_cached{exported_instance=\"$namespace\"})",
+                  "interval": "",
+                  "legendFormat": "Memory cached",
+                  "refId": "C"
+                },
+                {
+                  "expr": "max(rdsosmetrics_memory_buffers{exported_instance=\"$namespace\"})",
+                  "interval": "",
+                  "legendFormat": "Memory buffers",
+                  "refId": "D"
+                },
+                {
+                  "expr": "max(rdsosmetrics_memory_active{exported_instance=\"$namespace\"})",
+                  "interval": "",
+                  "legendFormat": "Memory active",
+                  "refId": "E"
+                }
+              ],
+              "thresholds": [],
+              "timeFrom": null,
+              "timeRegions": [],
+              "timeShift": null,
+              "title": "RDS memory",
+              "tooltip": {
+                "shared": true,
+                "sort": 0,
+                "value_type": "individual"
+              },
+              "type": "graph",
+              "xaxis": {
+                "buckets": null,
+                "mode": "time",
+                "name": null,
+                "show": true,
+                "values": []
+              },
+              "yaxes": [
+                {
+                  "format": "deckbytes",
+                  "label": null,
+                  "logBase": 1,
+                  "max": null,
+                  "min": null,
+                  "show": true
+                },
+                {
+                  "format": "short",
+                  "label": null,
+                  "logBase": 1,
+                  "max": null,
+                  "min": null,
+                  "show": true
+                }
+              ],
+              "yaxis": {
+                "align": false,
+                "alignLevel": null
+              }
+            },
+            {
+              "aliasColors": {},
+              "bars": false,
+              "dashLength": 10,
+              "dashes": false,
+              "datasource": "$DatasourceRDS",
+              "fieldConfig": {
+                "defaults": {
+                  "custom": {},
+                  "links": []
+                },
+                "overrides": []
+              },
+              "fill": 1,
+              "fillGradient": 0,
+              "gridPos": {
+                "h": 8,
+                "w": 12,
+                "x": 0,
+                "y": 22
+              },
+              "hiddenSeries": false,
+              "id": 48,
+              "legend": {
+                "avg": false,
+                "current": false,
+                "max": false,
+                "min": false,
+                "show": true,
+                "total": false,
+                "values": false
+              },
+              "lines": true,
+              "linewidth": 1,
+              "nullPointMode": "null",
+              "options": {
+                "alertThreshold": true
+              },
+              "percentage": false,
+              "pluginVersion": "7.2.1",
+              "pointradius": 2,
+              "points": false,
+              "renderer": "flot",
+              "seriesOverrides": [],
+              "spaceLength": 10,
+              "stack": false,
+              "steppedLine": false,
+              "targets": [
+                {
+                  "expr": "max(rdsosmetrics_tasks_sleeping{exported_instance=\"$namespace\"})",
+                  "interval": "",
+                  "legendFormat": "Tasks sleeping",
+                  "refId": "A"
+                },
+                {
+                  "expr": "max(rdsosmetrics_tasks_running{exported_instance=\"$namespace\"})",
+                  "interval": "",
+                  "legendFormat": "Tasks running",
+                  "refId": "B"
+                },
+                {
+                  "expr": "max(rdsosmetrics_tasks_blocked{exported_instance=\"$namespace\"})",
+                  "hide": false,
+                  "interval": "",
+                  "legendFormat": "Tasks blocked",
+                  "refId": "C"
+                },
+                {
+                  "expr": "max(rdsosmetrics_tasks_stopped{exported_instance=\"$namespace\"})",
+                  "hide": false,
+                  "interval": "",
+                  "legendFormat": "Tasks stopped",
+                  "refId": "D"
+                },
+                {
+                  "expr": "max(rdsosmetrics_tasks_total{exported_instance=\"$namespace\"})",
+                  "hide": false,
+                  "interval": "",
+                  "legendFormat": "Tasks total",
+                  "refId": "E"
+                },
+                {
+                  "expr": "max(rdsosmetrics_tasks_zombie{exported_instance=\"$namespace\"})",
+                  "hide": false,
+                  "interval": "",
+                  "legendFormat": "Tasks zombie",
+                  "refId": "F"
+                }
+              ],
+              "thresholds": [],
+              "timeFrom": null,
+              "timeRegions": [],
+              "timeShift": null,
+              "title": "RDS tasks",
+              "tooltip": {
+                "shared": true,
+                "sort": 0,
+                "value_type": "individual"
+              },
+              "type": "graph",
+              "xaxis": {
+                "buckets": null,
+                "mode": "time",
+                "name": null,
+                "show": true,
+                "values": []
+              },
+              "yaxes": [
+                {
+                  "format": "short",
+                  "label": null,
+                  "logBase": 1,
+                  "max": null,
+                  "min": null,
+                  "show": true
+                },
+                {
+                  "format": "short",
+                  "label": null,
+                  "logBase": 1,
+                  "max": null,
+                  "min": null,
+                  "show": true
+                }
+              ],
+              "yaxis": {
+                "align": false,
+                "alignLevel": null
+              }
+            },
+            {
+              "aliasColors": {},
+              "bars": false,
+              "dashLength": 10,
+              "dashes": false,
+              "datasource": "$DatasourceRDS",
+              "fieldConfig": {
+                "defaults": {
+                  "custom": {},
+                  "links": []
+                },
+                "overrides": []
+              },
+              "fill": 1,
+              "fillGradient": 0,
+              "gridPos": {
+                "h": 8,
+                "w": 12,
+                "x": 12,
+                "y": 22
+              },
+              "hiddenSeries": false,
+              "id": 50,
+              "legend": {
+                "avg": false,
+                "current": false,
+                "max": false,
+                "min": false,
+                "show": true,
+                "total": false,
+                "values": false
+              },
+              "lines": true,
+              "linewidth": 1,
+              "nullPointMode": "null",
+              "options": {
+                "alertThreshold": true
+              },
+              "percentage": false,
+              "pluginVersion": "7.2.1",
+              "pointradius": 2,
+              "points": false,
+              "renderer": "flot",
+              "seriesOverrides": [],
+              "spaceLength": 10,
+              "stack": false,
+              "steppedLine": false,
+              "targets": [
+                {
+                  "expr": "max(rdsosmetrics_diskIO_util{exported_instance=\"$namespace\"}) by (device)",
+                  "interval": "",
+                  "legendFormat": "Device: {{device}}",
+                  "refId": "A"
+                }
+              ],
+              "thresholds": [],
+              "timeFrom": null,
+              "timeRegions": [],
+              "timeShift": null,
+              "title": "RDS DIsk IO util",
+              "tooltip": {
+                "shared": true,
+                "sort": 0,
+                "value_type": "individual"
+              },
+              "type": "graph",
+              "xaxis": {
+                "buckets": null,
+                "mode": "time",
+                "name": null,
+                "show": true,
+                "values": []
+              },
+              "yaxes": [
+                {
+                  "format": "percent",
+                  "label": null,
+                  "logBase": 1,
+                  "max": null,
+                  "min": null,
+                  "show": true
+                },
+                {
+                  "format": "short",
+                  "label": null,
+                  "logBase": 1,
+                  "max": null,
+                  "min": null,
+                  "show": true
+                }
+              ],
+              "yaxis": {
+                "align": false,
+                "alignLevel": null
+              }
+            },
+            {
+              "aliasColors": {},
+              "bars": false,
+              "dashLength": 10,
+              "dashes": false,
+              "datasource": "$DatasourceRDS",
+              "fieldConfig": {
+                "defaults": {
+                  "custom": {},
+                  "links": []
+                },
+                "overrides": []
+              },
+              "fill": 1,
+              "fillGradient": 0,
+              "gridPos": {
+                "h": 8,
+                "w": 12,
+                "x": 0,
+                "y": 30
+              },
+              "hiddenSeries": false,
+              "id": 52,
+              "legend": {
+                "avg": false,
+                "current": false,
+                "max": false,
+                "min": false,
+                "show": true,
+                "total": false,
+                "values": false
+              },
+              "lines": true,
+              "linewidth": 1,
+              "nullPointMode": "null",
+              "options": {
+                "alertThreshold": true
+              },
+              "percentage": false,
+              "pluginVersion": "7.2.1",
+              "pointradius": 2,
+              "points": false,
+              "renderer": "flot",
+              "seriesOverrides": [],
+              "spaceLength": 10,
+              "stack": false,
+              "steppedLine": false,
+              "targets": [
+                {
+                  "expr": "max(rdsosmetrics_network_rx{exported_instance=\"$namespace\"})",
+                  "interval": "",
+                  "legendFormat": "Network receive",
+                  "refId": "A"
+                },
+                {
+                  "expr": "max(rdsosmetrics_network_tx{exported_instance=\"$namespace\"})",
+                  "interval": "",
+                  "legendFormat": "Network transmit",
+                  "refId": "B"
+                }
+              ],
+              "thresholds": [],
+              "timeFrom": null,
+              "timeRegions": [],
+              "timeShift": null,
+              "title": "RDS network",
+              "tooltip": {
+                "shared": true,
+                "sort": 0,
+                "value_type": "individual"
+              },
+              "type": "graph",
+              "xaxis": {
+                "buckets": null,
+                "mode": "time",
+                "name": null,
+                "show": true,
+                "values": []
+              },
+              "yaxes": [
+                {
+                  "format": "binBps",
+                  "label": null,
+                  "logBase": 1,
+                  "max": null,
+                  "min": null,
+                  "show": true
+                },
+                {
+                  "format": "short",
+                  "label": null,
+                  "logBase": 1,
+                  "max": null,
+                  "min": null,
+                  "show": true
+                }
+              ],
+              "yaxis": {
+                "align": false,
+                "alignLevel": null
+              }
+            },
+            {
+              "aliasColors": {},
+              "bars": false,
+              "dashLength": 10,
+              "dashes": false,
+              "datasource": "$DatasourceRDS",
+              "fieldConfig": {
+                "defaults": {
+                  "custom": {},
+                  "links": []
+                },
+                "overrides": []
+              },
+              "fill": 1,
+              "fillGradient": 0,
+              "gridPos": {
+                "h": 8,
+                "w": 12,
+                "x": 12,
+                "y": 30
+              },
+              "hiddenSeries": false,
+              "id": 54,
+              "legend": {
+                "avg": false,
+                "current": false,
+                "max": false,
+                "min": false,
+                "show": true,
+                "total": false,
+                "values": false
+              },
+              "lines": true,
+              "linewidth": 1,
+              "nullPointMode": "null",
+              "options": {
+                "alertThreshold": true
+              },
+              "percentage": false,
+              "pluginVersion": "7.2.1",
+              "pointradius": 2,
+              "points": false,
+              "renderer": "flot",
+              "seriesOverrides": [],
+              "spaceLength": 10,
+              "stack": false,
+              "steppedLine": false,
+              "targets": [
+                {
+                  "expr": "max(aws_rds_read_latency_average{dbinstance_identifier=\"$namespace\"})",
+                  "hide": false,
+                  "interval": "",
+                  "legendFormat": "Read Latency Average",
+                  "refId": "A"
+                },
+                {
+                  "expr": "max(aws_rds_write_latency_average{dbinstance_identifier=\"$namespace\"})",
+                  "interval": "",
+                  "legendFormat": "Write Latency Average",
+                  "refId": "B"
+                }
+              ],
+              "thresholds": [],
+              "timeFrom": null,
+              "timeRegions": [],
+              "timeShift": null,
+              "title": "RDS latency average",
+              "tooltip": {
+                "shared": true,
+                "sort": 0,
+                "value_type": "individual"
+              },
+              "type": "graph",
+              "xaxis": {
+                "buckets": null,
+                "mode": "time",
+                "name": null,
+                "show": true,
+                "values": []
+              },
+              "yaxes": [
+                {
+                  "format": "short",
+                  "label": null,
+                  "logBase": 1,
+                  "max": null,
+                  "min": null,
+                  "show": true
+                },
+                {
+                  "format": "short",
+                  "label": null,
+                  "logBase": 1,
+                  "max": null,
+                  "min": null,
+                  "show": true
+                }
+              ],
+              "yaxis": {
+                "align": false,
+                "alignLevel": null
+              }
+            }
+          ],
+          "title": "RDS Database",
+          "type": "row"
         }
       ],
       "schemaVersion": 26,
@@ -1005,9 +1878,9 @@ data:
         "list": [
           {
             "current": {
-              "selected": false,
-              "text": "crcs02ue1-prometheus",
-              "value": "crcs02ue1-prometheus"
+              "selected": true,
+              "text": "crcp01ue1-prometheus",
+              "value": "crcp01ue1-prometheus"
             },
             "hide": 0,
             "includeAll": false,
@@ -1125,14 +1998,14 @@ data:
         ]
       },
       "time": {
-        "from": "now-1h",
+        "from": "now-24h",
         "to": "now"
       },
       "timepicker": {},
       "timezone": "",
       "title": "Sources",
       "uid": "zxZKNnAMz",
-      "version": 7
+      "version": 8
     }
 kind: ConfigMap
 metadata:
