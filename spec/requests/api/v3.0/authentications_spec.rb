@@ -11,12 +11,14 @@ RSpec.describe("v3.0 - Authentications") do
 
   let(:headers)         { {"CONTENT_TYPE" => "application/json", "x-rh-identity" => identity} }
   let(:collection_path) { "/api/v3.0/authentications" }
+  let(:application) { create(:application, :tenant => tenant) }
+
   let(:payload) do
     {
       "username"      => "test_name",
       "password"      => "Test Password",
-      "resource_type" => "Tenant",
-      "resource_id"   => tenant.id.to_s
+      "resource_type" => "Application",
+      "resource_id"   => application.id.to_s
     }
   end
 
@@ -112,7 +114,7 @@ RSpec.describe("v3.0 - Authentications") do
 
         expect(response).to have_attributes(
           :status => 200,
-          :parsed_body => payload.except("password").merge("id" => instance.id.to_s, "tenant" => tenant.external_tenant)
+          :parsed_body => payload.except("password").merge("id" => instance.id.to_s, "tenant" => tenant.external_tenant, "source_id" => application.source_id.to_s)
         )
       end
 
