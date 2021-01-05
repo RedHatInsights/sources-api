@@ -18,3 +18,4 @@
 /tmp/
 /public/doc/*.jar
 /public/doc/openapi*generator.yaml
+/grafana-dashboards/*.json

@@ -1452,6 +1452,9 @@
             "readOnly": true,
             "type": "string"
           },
+          "extra": {
+            "type": "object"
+          },
           "id": {
             "$ref": "#/components/schemas/ID"
           },

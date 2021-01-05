@@ -26,7 +26,7 @@ module Api
 
         logger.info("Initiating Source#availability_check [#{{"source_id" => source.id, "topic" => topic}}]")
 
-        if Sources::Api::Messaging.topics.include?(topic)
+        begin
           logger.debug("Publishing message for Source#availability_check [#{{"source_id" => source.id, "topic" => topic}}]")
 
           Sources::Api::Messaging.client.publish_topic(
@@ -43,8 +43,8 @@ module Api
           )
 
           logger.debug("Publishing message for Source#availability_check [#{{"source_id" => source.id, "topic" => topic}}]...Complete")
-        else
-          logger.error("Not publishing message to non-existing topic: Source#availability_check [#{{"source_id" => source.id, "topic" => topic}}]")
+        rescue e
+          logger.error("Hit error attempting to publish [#{{"source_id" => source.id, "topic" => topic}}] during Source#availability_check: #{e.message}")
         end
 
         check_application_availability(source)

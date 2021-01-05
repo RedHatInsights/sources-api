@@ -13,10 +13,6 @@ module Sources
           :encoding => "json"
         )
       end
-
-      cache_with_timeout(:topics) do
-        client.topics || []
-      end
     end
   end
 end

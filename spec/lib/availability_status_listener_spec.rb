@@ -1,7 +1,7 @@
 RSpec.describe AvailabilityStatusListener do
   let(:client)     { double(:client) }
   let(:event_type) { AvailabilityStatusListener::EVENT_AVAILABILITY_STATUS }
-  let(:payload)    { {"resource_type" => resource_type, "resource_id" => resource_id, "status" => status, "error" => reason} }
+  let(:payload)    { {"resource_type" => resource_type, "resource_id" => resource_id, "status" => status, "error" => reason}.to_json }
   let(:status)     { "unavailable" }
   let(:reason)     { "host unreachable" }
   let(:now)        { Time.new(2020).utc }
