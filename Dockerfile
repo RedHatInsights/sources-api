@@ -20,8 +20,8 @@ ENV WORKDIR /opt/sources-api/
 ENV RAILS_ROOT $WORKDIR
 WORKDIR $WORKDIR
 
-COPY docker-assets/librdkafka-1.5.0.tar.gz /tmp/librdkafka.tar.gz
-RUN cd /tmp && tar -xf /tmp/librdkafka.tar.gz && cd librdkafka-1.5.0 && \
+COPY docker-assets/librdkafka-1.5.3.tar.gz /tmp/librdkafka.tar.gz
+RUN cd /tmp && tar -xf /tmp/librdkafka.tar.gz && cd librdkafka-1.5.3 && \
     ./configure --prefix=/usr && \
     make -j2 && make install && \
     rm -rf /tmp/librdkafka*
