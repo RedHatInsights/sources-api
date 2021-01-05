@@ -1,6 +1,7 @@
 class Application < ApplicationRecord
   include TenancyConcern
   include EventConcern
+  include AvailabilityStatusConcern
 
   belongs_to :source
   belongs_to :application_type
