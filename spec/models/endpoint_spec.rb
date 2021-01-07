@@ -1,5 +1,13 @@
+require "models/shared/availability_status.rb"
+
 describe Endpoint do
   include ::Spec::Support::TenantIdentity
+
+  it_behaves_like "availability_status" do
+    let!(:record)    { create(:endpoint, :source => create(:source)) }
+    let!(:update)    { {:path => 'new_path'} }
+    let!(:no_update) { {:path => record.path} }
+  end
 
   describe "#base_url_path" do
     let(:endpoint) { described_class.new(:host => "www.example.com", :port => 1234, :scheme => "https") }

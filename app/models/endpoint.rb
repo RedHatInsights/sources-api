@@ -1,6 +1,7 @@
 class Endpoint < ApplicationRecord
   include TenancyConcern
   include EventConcern
+  include AvailabilityStatusConcern
   belongs_to :source
 
   has_many   :authentications, :as => :resource, :dependent => :destroy
