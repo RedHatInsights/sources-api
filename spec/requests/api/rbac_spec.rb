@@ -53,7 +53,7 @@ describe("RBAC requests") do
         expect(response).to have_attributes(
           :status      => 403,
           :location    => nil,
-          :parsed_body => {"errors"=>[{"status" => "403", "detail" => "You are not authorized to create this source"}]}
+          :parsed_body => {"errors"=>[{"status" => "403", "detail" => "You are not authorized to perform the create action for this source"}]}
         )
       end
     end
