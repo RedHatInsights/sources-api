@@ -4,6 +4,7 @@ class ApplicationController < ActionController::API
   include Insights::API::Common::ApplicationControllerMixins::ExceptionHandling
   include Insights::API::Common::ApplicationControllerMixins::RequestBodyValidation
   include Insights::API::Common::ApplicationControllerMixins::RequestPath
+  include Insights::API::Common::ApplicationControllerMixins::Parameters
   include Pundit
 
   BLACKLIST_PARAMS = [:tenant].freeze
@@ -175,10 +176,6 @@ class ApplicationController < ActionController::API
 
   def query_sort_by
     safe_params_for_list[:sort_by]
-  end
-
-  def params_for_update
-    body_params.permit(*api_doc_definition.all_attributes - api_doc_definition.read_only_attributes)
   end
 
   def pundit_user
