@@ -123,6 +123,34 @@ ansible-tower:
         :condition:
           :when: endpoint.verify_ssl
           :is: true
+google:
+  :product_name: Google Cloud Engine
+  :vendor: Google
+  :icon_url: "/apps/chrome/assets/images/partners-icons/google-cloud-engine.svg" # TODO
+  :schema:
+    :authentication:
+    - :type: username_password
+      :name: Project ID and Service Account JSON
+      :fields:
+      - :component: text-field
+        :name: authentication.authtype
+        :hideField: true
+        :initializeOnMount: true
+        :initialValue: username_password
+      - :component: text-field
+        :name: authentication.username
+        :label: Project ID
+      - :component: textarea
+        :name: authentication.password
+        :label: Service Account JSON
+    :endpoint:
+      :hidden: true
+      :fields:
+      - :component: text-field
+        :name: endpoint.role
+        :hideField: true
+        :initializeOnMount: true
+        :initialValue: google
 azure:
   :product_name: Microsoft Azure
   :vendor: Azure
