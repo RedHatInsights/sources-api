@@ -1,0 +1,117 @@
+---
+"/insights/platform/cost-management":
+  steps:
+  - step: 1
+    name: s3
+    payload:
+      bucket_name: S3
+    substitutions:
+      S3: gen_s3_name
+  - step: 2
+    name: policy
+    payload:
+      {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+            "Sid": "VisualEditor0",
+            "Effect": "Allow",
+            "Action": [
+              "s3:Get*",
+              "s3:List*"
+            ],
+            "Resource": [
+              "arn:aws:s3:::S3BUCKET",
+              "arn:aws:s3:::S3BUCKET/*"
+            ]
+          },
+          {
+            "Sid": "VisualEditor1",
+            "Effect": "Allow",
+            "Action": [
+              "s3:HeadBucket",
+              "cur:DescribeReportDefinitions"
+            ],
+            "Resource": "*"
+          }
+        ]
+      }
+    substitutions:
+    - S3BUCKET: s3
+  - step: 3
+    name: role
+    payload:
+      {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+            "Effect": "Allow",
+            "Principal": {
+              "AWS": "arn:aws:iam::ACCOUNT:root"
+            },
+            "Action": "sts:AssumeRole",
+            "Condition": {}
+          }
+        ]
+      }
+    substitutions:
+    - ACCOUNT: get_account
+  - step: 3
+    name: bind_role
+    payload: {}
+    substitutions: []
+
+"/insights/platform/cloud-meter":
+  steps:
+  - step: 1
+    name: policy
+    payload:
+      {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+            "Sid": "CloudigradePolicy",
+            "Effect": "Allow",
+            "Action": [
+              "ec2:DescribeImages",
+              "ec2:DescribeInstances",
+              "ec2:ModifySnapshotAttribute",
+              "ec2:DescribeSnapshotAttribute",
+              "ec2:DescribeSnapshots",
+              "ec2:CopyImage",
+              "ec2:CreateTags",
+              "ec2:DescribeRegions",
+              "cloudtrail:CreateTrail",
+              "cloudtrail:UpdateTrail",
+              "cloudtrail:PutEventSelectors",
+              "cloudtrail:DescribeTrails",
+              "cloudtrail:StartLogging",
+              "cloudtrail:DeleteTrail"
+            ],
+            "Resource": "*"
+          }
+        ]
+      }
+    substitutions: []
+  - step: 2
+    name: role
+    payload:
+      {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+            "Effect": "Allow",
+            "Principal": {
+              "AWS": "arn:aws:iam::ACCOUNT:root"
+            },
+            "Action": "sts:AssumeRole",
+            "Condition": {}
+          }
+        ]
+      }
+    substitutions:
+      ACCOUNT: get_account
+  - step: 3
+    name: bind_role
+    payload: {}
+    substitutions: []
