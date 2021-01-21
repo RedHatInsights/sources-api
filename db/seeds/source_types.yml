@@ -35,7 +35,7 @@ amazon:
         - :type: required
         - :type: pattern
           :pattern: "^[A-Za-z0-9]+[A-Za-z0-9_-]*$"
-      - :name: authentication.password
+      - :name: authentication.username
         :stepKey: arn
         :component: text-field
         :label: ARN
@@ -54,7 +54,7 @@ amazon:
         :hideField: true
         :initializeOnMount: true
         :initialValue: cloud-meter-arn
-      - :name: authentication.password
+      - :name: authentication.username
         :component: text-field
         :label: ARN
         :isRequired: true
