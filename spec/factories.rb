@@ -69,4 +69,11 @@ FactoryBot.define do
     description     { "Test tenant" }
     external_tenant { rand(1000).to_s }
   end
+
+  factory :app_meta_data do
+    application_type { association(:application_type) }
+
+    name { "my-custom-metadata" }
+    payload { {"account" => 1234} }
+  end
 end
