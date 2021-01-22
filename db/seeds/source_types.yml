@@ -123,6 +123,41 @@ ansible-tower:
         :condition:
           :when: endpoint.verify_ssl
           :is: true
+google:
+  :product_name: Google Cloud
+  :vendor: Google
+  :icon_url: "/apps/frontend-assets/partners-icons/google-cloud.svg"
+  :schema:
+    :authentication:
+    - :type: project_id_service_account_json
+      :name: Project ID and Service Account JSON
+      :fields:
+      - :component: text-field
+        :name: authentication.authtype
+        :hideField: true
+        :initializeOnMount: true
+        :initialValue: project_id_service_account_json
+      - :component: text-field
+        :name: authentication.username
+        :label: Project ID
+      - :component: textarea
+        :name: authentication.password
+        :label: Service Account JSON
+      - :component: text-field
+        :name: application.extra.dataset
+        :stepKey: cost-management
+        :label: Dataset name
+        :isRequired: true
+        :validate:
+        - :type: required
+    :endpoint:
+      :hidden: true
+      :fields:
+      - :component: text-field
+        :name: endpoint.role
+        :hideField: true
+        :initializeOnMount: true
+        :initialValue: google
 azure:
   :product_name: Microsoft Azure
   :vendor: Azure
