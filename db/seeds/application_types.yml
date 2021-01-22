@@ -22,7 +22,7 @@
     azure:
     - tenant_id_client_id_client_secret
     google:
-    - username_password
+    - project_id_service_account_json
     openshift:
     - token
 "/insights/platform/cloud-meter":
