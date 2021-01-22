@@ -1,0 +1,14 @@
+#!/bin/bash
+
+function write_encryption_key() {
+  echo "== Writing encryption key =="
+  cat > $WORKDIR/v2_key << KEY
+---
+:algorithm: aes-256-cbc
+:key: ${ENCRYPTION_KEY}
+KEY
+}
+
+write_encryption_key
+
+bundle exec rake db:migrate db:seed
