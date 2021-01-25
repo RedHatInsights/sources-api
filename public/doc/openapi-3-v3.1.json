@@ -2098,6 +2098,14 @@
       "Source": {
         "type": "object",
         "properties": {
+          "app_creation_workflow": {
+            "type": "string",
+            "enum": [
+              "paranoid",
+              "semi-trust",
+              "trust"
+            ]
+          },
           "availability_status": {
             "type": "string"
           },
