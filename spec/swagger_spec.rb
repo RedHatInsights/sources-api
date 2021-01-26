@@ -106,5 +106,44 @@ describe "Swagger stuff" do
         end
       end
     end
+
+    context "v2.0" do
+      let(:version) { "2.0" }
+      ::Insights::API::Common::OpenApi::Docs.instance["2.0"].definitions.each do |definition_name, _schema|
+        next if definition_name.in?(["CollectionLinks", "CollectionMetadata"])
+
+        definition_name = definition_name.delete_suffix(/Collection\z/, "").singularize
+
+        it "#{definition_name} matches the JSONSchema" do
+          expect(send(definition_name.underscore).as_json(:prefixes => ["api/v1x0/#{definition_name.underscore}"])).to match_json_schema("2.0", definition_name)
+        end
+      end
+    end
+
+    context "v3.0" do
+      let(:version) { "3.0" }
+      ::Insights::API::Common::OpenApi::Docs.instance["3.0"].definitions.each do |definition_name, _schema|
+        next if definition_name.in?(["CollectionLinks", "CollectionMetadata"])
+
+        definition_name = definition_name.delete_suffix(/Collection\z/, "").singularize
+
+        it "#{definition_name} matches the JSONSchema" do
+          expect(send(definition_name.underscore).as_json(:prefixes => ["api/v3x0/#{definition_name.underscore}"])).to match_json_schema("3.0", definition_name)
+        end
+      end
+    end
+
+    context "v3.1" do
+      let(:version) { "3.1" }
+      ::Insights::API::Common::OpenApi::Docs.instance["3.1"].definitions.each do |definition_name, _schema|
+        next if definition_name.in?(["CollectionLinks", "CollectionMetadata"])
+
+        definition_name = definition_name.delete_suffix(/Collection\z/, "").singularize
+
+        it "#{definition_name} matches the JSONSchema" do
+          expect(send(definition_name.underscore).as_json(:prefixes => ["api/v3x1/#{definition_name.underscore}"])).to match_json_schema("3.1", definition_name)
+        end
+      end
+    end
   end
 end
