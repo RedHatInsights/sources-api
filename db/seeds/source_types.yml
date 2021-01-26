@@ -26,7 +26,7 @@ amazon:
         :hideField: true
         :initializeOnMount: true
         :initialValue: arn
-      - :name: billing_source.data_source.bucket
+      - :name: application.extra.bucket
         :stepKey: cost-management
         :component: text-field
         :label: S3 bucket name
@@ -173,15 +173,15 @@ azure:
         :initializeOnMount: true
         :initialValue: tenant_id_client_id_client_secret
       - :component: text-field
-        :name: billing_source.data_source.resource_group
+        :name: application.extra.resource_group
         :label: Resource group name
         :stepKey: azure-2
       - :component: text-field
-        :name: billing_source.data_source.storage_account
+        :name: application.extra.storage_account
         :label: Storage account name
         :stepKey: azure-2
       - :component: text-field
-        :name: credentials.subscription_id
+        :name: application.extra.subscription_id
         :label: Subscription ID
         :stepKey: service-principle
       - :component: text-field
