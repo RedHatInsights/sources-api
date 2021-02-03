@@ -318,7 +318,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/AppMetaDatumCollection"
+                  "$ref": "#/components/schemas/AppMetaDataCollection"
                 }
               }
             }
@@ -1461,7 +1461,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/AppMetaDatumCollection"
+                  "$ref": "#/components/schemas/AppMetaDataCollection"
                 }
               }
             }
@@ -1485,7 +1485,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/AppMetaDatum"
+                  "$ref": "#/components/schemas/AppMetaData"
                 }
               }
             }
@@ -1499,6 +1499,37 @@
                 }
               }
             }
+          }
+        }
+      }
+    },
+    "/bulk_create": {
+      "post": {
+        "summary": "Bulk-create a Source and specified sub-resources",
+        "operationId": "bulkCreate",
+        "description": "Bulk-create a Source and specified sub-resources",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BulkCreatePayload"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Resources Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BulkCreateResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
           }
         }
       }
@@ -1755,35 +1786,7 @@
         },
         "additionalProperties": false
       },
-      "AppMetaDatum": {
-        "type": "object",
-        "properties": {
-          "created_at": {
-            "format": "date-time",
-            "readOnly": true,
-            "type": "string"
-          },
-          "application_type_id": {
-            "type": "string"
-          },
-          "id": {
-            "$ref": "#/components/schemas/ID"
-          },
-          "name": {
-            "type": "string"
-          },
-          "payload": {
-            "type": "object"
-          },
-          "updated_at": {
-            "format": "date-time",
-            "readOnly": true,
-            "type": "string"
-          }
-        },
-        "additionalProperties": false
-      },
-      "AppMetaDatumCollection": {
+      "AppMetaDataCollection": {
         "type": "object",
         "properties": {
           "meta": {
@@ -1795,7 +1798,7 @@
           "data": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/AppMetaDatum"
+              "$ref": "#/components/schemas/AppMetaData"
             }
           }
         }
@@ -2224,6 +2227,141 @@
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/Source"
+            }
+          }
+        }
+      },
+      "BulkCreatePayload": {
+        "type": "object",
+        "properties": {
+          "superkey": {
+            "type": "boolean",
+            "default": false
+          },
+          "sources": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "type": {
+                  "type": "string",
+                  "description": "Source Type from supported types",
+                  "enum": [
+                    "amazon",
+                    "azure",
+                    "ansible_tower",
+                    "openshift",
+                    "satellite"
+                  ]
+                }
+              }
+            }
+          },
+          "endpoints": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "scheme": {
+                  "type": "string"
+                },
+                "host": {
+                  "type": "string"
+                },
+                "path": {
+                  "type": "string"
+                },
+                "port": {
+                  "type": "integer"
+                },
+                "verify_ssl": {
+                  "type": "boolean"
+                }
+              }
+            }
+          },
+          "applications": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string"
+                },
+                "extra": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "authentications": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "authtype": {
+                  "type": "string"
+                },
+                "extra": {
+                  "type": "object"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "username": {
+                  "type": "string"
+                },
+                "password": {
+                  "type": "string"
+                },
+                "resource_name": {
+                  "type": "string"
+                },
+                "resource_type": {
+                  "type": "string",
+                  "enum": [
+                    "application",
+                    "endpoint",
+                    "source"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      },
+      "BulkCreateResponse": {
+        "type": "object",
+        "properties": {
+          "superkey": {
+            "type": "boolean",
+            "default": false
+          },
+          "sources": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Source"
+            }
+          },
+          "endpoints": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Endpoint"
+            }
+          },
+          "applications": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Application"
+            }
+          },
+          "authentications": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Authentication"
             }
           }
         }
