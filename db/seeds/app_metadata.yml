@@ -13,7 +13,7 @@ qa:
     gcp_service_account: test-billing-service-account@cloud-billing-292519.iam.gserviceaccount.com
 stage:
   "/insights/platform/cost-management":
-    gcp_service_account: ccc
+    gcp_service_account: billing-export@red-hat-cost-management-stage.iam.gserviceaccount.com
 prod:
   "/insights/platform/cost-management":
-    gcp_service_account: ddd
+    gcp_service_account: billing-export@red-hat-cost-management.iam.gserviceaccount.com
