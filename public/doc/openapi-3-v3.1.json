@@ -1533,6 +1533,50 @@
           }
         }
       }
+    },
+    "/superkey": {
+      "post": {
+        "summary": "Run the superkey workflow for a specified source for specified application types",
+        "operationId": "superkeyCreate",
+        "description": "Run the superkey workflow for a specified source for specified application types",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SuperKeyRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "202": {
+            "description": "Request accepted."
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    },
+    "/superkey/{id}": {
+      "delete": {
+        "summary": "Destroy the specified superkey application",
+        "operationId": "superkeyDestroyApplication",
+        "description": "Destroy the specified superkey on specified application",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/ID"
+          }
+        ],
+        "responses": {
+          "202": {
+            "description": "Superkey DELETE request queued."
+          },
+          "404": {
+            "description": "Application not found or not a valid superkey Application"
+          }
+        }
+      }
     }
   },
   "servers": [
@@ -2234,10 +2278,8 @@
       "BulkCreatePayload": {
         "type": "object",
         "properties": {
-          "superkey": {
-            "type": "boolean",
-            "default": false,
-            "description": "Whether to send a superkey request for the provided source/authentication"
+          "superkey_request": {
+            "$ref": "#/components/schemas/SuperKeyRequest"
           },
           "sources": {
             "description": "Array of Source objects to create. Only supported fields are name + type, source_type_id will automatically\nbe set based on the name.\n",
@@ -2372,6 +2414,32 @@
             "items": {
               "$ref": "#/components/schemas/Authentication"
             }
+          }
+        }
+      },
+      "SuperKeyRequest": {
+        "type": "object",
+        "description": "Details on the provided superkey request, most notably the provider and type of request(s)",
+        "properties": {
+          "provider": {
+            "type": "string",
+            "enum": [
+              "amazon"
+            ]
+          },
+          "applications": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "cost-management",
+                "subscription-watch"
+              ]
+            }
+          },
+          "source_id": {
+            "description": "the superkey source to create applications under. only required if not included in a `bulk_create` request\n",
+            "type": "string"
           }
         }
       }

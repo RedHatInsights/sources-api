@@ -6,14 +6,9 @@ module Api
         authorize(Source.new)
         params.permit!
 
-        output = Sources::Api::BulkAssembly.bulk_create(
-          :sources         => params[:sources],
-          :endpoints       => params[:endpoints],
-          :applications    => params[:applications],
-          :authentications => params[:authentications]
-        )
+        bulk = Sources::BulkAssembly.new(params).process
 
-        render :status => 201, :json => output
+        render :status => 201, :json => bulk.output
       end
     end
   end
