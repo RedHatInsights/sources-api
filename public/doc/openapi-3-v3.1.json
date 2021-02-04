@@ -2236,9 +2236,11 @@
         "properties": {
           "superkey": {
             "type": "boolean",
-            "default": false
+            "default": false,
+            "description": "Whether to send a superkey request for the provided source/authentication"
           },
           "sources": {
+            "description": "Array of Source objects to create. Only supported fields are name + type, source_type_id will automatically\nbe set based on the name.\n",
             "type": "array",
             "items": {
               "type": "object",
@@ -2252,15 +2254,17 @@
                   "enum": [
                     "amazon",
                     "azure",
-                    "ansible_tower",
+                    "ansible-tower",
                     "openshift",
-                    "satellite"
+                    "satellite",
+                    "google"
                   ]
                 }
               }
             }
           },
           "endpoints": {
+            "description": "Array of Endpoint objects to create. The operation looks up the parent source by the `source_name` attribute\nso the `source_name` must match one of the `source`'s names in the payload.\n",
             "type": "array",
             "items": {
               "type": "object",
@@ -2279,11 +2283,15 @@
                 },
                 "verify_ssl": {
                   "type": "boolean"
+                },
+                "source_name": {
+                  "type": "string"
                 }
               }
             }
           },
           "applications": {
+            "description": "Array of Application objects to create. The operation looks up the parent Source by the `source_name` attribute\nso the `source_name` must match one of the `source`'s names in the payload.\n\napplication_type_id will be automatically looked up and set by the `type` attribute via regex.\n",
             "type": "array",
             "items": {
               "type": "object",
@@ -2293,11 +2301,15 @@
                 },
                 "extra": {
                   "type": "object"
+                },
+                "source_name": {
+                  "type": "string"
                 }
               }
             }
           },
           "authentications": {
+            "description": "Array of Authentications to create. This one is a bit more tricky. `resource_type` tells the action where to look for the parent, must be either application/endpoint/source\n\nif the parent is a source, it looks up by name.\nif the parent is an endpoint, it looks up via host so the hostname must match.\nif the parent is an application, it looks up via application type so the value must match the application type which matches\n",
             "type": "array",
             "items": {
               "type": "object",
@@ -2307,9 +2319,6 @@
                 },
                 "extra": {
                   "type": "object"
-                },
-                "name": {
-                  "type": "string"
                 },
                 "username": {
                   "type": "string"
