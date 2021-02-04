@@ -1,0 +1,2 @@
+class MetaData < ApplicationRecord
+end

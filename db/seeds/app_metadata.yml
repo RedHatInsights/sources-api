@@ -1,0 +1,19 @@
+######
+# Seed file for application specific metadata.
+# Outer object is the env (in case there are per-env settings)
+# Innter object is in the form of `key`: `jsonb`, but a plain
+# string is valid json. So plain key/value works fine.
+#####
+
+ci:
+  "/insights/platform/cost-management":
+    gcp_service_account: test-billing-service-account@cloud-billing-292519.iam.gserviceaccount.com
+qa:
+  "/insights/platform/cost-management":
+    gcp_service_account: test-billing-service-account@cloud-billing-292519.iam.gserviceaccount.com
+stage:
+  "/insights/platform/cost-management":
+    gcp_service_account: billing-export@red-hat-cost-management-stage.iam.gserviceaccount.com
+prod:
+  "/insights/platform/cost-management":
+    gcp_service_account: billing-export@red-hat-cost-management.iam.gserviceaccount.com

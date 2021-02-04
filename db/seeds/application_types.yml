@@ -14,16 +14,19 @@
   :supported_source_types:
   - amazon
   - azure
+  - google
   - openshift
   :supported_authentication_types:
     amazon:
     - arn
     azure:
     - tenant_id_client_id_client_secret
+    google:
+    - project_id_service_account_json
     openshift:
     - token
 "/insights/platform/cloud-meter":
-  :display_name: Subscription Watch
+  :display_name: RHEL management
   :dependent_applications: []
   :supported_source_types:
   - amazon

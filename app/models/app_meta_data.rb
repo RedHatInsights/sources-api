@@ -1,0 +1,24 @@
+class AppMetaData < MetaData
+  belongs_to :application_type
+
+  def self.seed
+    transaction do
+      env = ENV['SOURCES_ENV']
+      raise "No SOURCES_ENV set, cannot continue seeding." unless env
+
+      destroy_all
+
+      metadata = YAML.safe_load(File.read("db/seeds/app_metadata.yml"))
+      metadata[env].each do |app, settings|
+        apptype = ApplicationType.find_by(:name => app)
+
+        settings.each do |key, value|
+          apptype.app_meta_data.create!(
+            :name    => key,
+            :payload => value
+          )
+        end
+      end
+    end
+  end
+end
