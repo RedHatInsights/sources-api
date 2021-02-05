@@ -1,4 +1,4 @@
-class SuperKeyMetaData < AppMetaData
+class SuperKeyMetaData < MetaData
   belongs_to :application_type
 
   default_scope { order(:step) }
