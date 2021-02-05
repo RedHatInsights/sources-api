@@ -41,7 +41,7 @@ COPY docker-assets/seed_database /usr/bin
 RUN chgrp -R 0 $WORKDIR && \
     chmod -R g=u $WORKDIR
 
-EXPOSE 3000
+#EXPOSE 8000
 
 ENTRYPOINT ["entrypoint"]
 CMD ["run_rails_server"]

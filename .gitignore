@@ -19,3 +19,6 @@
 /public/doc/*.jar
 /public/doc/openapi*generator.yaml
 /grafana-dashboards/*.json
+
+# Local Bonfire (Clowder deploy) settings
+/config.yaml
