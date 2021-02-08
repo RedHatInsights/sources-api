@@ -20,7 +20,7 @@ module Sources
 
         self
       rescue => e
-        Rails.logger.error("Error bulk processing from payload: Sources: #{sources}, Endpoints: #{endpoints}, Applications: #{applications}, Authentications: #{authentications}. Error: #{e}")
+        Rails.logger.error("Error bulk processing from payload: Sources: #{@sources}, Endpoints: #{@endpoints}, Applications: #{@applications}, Authentications: #{@authentications}. Error: #{e}")
 
         raise
       end
@@ -28,14 +28,16 @@ module Sources
 
     def create_sources(sources)
       sources&.map do |source|
-        srct = SourceType.select(:id).find_by(:name => source.delete(:type)).id
-        Source.create!(source.merge!(:source_type_id => srct))
+        srct = SourceType.find_by!(:name => source.delete(:type))
+
+        Source.create!(source.merge!(:source_type => srct))
       end
     end
 
     def create_endpoints(endpoints, resources)
       endpoints&.map do |endpoint|
         src = find_resource(resources, :sources, endpoint.delete(:source_name))
+
         Endpoint.create!(endpoint.merge!(:source_id => src.id))
       end
     end
@@ -72,9 +74,18 @@ module Sources
     private
 
     def find_resource(resources, rtype, rname, field = :name)
-      resources[rtype].detect { |resource| resource.send(field) == rname }.tap do |found|
-        raise ActiveRecord::ActiveRecordError, "no applicable #{rtype} for #{rname}" if found.nil?
+      # use the safe operator in the case of creating a subresource on an existing source
+      parent = resources[rtype]&.detect { |resource| resource.send(field) == rname }
+
+      # if the parent is a source, it's possible that it was already created in the db
+      # so we need to try and look it up potentially.
+      if rtype == :sources && parent.nil?
+        parent = Source.find_by(:name => rname)
       end
+
+      raise ActiveRecord::ActiveRecordError, "no applicable #{rtype} for #{rname}" if parent.nil?
+
+      parent
     end
 
     def get_application_type(type)
