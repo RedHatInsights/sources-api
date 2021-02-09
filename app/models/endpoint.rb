@@ -21,4 +21,15 @@ class Endpoint < ApplicationRecord
   def set_default
     self.default = true
   end
+
+  def remove_availability_status!
+    remove_availability_status
+    save!
+  end
+
+  def remove_availability_status
+    self.availability_status       = nil
+    self.last_checked_at           = nil
+    self.availability_status_error = nil
+  end
 end

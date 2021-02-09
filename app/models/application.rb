@@ -20,6 +20,17 @@ class Application < ApplicationRecord
   after_create :superkey_workflow
   after_destroy :superkey_workflow
 
+  def remove_availability_status!
+    remove_availability_status
+    save!
+  end
+
+  def remove_availability_status
+    self.availability_status       = nil
+    self.last_checked_at           = nil
+    self.availability_status_error = nil
+  end
+
   private
 
   def source_must_be_compatible
