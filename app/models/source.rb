@@ -11,7 +11,7 @@ class Source < ApplicationRecord
 
   attribute :availability_status, :string
   validates :availability_status, :inclusion => { :in => %w[available partially_available unavailable] }, :allow_nil => true
-  validates :app_creation_workflow, :inclusion => {:in => %w[paranoid semi-trust trust]}
+  validates :app_creation_workflow, :inclusion => {:in => %w[manual_configuration account_authorization]}
 
   belongs_to :source_type
 

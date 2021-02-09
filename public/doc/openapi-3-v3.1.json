@@ -2101,9 +2101,8 @@
           "app_creation_workflow": {
             "type": "string",
             "enum": [
-              "paranoid",
-              "semi-trust",
-              "trust"
+              "manual_configuration",
+              "account_authorization"
             ]
           },
           "availability_status": {
