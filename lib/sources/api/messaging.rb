@@ -12,7 +12,7 @@ module Sources
         )
       end
 
-      def self.send_superkey_steps(tenant:, type:, authentication:, provider:, extra: {})
+      def self.send_superkey_steps(tenant:, source_id:, type:, authentication:, provider:, extra: {})
         type.reload
 
         # map the payload to a string, since that is what we're sending to AWS every time.
@@ -22,10 +22,11 @@ module Sources
 
         payload = {
           :tenant_id         => tenant.external_tenant,
-          :application_type  => type.name,
+          :source_id         => source_id.to_s,
           :authentication_id => authentication.id.to_s,
-          :provider          => provider,
+          :application_type  => type.name,
           :extra             => extra,
+          :provider          => provider,
           :superkey_steps    => steps.as_json
         }
 

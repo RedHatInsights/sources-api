@@ -80,7 +80,7 @@ module Sources
       # if the parent is a source, it's possible that it was already created in the db
       # so we need to try and look it up potentially.
       if rtype == :sources && parent.nil?
-        parent = Source.find_by(:name => rname)
+        parent = Source.find_by(:name => rname) || Source.find_by(:id => rname)
       end
 
       raise ActiveRecord::ActiveRecordError, "no applicable #{rtype} for #{rname}" if parent.nil?

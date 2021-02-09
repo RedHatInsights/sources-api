@@ -22,22 +22,26 @@ module Sources
                   end
 
         extra = {}.tap do |e|
-          case provider
+          case @provider
           when "amazon"
+            # account # to substitute in resources
             e[:account] = apptype
                           .app_meta_data
                           .detect { |field| field.name == "aws_wizard_account_number" }
                           .payload
+
+            # type of authentication to return
+            e[:result_type] = apptype.supported_authentication_types["amazon"]&.first
           end
         end
 
         Sources::Api::Messaging.send_superkey_steps(
           :tenant         => src.tenant,
+          :source_id      => src.id,
           :type           => apptype,
           :authentication => src.super_key,
           :provider       => @provider,
-          :extra          => extra,
-          :superkey_steps => steps
+          :extra          => extra
         )
       end
     end
