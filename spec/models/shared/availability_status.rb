@@ -1,34 +1,37 @@
-RSpec.shared_examples "availability_status" do
+RSpec.shared_context "availability_status_context" do
+  let(:timestamp)                 { Time.current }
+  let(:new_timestamp)             { Time.current + 1.hour }
+  let(:available_status)          { "available" }
+  let(:unavailable_status)        { "unavailable" }
+  let(:new_name)                  { "new_name" }
+  let(:availability_status_error) { "availability_status_error" }
+
+  let(:ignored_attributes) do
+    new_attributes = {
+      :availability_status => unavailable_status,
+      :last_checked_at     => new_timestamp,
+      :last_available_at   => new_timestamp
+    }
+
+    if record.respond_to?(:updated_at)
+      new_attributes[:updated_at] = new_timestamp
+    end
+
+    if record.respond_to?(:availability_status_error)
+      new_attributes[:availability_status_error] = availability_status_error
+    end
+
+    if record.respond_to?(:name)
+      new_attributes[:name] = new_name
+    end
+
+    new_attributes
+  end
+end
+
+RSpec.shared_examples "availability_status_examples" do
   # record, update and no_update variables come from caller spec
   describe "#before_update" do
-    let(:timestamp)                 { Time.current }
-    let(:new_timestamp)             { Time.current + 1.hour }
-    let(:available_status)          { "available" }
-    let(:unavailable_status)        { "unavailable" }
-    let(:new_name)                  { "new_name" }
-    let(:availability_status_error) { "availability_status_error" }
-
-    let(:ignored_attributes) do
-      new_attributes = {
-        :availability_status => unavailable_status,
-        :last_checked_at     => new_timestamp,
-        :last_available_at   => new_timestamp
-      }
-
-      if record.respond_to?(:updated_at)
-        new_attributes[:updated_at] = new_timestamp
-      end
-
-      if record.respond_to?(:availability_status_error)
-        new_attributes[:availability_status_error] = availability_status_error
-      end
-
-      if record.respond_to?(:name)
-        new_attributes[:name] = new_name
-      end
-
-      new_attributes
-    end
 
     before do
       record.availability_status = available_status
