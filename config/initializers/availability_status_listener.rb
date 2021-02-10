@@ -1,8 +1,10 @@
+require 'sources/api/clowder_config'
+
 # Be sure to restart your server when you modify this file.
 
 unless defined?(::Rails::Console)
-  queue_host = ENV["QUEUE_HOST"] || "localhost"
-  queue_port = ENV["QUEUE_PORT"] || 9092
+  queue_host = Sources::Api::ClowderConfig.instance['kafkaHost']
+  queue_port = Sources::Api::ClowderConfig.instance['kafkaPort']
 
   availability_status_listener = AvailabilityStatusListener.new(:host => queue_host, :port => queue_port)
   availability_status_listener.run

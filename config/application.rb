@@ -45,6 +45,11 @@ module Sources
 
     config.log_level = (ENV['RAILS_LOG_LEVEL'] || 'debug').downcase.to_sym
     Insights::API::Common::Logging.activate(config)
+
+    # ManageIQ Metrics depends on these variables
+    require "sources/api/clowder_config"
+    ENV['METRICS_PORT'] = Sources::Api::ClowderConfig.instance['metricsPort'].to_s
+
     Insights::API::Common::Metrics.activate(config, "sources_api")
   end
 end

@@ -25,26 +25,7 @@ function check_svc_status() {
 
 write_encryption_key
 
-DB_STRING=`ruby<<EOF
-require 'json'
-file = File.read(ENV['ACG_CONFIG'])
-data = JSON.parse(file)
-puts data['database']['hostname']
-puts data['database']['port']
-puts data['database']['username']
-puts data['database']['password']
-puts data['database']['name']
-EOF
-`
-DB_VALUES=( $DB_STRING )
-
-DATABASE_HOST=${DB_VALUES[0]}
-DATABASE_PORT=${DB_VALUES[1]}
-DATABASE_USER=${DB_VALUES[2]}
-DATABASE_PASSWORD=${DB_VALUES[3]}
-DATABASE_NAME=${DB_VALUES[4]}
-
 # Wait for postgres to be ready
 check_svc_status $DATABASE_HOST $DATABASE_PORT
 
-bundle exec rake db:migrate && bundle exec rails server -p 8000
+bundle exec rake db:migrate && bundle exec rails server -p $WEB_PORT

@@ -1,17 +1,18 @@
 apiVersion: v1
 kind: Template
 metadata:
-  name: sources-api
+  name: sources
 objects:
 - apiVersion: cloud.redhat.com/v1alpha1
   kind: ClowdApp
   metadata:
-    name: sources-api
+    name: sources
   spec:
     envName: ${ENV_NAME}
     deployments:
-    - name: sources-api
+    - name: api
       minReplicas: ${{MIN_REPLICAS}}
+#      web: true # for compatibility with clowder 0.3.0
       webServices:
         public:
           enabled: true # port 8000 is default in ClowdEnvironment
@@ -19,59 +20,56 @@ objects:
         image: ${IMAGE}:${IMAGE_TAG}
         initContainers:
         - command:
-            - entrypoint
+          - entrypoint
           args:
-            - seed_database
+          - seed_database
           inheritEnv: false
           env:
-            - name: CLOWDER_ENABLED
-              value: ${CLOWDER_ENABLED}
-            - name: ENCRYPTION_KEY
-              valueFrom:
-                secretKeyRef:
-                  name: sources-api-secrets
-                  key: encryption-key
-            - name: SECRET_KEY_BASE
-              valueFrom:
-                secretKeyRef:
-                  name: sources-api-secrets
-                  key: secret-key
-            - name: SOURCES_ENV
-              value: ${SOURCES_ENV}
-        env:
-          - name: APP_NAME
-            value: ${APP_NAME}
-          - name: CLOWDER_ENABLED
-            value: ${CLOWDER_ENABLED}
-          - name: RAILS_LOG_LEVEL
-            value: ${LOG_LEVEL}
-          - name: CLOUD_METER_AVAILABILITY_CHECK_URL
-            value: http://${CLOUD_METER_API_HOST}:${CLOUD_METER_SOURCES_API_PORT}${CLOUD_METER_SOURCES_API_AVAILABILITY_CHECK_PATH}
-          - name: COST_MANAGEMENT_AVAILABILITY_CHECK_URL
-            value: ${KOKU_SOURCES_API_SCHEME}://${KOKU_SOURCES_API_HOST}:${KOKU_SOURCES_API_PORT}${KOKU_SOURCES_API_APP_CHECK_PATH}
           - name: ENCRYPTION_KEY
             valueFrom:
               secretKeyRef:
                 name: sources-api-secrets
                 key: encryption-key
-          - name: METRICS_PORT
-            value: ${METRICS_PORT}
-          - name: PATH_PREFIX
-            value: ${PATH_PREFIX}
-          - name: PGSSLMODE
-            value: ${PGSSLMODE}
-          - name: PGSSLROOTCERT
-            value: /etc/rds-certs/rds-cacert
           - name: SECRET_KEY_BASE
             valueFrom:
               secretKeyRef:
                 name: sources-api-secrets
                 key: secret-key
-          - name: RBAC_URL
-            value: ${RBAC_SCHEME}://${RBAC_HOST}:${RBAC_PORT}
+          - name: SOURCES_ENV
+            value: ${SOURCES_ENV}
+        env:
+        - name: APP_NAME
+          value: ${APP_NAME}
+        - name: RAILS_LOG_LEVEL
+          value: ${LOG_LEVEL}
+          # TODO: It never can be blank!
+        - name: CLOUD_METER_AVAILABILITY_CHECK_URL
+          value: http://${CLOUD_METER_API_HOST}:${CLOUD_METER_SOURCES_API_PORT}${CLOUD_METER_SOURCES_API_AVAILABILITY_CHECK_PATH}
+#          - name: COST_MANAGEMENT_AVAILABILITY_CHECK_URL
+#            value: ${KOKU_SOURCES_API_SCHEME}://${KOKU_SOURCES_API_HOST}:${KOKU_SOURCES_API_PORT}${KOKU_SOURCES_API_APP_CHECK_PATH}
+        - name: ENCRYPTION_KEY
+          valueFrom:
+            secretKeyRef:
+              name: sources-api-secrets
+              key: encryption-key
+        - name: METRICS_PORT
+          value: ${METRICS_PORT}
+        - name: PATH_PREFIX
+          value: ${PATH_PREFIX}
+        - name: PGSSLMODE
+          value: ${PGSSLMODE}
+        - name: PGSSLROOTCERT
+          value: /etc/rds-certs/rds-cacert
+        - name: SECRET_KEY_BASE
+          valueFrom:
+            secretKeyRef:
+              name: sources-api-secrets
+              key: secret-key
+        - name: RBAC_URL
+          value: ${RBAC_SCHEME}://${RBAC_HOST}:${RBAC_PORT}
         readinessProbe:
           tcpSocket:
-            port: 80
+            port: 8000
         livenessProbe:
           httpGet:
             path: /health
@@ -85,117 +83,118 @@ objects:
             cpu: ${CPU_REQUEST}
             memory: ${MEMORY_REQUEST}
         volumeMounts:
-          - mountPath: /etc/rds-certs
-            name: rds-client-ca
-            readOnly: true
+        - mountPath: /etc/rds-certs
+          name: rds-client-ca
+          readOnly: true
         volumes:
-          - name: rds-client-ca
-            secret:
-              secretName: rds-client-ca
+        - name: rds-client-ca
+          secret:
+            secretName: rds-client-ca
     database:
       name: sources # looking for rds: sources-db resource in app-interface
       version: 12
     kafkaTopics:
-      - topicName: platform.sources.event-stream
-        partitions: 3
-        replicas: 3
-      - topicName: platform.sources.status
-        partitions: 3
-        replicas: 3
-      - topicName: platform.topological-inventory.operations-amazon
-        partitions: 3
-        replicas: 3
-      - topicName: platform.topological-inventory.operations-ansible-tower
-        partitions: 3
-        replicas: 3
-      - topicName: platform.topological-inventory.operations-azure
-        partitions: 3
-        replicas: 3
-      - topicName: platform.topological-inventory.operations-google
-        partitions: 3
-        replicas: 3
-      - topicName: platform.topological-inventory.operations-openshift
-        partitions: 3
-        replicas: 3
-      - topicName: platform.topological-inventory.operations-satellite
-        partitions: 3
-        replicas: 3
+    - topicName: platform.sources.event-stream
+      partitions: 3
+      replicas: 3
+    - topicName: platform.sources.status
+      partitions: 3
+      replicas: 3
+    - topicName: platform.sources.superkey-requests
+      partitions: 3
+      replicas: 3
+    - topicName: platform.topological-inventory.operations-amazon
+      partitions: 3
+      replicas: 3
+    - topicName: platform.topological-inventory.operations-ansible-tower
+      partitions: 3
+      replicas: 3
+    - topicName: platform.topological-inventory.operations-azure
+      partitions: 3
+      replicas: 3
+    - topicName: platform.topological-inventory.operations-google
+      partitions: 3
+      replicas: 3
+    - topicName: platform.topological-inventory.operations-openshift
+      partitions: 3
+      replicas: 3
+    - topicName: platform.topological-inventory.operations-satellite
+      partitions: 3
+      replicas: 3
 parameters:
-  - description: Application name to be used in request paths.
-    displayName: Application Name
-    name: APP_NAME
-    value: sources
-  - description: Hostname of the Cloud Meter API
-    displayName: Cloud Meter API Hostname
-    name: CLOUD_METER_API_HOST
-    required: true
-    value: cloudigrade-api
-  - name: CLOUD_METER_SOURCES_API_PORT
-    value: '80'
-  - name: CLOUD_METER_SOURCES_API_AVAILABILITY_CHECK_PATH
-    value: /internal/api/cloudigrade/v1/availability_status
-  - description: Clowder enabled flag
-    name: CLOWDER_ENABLED
-    value: ''
-  - name: CPU_LIMIT
-    value: 500m
-  - name: CPU_REQUEST
-    value: 100m
-  - description: Clowder ENV
-    name: ENV_NAME
-    required: true
-  - description: Image
-    name: IMAGE
-    value: quay.io/cloudservices/sources-api
-  - description: Image tag
-    name: IMAGE_TAG
-    required: true
-  - name: KOKU_SOURCES_API_SCHEME
-    value: http
-  - description: Hostname of the koku sources API server
-    displayName: Koku Sources API Hostname
-    name: KOKU_SOURCES_API_HOST
-    required: true
-    value: koku-sources
-  - name: KOKU_SOURCES_API_PORT
-    value: '8080'
-  - name: KOKU_SOURCES_API_APP_CHECK_PATH
-    value: /api/cost-management/v1/source-status/
-  - name: LOG_LEVEL
-    value: WARN
-  - name: MEMORY_LIMIT
-    value: 1Gi
-  - name: MEMORY_REQUEST
-    value: 500Mi
-  - description: Prometheus Metrics Port
-    name: METRICS_PORT
-    value: '9000' # default in ClowdEnvironment CRD
-  - description: The number of replicas to use for the prometheus deploy
-    name: MIN_REPLICAS
-    value: '1'
-  - description: Base path for the API
-    displayName: Path Prefix
-    name: PATH_PREFIX
-    value: api
-  - description: 'Options can be found in the doc: https://www.postgresql.org/docs/current/libpq-ssl.html#LIBPQ-SSL-SSLMODE-STATEMENTS'
-    displayName: Postgres SSL mode
-    name: PGSSLMODE
-    value: prefer
-  - description: Host to use for the RBAC service URL.
-    displayName: Rbac Service Host
-    name: RBAC_HOST
-    value: rbac
-  - description: Port to use for the RBAC service URL.
-    displayName: Rbac Service Port
-    name: RBAC_PORT
-    required: true
-    value: '8080'
-  - description: Scheme to use for the RBAC service URL. Can be either http or https
-    displayName: Rbac Service Scheme
-    name: RBAC_SCHEME
-    required: true
-    value: http
-  - description: Env name for seed
-    name: SOURCES_ENV
-    required: true
-    value: stage
+- description: Application name to be used in request paths.
+  displayName: Application Name
+  name: APP_NAME
+  value: sources
+- description: Hostname of the Cloud Meter API
+  displayName: Cloud Meter API Hostname
+  name: CLOUD_METER_API_HOST
+  required: true
+  value: cloudigrade-api
+- name: CLOUD_METER_SOURCES_API_PORT
+  value: '80'
+- name: CLOUD_METER_SOURCES_API_AVAILABILITY_CHECK_PATH
+  value: /internal/api/cloudigrade/v1/availability_status
+- name: CPU_LIMIT
+  value: 500m
+- name: CPU_REQUEST
+  value: 100m
+- description: Clowder ENV
+  name: ENV_NAME
+  required: true
+- description: Image
+  name: IMAGE
+  value: quay.io/cloudservices/sources-api
+- description: Image tag
+  name: IMAGE_TAG
+  required: true
+- name: KOKU_SOURCES_API_SCHEME
+  value: http
+- description: Hostname of the koku sources API server
+  displayName: Koku Sources API Hostname
+  name: KOKU_SOURCES_API_HOST
+  required: true
+  value: koku-sources
+- name: KOKU_SOURCES_API_PORT
+  value: '8080'
+- name: KOKU_SOURCES_API_APP_CHECK_PATH
+  value: /api/cost-management/v1/source-status/
+- name: LOG_LEVEL
+  value: WARN
+- name: MEMORY_LIMIT
+  value: 1Gi
+- name: MEMORY_REQUEST
+  value: 500Mi
+- description: Prometheus Metrics Port
+  displayName: Metrics Port
+  name: METRICS_PORT
+  value: '9000' # default in ClowdEnvironment CRD
+- description: The number of replicas to use for the prometheus deploy
+  name: MIN_REPLICAS
+  value: '1'
+- description: Base path for the API
+  displayName: Path Prefix
+  name: PATH_PREFIX
+  value: api
+- description: 'Options can be found in the doc: https://www.postgresql.org/docs/current/libpq-ssl.html#LIBPQ-SSL-SSLMODE-STATEMENTS'
+  displayName: Postgres SSL mode
+  name: PGSSLMODE
+  value: prefer
+- description: Host to use for the RBAC service URL.
+  displayName: Rbac Service Host
+  name: RBAC_HOST
+  value: rbac
+- description: Port to use for the RBAC service URL.
+  displayName: Rbac Service Port
+  name: RBAC_PORT
+  required: true
+  value: '8080'
+- description: Scheme to use for the RBAC service URL. Can be either http or https
+  displayName: Rbac Service Scheme
+  name: RBAC_SCHEME
+  required: true
+  value: http
+- description: Env name for seed
+  name: SOURCES_ENV
+  required: true
+  value: stage

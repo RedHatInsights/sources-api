@@ -1,5 +1,6 @@
 require "base64"
 require "net/http"
+require 'sources/api/clowder_config'
 
 module Api
   module V1
@@ -22,7 +23,7 @@ module Api
 
       def check_availability
         source = Source.find(params[:source_id])
-        topic  = "platform.topological-inventory.operations-#{source.source_type.name}"
+        topic  = Sources::Api::ClowderConfig.kafka_topic("platform.topological-inventory.operations-#{source.source_type.name}")
 
         logger.info("Initiating Source#availability_check [#{{"source_id" => source.id, "topic" => topic}}]")
 

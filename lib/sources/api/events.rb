@@ -1,3 +1,5 @@
+require 'sources/api/clowder_config'
+
 module Sources
   module Api
     module Events
@@ -5,7 +7,7 @@ module Sources
         return if ENV['NO_KAFKA']
 
         publish_opts = {
-          :service => "platform.sources.event-stream",
+          :service => Sources::Api::ClowderConfig.kafka_topic("platform.sources.event-stream"),
           :event   => event,
           :payload => payload
         }
