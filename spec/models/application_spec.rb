@@ -3,9 +3,9 @@ require "models/shared/availability_status.rb"
 RSpec.describe("Application") do
   describe "create!" do
     it_behaves_like "availability_status" do
-      let!(:record)    { create(:application, :source => create(:source), :extra => 'old_data') }
-      let!(:update)    { {:extra => 'new_data'} }
-      let!(:no_update) { {:extra => 'old_data'} }
+      let!(:record)    { create(:application, :source => create(:source), :extra => {'old_data' => 0}) }
+      let!(:update)    { {:extra => {'new_data' => 1}} }
+      let!(:no_update) { {:extra => {'old_data' => 0}} }
     end
 
     subject do

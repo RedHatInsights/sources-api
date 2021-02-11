@@ -20,8 +20,6 @@ Rails.application.routes.draw do
       get "/openapi.json", :to => "root#openapi"
       post "/graphql", :to => "graphql#query"
       post "/bulk_create", :to => "bulk_create#create"
-      post "/superkey", :to => "super_key#create"
-      delete "/superkey/:id", :to => "super_key#destroy"
 
       resources :application_types,           :only => [:index, :show] do
         resources :sources, :only => [:index]

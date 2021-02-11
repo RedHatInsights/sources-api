@@ -4,9 +4,7 @@ module Api
       def create
         # Authorize creating a new source, before we go through the processing.
         authorize(Source.new)
-        params.permit!
-
-        bulk = Sources::BulkAssembly.new(params).process
+        bulk = Sources::BulkAssembly.new(params_for_create).process
 
         render :status => 201, :json => bulk.output
       end

@@ -39,7 +39,7 @@ describe Sources::BulkAssembly do
       let(:params) { {:sources => [{:name => "the bad source", :type => "nothere"}]} }
 
       it "raises exception" do
-        expect { subject }.to raise_error(ActiveRecord::RecordNotFound)
+        expect { subject }.to raise_error(ActiveRecord::ActiveRecordError)
       end
     end
   end
@@ -72,11 +72,28 @@ describe Sources::BulkAssembly do
         end
       end
 
+      context "with an application that has private superkey data" do
+        let(:params) do
+          sourcehash.merge!(
+            :applications => [{:type => "cost", :source_name => "mysource", :extra => {:_superkey => {"guid" => "asdf"}}}]
+          )
+        end
+
+        it "creates the resources and links them together" do
+          output = subject
+          src = output[:sources].first
+          application = output[:applications].first
+
+          expect(application.source).to eq src
+          expect(application.superkey_data).to match(a_hash_including("guid" => "asdf"))
+        end
+      end
+
       context "with a single authentication" do
         let(:params) do
           sourcehash.merge!(
             :authentications => [
-              {:authtype => "superkey", :username => "user", :password => "pass", :resource_type => "source", :resource_name => "mysource"}
+              {:authtype => "userpass", :username => "user", :password => "pass", :resource_type => "source", :resource_name => "mysource"}
             ]
           )
         end
@@ -97,7 +114,7 @@ describe Sources::BulkAssembly do
               {:host => "example.com", :source_name => "mysource"}
             ],
             :authentications => [
-              {:authtype => "superkey", :username => "user", :password => "pass", :resource_type => "endpoint", :resource_name => "example.com"}
+              {:authtype => "userpass", :username => "user", :password => "pass", :resource_type => "endpoint", :resource_name => "example.com"}
             ]
           )
         end

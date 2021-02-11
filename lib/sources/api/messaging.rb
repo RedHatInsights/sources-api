@@ -12,22 +12,18 @@ module Sources
         )
       end
 
-      def self.send_superkey_steps(tenant:, source_id:, type:, authentication:, provider:, extra: {})
-        type.reload
-
-        # map the payload to a string, since that is what we're sending to AWS every time.
-        steps = type.super_key_meta_data.each do |m|
-          m.payload = JSON.dump(m.payload)
-        end
+      def self.send_superkey_create_request(application:, super_key:, provider:, extra: {})
+        steps = process_payload(application)
 
         payload = {
-          :tenant_id         => tenant.external_tenant,
-          :source_id         => source_id.to_s,
-          :authentication_id => authentication.id.to_s,
-          :application_type  => type.name,
-          :extra             => extra,
-          :provider          => provider,
-          :superkey_steps    => steps.as_json
+          :tenant_id        => application.tenant.external_tenant,
+          :source_id        => application.source_id.to_s,
+          :application_id   => application.id.to_s,
+          :application_type => application.application_type.name,
+          :super_key        => super_key.id.to_s,
+          :provider         => provider,
+          :extra            => extra,
+          :superkey_steps   => steps
         }
 
         client.publish_topic(
@@ -35,6 +31,32 @@ module Sources
           :event   => "create_application",
           :payload => payload
         )
+      end
+
+      def self.send_superkey_destroy_request(application:)
+        steps = process_payload(application)
+
+        payload = {
+          :tenant_id       => application.tenant.external_tenant,
+          :super_key       => application.source.super_key.id.to_s,
+          :guid            => application.superkey_data["guid"],
+          :provider        => application.superkey_data["provider"],
+          :steps_completed => application.superkey_data["steps"],
+          :superkey_steps  => steps
+
+        }
+
+        client.publish_topic(
+          :service => "platform.sources.superkey-requests",
+          :event   => "destroy_application",
+          :payload => payload
+        )
+      end
+
+      def self.process_payload(application)
+        application.application_type.super_key_meta_data.each do |m|
+          m.payload = JSON.dump(m.payload)
+        end.as_json
       end
     end
   end
