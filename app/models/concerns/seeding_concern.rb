@@ -7,12 +7,15 @@ module SeedingConcern
     def seed
       logger.info("Seeding #{name}...")
       seeds = YAML.load_file(Rails.root.join("db/seeds/#{table_name}.yml"))
+      excluded_types = ENV.fetch("#{to_s.upcase}_SKIP_LIST", "").split(",")
 
       transaction do
         records = all.index_by(&seed_key)
 
         seeds.each do |key, attributes|
-          if (r = records.delete(key))
+          if excluded_types.include?(key)
+            logger.info("Skipping #{key}")
+          elsif (r = records.delete(key))
             logger.info("Updating #{key}")
             r.update!(attributes)
           else
