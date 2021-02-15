@@ -227,84 +227,108 @@ describe Sources::BulkAssembly do
         end
       end
     end
-  end
 
-  context "when creating subresources using an existing source" do
-    let(:source) do
-      create(:source, :source_type => SourceType.find_by(:name => "amazon"))
-    end
-
-    context "when creating an application using an existing source" do
-      let(:params) do
-        {:applications => [
-          {:type => "cost", :source_name => source.name}
-        ]}
+    context "when creating subresources using an existing source" do
+      let(:source) do
+        create(:source, :source_type => SourceType.find_by(:name => "amazon"))
       end
 
-      it "looks up the source and links it" do
-        application = subject[:applications].first
-
-        expect(application.source).to eq source
-      end
-    end
-
-    context "when creating an endpoint using an exisitng source" do
-      let(:params) do
-        {:endpoints => [
-          {:host => "example.com", :source_name => source.name}
-        ]}
-      end
-
-      it "looks up the source and links it" do
-        endpoint = subject[:endpoints].first
-
-        expect(endpoint.source).to eq source
-      end
-    end
-
-    context "when creating an application + authentication on an existing source" do
-      let(:params) do
-        {
-          :applications    => [
+      context "when creating an application using an existing source" do
+        let(:params) do
+          {:applications => [
             {:type => "cost", :source_name => source.name}
-          ],
-          :authentications => [
-            {:authtype => "arn", :username => "an arn", :resource_type => "application", :resource_name => "cost"}
-          ]
-        }
+          ]}
+        end
+
+        it "looks up the source and links it" do
+          application = subject[:applications].first
+
+          expect(application.source).to eq source
+        end
       end
 
-      it "looks up the source and links everything" do
-        output = subject
-        application = output[:applications].first
-        authentication = output[:authentications].first
+      context "when creating an endpoint using an exisitng source" do
+        let(:params) do
+          {:endpoints => [
+            {:host => "example.com", :source_name => source.name}
+          ]}
+        end
 
-        expect(application.source).to eq source
-        expect(authentication.source).to eq source
-        expect(authentication.resource).to eq application
+        it "looks up the source and links it" do
+          endpoint = subject[:endpoints].first
+
+          expect(endpoint.source).to eq source
+        end
+      end
+
+      context "when creating an application + authentication on an existing source" do
+        let(:params) do
+          {
+            :applications    => [
+              {:type => "cost", :source_name => source.name}
+            ],
+            :authentications => [
+              {:authtype => "arn", :username => "an arn", :resource_type => "application", :resource_name => "cost"}
+            ]
+          }
+        end
+
+        it "looks up the source and links everything" do
+          output = subject
+          application = output[:applications].first
+          authentication = output[:authentications].first
+
+          expect(application.source).to eq source
+          expect(authentication.source).to eq source
+          expect(authentication.resource).to eq application
+        end
+      end
+
+      context "when creating an endpoint + authentication on an existing source" do
+        let(:params) do
+          {
+            :endpoints       => [
+              {:host => "example.com", :source_name => source.name}
+            ],
+            :authentications => [
+              {:authtype => "arn", :username => "an arn", :resource_type => "endpoint", :resource_name => "example.com"}
+            ]
+          }
+        end
+
+        it "looks up the source and links everything" do
+          output = subject
+          endpoint = output[:endpoints].first
+          authentication = output[:authentications].first
+
+          expect(endpoint.source).to eq source
+          expect(authentication.source).to eq source
+          expect(authentication.resource).to eq endpoint
+        end
       end
     end
 
-    context "when creating an endpoint + authentication on an existing source" do
-      let(:params) do
-        {
-          :endpoints       => [
-            {:host => "example.com", :source_name => source.name}
-          ],
-          :authentications => [
-            {:authtype => "arn", :username => "an arn", :resource_type => "endpoint", :resource_name => "example.com"}
-          ]
-        }
+    context "when creating resources but specifying type id instead of string" do
+      context "sources" do
+        let(:params) { {:sources => [{:name => "testingsource", :source_type_id => SourceType.first.id}]} }
+
+        it "looks up the source type properly" do
+          expect(subject[:sources].first.source_type).to eq SourceType.first
+        end
       end
 
-      it "looks up the source and links everything" do
-        output = subject
-        endpoint = output[:endpoints].first
-        authentication = output[:authentications].first
+      context "applications" do
+        let(:apptype) { ApplicationType.find_by(:name => "/insights/platform/cost-management") }
+        let(:params) do
+          {
+            :sources      => [{:name => "testingsource", :type => "amazon"}],
+            :applications => [{:source_name => "testingsource", :application_type_id => apptype}]
+          }
+        end
 
-        expect(endpoint.source).to eq source
-        expect(authentication.source).to eq source
-        expect(authentication.resource).to eq endpoint
+        it "looks up the application type properly" do
+          expect(subject[:applications].first.application_type).to eq apptype
+        end
       end
     end
   end

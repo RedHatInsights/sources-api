@@ -2254,6 +2254,12 @@
                     "satellite",
                     "google"
                   ]
+                },
+                "source_ref": {
+                  "type": "string"
+                },
+                "source_type_id": {
+                  "type": "string"
                 }
               }
             }
@@ -2292,6 +2298,9 @@
               "type": "object",
               "properties": {
                 "type": {
+                  "type": "string"
+                },
+                "application_type_id": {
                   "type": "string"
                 },
                 "extra": {
