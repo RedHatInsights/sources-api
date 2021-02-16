@@ -2235,7 +2235,7 @@
         "type": "object",
         "properties": {
           "sources": {
-            "description": "Array of Source objects to create. Only supported fields are name + type, source_type_id will automatically\nbe set based on the name.\n",
+            "description": "Array of Source objects to create. Only supported fields are name + type, source_type_id will automatically\nbe set based on the `source_type_name`.\n",
             "type": "array",
             "items": {
               "type": "object",
@@ -2243,7 +2243,7 @@
                 "name": {
                   "type": "string"
                 },
-                "type": {
+                "source_type_name": {
                   "type": "string",
                   "description": "Source Type from supported types",
                   "enum": [
@@ -2292,12 +2292,12 @@
             }
           },
           "applications": {
-            "description": "Array of Application objects to create. The operation looks up the parent Source by the `source_name` attribute\nso the `source_name` must match one of the `source`'s names in the payload.\n\napplication_type_id will be automatically looked up and set by the `type` attribute via regex.\n",
+            "description": "Array of Application objects to create. The operation looks up the parent Source by the `source_name` attribute\nso the `source_name` must match one of the `source`'s names in the payload.\n\napplication_type_id will be automatically looked up and set by the `application_type_name` attribute via regex.\n",
             "type": "array",
             "items": {
               "type": "object",
               "properties": {
-                "type": {
+                "application_type_name": {
                   "type": "string"
                 },
                 "application_type_id": {

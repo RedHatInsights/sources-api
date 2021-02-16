@@ -15,7 +15,7 @@ describe Sources::BulkAssembly do
 
   context "when creating sources" do
     context "when given only a single source" do
-      let(:params) { {:sources => [{:name => "singletest", :type => "amazon"}]} }
+      let(:params) { {:sources => [{:name => "singletest", :source_type_name => "amazon"}]} }
 
       it "creates the source" do
         expect(subject[:sources].map(&:name)).to match_array(%w[singletest])
@@ -25,8 +25,8 @@ describe Sources::BulkAssembly do
     context "when given multiple sources" do
       let(:params) do
         {:sources => [
-          {:name => "bulktest", :type => "amazon"},
-          {:name => "anothertest", :type => "openshift"}
+          {:name => "bulktest", :source_type_name => "amazon"},
+          {:name => "anothertest", :source_type_name => "openshift"}
         ]}
       end
 
@@ -36,7 +36,7 @@ describe Sources::BulkAssembly do
     end
 
     context "when given a bad source type" do
-      let(:params) { {:sources => [{:name => "the bad source", :type => "nothere"}]} }
+      let(:params) { {:sources => [{:name => "the bad source", :source_type_name => "nothere"}]} }
 
       it "raises exception" do
         expect { subject }.to raise_error(ActiveRecord::ActiveRecordError)
@@ -45,7 +45,7 @@ describe Sources::BulkAssembly do
   end
 
   context "when creating a source + subresource" do
-    let(:sourcehash) { {:sources => [{:name => "mysource", :type => "amazon"}]} }
+    let(:sourcehash) { {:sources => [{:name => "mysource", :source_type_name => "amazon"}]} }
 
     context "when the request is well formed" do
       context "with a single endpoint" do
@@ -61,7 +61,7 @@ describe Sources::BulkAssembly do
       end
 
       context "with a single application" do
-        let(:params) { sourcehash.merge!(:applications => [{:type => "cost", :source_name => "mysource"}]) }
+        let(:params) { sourcehash.merge!(:applications => [{:application_type_name => "cost", :source_name => "mysource"}]) }
 
         it "creates a source and application and links them together" do
           output = subject
@@ -75,7 +75,7 @@ describe Sources::BulkAssembly do
       context "with an application that has private superkey data" do
         let(:params) do
           sourcehash.merge!(
-            :applications => [{:type => "cost", :source_name => "mysource", :extra => {:_superkey => {"guid" => "asdf"}}}]
+            :applications => [{:application_type_name => "cost", :source_name => "mysource", :extra => {:_superkey => {"guid" => "asdf"}}}]
           )
         end
 
@@ -134,7 +134,7 @@ describe Sources::BulkAssembly do
         let(:params) do
           sourcehash.merge!(
             :applications    => [
-              {:type => "cost", :source_name => "mysource"}
+              {:application_type_name => "cost", :source_name => "mysource"}
             ],
             :authentications => [
               {:authtype => "arn", :username => "user", :resource_type => "application", :resource_name => "cost"}
@@ -158,8 +158,8 @@ describe Sources::BulkAssembly do
         let(:params) do
           sourcehash.merge!(
             :applications    => [
-              {:type => "cost", :source_name => "mysource"},
-              {:type => "cloud-meter", :source_name => "mysource"},
+              {:application_type_name => "cost", :source_name => "mysource"},
+              {:application_type_name => "cloud-meter", :source_name => "mysource"},
             ],
             :authentications => [
               {:authtype => "arn", :username => "arn1", :resource_type => "application", :resource_name => "cost"},
@@ -194,7 +194,7 @@ describe Sources::BulkAssembly do
       end
 
       context "with a source+application request" do
-        let(:params) { sourcehash.merge!(:applications => [{:type => "cost", :source_name => "notmatched"}]) }
+        let(:params) { sourcehash.merge!(:applications => [{:application_type_name => "cost", :source_name => "notmatched"}]) }
 
         it "fails to link" do
           expect { subject }.to raise_error(ActiveRecord::ActiveRecordError)
@@ -217,7 +217,7 @@ describe Sources::BulkAssembly do
       context "with a source+application+authentication request" do
         let(:params) do
           sourcehash.merge!(
-            :applications    => [{:type => "cost", :source_name => "mysource"}],
+            :applications    => [{:application_type_name => "cost", :source_name => "mysource"}],
             :authentications => [{:authtype => "arn", :username => "user", :resource_type => "application", :resource_name => "notright"}]
           )
         end
@@ -236,7 +236,7 @@ describe Sources::BulkAssembly do
       context "when creating an application using an existing source" do
         let(:params) do
           {:applications => [
-            {:type => "cost", :source_name => source.name}
+            {:application_type_name => "cost", :source_name => source.name}
           ]}
         end
 
@@ -265,7 +265,7 @@ describe Sources::BulkAssembly do
         let(:params) do
           {
             :applications    => [
-              {:type => "cost", :source_name => source.name}
+              {:application_type_name => "cost", :source_name => source.name}
             ],
             :authentications => [
               {:authtype => "arn", :username => "an arn", :resource_type => "application", :resource_name => "cost"}
@@ -321,7 +321,7 @@ describe Sources::BulkAssembly do
         let(:apptype) { ApplicationType.find_by(:name => "/insights/platform/cost-management") }
         let(:params) do
           {
-            :sources      => [{:name => "testingsource", :type => "amazon"}],
+            :sources      => [{:name => "testingsource", :source_type_name => "amazon"}],
             :applications => [{:source_name => "testingsource", :application_type_id => apptype}]
           }
         end

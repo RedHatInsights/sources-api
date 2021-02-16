@@ -15,10 +15,12 @@ module Sources
         case @provider
         when "amazon"
           # account number to substitute in resources
-          e[:account] = @application.application_type
-                                    .app_meta_data
-                                    .detect { |field| field.name == "aws_wizard_account_number" }
-                                    .payload
+          acct = @application.application_type
+                             .app_meta_data
+                             .detect { |field| field.name == "aws_wizard_account_number" }
+                             &.payload
+
+          e[:account] = acct if acct
 
           # type of authentication to return
           e[:result_type] = @application.application_type.supported_authentication_types["amazon"]&.first

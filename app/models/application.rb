@@ -1,4 +1,6 @@
 class Application < ApplicationRecord
+  SUPERKEY_WORKFLOW = "account_authorization".freeze
+
   include TenancyConcern
   include EventConcern
   include AvailabilityStatusConcern
@@ -27,7 +29,7 @@ class Application < ApplicationRecord
   end
 
   def superkey_workflow
-    return unless source.app_creation_workflow == "account_authorization"
+    return unless source.app_creation_workflow == SUPERKEY_WORKFLOW
 
     sk = Sources::SuperKey.new(
       :provider    => source.source_type.name,
