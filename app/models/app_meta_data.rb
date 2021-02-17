@@ -3,8 +3,8 @@ class AppMetaData < MetaData
 
   def self.seed
     transaction do
-      env = ENV['SOURCES_ENV']
-      raise "No SOURCES_ENV set, cannot continue seeding." unless env
+      # Default to CI
+      env = ENV['SOURCES_ENV'] || "ci"
 
       destroy_all
 
