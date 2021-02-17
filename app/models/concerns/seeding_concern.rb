@@ -14,7 +14,6 @@ module SeedingConcern
 
         seeds.each do |key, attributes|
           if excluded_types.include?(key)
-            records.delete(key)
             logger.info("Skipping #{key}")
           elsif (r = records.delete(key))
             logger.info("Updating #{key}")
