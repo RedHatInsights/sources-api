@@ -43,7 +43,7 @@ module Api
           )
 
           logger.debug("Publishing message for Source#availability_check [#{{"source_id" => source.id, "topic" => topic}}]...Complete")
-        rescue e
+        rescue => e
           logger.error("Hit error attempting to publish [#{{"source_id" => source.id, "topic" => topic}}] during Source#availability_check: #{e.message}")
         end
 
