@@ -4,6 +4,7 @@ amazon:
   :schema:
     :authentication:
     - :type: access_key_secret_key
+      :is_superkey: true
       :name: AWS Secret key
       :fields:
       - :component: text-field

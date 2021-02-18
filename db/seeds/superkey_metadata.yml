@@ -3,10 +3,8 @@
   steps:
   - step: 1
     name: s3
-    payload:
-      bucket_name: S3
-    substitutions:
-      S3: gen_s3_name
+    payload: {}
+    substitutions: {}
   - step: 2
     name: policy
     payload:
@@ -37,7 +35,7 @@
         ]
       }
     substitutions:
-    - S3BUCKET: s3
+      S3BUCKET: s3
   - step: 3
     name: role
     payload:
@@ -55,11 +53,11 @@
         ]
       }
     substitutions:
-    - ACCOUNT: get_account
+      ACCOUNT: get_account
   - step: 3
     name: bind_role
     payload: {}
-    substitutions: []
+    substitutions: {}
 
 "/insights/platform/cloud-meter":
   steps:
@@ -92,7 +90,7 @@
           }
         ]
       }
-    substitutions: []
+    substitutions: {}
   - step: 2
     name: role
     payload:
@@ -114,4 +112,4 @@
   - step: 3
     name: bind_role
     payload: {}
-    substitutions: []
+    substitutions: {}

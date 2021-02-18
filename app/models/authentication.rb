@@ -19,6 +19,10 @@ class Authentication < ApplicationRecord
   private
 
   def set_source
-    self.source_id = resource&.source_id
+    self.source_id = if resource.instance_of?(Source)
+                       resource.id
+                     else
+                       resource.try(:source_id)
+                     end
   end
 end

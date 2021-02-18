@@ -2098,6 +2098,13 @@
       "Source": {
         "type": "object",
         "properties": {
+          "app_creation_workflow": {
+            "type": "string",
+            "enum": [
+              "manual_configuration",
+              "account_authorization"
+            ]
+          },
           "availability_status": {
             "type": "string"
           },
