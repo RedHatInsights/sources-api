@@ -22,6 +22,8 @@ class Source < ApplicationRecord
   validates :name, :presence => true, :allow_blank => false,
             :uniqueness => { :scope => :tenant_id }
 
+  after_update :availability_check, :unless => :availability_status
+
   def default_endpoint
     default = endpoints.detect(&:default)
     default || endpoints.build(:default => true, :tenant => tenant)
@@ -44,7 +46,72 @@ class Source < ApplicationRecord
   end
 
   def remove_availability_status!(source = nil)
+    return if availability_status.nil?
+
     remove_availability_status(source)
     save!
+  end
+
+  def availability_check
+    check_source_availability
+    check_application_availability
+  end
+
+  private
+
+  def check_source_availability
+    topic = "platform.topological-inventory.operations-#{source_type.name}"
+
+    logger.info("Initiating Source#availability_check [#{{"source_id" => id, "topic" => topic}}]")
+
+    begin
+      logger.debug("Publishing message for Source#availability_check [#{{"source_id" => id, "topic" => topic}}]")
+
+      Sources::Api::Messaging.client.publish_topic(
+        :service => topic,
+        :event   => "Source.availability_check",
+        :payload => {
+          :params => {
+            :source_id       => id.to_s,
+            :source_uid      => uid.to_s,
+            :source_ref      => source_ref.to_s,
+            :external_tenant => tenant.external_tenant
+          }
+        }
+      )
+
+      logger.debug("Publishing message for Source#availability_check [#{{"source_id" => id, "topic" => topic}}]...Complete")
+    rescue => e
+      logger.error("Hit error attempting to publish [#{{"source_id" => id, "topic" => topic}}] during Source#availability_check: #{e.message}")
+    end
+  end
+
+  def check_application_availability
+    application_types.each do |app_type|
+      app_env_prefix = app_type.name.split('/').last.upcase.tr('-', '_')
+      url = ENV["#{app_env_prefix}_AVAILABILITY_CHECK_URL"]
+      next if url.blank?
+
+      logger.info("Requesting #{app_type.display_name} Source#availability_check [#{{"source_id" => id, "url" => url}}]")
+
+      begin
+        headers = {
+          "Content-Type"  => "application/json",
+          "x-rh-identity" => Base64.strict_encode64({'identity' => {'account_number' => tenant.external_tenant}}.to_json)
+        }
+
+        uri = URI.parse(url)
+        net_http = Net::HTTP.new(uri.host, uri.port)
+        net_http.open_timeout = net_http.read_timeout = 10
+
+        request = Net::HTTP::Post.new(uri.request_uri, headers)
+        request.body = {"source_id" => id.to_s}.to_json
+
+        response = net_http.request(request)
+        raise response.message unless response.kind_of?(Net::HTTPSuccess)
+      rescue => e
+        logger.error("Failed to request #{app_type.display_name} Source#availability_check [#{{"source_id" => id, "url" => url}}] Error: #{e.message}")
+      end
+    end
   end
 end
