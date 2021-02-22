@@ -4,7 +4,7 @@ plugin "bundler-inject", "~> 1.1"
 require File.join(Bundler::Plugin.index.load_paths("bundler-inject")[0], "bundler-inject") rescue nil
 
 # Parser for Clowder config in ENV['ACG_CONFIG'] path
-gem 'app-common-ruby', :git => 'https://github.com/RedHatInsights/app-common-ruby', :branch => 'master', :require => false
+gem 'app-common-ruby', :git => 'https://github.com/slemrmartin/app-common-ruby', :branch => 'master', :require => false
 
 gem 'cloudwatchlogger',     '~> 0.2.1'
 gem 'insights-api-common',  '~> 5.0'
