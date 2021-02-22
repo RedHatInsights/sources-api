@@ -19,6 +19,7 @@ Rails.application.routes.draw do
     namespace :v3x1, :path => "v3.1" do
       get "/openapi.json", :to => "root#openapi"
       post "/graphql", :to => "graphql#query"
+      post "/bulk_create", :to => "bulk_create#create"
 
       resources :application_types,           :only => [:index, :show] do
         resources :sources, :only => [:index]

@@ -24,4 +24,8 @@ class Source < ApplicationRecord
     default = endpoints.detect(&:default)
     default || endpoints.build(:default => true, :tenant => tenant)
   end
+
+  def super_key
+    authentications.find_by!(:authtype => "superkey")
+  end
 end
