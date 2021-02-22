@@ -14,6 +14,8 @@ class Endpoint < ApplicationRecord
 
   before_save :set_default, :if => proc { source.endpoints.count.zero? }
 
+  after_destroy :remove_availability_status_on_source
+
   def base_url_path
     URI::Generic.build(:scheme => scheme, :host => host, :port => port, :path => path).to_s
   end

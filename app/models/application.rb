@@ -16,7 +16,7 @@ class Application < ApplicationRecord
 
   before_save :copy_superkey_data
   after_create :superkey_workflow
-  after_destroy :superkey_workflow
+  after_destroy :superkey_workflow, :remove_availability_status_on_source
 
   def remove_availability_status!
     remove_availability_status

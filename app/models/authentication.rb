@@ -16,6 +16,8 @@ class Authentication < ApplicationRecord
   before_validation :set_source
   validate :only_one_superkey, :if => proc { new_record? && source.super_key? }
 
+  after_destroy :remove_availability_status_on_source
+
   private
 
   def set_source
@@ -33,5 +35,9 @@ class Authentication < ApplicationRecord
     if source.authentications.any? { |auth| auth.authtype == superkey_authtype }
       errors.add(:only_one_superkey, "Only one Authentication of #{superkey_authtype} is allowed on the Source.")
     end
+  end
+
+  def remove_availability_status_on_source
+    source.remove_availability_status!(self.class.name.to_sym)
   end
 end
