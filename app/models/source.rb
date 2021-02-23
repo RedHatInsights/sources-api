@@ -25,8 +25,9 @@ class Source < ApplicationRecord
     default || endpoints.build(:default => true, :tenant => tenant)
   end
 
+  # finds the superkey authentication tied to the Source
   def super_key
-    authentications.find_by!(:authtype => "superkey")
+    authentications.detect { |a| a.authtype == source_type.superkey_authtype }
   end
 
   def remove_availability_status(source = nil)

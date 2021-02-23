@@ -42,6 +42,11 @@ class Application < ApplicationRecord
   def superkey_workflow
     return unless source.app_creation_workflow == SUPERKEY_WORKFLOW
 
+    if source.super_key.nil?
+      update!(:availability_status => "unavailable", :availability_status_error => "Superkey Credential Missing")
+      return
+    end
+
     sk = Sources::SuperKey.new(
       :provider    => source.source_type.name,
       :source_id   => source.id,
