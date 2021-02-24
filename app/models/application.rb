@@ -1,6 +1,4 @@
 class Application < ApplicationRecord
-  SUPERKEY_WORKFLOW = "account_authorization".freeze
-
   include TenancyConcern
   include EventConcern
   include AvailabilityStatusConcern
@@ -40,10 +38,13 @@ class Application < ApplicationRecord
   end
 
   def superkey_workflow
-    return unless source.app_creation_workflow == SUPERKEY_WORKFLOW
+    return unless source.super_key?
 
-    if source.super_key.nil?
-      update!(:availability_status => "unavailable", :availability_status_error => "Superkey Credential Missing")
+    if source.super_key_credential.nil?
+      update!(
+        :availability_status       => "unavailable",
+        :availability_status_error => "The source is missing credentials for account authorization. Please remove the source and try to add it again / open a ticket to solve this issue."
+      )
       return
     end
 

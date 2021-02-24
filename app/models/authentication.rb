@@ -14,6 +14,7 @@ class Authentication < ApplicationRecord
   validates :availability_status, :inclusion => { :in => %w[available unavailable] }, :allow_nil => true
 
   before_validation :set_source
+  validate :only_one_superkey, :if => proc { source.super_key? }
 
   private
 
@@ -23,5 +24,14 @@ class Authentication < ApplicationRecord
                      else
                        resource.try(:source_id)
                      end
+  end
+
+  def only_one_superkey
+    superkey_authtype = source.source_type.superkey_authtype
+    return unless superkey_authtype && authtype == superkey_authtype
+
+    if source.authentications.any? { |auth| auth.authtype == superkey_authtype }
+      errors.add(:only_one_superkey, "Only one Authentication of #{superkey_authtype} is allowed on the Source.")
+    end
   end
 end
