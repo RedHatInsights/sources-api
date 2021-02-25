@@ -7,6 +7,12 @@ describe "v3.1 - /bulk_create" do
     ApplicationType.seed
   end
 
+  let(:client) { instance_double("ManageIQ::Messaging::Client") }
+  before do
+    allow(client).to receive(:publish_topic)
+    allow(Sources::Api::Messaging).to receive(:client).and_return(client)
+  end
+
   let(:amazontype) { SourceType.find_by(:name => "amazon") }
   let(:swatchapp) { ApplicationType.find_by(:name => "/insights/platform/cloud-meter") }
   let(:costapp) { ApplicationType.find_by(:name => "/insights/platform/cost-management") }
@@ -19,6 +25,8 @@ describe "v3.1 - /bulk_create" do
     context "with source + application" do
       context "with string apptype" do
         it "creates the resources" do
+          expect(Sources::Api::Events).to receive(:raise_event).twice
+
           post collection_path,
                :headers => headers,
                :params  => sources.merge!(
@@ -27,7 +35,7 @@ describe "v3.1 - /bulk_create" do
 
           expect(response).to have_attributes(
             :status      => 201,
-            :parsed_body => a_hash_including(*%w[sources applications])
+            :parsed_body => a_hash_including('sources', 'applications')
           )
 
           source = response.parsed_body["sources"].first
@@ -39,6 +47,8 @@ describe "v3.1 - /bulk_create" do
 
       context "with id apptype" do
         it "creates the resources" do
+          expect(Sources::Api::Events).to receive(:raise_event).twice
+
           post collection_path,
                :headers => headers,
                :params  => sources.merge!(
@@ -47,7 +57,7 @@ describe "v3.1 - /bulk_create" do
 
           expect(response).to have_attributes(
             :status      => 201,
-            :parsed_body => a_hash_including(*%w[sources applications])
+            :parsed_body => a_hash_including('sources', 'applications')
           )
 
           source = response.parsed_body["sources"].first
@@ -59,6 +69,8 @@ describe "v3.1 - /bulk_create" do
 
       context "with multiple applications" do
         it "creates the resources" do
+          expect(Sources::Api::Events).to receive(:raise_event).thrice
+
           post collection_path,
                :headers => headers,
                :params  => sources.merge!(
@@ -70,7 +82,7 @@ describe "v3.1 - /bulk_create" do
 
           expect(response).to have_attributes(
             :status      => 201,
-            :parsed_body => a_hash_including(*%w[sources applications])
+            :parsed_body => a_hash_including('sources', 'applications')
           )
 
           source = response.parsed_body["sources"].first
@@ -84,6 +96,8 @@ describe "v3.1 - /bulk_create" do
 
     context "with source + endpoint" do
       it "creates the resources" do
+        expect(Sources::Api::Events).to receive(:raise_event).twice
+
         post collection_path,
              :headers => headers,
              :params  => sources.merge!(
@@ -92,7 +106,7 @@ describe "v3.1 - /bulk_create" do
 
         expect(response).to have_attributes(
           :status      => 201,
-          :parsed_body => a_hash_including(*%w[sources endpoints])
+          :parsed_body => a_hash_including('sources', 'endpoints')
         )
 
         source = response.parsed_body["sources"].first
@@ -104,6 +118,8 @@ describe "v3.1 - /bulk_create" do
 
     context "with source + application + authentication" do
       it "creates the resources" do
+        expect(Sources::Api::Events).to receive(:raise_event).thrice
+
         post collection_path,
              :headers => headers,
              :params  => sources.merge!(
@@ -121,7 +137,7 @@ describe "v3.1 - /bulk_create" do
 
         expect(response).to have_attributes(
           :status      => 201,
-          :parsed_body => a_hash_including(*%w[sources applications authentications])
+          :parsed_body => a_hash_including('sources', 'applications', 'authentications')
         )
 
         source = response.parsed_body["sources"].first
@@ -135,6 +151,8 @@ describe "v3.1 - /bulk_create" do
 
     context "with source + endpoint + authentication" do
       it "creates the resources" do
+        expect(Sources::Api::Events).to receive(:raise_event).thrice
+
         post collection_path,
              :headers => headers,
              :params  => sources.merge!(
@@ -152,7 +170,7 @@ describe "v3.1 - /bulk_create" do
 
         expect(response).to have_attributes(
           :status      => 201,
-          :parsed_body => a_hash_including(*%w[sources endpoints authentications])
+          :parsed_body => a_hash_including('sources', 'endpoints', 'authentications')
         )
 
         source = response.parsed_body["sources"].first
