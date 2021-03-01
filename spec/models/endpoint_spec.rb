@@ -3,10 +3,30 @@ require "models/shared/availability_status.rb"
 describe Endpoint do
   include ::Spec::Support::TenantIdentity
 
-  it_behaves_like "availability_status" do
-    let!(:record)    { create(:endpoint, :source => create(:source)) }
+  include_context "availability_status_context"
+  it_behaves_like "availability_status_examples" do
+    let!(:source)    { create(:source, :availability_status => available_status, :last_checked_at => timestamp) }
+    let!(:record)    { create(:endpoint, :source => source, :availability_status => available_status) }
     let!(:update)    { {:path => 'new_path'} }
     let!(:no_update) { {:path => record.path} }
+
+    context "#with changes" do
+      it "resets availability status for related source" do
+        record.update!(update)
+
+        expect(record.source.availability_status).to eq(nil)
+        expect(record.source.last_checked_at).to eq(nil)
+      end
+    end
+
+    context "#without changes" do
+      it "does not reset availability status for related source" do
+        record.update!(no_update)
+
+        expect(record.source.availability_status).to eq(available_status)
+        expect(record.source.last_checked_at).to eq(timestamp)
+      end
+    end
   end
 
   describe "#base_url_path" do

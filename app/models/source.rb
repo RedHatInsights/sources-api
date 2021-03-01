@@ -28,4 +28,16 @@ class Source < ApplicationRecord
   def super_key
     authentications.find_by!(:authtype => "superkey")
   end
+
+  def remove_availability_status(source = nil)
+    return if source == :Application && endpoints.any?
+
+    self.availability_status = nil
+    self.last_checked_at = nil
+  end
+
+  def remove_availability_status!(source = nil)
+    remove_availability_status(source)
+    save!
+  end
 end
