@@ -23,6 +23,9 @@ module Api
           end
         end
 
+        # raise a single bulk-create event with the types + array of id's
+        raise_event("Bulk.create", bulk.output.transform_values { |val| val&.map(&:id) }.as_json)
+
         render :status => 201, :json => bulk.output
       end
     end

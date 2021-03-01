@@ -25,7 +25,7 @@ describe "v3.1 - /bulk_create" do
     context "with source + application" do
       context "with string apptype" do
         it "creates the resources" do
-          expect(Sources::Api::Events).to receive(:raise_event).twice
+          expect(Sources::Api::Events).to receive(:raise_event).exactly(3).times
 
           post collection_path,
                :headers => headers,
@@ -47,7 +47,7 @@ describe "v3.1 - /bulk_create" do
 
       context "with id apptype" do
         it "creates the resources" do
-          expect(Sources::Api::Events).to receive(:raise_event).twice
+          expect(Sources::Api::Events).to receive(:raise_event).exactly(3).times
 
           post collection_path,
                :headers => headers,
@@ -69,7 +69,7 @@ describe "v3.1 - /bulk_create" do
 
       context "with multiple applications" do
         it "creates the resources" do
-          expect(Sources::Api::Events).to receive(:raise_event).thrice
+          expect(Sources::Api::Events).to receive(:raise_event).exactly(4).times
 
           post collection_path,
                :headers => headers,
@@ -96,7 +96,7 @@ describe "v3.1 - /bulk_create" do
 
     context "with source + endpoint" do
       it "creates the resources" do
-        expect(Sources::Api::Events).to receive(:raise_event).twice
+        expect(Sources::Api::Events).to receive(:raise_event).exactly(3).times
 
         post collection_path,
              :headers => headers,
@@ -118,7 +118,7 @@ describe "v3.1 - /bulk_create" do
 
     context "with source + application + authentication" do
       it "creates the resources" do
-        expect(Sources::Api::Events).to receive(:raise_event).exactly(4).times
+        expect(Sources::Api::Events).to receive(:raise_event).exactly(5).times
 
         post collection_path,
              :headers => headers,
@@ -151,7 +151,7 @@ describe "v3.1 - /bulk_create" do
 
     context "with source + endpoint + authentication" do
       it "creates the resources" do
-        expect(Sources::Api::Events).to receive(:raise_event).thrice
+        expect(Sources::Api::Events).to receive(:raise_event).exactly(4).times
 
         post collection_path,
              :headers => headers,
