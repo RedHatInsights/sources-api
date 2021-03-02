@@ -2,6 +2,7 @@ class Authentication < ApplicationRecord
   include PasswordConcern
   include TenancyConcern
   include EventConcern
+  include AvailabilityStatusConcern
   encrypt_column :password
 
   belongs_to :resource, :polymorphic => true
@@ -38,6 +39,14 @@ class Authentication < ApplicationRecord
   end
 
   def remove_availability_status_on_source
-    source.remove_availability_status!(self.class.name.to_sym)
+    super
+
+    unless resource.class == Source
+      remove_availability_status_on_resource
+    end
+  end
+
+  def remove_availability_status_on_resource
+    resource.remove_availability_status!
   end
 end
