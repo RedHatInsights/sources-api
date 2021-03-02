@@ -29,7 +29,7 @@ module Sources
 
       Sources::Api::Messaging.send_superkey_create_request(
         :application => @application,
-        :super_key   => src.super_key,
+        :super_key   => src.super_key_credential,
         :provider    => @provider,
         :extra       => extra
       )

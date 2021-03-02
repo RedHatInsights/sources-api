@@ -8,7 +8,9 @@ module Sources
       @applications = params[:applications]
 
       # separate out the superkey authentications.
-      @superkeys, @authentications = params[:authentications]&.partition { |auth| auth[:authtype] == "superkey" }
+      @superkeys, @authentications = params[:authentications]&.partition do |auth|
+        superkey_authtypes.include?(auth[:authtype])
+      end
     end
 
     def process
@@ -55,7 +57,7 @@ module Sources
 
     def create_endpoints(endpoints, resources)
       endpoints&.map do |endpoint|
-        src = find_resource(resources, "Source", endpoint.delete(:source_name))
+        src = find_resource(resources, :sources, endpoint.delete(:source_name))
 
         Endpoint.create!(endpoint.merge!(:source_id => src.id))
       end
@@ -63,7 +65,7 @@ module Sources
 
     def create_applications(applications, resources)
       applications&.map do |app|
-        src = find_resource(resources, "Source", app.delete(:source_name))
+        src = find_resource(resources, :sources, app.delete(:source_name))
         # Get the application by id or lookup by type string
         appt = ApplicationType.find_by(:id => app.delete(:application_type_id)) || get_application_type(app.delete(:application_type_name))
 
@@ -80,9 +82,9 @@ module Sources
         # be looked up differently
         parent = case resource_type
                  when "source"
-                   find_resource(resources, "Source", resource_name)
+                   find_resource(resources, :sources, resource_name)
                  when "endpoint"
-                   find_resource(resources, "Endpoint", resource_name, :host)
+                   find_resource(resources, :endpoints, resource_name, :host)
                  when "application"
                    # we have to look up the application by id before jumping
                    # into looking for the current resources since it matches by
@@ -100,6 +102,12 @@ module Sources
 
     private
 
+    # this method finds a resource that has already been created _in this
+    # payload, which is what the `resources` param is
+    # `resource_name` is the matcher
+    # `resource_type` is the type that has been already created, e.g. :sources for
+    # a source that was already created. It is the key in the response hash.
+    # `field` is which message to send the existing objects to get a match
     def find_resource(resources, resource_type, resource_name, field = :name)
       # use the safe operator in the case of creating a subresource on an
       # existing source
@@ -109,9 +117,9 @@ module Sources
       # the db so we need to try and look it up
       if parent.nil?
         case resource_type
-        when "Source"
+        when :sources
           parent = Source.find_by(:name => resource_name) || Source.find_by(:id => resource_name)
-        when "Endpoint"
+        when :endpoints
           parent = Endpoint.find_by(:host => resource_name) || Endpoint.find_by(:id => resource_name)
         end
       end
@@ -125,6 +133,10 @@ module Sources
       ApplicationType.all.detect { |apptype| apptype.name.match?(type) }.tap do |found|
         raise ActiveRecord::ActiveRecordError, "no applicable application type found for #{type}" if found.nil?
       end
+    end
+
+    def superkey_authtypes
+      @superkey_authtypes ||= SourceType.all.map(&:superkey_authtype).compact!
     end
   end
 end
