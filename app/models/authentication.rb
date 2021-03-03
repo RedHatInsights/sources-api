@@ -14,7 +14,7 @@ class Authentication < ApplicationRecord
   validates :availability_status, :inclusion => { :in => %w[available unavailable] }, :allow_nil => true
 
   before_validation :set_source
-  validate :only_one_superkey, :if => proc { source.super_key? }
+  validate :only_one_superkey, :if => proc { new_record? && source.super_key? }
 
   private
 
