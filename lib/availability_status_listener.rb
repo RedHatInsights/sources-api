@@ -1,4 +1,5 @@
 require "manageiq-messaging"
+require 'sources/api/clowder_config'
 
 class AvailabilityStatusListener
   SERVICE_NAME = "platform.sources.status".freeze
@@ -20,7 +21,7 @@ class AvailabilityStatusListener
 
     ManageIQ::Messaging::Client.open(messaging_client_options) do |client|
       client.subscribe_topic(
-        :service     => SERVICE_NAME,
+        :service     => Sources::Api::ClowderConfig.kafka_topic(SERVICE_NAME),
         :persist_ref => GROUP_REF,
         :max_bytes   => 500_000
       ) do |event|

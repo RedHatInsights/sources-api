@@ -4,10 +4,38 @@ function urlescape() {
   PAYLOAD="$1" ruby -rcgi -e "puts CGI.escape(ENV['PAYLOAD'])"
 }
 
+if [[ -z $ACG_CONFIG ]]; then
+  DATABASE_NAME="sources_production"
+  export WEB_PORT=3000
+else
+  CONFIG_STRING=`ruby<<EOF
+  require 'json'
+  file = File.read(ENV['ACG_CONFIG'])
+  data = JSON.parse(file)
+  puts data['database']['hostname']
+  puts data['database']['port']
+  puts data['database']['username']
+  puts data['database']['password']
+  puts data['database']['name']
+  puts data['webPort']
+EOF
+`
+
+  CONFIG_VALUES=( $CONFIG_STRING )
+
+  export DATABASE_HOST=${CONFIG_VALUES[0]}
+  export DATABASE_PORT=${CONFIG_VALUES[1]}
+  DATABASE_USER=${CONFIG_VALUES[2]}
+  DATABASE_PASSWORD=${CONFIG_VALUES[3]}
+  DATABASE_NAME=${CONFIG_VALUES[4]}
+
+  export WEB_PORT=${CONFIG_VALUES[5]}
+fi
+
 safeuser=$(urlescape ${DATABASE_USER})
 safepass=$(urlescape ${DATABASE_PASSWORD})
 
 export RAILS_ENV=production
-export DATABASE_URL="postgresql://${safeuser}:${safepass}@${DATABASE_HOST}:${DATABASE_PORT}/sources_production?encoding=utf8&pool=5&wait_timeout=5"
+export DATABASE_URL="postgresql://${safeuser}:${safepass}@${DATABASE_HOST}:${DATABASE_PORT}/${DATABASE_NAME}?encoding=utf8&pool=5&wait_timeout=5"
 
 exec ${@}

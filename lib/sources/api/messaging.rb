@@ -1,3 +1,5 @@
+require "sources/api/clowder_config"
+
 module Sources
   module Api
     module Messaging
@@ -6,8 +8,8 @@ module Sources
 
         @client ||= ManageIQ::Messaging::Client.open(
           :protocol => :Kafka,
-          :host     => ENV["QUEUE_HOST"] || "localhost",
-          :port     => ENV["QUEUE_PORT"] || "9092",
+          :host     => Sources::Api::ClowderConfig.instance['kafkaHost'],
+          :port     => Sources::Api::ClowderConfig.instance['kafkaPort'],
           :encoding => "json"
         )
       end
@@ -27,7 +29,7 @@ module Sources
         }
 
         client.publish_topic(
-          :service => "platform.sources.superkey-requests",
+          :service => Sources::Api::ClowderConfig.kafka_topic("platform.sources.superkey-requests"),
           :event   => "create_application",
           :payload => payload
         )
