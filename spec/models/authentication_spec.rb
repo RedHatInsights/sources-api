@@ -17,5 +17,9 @@ describe Authentication do
         )
       end.to raise_error(ActiveRecord::ActiveRecordError)
     end
+
+    it "allows updating the superkey record" do
+      expect { authentication.update!(:username => "another thing") }.not_to raise_error
+    end
   end
 end
