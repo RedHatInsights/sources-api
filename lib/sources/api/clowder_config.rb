@@ -1,4 +1,4 @@
-require 'app-common-ruby'
+require 'clowder-common-ruby'
 require 'singleton'
 
 module Sources
@@ -8,8 +8,8 @@ module Sources
 
       def self.instance
         @instance ||= {}.tap do |options|
-          if AppCommonRuby::Config.clowder_enabled?
-            config = AppCommonRuby::Config.load
+          if ::ClowderCommonRuby::Config.clowder_enabled?
+            config = ::ClowderCommonRuby::Config.load
             options["awsAccessKeyId"]     = config.logging.cloudwatch.accessKeyId
             options["awsRegion"]          = config.logging.cloudwatch.region
             options["awsSecretAccessKey"] = config.logging.cloudwatch.secretAccessKey
