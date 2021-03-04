@@ -1681,13 +1681,6 @@
           "source_id": {
             "$ref": "#/components/schemas/ID"
           },
-          "status": {
-            "example": "valid",
-            "type": "string"
-          },
-          "status_details": {
-            "type": "string"
-          },
           "username": {
             "example": "user@example.com",
             "type": "string"
