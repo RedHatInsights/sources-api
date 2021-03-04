@@ -3,6 +3,15 @@ kind: Template
 metadata:
   name: sources
 objects:
+- apiVersion: v1
+  kind: Secret # For ephemeral/local environment
+  metadata:
+    name: sources-api-secrets
+    labels:
+      app: sources
+  stringData:
+    encryption-key: "${ENCRYPTION_KEY}"
+    secret-key: "${SECRET_KEY}"
 - apiVersion: cloud.redhat.com/v1alpha1
   kind: ClowdApp
   metadata:
@@ -12,7 +21,6 @@ objects:
     deployments:
     - name: api
       minReplicas: ${{MIN_REPLICAS}}
-#      web: true # for compatibility with clowder 0.3.0
       webServices:
         public:
           enabled: true # port 8000 is default in ClowdEnvironment
@@ -59,8 +67,6 @@ objects:
           value: ${PATH_PREFIX}
         - name: PGSSLMODE
           value: ${PGSSLMODE}
-        - name: PGSSLROOTCERT
-          value: /etc/rds-certs/rds-cacert
         - name: SECRET_KEY_BASE
           valueFrom:
             secretKeyRef:
@@ -83,14 +89,6 @@ objects:
           requests:
             cpu: ${CPU_REQUEST}
             memory: ${MEMORY_REQUEST}
-        volumeMounts:
-        - mountPath: /etc/rds-certs
-          name: rds-client-ca
-          readOnly: true
-        volumes:
-        - name: rds-client-ca
-          secret:
-            secretName: rds-client-ca
     database:
       name: sources # looking for rds: sources-db resource in app-interface
       version: 12
@@ -133,13 +131,19 @@ parameters:
   required: true
   value: cloudigrade-api
 - name: CLOUD_METER_SOURCES_API_PORT
-  value: '80'
+  value: '8000'
 - name: CLOUD_METER_SOURCES_API_AVAILABILITY_CHECK_PATH
   value: /internal/api/cloudigrade/v1/availability_status
 - name: CPU_LIMIT
   value: 500m
 - name: CPU_REQUEST
   value: 100m
+- name: ENCRYPTION_KEY
+  displayName: Encryption Key (Ephemeral)
+  required: true
+  description: Encryption Key for Passwords
+  from: "[a-zA-Z0-9]{43}"
+  generate: expression
 - description: Clowder ENV
   name: ENV_NAME
   required: true
@@ -157,7 +161,7 @@ parameters:
   required: true
   value: koku-sources
 - name: KOKU_SOURCES_API_PORT
-  value: '8080'
+  value: '8000'
 - name: KOKU_SOURCES_API_APP_CHECK_PATH
   value: /api/cost-management/v1/source-status/
 - name: LOG_LEVEL
@@ -189,12 +193,18 @@ parameters:
   displayName: Rbac Service Port
   name: RBAC_PORT
   required: true
-  value: '8080'
+  value: '8000'
 - description: Scheme to use for the RBAC service URL. Can be either http or https
   displayName: Rbac Service Scheme
   name: RBAC_SCHEME
   required: true
   value: http
+- name: SECRET_KEY
+  displayName: Secret Key (Ephemeral)
+  required: true
+  description: Rails SECRET_KEY_BASE
+  from: "[a-f0-9]{128}"
+  generate: expression
 - description: Env name for seed
   name: SOURCES_ENV
   required: true
