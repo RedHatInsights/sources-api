@@ -40,7 +40,7 @@ module Sources
 
         payload = {
           :tenant_id       => application.tenant.external_tenant,
-          :super_key       => application.source.super_key.id.to_s,
+          :super_key       => application.source.super_key_credential.id.to_s,
           :guid            => application.superkey_data["guid"],
           :provider        => application.superkey_data["provider"],
           :steps_completed => application.superkey_data["steps"],
