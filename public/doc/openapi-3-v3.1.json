@@ -2260,6 +2260,13 @@
                 },
                 "source_type_id": {
                   "type": "string"
+                },
+                "app_creation_workflow": {
+                  "type": "string",
+                  "enum": [
+                    "manual_configuration",
+                    "account_authorization"
+                  ]
                 }
               }
             }
