@@ -1438,13 +1438,6 @@
           "source_id": {
             "$ref": "#/components/schemas/ID"
           },
-          "status": {
-            "example": "valid",
-            "type": "string"
-          },
-          "status_details": {
-            "type": "string"
-          },
           "tenant": {
             "type": "string",
             "readOnly": true
