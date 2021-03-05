@@ -13,7 +13,8 @@ module AvailabilityStatusConcern
     "last_available_at",
     "last_checked_at",
     "updated_at",
-    "name"
+    "name",
+    "superkey_data"
   ].freeze
 
   def update_status
