@@ -48,6 +48,8 @@ objects:
         env:
         - name: APP_NAME
           value: ${APP_NAME}
+        - name: DB_POOL_SIZE
+          value: ${DB_POOL_SIZE}
         - name: RAILS_LOG_LEVEL
           value: ${LOG_LEVEL}
           # TODO: It never can be blank!
@@ -138,6 +140,10 @@ parameters:
   value: 500m
 - name: CPU_REQUEST
   value: 100m
+- name: DB_POOL_SIZE
+  displayName: Database Pool size
+  description: Database pool configuration in DATABASE_URL env
+  value: "5"
 - name: ENCRYPTION_KEY
   displayName: Encryption Key (Ephemeral)
   required: true
