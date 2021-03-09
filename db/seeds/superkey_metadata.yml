@@ -3,9 +3,32 @@
   steps:
   - step: 1
     name: s3
-    payload: {}
-    substitutions: {}
+    payload:
+      "create_cost_policy"
+    substitutions:
+      S3BUCKET: s3
   - step: 2
+    name: cost_report
+    payload:
+      {
+        "additional_artifacts": [
+          "REDSHIFT",
+          "QUICKSIGHT"
+        ],
+        "additional_schema_elements": [
+          "RESOURCES"
+        ],
+        "compression": "GZIP",
+        "format": "textORcsv",
+        "time_unit": "HOURLY",
+        "report_name": "koku",
+        "s3_prefix": "cost",
+        "s3_region": "us-east-1",
+        "s3_bucket": "S3BUCKET"
+      }
+    substitutions:
+      S3BUCKET: s3
+  - step: 3
     name: policy
     payload:
       {
@@ -36,7 +59,7 @@
       }
     substitutions:
       S3BUCKET: s3
-  - step: 3
+  - step: 4
     name: role
     payload:
       {
@@ -54,7 +77,7 @@
       }
     substitutions:
       ACCOUNT: get_account
-  - step: 3
+  - step: 5
     name: bind_role
     payload: {}
     substitutions: {}
