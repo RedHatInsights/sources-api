@@ -122,6 +122,21 @@ objects:
     - topicName: platform.topological-inventory.operations-satellite
       partitions: 3
       replicas: 3
+- apiVersion: v1
+  kind: Service
+  metadata:
+    name: sources-api-transitional
+    labels:
+      app: sources
+      pod: sources-api
+  spec:
+    ports:
+    - port: 8080
+      protocol: TCP
+      targetPort: 8000
+      name: weblegacy
+    selector:
+      pod: sources-api
 parameters:
 - description: Application name to be used in request paths.
   displayName: Application Name
