@@ -118,7 +118,7 @@ describe "v3.1 - /bulk_create" do
 
     context "with source + application + authentication" do
       it "creates the resources" do
-        expect(Sources::Api::Events).to receive(:raise_event).thrice
+        expect(Sources::Api::Events).to receive(:raise_event).exactly(4).times
 
         post collection_path,
              :headers => headers,
