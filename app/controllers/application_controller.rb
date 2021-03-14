@@ -74,6 +74,10 @@ class ApplicationController < ActionController::API
     send("api_#{version}_#{endpoint}_url", instance.id)
   end
 
+  def raise_event_if(ignore_raise_event, event, payload)
+    raise_event(event, payload) unless ignore_raise_event
+  end
+
   def raise_event(event, payload)
     headers = Insights::API::Common::Request.current_forwardable
     logger.debug("publishing message to topic \"platform.sources.event-stream\"...")

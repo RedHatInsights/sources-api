@@ -7,7 +7,10 @@ module Api
           authorize(record)
 
           record.update!(params_for_update)
-          raise_event("#{model}.update", record.as_json)
+
+          ignore_raise_event = record.try(:ignore_raise_event_for?, params_for_update.keys)
+          raise_event_if(ignore_raise_event, "#{model}.update", record.to_json)
+
           head :no_content
         end
       end

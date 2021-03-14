@@ -16,6 +16,10 @@ module Sources
 
         Messaging.client.publish_topic(publish_opts)
       end
+
+      def self.raise_event_if(condition, event, payload, headers = nil)
+        raise_event(event, payload, headers) unless condition
+      end
     end
   end
 end

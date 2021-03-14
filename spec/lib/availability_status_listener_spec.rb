@@ -34,18 +34,41 @@ RSpec.describe AvailabilityStatusListener do
       context "when status is available" do
         let(:status) { "available" }
 
-        it "updates availability status and last_available_at" do
-          expect(Sources::Api::Events).to receive(:raise_event).with("Endpoint.update", anything, anything)
+        context "Source" do
+          it "updates availability status and last_available_at" do
+            expect(Sources::Api::Events).to receive(:raise_event).with("Endpoint.update", anything, anything)
 
-          subject.subscribe_to_availability_status
+            subject.subscribe_to_availability_status
 
-          endpoint.reload
-          expect(endpoint).to have_attributes(
-            :availability_status       => status,
-            :availability_status_error => reason,
-            :last_available_at         => now,
-            :last_checked_at           => now
-          )
+            endpoint.reload
+            expect(endpoint).to have_attributes(
+              :availability_status       => status,
+              :availability_status_error => reason,
+              :last_available_at         => now,
+              :last_checked_at           => now
+            )
+          end
+        end
+
+        context "Application" do
+          let(:application) { create(:application) }
+
+          let(:resource_type) { "application" }
+          let(:resource_id)   { application.id.to_s }
+
+          it "updates availability status and last_available_at" do
+            expect(Sources::Api::Events).not_to receive(:raise_event)
+
+            subject.subscribe_to_availability_status
+
+            application.reload
+            expect(application).to have_attributes(
+              :availability_status       => status,
+              :availability_status_error => reason,
+              :last_available_at         => now,
+              :last_checked_at           => now
+            )
+          end
         end
       end
 
