@@ -81,6 +81,10 @@ class ApplicationController < ActionController::API
     Sources::Api::Events.raise_event_with_logging(event, payload, headers)
   end
 
+  def raise_event_unless(ignore_raise_event, event, payload)
+    raise_event_if(!ignore_raise_event, event, payload)
+  end
+
   def raise_event(event, payload)
     raise_event_if(false, event, payload)
   end

@@ -75,10 +75,6 @@ RSpec.describe("v3.1 - Applications") do
   end
 
   describe("/api/v3.1/applications/:id") do
-    def instance_path(id)
-      File.join(collection_path, id.to_s)
-    end
-
     context "get" do
       it "success: with a valid id" do
         instance = create(:application, payload.merge(:tenant => tenant))
@@ -186,5 +182,33 @@ RSpec.describe("v3.1 - Applications") do
         )
       end
     end
+  end
+
+  describe "superkey" do
+    describe "when creating an application attached to a superkey source" do
+      let(:src) { create(:source, :app_creation_workflow => "account_authorization") }
+
+      it "does not post the message on create" do
+        expect(Sources::Api::Events).not_to receive(:raise_event).with("Application.create", any_args)
+        post(collection_path, :params => {:application_type_id => 5, :source_id => src.id}, :headers => headers)
+      end
+    end
+
+    describe "when updating the application with logic" do
+      let(:src) { create(:source, :app_creation_workflow => "account_authorization") }
+      let(:instance) { create(:application, :source => src) }
+      let(:extra_attributes) { {:extra => {:_superkey => {"worked" => true}}} }
+
+      it "raises the create event instead of the update event" do
+        expect(Sources::Api::Events).to receive(:raise_event).with("Application.create", any_args).exactly(1).times
+        expect(Sources::Api::Events).not_to receive(:raise_event).with("Application.update", any_args)
+
+        patch(instance_path(instance.id), :params => extra_attributes.to_json, :headers => headers)
+      end
+    end
+  end
+
+  def instance_path(id)
+    File.join(collection_path, id.to_s)
   end
 end
