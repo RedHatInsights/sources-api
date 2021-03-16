@@ -7,8 +7,7 @@ module EventConcern
 
   def raise_event
     headers = Insights::API::Common::Request.current_forwardable
-    logger.debug("publishing message to topic \"platform.sources.event-stream\"...")
-    Sources::Api::Events.raise_event("#{self.class}.destroy", self.as_json, headers)
-    logger.debug("publishing message to topic \"platform.sources.event-stream\"...Complete")
+
+    Sources::Api::Events.raise_event_with_logging("#{self.class}.destroy", self.as_json, headers)
   end
 end

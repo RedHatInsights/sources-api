@@ -75,14 +75,14 @@ class ApplicationController < ActionController::API
   end
 
   def raise_event_if(ignore_raise_event, event, payload)
-    raise_event(event, payload) unless ignore_raise_event
+    return if ignore_raise_event
+
+    headers = Insights::API::Common::Request.current_forwardable
+    Sources::Api::Events.raise_event_with_logging(event, payload, headers)
   end
 
   def raise_event(event, payload)
-    headers = Insights::API::Common::Request.current_forwardable
-    logger.debug("publishing message to topic \"platform.sources.event-stream\"...")
-    Sources::Api::Events.raise_event(event, payload, headers)
-    logger.debug("publishing message to topic \"platform.sources.event-stream\"...Complete")
+    raise_event_if(false, event, payload)
   end
 
   def params_for_create
