@@ -22,8 +22,6 @@ class Source < ApplicationRecord
   validates :name, :presence => true, :allow_blank => false,
             :uniqueness => { :scope => :tenant_id }
 
-  after_update :availability_check, :unless => :availability_status
-
   def default_endpoint
     default = endpoints.detect(&:default)
     default || endpoints.build(:default => true, :tenant => tenant)
@@ -38,18 +36,17 @@ class Source < ApplicationRecord
     authentications.detect { |a| a.authtype == source_type.superkey_authtype }
   end
 
-  def remove_availability_status(source = nil)
+  def reset_availability(source = nil)
+    return if availability_status.nil?
+
     return if source == :Application && endpoints.any?
 
     self.availability_status = nil
     self.last_checked_at = nil
-  end
 
-  def remove_availability_status!(source = nil)
-    return if availability_status.nil?
-
-    remove_availability_status(source)
     save!
+
+    availability_check
   end
 
   def availability_check

@@ -16,18 +16,7 @@ class Application < ApplicationRecord
 
   before_save :copy_superkey_data
   after_create :superkey_workflow
-  after_destroy :superkey_workflow, :remove_availability_status_on_source
-
-  def remove_availability_status!
-    remove_availability_status
-    save!
-  end
-
-  def remove_availability_status
-    self.availability_status       = nil
-    self.last_checked_at           = nil
-    self.availability_status_error = nil
-  end
+  after_destroy :superkey_workflow, :reset_availability_on_source
 
   private
 

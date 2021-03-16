@@ -17,7 +17,7 @@ class Authentication < ApplicationRecord
   before_validation :set_source
   validate :only_one_superkey, :if => proc { new_record? && source.super_key? }
 
-  after_destroy :remove_availability_status_on_source
+  after_destroy :reset_availability_on_source
 
   private
 
@@ -38,15 +38,16 @@ class Authentication < ApplicationRecord
     end
   end
 
-  def remove_availability_status_on_source
+  def reset_availability_on_source
     super
 
     unless resource.class == Source
-      remove_availability_status_on_resource
+      reset_availability_on_resource
     end
   end
 
-  def remove_availability_status_on_resource
-    resource.remove_availability_status!
+  def reset_availability_on_resource
+    resource.reset_availability
+    resource.save!
   end
 end

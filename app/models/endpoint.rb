@@ -14,7 +14,7 @@ class Endpoint < ApplicationRecord
 
   before_save :set_default, :if => proc { source.endpoints.count.zero? }
 
-  after_destroy :remove_availability_status_on_source
+  after_destroy :reset_availability_on_source
 
   def base_url_path
     URI::Generic.build(:scheme => scheme, :host => host, :port => port, :path => path).to_s
@@ -22,16 +22,5 @@ class Endpoint < ApplicationRecord
 
   def set_default
     self.default = true
-  end
-
-  def remove_availability_status!
-    remove_availability_status
-    save!
-  end
-
-  def remove_availability_status
-    self.availability_status       = nil
-    self.last_checked_at           = nil
-    self.availability_status_error = nil
   end
 end
