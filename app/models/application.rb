@@ -18,12 +18,6 @@ class Application < ApplicationRecord
   after_create :superkey_workflow
   after_destroy :superkey_workflow
 
-  IGNORE_RAISE_EVENT_ATTRIBUTES_LIST = %i[availability_status availability_status_error].freeze
-
-  def ignore_raise_event_for?(attributes)
-    (IGNORE_RAISE_EVENT_ATTRIBUTES_LIST & attributes.map(&:to_sym)).present?
-  end
-
   def remove_availability_status!
     remove_availability_status
     save!

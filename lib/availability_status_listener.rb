@@ -52,9 +52,7 @@ class AvailabilityStatusListener
     options[:last_available_at] = options[:last_checked_at] if options[:availability_status] == 'available'
 
     object.update!(options)
-
-    ignore_raise_event = object.try(:ignore_raise_event_for?, options.keys)
-    Sources::Api::Events.raise_event_if(ignore_raise_event, "#{model_class}.update", object.as_json, event.headers)
+    object.raise_event_for_update(options.keys)
   rescue NameError
     Rails.logger.error("Invalid resource_type #{payload["resource_type"]}")
   rescue ActiveRecord::RecordNotFound
