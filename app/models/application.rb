@@ -20,6 +20,12 @@ class Application < ApplicationRecord
 
   private
 
+  def reset_availability_on_source
+    return if source.endpoints.any?
+
+    super
+  end
+
   def source_must_be_compatible
     return if application_type.supported_source_types.include?(source.source_type.name)
 

@@ -37,6 +37,6 @@ module AvailabilityStatusConcern
   end
 
   def reset_availability_on_source
-    source.reset_availability(self.class.name.to_sym)
+    source.reset_availability
   end
 end

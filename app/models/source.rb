@@ -36,14 +36,10 @@ class Source < ApplicationRecord
     authentications.detect { |a| a.authtype == source_type.superkey_authtype }
   end
 
-  def reset_availability(source = nil)
+  def reset_availability
     return if availability_status.nil?
 
-    return if source == :Application && endpoints.any?
-
-    self.availability_status = nil
-    self.last_checked_at = nil
-
+    super
     save!
 
     availability_check
