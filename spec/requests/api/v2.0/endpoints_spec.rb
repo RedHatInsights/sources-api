@@ -114,6 +114,16 @@ RSpec.describe("v2.0 - Endpoints") do
 
     context "patch" do
       let(:instance) { create(:endpoint, payload.merge(:tenant => tenant)) }
+
+      it "update availability status" do
+        expect(Sources::Api::Events).not_to receive(:raise_event)
+
+        included_attributes = {"availability_status" => "available"}
+        patch(instance_path(instance.id), :params => included_attributes.to_json, :headers => headers)
+
+        expect(response).to have_attributes(:status => 204, :parsed_body => "")
+      end
+
       it "success: with a valid id" do
         new_attributes = {"host" => "example.org"}
         patch(instance_path(instance.id), :params => new_attributes.to_json, :headers => headers)

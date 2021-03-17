@@ -106,7 +106,10 @@ RSpec.describe("v2.0 - Applications") do
 
     context "patch" do
       let(:instance) { create(:application, payload.merge(:tenant => tenant)) }
-      it "success: with a valid id" do
+
+      it "update availability status" do
+        expect(Sources::Api::Events).not_to receive(:raise_event)
+
         new_attributes = {"availability_status" => "available"}
         patch(instance_path(instance.id), :params => new_attributes.to_json, :headers => headers)
 
