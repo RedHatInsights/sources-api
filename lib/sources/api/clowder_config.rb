@@ -13,11 +13,6 @@ module Sources
             options["awsAccessKeyId"]     = config.logging.cloudwatch.accessKeyId
             options["awsRegion"]          = config.logging.cloudwatch.region
             options["awsSecretAccessKey"] = config.logging.cloudwatch.secretAccessKey
-            options["databaseHostname"]   = config.database.hostname
-            options["databaseName"]       = config.database.name
-            options["databasePassword"]   = config.database.password
-            options["databasePort"]       = config.database.port
-            options["databaseUsername"]   = config.database.username
             options["metricsPort"] = config.metricsPort
             # there might be more brokers but not relevant at this moment
             broker                 = config.kafka.brokers.first
@@ -40,11 +35,6 @@ module Sources
             options["awsAccessKeyId"]     = ENV['CW_AWS_ACCESS_KEY_ID']
             options["awsRegion"]          = "us-east-1"
             options["awsSecretAccessKey"] = ENV['CW_AWS_SECRET_ACCESS_KEY']
-            options["databaseHostname"]   = ENV['DATABASE_HOST']
-            options["databaseName"]       = ENV['DATABASE_NAME']
-            options["databasePassword"]   = ENV['DATABASE_PASSWORD']
-            options["databasePort"]       = ENV['DATABASE_PORT']
-            options["databaseUsername"]   = ENV['DATABASE_USER']
             options["kafkaHost"]          = ENV['QUEUE_HOST'] || "localhost"
             options["kafkaPort"]          = (ENV['QUEUE_PORT'] || "9092").to_i
             options["kafkaTopics"]        = {}

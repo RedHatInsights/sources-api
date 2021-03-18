@@ -1,25 +1,25 @@
 apiVersion: v1
 kind: Template
 metadata:
-  name: sources
+  name: sources-api
 objects:
 - apiVersion: v1
   kind: Secret # For ephemeral/local environment
   metadata:
     name: sources-api-secrets
     labels:
-      app: sources
+      app: sources-api
   stringData:
     encryption-key: "${ENCRYPTION_KEY}"
     secret-key: "${SECRET_KEY}"
 - apiVersion: cloud.redhat.com/v1alpha1
   kind: ClowdApp
   metadata:
-    name: sources
+    name: sources-api
   spec:
     envName: ${ENV_NAME}
     deployments:
-    - name: api
+    - name: svc
       minReplicas: ${{MIN_REPLICAS}}
       webServices:
         public:
@@ -63,12 +63,8 @@ objects:
             secretKeyRef:
               name: sources-api-secrets
               key: encryption-key
-        - name: METRICS_PORT
-          value: ${METRICS_PORT}
         - name: PATH_PREFIX
           value: ${PATH_PREFIX}
-        - name: PGSSLMODE
-          value: ${PGSSLMODE}
         - name: SECRET_KEY_BASE
           valueFrom:
             secretKeyRef:
@@ -127,8 +123,8 @@ objects:
   metadata:
     name: sources-api-transitional
     labels:
-      app: sources
-      pod: sources-api
+      app: sources-api
+      pod: sources-api-svc
   spec:
     ports:
     - port: 8080
@@ -136,7 +132,7 @@ objects:
       targetPort: 8000
       name: weblegacy
     selector:
-      pod: sources-api
+      pod: sources-api-svc
 parameters:
 - description: Application name to be used in request paths.
   displayName: Application Name
