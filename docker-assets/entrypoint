@@ -17,6 +17,7 @@ else
   puts data['database']['username']
   puts data['database']['password']
   puts data['database']['name']
+  puts data['database']['sslMode']
   puts data['webPort']
   puts data['database']['rdsCa']
 EOF
@@ -29,11 +30,12 @@ EOF
   DATABASE_USER=${CONFIG_VALUES[2]}
   DATABASE_PASSWORD=${CONFIG_VALUES[3]}
   DATABASE_NAME=${CONFIG_VALUES[4]}
+  export PGSSLMODE=${CONFIG_VALUES[5]}
 
-  export WEB_PORT=${CONFIG_VALUES[5]}
+  export WEB_PORT=${CONFIG_VALUES[6]}
 
-  if [[ ! -z ${CONFIG_VALUES[6]} ]]; then
-    export PGSSLROOTCERT=${CONFIG_VALUES[6]}
+  if [[ ! -z ${CONFIG_VALUES[7]} ]]; then
+    export PGSSLROOTCERT=${CONFIG_VALUES[7]}
   fi
 fi
 
