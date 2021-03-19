@@ -7,7 +7,8 @@ module Api
           authorize(record)
 
           record.update!(params_for_update)
-          raise_event("#{model}.update", record.as_json)
+          record.raise_event_for_update(params_for_update.keys)
+
           head :no_content
         end
       end
