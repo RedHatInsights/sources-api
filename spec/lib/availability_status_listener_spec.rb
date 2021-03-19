@@ -5,9 +5,10 @@ RSpec.describe AvailabilityStatusListener do
   let(:status)     { "unavailable" }
   let(:reason)     { "host unreachable" }
   let(:now)        { Time.new(2020).utc }
+  let(:headers)    { {"SECRET_HEADER" => "PASSWORD"} }
 
   describe "#subscribe_to_availability_status" do
-    let(:message) { ManageIQ::Messaging::ReceivedMessage.new(nil, event_type, payload, {}, nil, client) }
+    let(:message) { ManageIQ::Messaging::ReceivedMessage.new(nil, event_type, payload, headers, nil, client) }
 
     before do
       allow(ManageIQ::Messaging::Client).to receive(:open).with(
@@ -57,6 +58,7 @@ RSpec.describe AvailabilityStatusListener do
           let(:resource_id)   { application.id.to_s }
 
           it "updates availability status and last_available_at" do
+            expect(Sources::Api::Events).to receive(:raise_event_with_logging_if).with(true, anything, anything, headers)
             expect(Sources::Api::Events).not_to receive(:raise_event)
 
             subject.subscribe_to_availability_status

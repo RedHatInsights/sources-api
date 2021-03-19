@@ -20,9 +20,9 @@ module EventConcern
     (IGNORE_RAISE_EVENT_ATTRIBUTES_LIST & attributes.map(&:to_sym)).present?
   end
 
-  def raise_event_for_update(attributes)
+  def raise_event_for_update(attributes, headers = safe_headers)
     condition = ignore_raise_event_for?(attributes)
-    Sources::Api::Events.raise_event_with_logging_if(condition, "#{self.class}.update", as_json, safe_headers)
+    Sources::Api::Events.raise_event_with_logging_if(condition, "#{self.class}.update", as_json, headers)
   end
 
   def raise_event_for_destroy
