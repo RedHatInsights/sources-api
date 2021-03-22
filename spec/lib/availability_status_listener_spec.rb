@@ -58,7 +58,7 @@ RSpec.describe AvailabilityStatusListener do
           let(:resource_id)   { application.id.to_s }
 
           it "updates availability status and last_available_at" do
-            expect(Sources::Api::Events).to receive(:raise_event_with_logging_if).with(true, anything, anything, headers)
+            expect(Sources::Api::Events).to receive(:raise_event_with_logging_if).with(false, anything, anything, headers)
             expect(Sources::Api::Events).not_to receive(:raise_event)
 
             subject.subscribe_to_availability_status

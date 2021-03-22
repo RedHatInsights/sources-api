@@ -17,7 +17,7 @@ module Api
         bulk.output[:applications]&.each do |app|
           # we do not want to raise the create event since the application has
           # not been processed by the superkey worker.
-          raise_event_unless(!app.source.super_key?, "Application.create", app.as_json)
+          raise_event_if(!app.source.super_key?, "Application.create", app.as_json)
         end
 
         # authentications are special since they have a "hidden"

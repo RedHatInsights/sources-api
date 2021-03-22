@@ -13,15 +13,15 @@ module EventConcern
     "Endpoint"       => IGNORE_RAISE_EVENT_ATTRIBUTES_LIST
   }.freeze
 
-  def ignore_raise_event_for?(attributes)
+  def raise_event_allowed?(attributes)
     ignore_attribute_list = IGNORE_RAISE_EVENT_LIST[self.class.name]
-    return false unless ignore_attribute_list
+    return true unless ignore_attribute_list
 
-    (ignore_attribute_list & attributes.map(&:to_sym)).present?
+    (ignore_attribute_list & attributes.map(&:to_sym)).empty?
   end
 
   def raise_event_for_update(attributes, headers = safe_headers)
-    condition = ignore_raise_event_for?(attributes)
+    condition = raise_event_allowed?(attributes)
     Sources::Api::Events.raise_event_with_logging_if(condition, "#{self.class}.update", as_json, headers)
   end
 
