@@ -17,8 +17,8 @@ module Sources
         Messaging.client.publish_topic(publish_opts)
       end
 
-      def self.raise_event_with_logging_if(ignore_raise_event, event, payload, headers = nil)
-        return if ignore_raise_event
+      def self.raise_event_with_logging_if(raise_event, event, payload, headers = nil)
+        return unless raise_event
 
         with_logging { raise_event(event, payload, headers) }
       end
