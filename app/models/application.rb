@@ -64,8 +64,8 @@ class Application < ApplicationRecord
 
   def copy_superkey_data
     if extra.key?("_superkey")
-      # pull out the superkey metadata we pass in from the worker
-      self.superkey_data = extra.delete("_superkey")
+      # pull out the superkey metadata we pass in from the worker, it can be nil so we handle that.
+      self.superkey_data&.merge!(extra.delete("_superkey")) || self.superkey_data = extra.delete("_superkey")
     end
   end
 end

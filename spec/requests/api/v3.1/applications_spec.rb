@@ -196,11 +196,12 @@ RSpec.describe("v3.1 - Applications") do
 
     describe "when updating the application with logic" do
       let(:src) { create(:source, :app_creation_workflow => "account_authorization") }
-      let(:instance) { create(:application, :source => src) }
+      let(:instance) { create(:application, :source => src, :superkey_data => {"headers" => original_headers}) }
+      let(:original_headers) { {"thing" => true} }
       let(:extra_attributes) { {:extra => {:_superkey => {"worked" => true}}} }
 
       it "raises the create event instead of the update event" do
-        expect(Sources::Api::Events).to receive(:raise_event).with("Application.create", any_args).exactly(1).times
+        expect(Sources::Api::Events).to receive(:raise_event).with("Application.create", any_args, original_headers).exactly(1).times
         expect(Sources::Api::Events).not_to receive(:raise_event).with("Application.update", any_args)
 
         patch(instance_path(instance.id), :params => extra_attributes.to_json, :headers => headers)

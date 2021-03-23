@@ -17,7 +17,13 @@ module Api
         bulk.output[:applications]&.each do |app|
           # we do not want to raise the create event since the application has
           # not been processed by the superkey worker.
-          raise_event_if(!app.source.super_key?, "Application.create", app.as_json)
+          #
+          # also need to store the headers on create, that way we can send them when the superkey worker posts back.
+          if app.source.super_key?
+            app.update!(:superkey_data => {:headers => Insights::API::Common::Request.current_forwardable})
+          else
+            raise_event("Application.create", app.as_json)
+          end
         end
 
         # authentications are special since they have a "hidden"

@@ -104,6 +104,17 @@ describe "v3.1 - /bulk_create" do
                  :applications => [{:application_type_name => costapp.name, :source_name => "testsksource"}]
                ).to_json
         end
+
+        it "stores the headers" do
+          post collection_path,
+               :headers => headers,
+               :params  => superkey_source.merge!(
+                 :applications => [{:application_type_name => costapp.name, :source_name => "testsksource"}]
+               ).to_json
+
+          application = Application.find(response.parsed_body["applications"].first["id"])
+          expect(application.superkey_data["headers"]).to have_key("x-rh-identity")
+        end
       end
     end
 

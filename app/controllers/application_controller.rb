@@ -74,15 +74,15 @@ class ApplicationController < ActionController::API
     send("api_#{version}_#{endpoint}_url", instance.id)
   end
 
-  def raise_event_if(raise_event_allowed, event, payload)
+  def raise_event_if(raise_event_allowed, event, payload, headers = nil)
     return unless raise_event_allowed
 
-    headers = Insights::API::Common::Request.current_forwardable
+    headers ||= Insights::API::Common::Request.current_forwardable
     Sources::Api::Events.raise_event_with_logging(event, payload, headers)
   end
 
-  def raise_event(event, payload)
-    raise_event_if(true, event, payload)
+  def raise_event(event, payload, headers = nil)
+    raise_event_if(true, event, payload, headers)
   end
 
   def params_for_create
