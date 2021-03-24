@@ -1,4 +1,5 @@
 #!/bin/bash
+# build_deploy.sh pushes new image + tags after PR is merged
 
 set -exv
 
