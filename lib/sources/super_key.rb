@@ -14,13 +14,20 @@ module Sources
       extra = {}.tap do |e|
         case @provider
         when "amazon"
-          # account number to substitute in resources
-          acct = @application.application_type
-                             .app_meta_data
-                             .detect { |field| field.name == "aws_wizard_account_number" }
-                             &.payload
+          case @application.application_type.name
+          when "/insights/platform/cloud-meter"
+            # subswatch has a few values dynamically substituted.
+            e[:account] = SubscriptionWatchInfo.fetch_account_number
+            payload.find { |step| step.payload =~ /DYNAMIC/ }.payload = SubscriptionWatchInfo.fetch_policy_json
+          else
+            # account number to substitute in resources
+            acct = @application.application_type
+                               .app_meta_data
+                               .detect { |field| field.name == "aws_wizard_account_number" }
+                               &.payload
 
-          e[:account] = acct if acct
+            e[:account] = acct if acct
+          end
 
           # type of authentication to return
           e[:result_type] = @application.application_type.supported_authentication_types["amazon"]&.first
@@ -31,14 +38,24 @@ module Sources
         :application => @application,
         :super_key   => src.super_key_credential,
         :provider    => @provider,
-        :extra       => extra
+        :extra       => extra,
+        :steps       => payload.to_json
       )
     end
 
     def teardown
       Sources::Api::Messaging.send_superkey_destroy_request(
-        :application => @application
+        :application => @application,
+        :steps       => payload.to_json
       )
+    end
+
+    def payload
+      @payload ||= begin
+        @application.application_type.super_key_meta_data.each do |m|
+          m.payload = JSON.dump(m.payload)
+        end
+      end
     end
   end
 end

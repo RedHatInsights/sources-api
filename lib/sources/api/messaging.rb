@@ -14,9 +14,7 @@ module Sources
         )
       end
 
-      def self.send_superkey_create_request(application:, super_key:, provider:, extra: {})
-        steps = process_payload(application)
-
+      def self.send_superkey_create_request(application:, super_key:, provider:, steps:, extra: {})
         payload = {
           :tenant_id        => application.tenant.external_tenant,
           :source_id        => application.source_id.to_s,
@@ -36,9 +34,7 @@ module Sources
         )
       end
 
-      def self.send_superkey_destroy_request(application:)
-        steps = process_payload(application)
-
+      def self.send_superkey_destroy_request(application:, steps:)
         payload = {
           :tenant_id       => application.tenant.external_tenant,
           :super_key       => application.source.super_key_credential.id.to_s,
@@ -55,12 +51,6 @@ module Sources
           :payload => payload,
           :headers => Insights::API::Common::Request.current_forwardable
         )
-      end
-
-      def self.process_payload(application)
-        application.application_type.super_key_meta_data.each do |m|
-          m.payload = JSON.dump(m.payload)
-        end.as_json
       end
     end
   end
