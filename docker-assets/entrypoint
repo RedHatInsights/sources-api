@@ -21,15 +21,23 @@ else
 
   certString=`cat $ACG_CONFIG | jq -r '.database.rdsCa'`
 
-  certPath="${WORKDIR}rdsca.crt"
+  certPath="/opt/rdsca.crt"
   echo "RDS Cert Path: $certPath"
   if [[ $certString != "null" ]]; then
     echo $certString > $certPath
+    echo $certString > /tmp/rdsca.crt
 
     export PGSSLROOTCERT=$certPath
   else
     echo "Hello World" > $certPath
+    echo "Hello World" > /tmp/rdsca.crt
   fi
+
+  echo "---"
+  cat $certPath
+  echo "---"
+  cat /tmp/rdsca.crt
+
 
   export WEB_PORT=`cat $ACG_CONFIG | jq -r '.webPort'`
 fi

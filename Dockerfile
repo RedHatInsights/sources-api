@@ -24,6 +24,8 @@ WORKDIR $WORKDIR
 RUN curl -L https://github.com/stedolan/jq/releases/download/jq-1.6/jq-linux64 -o jq \
   && chmod +x ./jq && cp jq /usr/bin
 
+RUN touch /opt/rdsca.crt && chmod 666 /opt/rdsca.crt
+
 COPY docker-assets/librdkafka-1.5.0.tar.gz /tmp/librdkafka.tar.gz
 RUN cd /tmp && tar -xf /tmp/librdkafka.tar.gz && cd librdkafka-1.5.0 && \
     ./configure --prefix=/usr && \
