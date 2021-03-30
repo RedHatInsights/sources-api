@@ -37,7 +37,7 @@ RSpec.describe AvailabilityStatusListener do
 
         context "Source" do
           it "updates availability status and last_available_at" do
-            expect(Sources::Api::Events).to receive(:raise_event)
+            expect(Sources::Api::Events).to receive(:raise_event).twice
 
             subject.subscribe_to_availability_status
 
@@ -58,7 +58,7 @@ RSpec.describe AvailabilityStatusListener do
           let(:resource_id)   { application.id.to_s }
 
           it "updates availability status and last_available_at" do
-            expect(Sources::Api::Events).to receive(:raise_event)
+            expect(Sources::Api::Events).to receive(:raise_event).twice
 
             subject.subscribe_to_availability_status
 
@@ -75,7 +75,7 @@ RSpec.describe AvailabilityStatusListener do
 
       context "when status is unavailable" do
         it "updates availability status" do
-          expect(Sources::Api::Events).to receive(:raise_event)
+          expect(Sources::Api::Events).to receive(:raise_event).twice
 
           subject.subscribe_to_availability_status
 

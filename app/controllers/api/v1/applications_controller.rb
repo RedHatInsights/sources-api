@@ -27,6 +27,7 @@ module Api
         # from there on we raise the normal update.
         first_time_superkey = (application.source.super_key? && params.try(:[], "extra")&.key?("_superkey"))
         raise_event_if(first_time_superkey, "Application.create", application.as_json)
+        raise_event_if(first_time_superkey, "Records.create", application.bulk_message)
 
         # appending the extra keys in case of _superkey being updated.
         application.raise_event_for_update(params_for_update.keys + params.fetch("extra", {}).keys)

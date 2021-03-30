@@ -107,6 +107,25 @@ module Sources
       end
     end
 
+    # method that returns the proper bulk_message for the payload. It keys off of whether
+    # there is an authentication first, then goes to application after. That way both bases
+    # are covered where a user might use bulk_create on an app w/o an authentication yet.
+    #
+    # when determining which app/auth to go off of - we go with first one, just because
+    # the bulk_message output will produce the same message independent of which of
+    # the 2 (or more) subresources exist
+    def process_message
+      if @output[:authentications]&.any?
+        auth = @output[:authentications].first
+        auth.bulk_message
+      elsif @output[:applications]&.any?
+        app = @output[:applications].first
+        # we don't raise application messages except for non-superkey sources at first,
+        # the worker will post the resources back later.
+        app.bulk_message unless app.source.super_key?
+      end
+    end
+
     private
 
     # this method finds a resource that has already been created _in this
