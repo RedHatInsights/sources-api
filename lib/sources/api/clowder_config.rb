@@ -31,6 +31,7 @@ module Sources
             options["metricsPath"] = config.metricsPath # PrometheusExporter doesn't support custom path!
             options["webPorts"]    = config.webPort
 
+            puts "Database config: #{config.database.inspect}"
           else
             options["awsAccessKeyId"]     = ENV['CW_AWS_ACCESS_KEY_ID']
             options["awsRegion"]          = "us-east-1"
