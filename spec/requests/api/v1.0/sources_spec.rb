@@ -313,6 +313,16 @@ RSpec.describe("v1.0 - Sources") do
         )
       end
 
+      it "update availability status" do
+        expect(Sources::Api::Events).to receive(:raise_event).with("Source.update", anything, anything)
+
+        included_attributes = {"availability_status" => "available"}
+        instance = create(:source, attributes.merge("tenant" => tenant))
+        patch(instance_path(instance.id), :params => included_attributes.to_json, :headers => headers)
+
+        expect(response).to have_attributes(:status => 204, :parsed_body => "")
+      end
+
       it "success: with a partially_available availability_status" do
         included_attributes = { "name" => "availability_source", "availability_status" => "partially_available" }
 

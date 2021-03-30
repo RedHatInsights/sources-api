@@ -52,7 +52,7 @@ class AvailabilityStatusListener
     options[:last_available_at] = options[:last_checked_at] if options[:availability_status] == 'available'
 
     object.update!(options)
-    raise_event("#{model_class}.update", object.as_json, event.headers)
+    object.raise_event_for_update(options.keys, event.headers)
   rescue NameError
     Rails.logger.error("Invalid resource_type #{payload["resource_type"]}")
   rescue ActiveRecord::RecordNotFound
@@ -61,12 +61,6 @@ class AvailabilityStatusListener
     Rails.logger.error("Invalid status #{payload["status"]}")
   rescue => e
     Rails.logger.error(["Something is wrong when processing Kafka message: ", e.message, *e.backtrace].join($RS))
-  end
-
-  def raise_event(event, payload, headers)
-    Sources::Api::Events.raise_event(event, payload, headers)
-  rescue => e
-    Rails.logger.error(["Failed to send Kafka message with event type(#{event}): ", e.message, *e.backtrace].join($RS))
   end
 
   def validate_resource_type(model_class)

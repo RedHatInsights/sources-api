@@ -92,6 +92,19 @@ describe "v3.1 - /bulk_create" do
           expect(apps.map { |x| x["application_type_id"].to_i }).to match_array([costapp.id, swatchapp.id])
         end
       end
+
+      context "with superkey sources" do
+        let(:superkey_source) { {:sources => [{:name => "testsksource", :source_type_name => "amazon", :app_creation_workflow => "account_authorization"}]} }
+
+        it "does not raise an application create message" do
+          expect(Sources::Api::Events).to receive(:raise_event).once
+          post collection_path,
+               :headers => headers,
+               :params  => superkey_source.merge!(
+                 :applications => [{:application_type_name => costapp.name, :source_name => "testsksource"}]
+               ).to_json
+        end
+      end
     end
 
     context "with source + endpoint" do

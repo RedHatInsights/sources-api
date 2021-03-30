@@ -45,7 +45,7 @@ describe Sources::BulkAssembly do
   end
 
   context "when creating a source + subresource" do
-    let(:sourcehash) { {:sources => [{:name => "mysource", :source_type_name => "amazon"}]} }
+    let(:sourcehash) { {:sources => [{:name => "mysource", :source_type_name => "amazon", :app_creation_workflow => Source::SUPERKEY_WORKFLOW}]} }
 
     context "when the request is well formed" do
       context "with a single endpoint" do

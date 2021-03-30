@@ -74,11 +74,15 @@ class ApplicationController < ActionController::API
     send("api_#{version}_#{endpoint}_url", instance.id)
   end
 
-  def raise_event(event, payload)
+  def raise_event_if(raise_event_allowed, event, payload)
+    return unless raise_event_allowed
+
     headers = Insights::API::Common::Request.current_forwardable
-    logger.debug("publishing message to topic \"platform.sources.event-stream\"...")
-    Sources::Api::Events.raise_event(event, payload, headers)
-    logger.debug("publishing message to topic \"platform.sources.event-stream\"...Complete")
+    Sources::Api::Events.raise_event_with_logging(event, payload, headers)
+  end
+
+  def raise_event(event, payload)
+    raise_event_if(true, event, payload)
   end
 
   def params_for_create

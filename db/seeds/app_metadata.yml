@@ -17,6 +17,8 @@ qa:
 stage:
   "/insights/platform/cost-management":
     gcp_service_account: billing-export@red-hat-cost-management-stage.iam.gserviceaccount.com
+  "/insights/platform/cloud-meter":
+    aws_wizard_account_number: "998366406740"
 prod:
   "/insights/platform/cost-management":
     gcp_service_account: billing-export@red-hat-cost-management.iam.gserviceaccount.com
