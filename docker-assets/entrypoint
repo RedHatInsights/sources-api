@@ -19,10 +19,8 @@ else
   puts data['database']['name']
   puts data['database']['sslMode']
   puts data['webPort']
-  puts data['database']['rdsCa']
 EOF
 `
-
   CONFIG_VALUES=( $CONFIG_STRING )
 
   export DATABASE_HOST=${CONFIG_VALUES[0]}
@@ -34,14 +32,21 @@ EOF
 
   export WEB_PORT=${CONFIG_VALUES[6]}
 
-  if [[ ! -z ${CONFIG_VALUES[7]} ]]; then
-    export PGSSLROOTCERT=${CONFIG_VALUES[7]}
+  cert=`cat $ACG_CONFIG | grep rdsCa | awk '{for(i=2;i<=NF;i++){ print $i }}'`
+  if [[ ! -z $cert ]]; then
+    export PGSSLROOTCERT=$cert
   fi
+  echo $CONFIG_STRING
+
+  echo "---"
+
+  cat `echo $ACG_CONFIG`
+
+  echo "----"
 
   echo "PGSSLMODE: ${PGSSLMODE}"
   echo "PGSSLROOTCERT: ${PGSSLROOTCERT}"
   echo " --- "
-  cat `echo $ACG_CONFIG`
 fi
 
 safeuser=$(urlescape ${DATABASE_USER})
