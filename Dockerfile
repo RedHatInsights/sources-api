@@ -20,6 +20,10 @@ ENV WORKDIR /opt/sources-api/
 ENV RAILS_ROOT $WORKDIR
 WORKDIR $WORKDIR
 
+# For the clowder config parser
+RUN curl -L https://github.com/stedolan/jq/releases/download/jq-1.6/jq-linux64 -o jq \
+  && chmod +x ./jq && cp jq /usr/bin
+
 COPY docker-assets/librdkafka-1.5.0.tar.gz /tmp/librdkafka.tar.gz
 RUN cd /tmp && tar -xf /tmp/librdkafka.tar.gz && cd librdkafka-1.5.0 && \
     ./configure --prefix=/usr && \
