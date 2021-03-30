@@ -24,20 +24,15 @@ else
   certPath="/opt/rdsca.crt"
   echo "RDS Cert Path: $certPath"
   if [[ $certString != "null" ]]; then
-    echo $certString > $certPath
-    echo $certString > /tmp/rdsca.crt
+    echo "$certString" > $certPath
 
     export PGSSLROOTCERT=$certPath
   else
     echo "Hello World" > $certPath
-    echo "Hello World" > /tmp/rdsca.crt
   fi
 
   echo "---"
   cat $certPath
-  echo "---"
-  cat /tmp/rdsca.crt
-
 
   export WEB_PORT=`cat $ACG_CONFIG | jq -r '.webPort'`
 fi
@@ -48,4 +43,4 @@ safepass=$(urlescape ${DATABASE_PASSWORD})
 export RAILS_ENV=production
 export DATABASE_URL="postgresql://${safeuser}:${safepass}@${DATABASE_HOST}:${DATABASE_PORT}/${DATABASE_NAME}?encoding=utf8&pool=${DB_POOL_SIZE:-5}&wait_timeout=5"
 
-exec ${@}
+#exec ${@}
