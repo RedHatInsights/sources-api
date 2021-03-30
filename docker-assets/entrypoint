@@ -37,6 +37,9 @@ EOF
   if [[ ! -z ${CONFIG_VALUES[7]} ]]; then
     export PGSSLROOTCERT=${CONFIG_VALUES[7]}
   fi
+
+  echo "PGSSLMODE: ${PGSSLMODE}"
+  echo "PGSSLROOTCERT: ${PGSSLROOTCERT}"
 fi
 
 safeuser=$(urlescape ${DATABASE_USER})
