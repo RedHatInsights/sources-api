@@ -40,6 +40,8 @@ EOF
 
   echo "PGSSLMODE: ${PGSSLMODE}"
   echo "PGSSLROOTCERT: ${PGSSLROOTCERT}"
+  echo " --- "
+  cat `echo $ACG_CONFIG`
 fi
 
 safeuser=$(urlescape ${DATABASE_USER})
