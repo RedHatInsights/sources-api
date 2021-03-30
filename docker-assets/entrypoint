@@ -32,7 +32,7 @@ EOF
 
   export WEB_PORT=${CONFIG_VALUES[6]}
 
-  cert=`cat $ACG_CONFIG | grep rdsCa | awk '{for(i=2;i<=NF;i++){ print $i }}'`
+  cert=`cat $ACG_CONFIG | grep rdsCa | awk '{for(i=2;i<=NF;i++) printf "%s",$i OFS; printf ORS}'`
   if [[ ! -z $cert ]]; then
     export PGSSLROOTCERT=$cert
   fi
