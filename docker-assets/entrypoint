@@ -28,11 +28,8 @@ else
 
     export PGSSLROOTCERT=$certPath
   else
-    echo "Hello World" > $certPath
+    echo "42" > $certPath
   fi
-
-  echo "---"
-  cat $certPath
 
   export WEB_PORT=`cat $ACG_CONFIG | jq -r '.webPort'`
 fi
