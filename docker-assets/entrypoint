@@ -19,9 +19,16 @@ else
     export PGSSLMODE=$sslMode
   fi
 
-  cert=`cat $ACG_CONFIG | jq -r '.database.rdsCa'`
-  if [[ $cert != "null" ]]; then
-    export PGSSLROOTCERT=$cert
+  certString=`cat $ACG_CONFIG | jq -r '.database.rdsCa'`
+
+  certPath="${WORKDIR}rdsca.crt"
+  echo "RDS Cert Path: $certPath"
+  if [[ $certString != "null" ]]; then
+    echo $certString > $certPath
+
+    export PGSSLROOTCERT=$certPath
+  else
+    echo "Hello World" > $certPath
   fi
 
   export WEB_PORT=`cat $ACG_CONFIG | jq -r '.webPort'`
