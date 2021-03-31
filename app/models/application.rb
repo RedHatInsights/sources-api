@@ -41,10 +41,16 @@ class Application < ApplicationRecord
     return unless source.super_key?
 
     if source.super_key_credential.nil?
-      update!(
-        :availability_status       => "unavailable",
-        :availability_status_error => "The source is missing credentials for account authorization. Please remove the source and try to add it again / open a ticket to solve this issue."
-      )
+      # update the availability status on the application if the application was created
+      # on a superkey source and there is _NO_ superkey credential
+      if new_record?
+        update!(
+          :availability_status       => "unavailable",
+          :availability_status_error => "The source is missing credentials for account authorization. Please remove the source and try to add it again / open a ticket to solve this issue."
+        )
+      end
+
+      # can't really do much if we don't have a superkey credential.
       return
     end
 
