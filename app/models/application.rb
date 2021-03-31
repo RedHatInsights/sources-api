@@ -15,8 +15,8 @@ class Application < ApplicationRecord
   validate :source_must_be_compatible
 
   before_save :copy_superkey_data
-  after_create :superkey_workflow
-  after_destroy :superkey_workflow
+  after_create :create_superkey_workflow
+  after_destroy :teardown_superkey_workflow
 
   def remove_availability_status!
     remove_availability_status
@@ -37,18 +37,16 @@ class Application < ApplicationRecord
     errors.add(:source, "of type: #{source.source_type.name}, is not compatible with this application type")
   end
 
-  def superkey_workflow
+  def create_superkey_workflow
     return unless source.super_key?
 
     if source.super_key_credential.nil?
       # update the availability status on the application if the application was created
       # on a superkey source and there is _NO_ superkey credential
-      if new_record?
-        update!(
-          :availability_status       => "unavailable",
-          :availability_status_error => "The source is missing credentials for account authorization. Please remove the source and try to add it again / open a ticket to solve this issue."
-        )
-      end
+      update!(
+        :availability_status       => "unavailable",
+        :availability_status_error => "The source is missing credentials for account authorization. Please remove the source and try to add it again / open a ticket to solve this issue."
+      )
 
       # can't really do much if we don't have a superkey credential.
       return
@@ -60,12 +58,19 @@ class Application < ApplicationRecord
       :application => self
     )
 
-    # the superkey_data hash tells whether or not the superkey workflow has been ran yet.
-    if superkey_data.try(:[], "guid").nil?
-      sk.create
-    else
-      sk.teardown
-    end
+    sk.create
+  end
+
+  def teardown_superkey_workflow
+    return unless source.super_key? && source.super_key_credential
+
+    sk = Sources::SuperKey.new(
+      :provider    => source.source_type.name,
+      :source_id   => source.id,
+      :application => self
+    )
+
+    sk.teardown
   end
 
   def copy_superkey_data
