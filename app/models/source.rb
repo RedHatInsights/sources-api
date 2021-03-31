@@ -22,8 +22,6 @@ class Source < ApplicationRecord
   validates :name, :presence => true, :allow_blank => false,
             :uniqueness => { :scope => :tenant_id }
 
-  before_destroy :validate_no_applications, :if => -> { super_key? }, :prepend => true
-
   def default_endpoint
     default = endpoints.detect(&:default)
     default || endpoints.build(:default => true, :tenant => tenant)
@@ -48,9 +46,5 @@ class Source < ApplicationRecord
   def remove_availability_status!(source = nil)
     remove_availability_status(source)
     save!
-  end
-
-  def validate_no_applications
-    raise(ActiveRecord::RecordNotDestroyed, "Applications must be removed before destroying parent source") if applications.any?
   end
 end
