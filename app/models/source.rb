@@ -23,6 +23,8 @@ class Source < ApplicationRecord
   validates :name, :presence => true, :allow_blank => false,
             :uniqueness => { :scope => :tenant_id }
 
+  before_destroy :validate_no_applications, :if => -> { super_key? }, :prepend => true
+
   def default_endpoint
     default = endpoints.detect(&:default)
     default || endpoints.build(:default => true, :tenant => tenant)
@@ -86,5 +88,9 @@ class Source < ApplicationRecord
     rescue => e
       logger.error("Hit error attempting to publish [#{{"source_id" => id, "topic" => topic}}] during Source#availability_check: #{e.message}")
     end
+  end
+
+  def validate_no_applications
+    raise(ActiveRecord::RecordNotDestroyed, "Applications must be removed before destroying parent source") if applications.any?
   end
 end
