@@ -397,6 +397,31 @@ RSpec.describe("v3.1 - Sources") do
         )
         expect(Application.count).to eq(0)
       end
+
+      context "when source is superkey" do
+        let!(:instance) { create(:source, attributes.merge("tenant" => tenant, "app_creation_workflow" => Source::SUPERKEY_WORKFLOW)) }
+        let!(:apptype) { create(:application_type, :supported_source_types => [instance.source_type.name]) }
+
+        it "does not allow deletion when there are applications attached" do
+          _app = create(:application, :source => instance, :application_type => apptype, :tenant => tenant)
+
+          delete(instance_path(instance.id), :headers => headers)
+          expect(response).to have_attributes(
+            :status      => 400,
+            :parsed_body => {
+              "errors" => [{"detail" => "ActiveRecord::RecordNotDestroyed: Applications must be removed before destroying parent source", "status" => "400"}]
+            }
+          )
+        end
+
+        it "allows deletion with no applications attached" do
+          delete(instance_path(instance.id), :headers => headers)
+          expect(response).to have_attributes(
+            :status      => 204,
+            :parsed_body => ""
+          )
+        end
+      end
     end
   end
 
