@@ -81,4 +81,60 @@ RSpec.describe("Application") do
       expect(endpoint.availability_status).to eq(available_status)
     end
   end
+  
+  describe "superkey" do
+    let!(:source) { create(:source, :app_creation_workflow => "account_authorization") }
+    let!(:apptype) { create(:application_type, :supported_source_types => [source.source_type.name]) }
+    let!(:sk) { instance_double(Sources::SuperKey) }
+
+    let(:client) { instance_double("ManageIQ::Messaging::Client") }
+
+    before do
+      allow(client).to receive(:publish_topic)
+      allow(Sources::Api::Messaging).to receive(:client).and_return(client)
+
+      allow(Sources::SuperKey).to receive(:new).and_return(sk)
+    end
+
+    context "on create" do
+      context "when there is a superkey authentication" do
+        it "runs the superkey workflow" do
+          _auth = Authentication.create!(:resource => source, :tenant => source.tenant, :username => "foo", :password => "bar")
+          expect(sk).to receive(:create).once
+
+          Application.create!(:source => source, :tenant => Tenant.first, :application_type_id => apptype.id)
+        end
+      end
+
+      context "when there is not a superkey authentication" do
+        it "does not run the superkey workflow" do
+          expect(sk).not_to receive(:create)
+
+          Application.create!(:source => source, :tenant => Tenant.first, :application_type_id => apptype.id)
+        end
+      end
+    end
+
+    context "on destroy" do
+      let!(:application) { create(:application, :application_type => apptype, :source => source) }
+
+      context "when there is a superkey authentication" do
+        it "runs the superkey workflow" do
+          _auth = Authentication.create!(:resource => source, :tenant => source.tenant, :username => "foo", :password => "bar")
+          source.reload
+          expect(sk).to receive(:teardown).once
+
+          application.destroy!
+        end
+      end
+
+      context "when there is not a superkey authentication" do
+        it "does not run the superkey workflow" do
+          expect(sk).not_to receive(:teardown)
+
+          application.destroy!
+        end
+      end
+    end
+  end
 end
