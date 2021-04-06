@@ -18,7 +18,7 @@ data:
       "editable": true,
       "gnetId": null,
       "graphTooltip": 0,
-      "iteration": 1617694616227,
+      "iteration": 1617726223802,
       "links": [],
       "panels": [
         {
@@ -165,7 +165,7 @@ data:
           "pluginVersion": "7.2.1",
           "targets": [
             {
-              "expr": "sum(up{service=~\"sources-api[-svc]?\"})",
+              "expr": "sum(up{service=~\"sources-api(-svc)?\"})",
               "interval": "",
               "legendFormat": "",
               "refId": "A"
@@ -2115,7 +2115,7 @@ data:
       "timezone": "",
       "title": "Sources",
       "uid": "zxZKNnAMz",
-      "version": 11
+      "version": 12
     }
 kind: ConfigMap
 metadata:
