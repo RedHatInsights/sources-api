@@ -16,9 +16,6 @@ objects:
   kind: ClowdApp
   metadata:
     name: sources-api
-    labels:
-      app: sources
-      clowdapp: sources-api
   spec:
     envName: ${ENV_NAME}
     deployments:
