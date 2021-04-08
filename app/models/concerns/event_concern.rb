@@ -7,10 +7,11 @@ module EventConcern
 
   IGNORE_RAISE_EVENT_ATTRIBUTES_LIST = %i[availability_status availability_status_error].freeze
 
+  # TODO: IGNORE_RAISE_EVENT_ATTRIBUTES_LIST will be added later
   IGNORE_RAISE_EVENT_LIST = {
-    "Application"    => IGNORE_RAISE_EVENT_ATTRIBUTES_LIST + %i[_superkey],
-    "Authentication" => IGNORE_RAISE_EVENT_ATTRIBUTES_LIST,
-    "Endpoint"       => IGNORE_RAISE_EVENT_ATTRIBUTES_LIST
+    "Application"    => %i[_superkey],
+    "Authentication" => [],
+    "Endpoint"       => []
   }.freeze
 
   def raise_event_allowed?(attributes)
