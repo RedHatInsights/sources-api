@@ -30,6 +30,7 @@
   :dependent_applications: []
   :supported_source_types:
   - amazon
+  - azure
   :supported_authentication_types:
     amazon:
     - cloud-meter-arn
