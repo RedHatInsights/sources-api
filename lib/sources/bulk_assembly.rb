@@ -51,7 +51,14 @@ module Sources
 
         raise ActiveRecord::ActiveRecordError, "Source Type not found" if source_type.nil?
 
-        Source.create!(source.merge!(:source_type => source_type))
+        extra_params = {
+          :source_type         => source_type,
+          :availability_status => if source[:app_creation_workflow] == Source::SUPERKEY_WORKFLOW
+                                    "in_progress"
+                                  end
+        }
+
+        Source.create!(source.merge!(extra_params))
       end
     end
 

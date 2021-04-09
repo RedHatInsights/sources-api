@@ -104,6 +104,13 @@ describe "v3.1 - /bulk_create" do
                  :applications => [{:application_type_name => costapp.name, :source_name => "testsksource"}]
                ).to_json
         end
+
+        it "sets the availability_status to in_progress" do
+          post(collection_path, :headers => headers, :params => superkey_source.to_json)
+
+          source = response.parsed_body["sources"].first
+          expect(source["availability_status"]).to eq "in_progress"
+        end
       end
     end
 

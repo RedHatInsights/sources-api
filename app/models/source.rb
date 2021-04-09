@@ -12,7 +12,7 @@ class Source < ApplicationRecord
   has_many :authentications, :dependent => :destroy
 
   attribute :availability_status, :string
-  validates :availability_status, :inclusion => { :in => %w[available partially_available unavailable] }, :allow_nil => true
+  validates :availability_status, :inclusion => {:in => %w[available partially_available unavailable in_progress]}, :allow_nil => true
   validates :app_creation_workflow, :inclusion => {:in => %w[manual_configuration account_authorization]}
 
   belongs_to :source_type
