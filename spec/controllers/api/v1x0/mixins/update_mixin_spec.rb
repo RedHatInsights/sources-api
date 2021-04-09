@@ -25,19 +25,4 @@ describe Api::V1::Mixins::UpdateMixin do
       expect(response.parsed_body).to be_empty
     end
   end
-
-  describe Api::V1x0::ApplicationsController, :type => :request do
-    %i[availability_status availability_status_error].each do |attribute|
-      it "patch /applications/:id updates a Application" do
-        application = create(:application)
-
-        expect(Sources::Api::Events).not_to receive(:raise_event)
-
-        patch(api_v1x0_application_url(application.id), :params => {attribute => "available"}.to_json, :headers => headers)
-
-        expect(response.status).to eq(204)
-        expect(response.parsed_body).to be_empty
-      end
-    end
-  end
 end
