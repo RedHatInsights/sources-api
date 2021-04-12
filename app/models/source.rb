@@ -27,6 +27,10 @@ class Source < ApplicationRecord
     default || endpoints.build(:default => true, :tenant => tenant)
   end
 
+  def has_endpoint?
+    endpoints.any?
+  end
+
   def super_key?
     app_creation_workflow == SUPERKEY_WORKFLOW
   end
@@ -36,15 +40,50 @@ class Source < ApplicationRecord
     authentications.detect { |a| a.authtype == source_type.superkey_authtype }
   end
 
-  def remove_availability_status(source = nil)
-    return if source == :Application && endpoints.any?
+  # resets availability status and runs new availability check
+  def reset_availability
+    super
 
-    self.availability_status = nil
-    self.last_checked_at = nil
+    availability_check
   end
 
-  def remove_availability_status!(source = nil)
-    remove_availability_status(source)
-    save!
+  # requests availability check:
+  # 1) through kafka
+  # 2) in connected applications
+  def availability_check
+    sources_availability_check
+
+    applications.includes(:application_type).each do |app|
+      app.availability_check
+    end
+  end
+
+  private
+
+  def sources_availability_check
+    topic  = Sources::Api::ClowderConfig.kafka_topic("platform.topological-inventory.operations-#{source_type.name}")
+
+    logger.info("Initiating Source#availability_check [#{{"source_id" => id, "topic" => topic}}]")
+
+    begin
+      logger.debug("Publishing message for Source#availability_check [#{{"source_id" => id, "topic" => topic}}]")
+
+      Sources::Api::Messaging.client.publish_topic(
+        :service => topic,
+        :event   => "Source.availability_check",
+        :payload => {
+          :params => {
+            :source_id       => id.to_s,
+            :source_uid      => uid.to_s,
+            :source_ref      => source_ref.to_s,
+            :external_tenant => tenant.external_tenant
+          }
+        }
+      )
+
+      logger.debug("Publishing message for Source#availability_check [#{{"source_id" => id, "topic" => topic}}]...Complete")
+    rescue => e
+      logger.error("Hit error attempting to publish [#{{"source_id" => id, "topic" => topic}}] during Source#availability_check: #{e.message}")
+    end
   end
 end
