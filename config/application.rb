@@ -43,6 +43,9 @@ module Sources
     config.autoload_paths << Rails.root.join("app", "policies", "mixins").to_s
     config.autoload_paths << Rails.root.join("lib").to_s
 
+    # set up activejob sidekiq adapter
+    config.active_job.queue_adapter = :sidekiq
+
     config.log_level = (ENV['RAILS_LOG_LEVEL'] || 'debug').downcase.to_sym
     Insights::API::Common::Logging.activate(config)
 

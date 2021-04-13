@@ -19,6 +19,42 @@ objects:
   spec:
     envName: ${ENV_NAME}
     deployments:
+    - name: sidekiq
+      minReplicas: ${{MIN_REPLICAS}}
+      podSpec:
+        image: ${IMAGE}:${IMAGE_TAG}
+        env:
+        - name: APP_NAME
+          value: ${APP_NAME}
+        - name: DB_POOL_SIZE
+          value: ${DB_POOL_SIZE}
+        - name: RAILS_LOG_LEVEL
+          value: ${LOG_LEVEL}
+          # TODO: It never can be blank!
+        - name: CLOUD_METER_AVAILABILITY_CHECK_URL
+          value: http://${CLOUD_METER_API_HOST}:${CLOUD_METER_SOURCES_API_PORT}${CLOUD_METER_SOURCES_API_AVAILABILITY_CHECK_PATH}
+          # TODO: It never can be blank!
+        - name: COST_MANAGEMENT_AVAILABILITY_CHECK_URL
+          value: ${KOKU_SOURCES_API_SCHEME}://${KOKU_SOURCES_API_HOST}:${KOKU_SOURCES_API_PORT}${KOKU_SOURCES_API_APP_CHECK_PATH}
+        - name: ENCRYPTION_KEY
+          valueFrom:
+            secretKeyRef:
+              name: sources-api-secrets
+              key: encryption-key
+        - name: PATH_PREFIX
+          value: ${PATH_PREFIX}
+        - name: SECRET_KEY_BASE
+          valueFrom:
+            secretKeyRef:
+              name: sources-api-secrets
+              key: secret-key
+        resources:
+          limits:
+            cpu: ${CPU_LIMIT}
+            memory: ${MEMORY_LIMIT}
+          requests:
+            cpu: ${CPU_REQUEST}
+            memory: ${MEMORY_REQUEST}
     - name: svc
       minReplicas: ${{MIN_REPLICAS}}
       webServices:
@@ -118,6 +154,7 @@ objects:
     - topicName: platform.topological-inventory.operations-satellite
       partitions: 3
       replicas: 3
+    inMemoryDb: true
 - apiVersion: v1
   kind: Service
   metadata:
