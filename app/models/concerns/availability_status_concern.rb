@@ -5,16 +5,14 @@ module AvailabilityStatusConcern
     before_update :reset_availability_callback
   end
 
-  private
-
   IGNORE_LIST = %w[
-    "availability_status",
-    "availability_status_error",
-    "last_available_at",
-    "last_checked_at",
-    "updated_at",
-    "name",
-    "superkey_data"
+    availability_status
+    availability_status_error
+    last_available_at
+    last_checked_at
+    name
+    superkey_data
+    updated_at
   ].freeze
 
   # reset availability status only if allowed attributes were changed

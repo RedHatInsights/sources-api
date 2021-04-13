@@ -27,10 +27,6 @@ class Source < ApplicationRecord
     default || endpoints.build(:default => true, :tenant => tenant)
   end
 
-  def has_endpoint?
-    endpoints.any?
-  end
-
   def super_key?
     app_creation_workflow == SUPERKEY_WORKFLOW
   end
@@ -53,15 +49,14 @@ class Source < ApplicationRecord
   def availability_check
     sources_availability_check
 
-    applications.includes(:application_type).each do |app|
-      app.availability_check
-    end
+    applications.includes(:application_type)
+                .each(&:availability_check)
   end
 
   private
 
   def sources_availability_check
-    topic  = Sources::Api::ClowderConfig.kafka_topic("platform.topological-inventory.operations-#{source_type.name}")
+    topic = Sources::Api::ClowderConfig.kafka_topic("platform.topological-inventory.operations-#{source_type.name}")
 
     logger.info("Initiating Source#availability_check [#{{"source_id" => id, "topic" => topic}}]")
 

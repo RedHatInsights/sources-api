@@ -30,9 +30,13 @@ RSpec.shared_context "availability_status_context" do
 end
 
 RSpec.shared_examples "availability_status_examples" do
+  before do
+    allow(source).to receive(:availability_check) if source.present?
+    allow(record).to receive(:availability_check) if record.respond_to?(:availability_check)
+  end
+
   # record, update and no_update variables come from caller spec
   describe "#before_update" do
-
     before do
       record.availability_status = available_status
       record.last_checked_at = timestamp
