@@ -18,6 +18,9 @@ module Sources
             broker                 = config.kafka.brokers.first
             options["kafkaHost"]   = broker.hostname
             options["kafkaPort"]   = broker.port
+            options["inMemoryDbHostname"] = config.inMemoryDb.hostname
+            options["inMemoryDbPort"] = config.inMemoryDb.port
+            options["inMemoryDbPassword"] = config.inMemoryDb.password
 
             # requested and real topic names can be somewhere(?) different
             # but they'll be equal for stage and prod (app-interface)
@@ -36,6 +39,9 @@ module Sources
             options["awsSecretAccessKey"] = ENV['CW_AWS_SECRET_ACCESS_KEY']
             options["kafkaHost"]          = ENV['QUEUE_HOST'] || "localhost"
             options["kafkaPort"]          = (ENV['QUEUE_PORT'] || "9092").to_i
+            options["inMemoryDbHostname"] = ENV['REDIS_HOST'] || "localhost"
+            options["inMemoryDbPort"]     = ENV['REDIS_PORT'] || 6379
+            options["inMemoryDbPassword"] = ENV['REDIS_PASSWORD'] || ""
             options["kafkaTopics"]        = {}
             options["logGroup"]           = "platform-dev"
             options["metricsPort"]        = (ENV['METRICS_PORT'] || 9394).to_i
