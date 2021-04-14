@@ -19,6 +19,46 @@ objects:
   spec:
     envName: ${ENV_NAME}
     deployments:
+    - name: sidekiq
+      minReplicas: ${{SIDEKIQ_REPLICAS}}
+      podSpec:
+        image: ${IMAGE}:${IMAGE_TAG}
+        args:
+        - sidekiq
+        - -c
+        - 5
+        env:
+        - name: APP_NAME
+          value: ${APP_NAME}
+        - name: DB_POOL_SIZE
+          value: ${DB_POOL_SIZE}
+        - name: RAILS_LOG_LEVEL
+          value: ${LOG_LEVEL}
+          # TODO: It never can be blank!
+        - name: CLOUD_METER_AVAILABILITY_CHECK_URL
+          value: ${CLOUD_METER_SOURCES_API_SCHEME}://${CLOUD_METER_API_HOST}:${CLOUD_METER_SOURCES_API_PORT}${CLOUD_METER_SOURCES_API_AVAILABILITY_CHECK_PATH}
+          # TODO: It never can be blank!
+        - name: COST_MANAGEMENT_AVAILABILITY_CHECK_URL
+          value: ${KOKU_SOURCES_API_SCHEME}://${KOKU_SOURCES_API_HOST}:${KOKU_SOURCES_API_PORT}${KOKU_SOURCES_API_APP_CHECK_PATH}
+        - name: ENCRYPTION_KEY
+          valueFrom:
+            secretKeyRef:
+              name: sources-api-secrets
+              key: encryption-key
+        - name: PATH_PREFIX
+          value: ${PATH_PREFIX}
+        - name: SECRET_KEY_BASE
+          valueFrom:
+            secretKeyRef:
+              name: sources-api-secrets
+              key: secret-key
+        resources:
+          limits:
+            cpu: ${SIDEKIQ_CPU_LIMIT}
+            memory: ${SIDEKIQ_MEMORY_LIMIT}
+          requests:
+            cpu: ${SIDEKIQ_CPU_REQUEST}
+            memory: ${SIDEKIQ_MEMORY_REQUEST}
     - name: svc
       minReplicas: ${{MIN_REPLICAS}}
       webServices:
@@ -54,7 +94,7 @@ objects:
           value: ${LOG_LEVEL}
           # TODO: It never can be blank!
         - name: CLOUD_METER_AVAILABILITY_CHECK_URL
-          value: http://${CLOUD_METER_API_HOST}:${CLOUD_METER_SOURCES_API_PORT}${CLOUD_METER_SOURCES_API_AVAILABILITY_CHECK_PATH}
+          value: ${CLOUD_METER_SOURCES_API_SCHEME}://${CLOUD_METER_API_HOST}:${CLOUD_METER_SOURCES_API_PORT}${CLOUD_METER_SOURCES_API_AVAILABILITY_CHECK_PATH}
           # TODO: It never can be blank!
         - name: COST_MANAGEMENT_AVAILABILITY_CHECK_URL
           value: ${KOKU_SOURCES_API_SCHEME}://${KOKU_SOURCES_API_HOST}:${KOKU_SOURCES_API_PORT}${KOKU_SOURCES_API_APP_CHECK_PATH}
@@ -118,6 +158,7 @@ objects:
     - topicName: platform.topological-inventory.operations-satellite
       partitions: 3
       replicas: 3
+    inMemoryDb: true
 - apiVersion: v1
   kind: Service
   metadata:
@@ -147,6 +188,8 @@ parameters:
   value: '8000'
 - name: CLOUD_METER_SOURCES_API_AVAILABILITY_CHECK_PATH
   value: /internal/api/cloudigrade/v1/availability_status
+- name: CLOUD_METER_SOURCES_API_SCHEME
+  value: http
 - name: CPU_LIMIT
   value: 500m
 - name: CPU_REQUEST
@@ -226,3 +269,13 @@ parameters:
   name: SOURCES_ENV
   required: true
   value: stage
+- name: SIDEKIQ_CPU_LIMIT
+  value: 200m
+- name: SIDEKIQ_CPU_REQUEST
+  value: 50m
+- name: SIDEKIQ_MEMORY_LIMIT
+  value: 500Mi
+- name: SIDEKIQ_MEMORY_REQUEST
+  value: 100Mi
+- name: SIDEKIQ_REPLICAS
+  value: '1'
