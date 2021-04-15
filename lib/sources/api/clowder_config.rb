@@ -41,7 +41,7 @@ module Sources
             options["kafkaPort"]          = (ENV['QUEUE_PORT'] || "9092").to_i
             options["inMemoryDbHostname"] = ENV['REDIS_CACHE_HOST'] || "localhost"
             options["inMemoryDbPort"]     = ENV['REDIS_CACHE_PORT'] || 6379
-            options["inMemoryDbPassword"] = ENV['REDIS_CACHE_PASSWORD'] || ""
+            options["inMemoryDbPassword"] = ENV['REDIS_CACHE_PASSWORD']
             options["kafkaTopics"]        = {}
             options["logGroup"]           = "platform-dev"
             options["metricsPort"]        = (ENV['METRICS_PORT'] || 9394).to_i
