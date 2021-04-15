@@ -2,41 +2,35 @@ module AvailabilityStatusConcern
   extend ActiveSupport::Concern
 
   included do
-    before_update :update_status
+    before_update :reset_availability_callback
   end
 
-  private
-
-  IGNORE_LIST = [
-    "availability_status",
-    "availability_status_error",
-    "last_available_at",
-    "last_checked_at",
-    "updated_at",
-    "name",
-    "superkey_data"
+  IGNORE_LIST = %w[
+    availability_status
+    availability_status_error
+    last_available_at
+    last_checked_at
+    name
+    superkey_data
+    updated_at
   ].freeze
 
-  def update_status
+  # reset availability status only if allowed attributes were changed
+  def reset_availability_callback
     updated_attributes = changed - IGNORE_LIST
 
-    remove_availability_status if updated_attributes.any?
-
-    if self.class != Source && availability_status.nil?
-      remove_availability_status_on_source
-    end
+    reset_availability if updated_attributes.any?
   end
 
-  def remove_availability_status
-    self.availability_status = nil
-    self.last_checked_at     = nil
-
-    if respond_to?(:availability_status_error)
-      self.availability_status_error = nil
-    end
+  # parent method for model's reset_availability
+  def reset_availability
+    self.availability_status       = nil
+    self.availability_status_error = nil if respond_to?(:availability_status_error)
+    self.last_checked_at           = nil
   end
 
-  def remove_availability_status_on_source
-    source.remove_availability_status!(self.class.name.to_sym)
+  def reset_availability!
+    reset_availability
+    save!
   end
 end

@@ -92,10 +92,8 @@ objects:
           value: ${DB_POOL_SIZE}
         - name: RAILS_LOG_LEVEL
           value: ${LOG_LEVEL}
-          # TODO: It never can be blank!
         - name: CLOUD_METER_AVAILABILITY_CHECK_URL
-          value: ${CLOUD_METER_SOURCES_API_SCHEME}://${CLOUD_METER_API_HOST}:${CLOUD_METER_SOURCES_API_PORT}${CLOUD_METER_SOURCES_API_AVAILABILITY_CHECK_PATH}
-          # TODO: It never can be blank!
+          value: ${CLOUD_METER_API_SCHEME}://${CLOUD_METER_API_HOST}:${CLOUD_METER_SOURCES_API_PORT}${CLOUD_METER_SOURCES_API_AVAILABILITY_CHECK_PATH}
         - name: COST_MANAGEMENT_AVAILABILITY_CHECK_URL
           value: ${KOKU_SOURCES_API_SCHEME}://${KOKU_SOURCES_API_HOST}:${KOKU_SOURCES_API_PORT}${KOKU_SOURCES_API_APP_CHECK_PATH}
         - name: ENCRYPTION_KEY
@@ -179,6 +177,10 @@ parameters:
   displayName: Application Name
   name: APP_NAME
   value: sources
+- description: Scheme of the Cloud Meter API
+  displayName: Cloud Meter API Scheme
+  name: CLOUD_METER_API_SCHEME
+  value: http
 - description: Hostname of the Cloud Meter API
   displayName: Cloud Meter API Hostname
   name: CLOUD_METER_API_HOST
@@ -188,8 +190,6 @@ parameters:
   value: '8000'
 - name: CLOUD_METER_SOURCES_API_AVAILABILITY_CHECK_PATH
   value: /internal/api/cloudigrade/v1/availability_status
-- name: CLOUD_METER_SOURCES_API_SCHEME
-  value: http
 - name: CPU_LIMIT
   value: 500m
 - name: CPU_REQUEST

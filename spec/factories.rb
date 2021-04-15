@@ -41,7 +41,7 @@ FactoryBot.define do
       compatible { true }
     end
 
-    initialize_with { SourceType.find_or_create_by(:name => name, :product_name => product_name, :vendor => vendor) }
+    initialize_with { SourceType.find_or_initialize_by(:name => name, :product_name => product_name, :vendor => vendor) }
 
     name         { compatible ? "my-source-type" : "not-my-source-type" }
     product_name { compatible ? "My Source Type" : "Not My Source Type" }
@@ -53,8 +53,7 @@ FactoryBot.define do
       compatible { true }
     end
 
-    initialize_with { Source.where(:name => name).first_or_create(:source_type => source_type, :tenant => tenant, :uid => uid) }
-    # initialize_with { Source.find_or_create_by(name: name, source_type: source_type, tenant: tenant) }
+    initialize_with { Source.where(:name => name).first_or_initialize(:source_type => source_type, :tenant => tenant, :uid => uid) }
 
     source_type { association(:source_type, :compatible => compatible) }
     tenant      { association(:tenant) }
@@ -63,7 +62,7 @@ FactoryBot.define do
   end
 
   factory :tenant do
-    initialize_with { Tenant.where(:name => name).first_or_create(:description => description, :external_tenant => external_tenant) }
+    initialize_with { Tenant.where(:name => name).first_or_initialize(:description => description, :external_tenant => external_tenant) }
 
     name            { "default" }
     description     { "Test tenant" }

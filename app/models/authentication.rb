@@ -2,6 +2,7 @@ class Authentication < ApplicationRecord
   include PasswordConcern
   include TenancyConcern
   include EventConcern
+  include AvailabilityStatusConcern
   encrypt_column :password
 
   belongs_to :resource, :polymorphic => true
@@ -32,6 +33,15 @@ class Authentication < ApplicationRecord
 
     if source.authentications.any? { |auth| auth.authtype == superkey_authtype }
       errors.add(:only_one_superkey, "Only one Authentication of #{superkey_authtype} is allowed on the Source.")
+    end
+  end
+
+  def reset_availability
+    super
+
+    resource.try(:reset_availability!)
+    applications.each do |app|
+      app.reset_availability! unless app == resource
     end
   end
 end

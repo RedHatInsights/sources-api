@@ -18,18 +18,50 @@ class Application < ApplicationRecord
   after_create :create_superkey_workflow
   after_destroy :teardown_superkey_workflow
 
-  def remove_availability_status!
-    remove_availability_status
-    save!
+  def reset_availability
+    super
+
+    source.reset_availability! if source.endpoints.blank?
   end
 
-  def remove_availability_status
-    self.availability_status       = nil
-    self.last_checked_at           = nil
-    self.availability_status_error = nil
+  # Calls availability check on connected service
+  # TODO: should be processed by resque/sidekiq(/kafka?)
+  def availability_check
+    return if (url = availability_check_url).nil?
+
+    logger.info("Requesting #{application_type.display_name} Application#availability_check [#{{"source_id" => source.id, "url" => url}}]")
+
+    uri                   = URI.parse(url)
+    net_http              = Net::HTTP.new(uri.host, uri.port)
+    net_http.open_timeout = net_http.read_timeout = 10
+
+    request      = Net::HTTP::Post.new(uri.request_uri, availability_check_headers)
+    request.body = {"source_id" => source.id.to_s}.to_json
+
+    response = net_http.request(request)
+    raise response.message unless response.kind_of?(Net::HTTPSuccess)
+  rescue => e
+    logger.error("Failed to request #{application_type.display_name} Application#availability_check [#{{"source_id" => source.id, "url" => url}}] Error: #{e.message}")
   end
 
   private
+
+  def availability_check_url
+    app_env_prefix = application_type.name.split('/').last.upcase.tr('-', '_')
+    url            = ENV["#{app_env_prefix}_AVAILABILITY_CHECK_URL"]
+
+    # ENVs consist of 3 parameters separated by '://' or ':'
+    return nil if url.to_s.gsub(/[:\/]/, '').strip.blank?
+
+    url
+  end
+
+  def availability_check_headers
+    {
+      "Content-Type"  => "application/json",
+      "x-rh-identity" => Base64.strict_encode64({'identity' => {'account_number' => source.tenant.external_tenant}}.to_json)
+    }
+  end
 
   def source_must_be_compatible
     return if application_type.supported_source_types.include?(source.source_type.name)

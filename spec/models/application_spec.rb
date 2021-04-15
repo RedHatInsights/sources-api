@@ -19,6 +19,8 @@ RSpec.describe("Application") do
 
     context "#with changes" do
       it "resets availability status for related source" do
+        expect(record.source).to receive(:availability_check)
+
         record.update!(update)
 
         expect(record.source.availability_status).to eq(nil)
@@ -28,6 +30,8 @@ RSpec.describe("Application") do
 
     context "#without changes" do
       it "does not reset availability status for related source" do
+        expect(record.source).not_to receive(:availability_check)
+
         record.update!(no_update)
 
         expect(record.source.availability_status).to eq(available_status)
