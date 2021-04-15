@@ -40,7 +40,8 @@ describe Authentication do
             end
 
             it "resets availability status for related application and source" do
-              expect(record.source).to receive(:availability_check).once
+              expect(record.source).not_to receive(:availability_check)
+              expect(record.resource).to receive(:availability_check)
 
               record.update!(update)
 

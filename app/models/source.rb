@@ -37,18 +37,23 @@ class Source < ApplicationRecord
     authentications.detect { |a| a.authtype == source_type.superkey_authtype }
   end
 
-  # resets availability status and runs new availability check
-  def reset_availability
-    super
+  # reset from Application can't invoke new check in Application
+  def reset_availability!(availability_check: true)
+    reset_availability(:availability_check => availability_check)
+  end
 
-    availability_check
+  # resets availability status and runs new availability check
+  def reset_availability(availability_check: true)
+    super()
+
+    self.availability_check if availability_check
   end
 
   # requests availability check:
-  # 1) through kafka
+  # 1) through kafka (only for full(endpoint based) check)
   # 2) in connected applications
   def availability_check
-    sources_availability_check
+    sources_availability_check if endpoints.any?
 
     applications.includes(:application_type)
                 .each(&:availability_check)

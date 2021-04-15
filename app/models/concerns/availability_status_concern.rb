@@ -34,4 +34,17 @@ module AvailabilityStatusConcern
     reset_availability
     save!
   end
+
+  # sets availability status from caller's status
+  # now Application -> Source
+  #
+  # @param caller [ActiveRecord::Base]
+  def set_availability!(caller)
+    self.availability_status = caller.availability_status
+    if respond_to?(:availability_status_error) && caller.respond_to?(:availability_status_error)
+      self.availability_status_error = caller.availability_status_error
+    end
+    self.last_checked_at = caller.last_checked_at
+    save!
+  end
 end
