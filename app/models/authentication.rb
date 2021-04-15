@@ -1,4 +1,5 @@
 class Authentication < ApplicationRecord
+  include Pausable
   include PasswordConcern
   include TenancyConcern
   include EventConcern

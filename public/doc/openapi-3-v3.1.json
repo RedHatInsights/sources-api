@@ -541,6 +541,60 @@
         }
       }
     },
+    "/applications/{id}/pause": {
+      "post": {
+        "summary": "Pauses an Application",
+        "operationId": "pauseApplication",
+        "description": "Pauses an Application",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/ID"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Application Paused"
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorNotFound"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/applications/{id}/unpause": {
+      "post": {
+        "summary": "Un-Pauses an Application",
+        "operationId": "unpauseApplication",
+        "description": "Un-Pauses an Application",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/ID"
+          }
+        ],
+        "responses": {
+          "202": {
+            "description": "Application Un-Paused"
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorNotFound"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/authentications": {
       "get": {
         "summary": "List Authentications",

@@ -1,4 +1,5 @@
 class Application < ApplicationRecord
+  include Pausable
   include TenancyConcern
   include EventConcern
   include AvailabilityStatusConcern

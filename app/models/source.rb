@@ -1,6 +1,7 @@
 class Source < ApplicationRecord
   SUPERKEY_WORKFLOW = "account_authorization".freeze
 
+  include Pausable
   include TenancyConcern
   include EventConcern
   include AvailabilityStatusConcern
