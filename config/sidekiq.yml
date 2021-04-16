@@ -1,0 +1,9 @@
+# This file defines the queues sidekiq will listen on
+# it also defines a weight at which polling occurs.
+#
+# the default queue is a higher priority than the availability
+# queue here for example, because availability operations are low
+# priority.
+:queues:
+  - ["default", 2]
+  - ["availability", 1]
