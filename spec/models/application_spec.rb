@@ -119,4 +119,29 @@ RSpec.describe("Application") do
       end
     end
   end
+
+  describe "pausing" do
+    let!(:source) { create(:source) }
+    let!(:app1) { Application.create!(:source => source, :tenant => source.tenant, :application_type => create(:application_type)) }
+    let!(:app2) { Application.create!(:source => source, :tenant => source.tenant, :application_type => app1.application_type) }
+    let!(:auth) { Authentication.create!(:resource => app1, :tenant => source.tenant) }
+
+    before do
+      # TODO: i have no idea why this is necessary. it doesn't make sense
+      app1.authentications << auth
+    end
+
+    it "discards dependent authentications" do
+      app1.discard
+
+      expect(auth.reload.discarded?).to be_truthy
+    end
+
+    it "discards the source when all applications are discarded" do
+      app1.discard
+      app2.discard
+
+      expect(app1.reload.source.discarded?).to be_truthy
+    end
+  end
 end

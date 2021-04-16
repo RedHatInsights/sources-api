@@ -19,6 +19,9 @@ class Application < ApplicationRecord
   after_create :create_superkey_workflow
   after_destroy :teardown_superkey_workflow
 
+  after_discard :discard_workflow
+  after_undiscard :undiscard_workflow
+
   def reset_availability
     super
 
@@ -111,5 +114,18 @@ class Application < ApplicationRecord
       # pull out the superkey metadata we pass in from the worker
       self.superkey_data = extra.delete("_superkey")
     end
+  end
+
+  # pause all applications and pause source if all applications
+  # have been paused
+  def discard_workflow
+    authentications.discard_all
+    source.discard if Application.where(:source_id => source_id).all?(&:discarded?)
+  end
+
+  # inverse of above.
+  def undiscard_workflow
+    authentications.undiscard_all
+    source.undiscard
   end
 end
