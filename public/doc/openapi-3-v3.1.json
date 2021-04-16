@@ -555,6 +555,9 @@
           "204": {
             "description": "Application Paused"
           },
+          "400": {
+            "description": "Bad request"
+          },
           "404": {
             "description": "Not found",
             "content": {
@@ -581,6 +584,9 @@
         "responses": {
           "202": {
             "description": "Application Un-Paused"
+          },
+          "400": {
+            "description": "Bad request"
           },
           "404": {
             "description": "Not found",
@@ -1715,6 +1721,11 @@
             "format": "date-time",
             "readOnly": true,
             "type": "string"
+          },
+          "paused_at": {
+            "format": "date-time",
+            "readOnly": true,
+            "type": "string"
           }
         },
         "additionalProperties": false
@@ -1933,6 +1944,11 @@
           },
           "username": {
             "example": "user@example.com",
+            "type": "string"
+          },
+          "paused_at": {
+            "format": "date-time",
+            "readOnly": true,
             "type": "string"
           }
         },
@@ -2202,6 +2218,11 @@
             "example": "6.5.0",
             "readOnly": true,
             "title": "Version",
+            "type": "string"
+          },
+          "paused_at": {
+            "format": "date-time",
+            "readOnly": true,
             "type": "string"
           }
         },
