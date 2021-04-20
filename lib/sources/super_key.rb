@@ -36,6 +36,8 @@ module Sources
     end
 
     def teardown
+      return unless @application.superkey_data
+
       Sources::Api::Messaging.send_superkey_destroy_request(
         :application => @application
       )
