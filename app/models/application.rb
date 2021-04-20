@@ -10,7 +10,7 @@ class Application < ApplicationRecord
   has_many :authentications, :through => :application_authentications
 
   attribute :availability_status, :string
-  validates :availability_status, :inclusion => {:in => %w[available unavailable]}, :allow_nil => true
+  validates :availability_status, :inclusion => {:in => %w[available unavailable in_progress]}, :allow_nil => true
 
   validate :source_must_be_compatible
 
