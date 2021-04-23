@@ -1,4 +1,6 @@
 class RenameSatelliteInitialValue < ActiveRecord::Migration[5.2]
+  class SourceType < ActiveRecord::Base; end
+
   def up
     rename("sattelite", "satellite")
   end
