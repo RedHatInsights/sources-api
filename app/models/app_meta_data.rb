@@ -4,12 +4,12 @@ class AppMetaData < MetaData
   def self.seed
     transaction do
       # Default to CI
-      env = ENV['SOURCES_ENV'] || "ci"
+      env = ENV['SOURCES_ENV'].presence || "ci"
 
       destroy_all
 
       metadata = YAML.safe_load(File.read("db/seeds/app_metadata.yml"))
-      metadata[env].each do |app, settings|
+      (metadata[env] || {}).each do |app, settings|
         apptype = ApplicationType.find_by(:name => app)
 
         settings.each do |key, value|
