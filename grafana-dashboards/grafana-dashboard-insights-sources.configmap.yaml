@@ -18,7 +18,7 @@ data:
       "editable": true,
       "gnetId": null,
       "graphTooltip": 0,
-      "iteration": 1617726223802,
+      "iteration": 1619683531394,
       "links": [],
       "panels": [
         {
@@ -46,7 +46,7 @@ data:
           },
           "gridPos": {
             "h": 1,
-            "w": 2,
+            "w": 6,
             "x": 0,
             "y": 1
           },
@@ -74,8 +74,8 @@ data:
           },
           "gridPos": {
             "h": 1,
-            "w": 2,
-            "x": 2,
+            "w": 6,
+            "x": 6,
             "y": 1
           },
           "id": 16,
@@ -102,8 +102,8 @@ data:
           },
           "gridPos": {
             "h": 1,
-            "w": 2,
-            "x": 4,
+            "w": 4,
+            "x": 12,
             "y": 1
           },
           "id": 57,
@@ -115,7 +115,7 @@ data:
           "pluginVersion": "7.1.0",
           "timeFrom": null,
           "timeShift": null,
-          "title": "5xx Errors Count",
+          "title": "Errors Count",
           "type": "text"
         },
         {
@@ -177,6 +177,122 @@ data:
           "type": "stat"
         },
         {
+          "datasource": "$Datasource",
+          "description": "Alert: Down for 2m",
+          "fieldConfig": {
+            "defaults": {
+              "custom": {},
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "red",
+                    "value": null
+                  },
+                  {
+                    "color": "green",
+                    "value": 1
+                  }
+                ]
+              }
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 3,
+            "w": 2,
+            "x": 2,
+            "y": 2
+          },
+          "id": 59,
+          "options": {
+            "colorMode": "value",
+            "graphMode": "none",
+            "justifyMode": "auto",
+            "orientation": "auto",
+            "reduceOptions": {
+              "calcs": [
+                "lastNotNull"
+              ],
+              "fields": "",
+              "values": false
+            },
+            "textMode": "auto"
+          },
+          "pluginVersion": "7.2.1",
+          "targets": [
+            {
+              "expr": "sum(up{service=\"sources-satellite-operations\"})",
+              "interval": "",
+              "legendFormat": "",
+              "refId": "A"
+            }
+          ],
+          "timeFrom": null,
+          "timeShift": null,
+          "title": "Satellite",
+          "type": "stat"
+        },
+        {
+          "datasource": "$Datasource",
+          "description": "Alert: Down for 2m",
+          "fieldConfig": {
+            "defaults": {
+              "custom": {},
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "red",
+                    "value": null
+                  },
+                  {
+                    "color": "green",
+                    "value": 1
+                  }
+                ]
+              }
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 3,
+            "w": 2,
+            "x": 4,
+            "y": 2
+          },
+          "id": 64,
+          "options": {
+            "colorMode": "value",
+            "graphMode": "none",
+            "justifyMode": "auto",
+            "orientation": "auto",
+            "reduceOptions": {
+              "calcs": [
+                "lastNotNull"
+              ],
+              "fields": "",
+              "values": false
+            },
+            "textMode": "auto"
+          },
+          "pluginVersion": "7.2.1",
+          "targets": [
+            {
+              "expr": "sum(up{service=\"sources-superkey-worker-svc\"})",
+              "interval": "",
+              "legendFormat": "",
+              "refId": "A"
+            }
+          ],
+          "timeFrom": null,
+          "timeShift": null,
+          "title": "SuperKey",
+          "type": "stat"
+        },
+        {
           "cacheTimeout": null,
           "datasource": "$Datasource",
           "description": "Alert: > 5 [30m] for 1h",
@@ -217,7 +333,7 @@ data:
           "gridPos": {
             "h": 3,
             "w": 2,
-            "x": 2,
+            "x": 6,
             "y": 2
           },
           "id": 12,
@@ -240,7 +356,7 @@ data:
           "pluginVersion": "7.2.1",
           "targets": [
             {
-              "expr": "round(sum(increase(kube_pod_container_status_restarts_total{container=\"sources-api\"}[$__range])))",
+              "expr": "round(sum(increase(kube_pod_container_status_restarts_total{container=\"sources-api-svc\"}[$__range])))",
               "interval": "",
               "legendFormat": "",
               "refId": "A"
@@ -282,7 +398,145 @@ data:
           "gridPos": {
             "h": 3,
             "w": 2,
-            "x": 4,
+            "x": 8,
+            "y": 2
+          },
+          "id": 61,
+          "options": {
+            "colorMode": "value",
+            "graphMode": "none",
+            "justifyMode": "auto",
+            "orientation": "auto",
+            "reduceOptions": {
+              "calcs": [
+                "lastNotNull"
+              ],
+              "fields": "",
+              "values": false
+            },
+            "textMode": "auto"
+          },
+          "pluginVersion": "7.2.1",
+          "targets": [
+            {
+              "expr": "round(sum(increase(kube_pod_container_status_restarts_total{container=\"sources-satellite-operations\"}[$__range])))",
+              "interval": "",
+              "legendFormat": "",
+              "refId": "A"
+            }
+          ],
+          "timeFrom": null,
+          "timeShift": null,
+          "title": "Satellite",
+          "type": "stat"
+        },
+        {
+          "cacheTimeout": null,
+          "datasource": "$Datasource",
+          "description": "Alert: > 5 [30m] for 1h",
+          "fieldConfig": {
+            "defaults": {
+              "custom": {},
+              "mappings": [
+                {
+                  "id": 0,
+                  "op": "=",
+                  "text": "N/A",
+                  "type": 1,
+                  "value": "null"
+                }
+              ],
+              "nullValueMode": "connected",
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  },
+                  {
+                    "color": "orange",
+                    "value": 1
+                  },
+                  {
+                    "color": "red",
+                    "value": 10
+                  }
+                ]
+              },
+              "unit": "none"
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 3,
+            "w": 2,
+            "x": 10,
+            "y": 2
+          },
+          "id": 66,
+          "interval": "",
+          "links": [],
+          "options": {
+            "colorMode": "value",
+            "graphMode": "area",
+            "justifyMode": "auto",
+            "orientation": "horizontal",
+            "reduceOptions": {
+              "calcs": [
+                "lastNotNull"
+              ],
+              "fields": "",
+              "values": false
+            },
+            "textMode": "auto"
+          },
+          "pluginVersion": "7.2.1",
+          "targets": [
+            {
+              "expr": "round(sum(increase(kube_pod_container_status_restarts_total{container=\"sources-superkey-worker-svc\"}[$__range])))",
+              "interval": "",
+              "legendFormat": "",
+              "refId": "A"
+            }
+          ],
+          "timeFrom": null,
+          "timeShift": null,
+          "title": "SuperKey",
+          "type": "stat"
+        },
+        {
+          "datasource": "$Datasource",
+          "description": "Alert: > 50 [5m] for 10m",
+          "fieldConfig": {
+            "defaults": {
+              "custom": {},
+              "mappings": [],
+              "noValue": "0",
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  },
+                  {
+                    "color": "orange",
+                    "value": 1
+                  },
+                  {
+                    "color": "red",
+                    "value": 10
+                  }
+                ]
+              }
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 3,
+            "w": 2,
+            "x": 12,
             "y": 2
           },
           "id": 56,
@@ -311,7 +565,82 @@ data:
           ],
           "timeFrom": null,
           "timeShift": null,
-          "title": "API",
+          "title": "API (5xx)",
+          "type": "stat"
+        },
+        {
+          "cacheTimeout": null,
+          "datasource": "$Datasource",
+          "description": "Alert: > 10 errors in 10mins for 30 minutes",
+          "fieldConfig": {
+            "defaults": {
+              "custom": {},
+              "mappings": [
+                {
+                  "id": 0,
+                  "op": "=",
+                  "text": "N/A",
+                  "type": 1,
+                  "value": "null"
+                }
+              ],
+              "nullValueMode": "connected",
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  },
+                  {
+                    "color": "orange",
+                    "value": 1
+                  },
+                  {
+                    "color": "red",
+                    "value": 10
+                  }
+                ]
+              },
+              "unit": "none"
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 3,
+            "w": 2,
+            "x": 14,
+            "y": 2
+          },
+          "id": 63,
+          "interval": "",
+          "links": [],
+          "options": {
+            "colorMode": "value",
+            "graphMode": "area",
+            "justifyMode": "auto",
+            "orientation": "horizontal",
+            "reduceOptions": {
+              "calcs": [
+                "lastNotNull"
+              ],
+              "fields": "",
+              "values": false
+            },
+            "textMode": "auto"
+          },
+          "pluginVersion": "7.2.1",
+          "targets": [
+            {
+              "expr": "round(sum(increase(sources_satellite_operations_errors_total[$__range])))+round(sum(increase(sources_satellite_operations_status_counter{status=\"error\"}[$__range])))",
+              "interval": "",
+              "legendFormat": "",
+              "refId": "A"
+            }
+          ],
+          "timeFrom": null,
+          "timeShift": null,
+          "title": "Satellite",
           "type": "stat"
         },
         {
@@ -334,7 +663,7 @@ data:
           "dashLength": 10,
           "dashes": false,
           "datasource": "$Datasource",
-          "description": "Alert: > 200 [10m]",
+          "description": "Alert: > 1000 [10m]",
           "fieldConfig": {
             "defaults": {
               "custom": {},
@@ -392,7 +721,7 @@ data:
               "fill": false,
               "line": true,
               "op": "gt",
-              "value": 200,
+              "value": 1000,
               "yaxis": "left"
             }
           ],
@@ -437,7 +766,7 @@ data:
           }
         },
         {
-          "collapsed": false,
+          "collapsed": true,
           "datasource": null,
           "gridPos": {
             "h": 1,
@@ -446,248 +775,249 @@ data:
             "y": 12
           },
           "id": 20,
-          "panels": [],
-          "title": "Sources API Requests Duration",
-          "type": "row"
-        },
-        {
-          "aliasColors": {},
-          "bars": false,
-          "dashLength": 10,
-          "dashes": false,
-          "datasource": "$Datasource",
-          "description": "",
-          "fieldConfig": {
-            "defaults": {
-              "custom": {
-                "align": null,
-                "filterable": false
-              },
-              "mappings": [],
-              "thresholds": {
-                "mode": "absolute",
-                "steps": [
-                  {
-                    "color": "green",
-                    "value": null
+          "panels": [
+            {
+              "aliasColors": {},
+              "bars": false,
+              "dashLength": 10,
+              "dashes": false,
+              "datasource": "$Datasource",
+              "description": "",
+              "fieldConfig": {
+                "defaults": {
+                  "custom": {
+                    "align": null,
+                    "filterable": false
                   },
-                  {
-                    "color": "red",
-                    "value": 80
+                  "mappings": [],
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "color": "green",
+                        "value": null
+                      },
+                      {
+                        "color": "red",
+                        "value": 80
+                      }
+                    ]
                   }
-                ]
+                },
+                "overrides": []
+              },
+              "fill": 1,
+              "fillGradient": 0,
+              "gridPos": {
+                "h": 7,
+                "w": 12,
+                "x": 0,
+                "y": 13
+              },
+              "hiddenSeries": false,
+              "id": 22,
+              "legend": {
+                "avg": false,
+                "current": false,
+                "max": false,
+                "min": false,
+                "show": true,
+                "total": false,
+                "values": false
+              },
+              "lines": true,
+              "linewidth": 1,
+              "nullPointMode": "null",
+              "options": {
+                "alertThreshold": true
+              },
+              "percentage": false,
+              "pluginVersion": "7.2.1",
+              "pointradius": 2,
+              "points": false,
+              "renderer": "flot",
+              "seriesOverrides": [],
+              "spaceLength": 10,
+              "stack": false,
+              "steppedLine": false,
+              "targets": [
+                {
+                  "expr": "rate(sources_api_http_duration_seconds_sum{controller!=\"status\",controller=~\"$controller\",action=~\"$action\"}[5m]) / rate(sources_api_http_duration_seconds_count{controller!=\"status\",controller=~\"$controller\",action=~\"$action\"}[5m]) * 1000 > 0",
+                  "interval": "",
+                  "legendFormat": "{{controller}}/{{action}}",
+                  "refId": "A"
+                }
+              ],
+              "thresholds": [],
+              "timeFrom": null,
+              "timeRegions": [],
+              "timeShift": null,
+              "title": "Request Duration",
+              "tooltip": {
+                "shared": true,
+                "sort": 0,
+                "value_type": "individual"
+              },
+              "type": "graph",
+              "xaxis": {
+                "buckets": null,
+                "mode": "time",
+                "name": null,
+                "show": true,
+                "values": []
+              },
+              "yaxes": [
+                {
+                  "format": "ms",
+                  "label": null,
+                  "logBase": 1,
+                  "max": null,
+                  "min": null,
+                  "show": true
+                },
+                {
+                  "format": "short",
+                  "label": null,
+                  "logBase": 1,
+                  "max": null,
+                  "min": null,
+                  "show": true
+                }
+              ],
+              "yaxis": {
+                "align": false,
+                "alignLevel": null
               }
             },
-            "overrides": []
-          },
-          "fill": 1,
-          "fillGradient": 0,
-          "gridPos": {
-            "h": 7,
-            "w": 12,
-            "x": 0,
-            "y": 13
-          },
-          "hiddenSeries": false,
-          "id": 22,
-          "legend": {
-            "avg": false,
-            "current": false,
-            "max": false,
-            "min": false,
-            "show": true,
-            "total": false,
-            "values": false
-          },
-          "lines": true,
-          "linewidth": 1,
-          "nullPointMode": "null",
-          "options": {
-            "alertThreshold": true
-          },
-          "percentage": false,
-          "pluginVersion": "7.2.1",
-          "pointradius": 2,
-          "points": false,
-          "renderer": "flot",
-          "seriesOverrides": [],
-          "spaceLength": 10,
-          "stack": false,
-          "steppedLine": false,
-          "targets": [
             {
-              "expr": "rate(sources_api_http_duration_seconds_sum{controller!=\"status\",controller=~\"$controller\",action=~\"$action\"}[5m]) / rate(sources_api_http_duration_seconds_count{controller!=\"status\",controller=~\"$controller\",action=~\"$action\"}[5m]) * 1000 > 0",
-              "interval": "",
-              "legendFormat": "{{controller}}/{{action}}",
-              "refId": "A"
+              "aliasColors": {},
+              "bars": false,
+              "dashLength": 10,
+              "dashes": false,
+              "datasource": "$Datasource",
+              "description": "Alert: Avg Request > 500ms[5m] for 10m",
+              "fieldConfig": {
+                "defaults": {
+                  "custom": {},
+                  "links": []
+                },
+                "overrides": []
+              },
+              "fill": 1,
+              "fillGradient": 0,
+              "gridPos": {
+                "h": 7,
+                "w": 12,
+                "x": 12,
+                "y": 13
+              },
+              "hiddenSeries": false,
+              "id": 26,
+              "legend": {
+                "avg": false,
+                "current": false,
+                "max": false,
+                "min": false,
+                "show": true,
+                "total": false,
+                "values": false
+              },
+              "lines": true,
+              "linewidth": 1,
+              "nullPointMode": "null",
+              "options": {
+                "alertThreshold": true
+              },
+              "percentage": false,
+              "pluginVersion": "7.2.1",
+              "pointradius": 2,
+              "points": false,
+              "renderer": "flot",
+              "seriesOverrides": [],
+              "spaceLength": 10,
+              "stack": false,
+              "steppedLine": false,
+              "targets": [
+                {
+                  "expr": "max(rate(sources_api_http_duration_seconds_sum{controller!=\"status\",controller=~\"$controller\",action=~\"$action\"}[5m]) / rate(sources_api_http_duration_seconds_count{controller!=\"status\",controller=~\"$controller\",action=~\"$action\"}[5m]) > 0)",
+                  "interval": "",
+                  "legendFormat": "Max Request",
+                  "refId": "A"
+                },
+                {
+                  "expr": "max(rate(sources_api_http_sql_duration_seconds_sum{controller!=\"status\",controller=~\"$controller\",action=~\"$action\"}[5m]) / rate(sources_inventory_api_http_sql_duration_seconds_count{controller!=\"status\",controller=~\"$controller\",action=~\"$action\"}[5m]) > 0)",
+                  "interval": "",
+                  "legendFormat": "Max SQL",
+                  "refId": "B"
+                },
+                {
+                  "expr": "avg(rate(sources_api_http_duration_seconds_sum{controller!=\"status\",controller=~\"$controller\",action=~\"$action\"}[5m]) / rate(sources_api_http_duration_seconds_count{controller!=\"status\",controller=~\"$controller\",action=~\"$action\"}[5m]) > 0)",
+                  "interval": "",
+                  "legendFormat": "Avg Request",
+                  "refId": "C"
+                },
+                {
+                  "expr": "avg(rate(sources_api_http_sql_duration_seconds_sum{controller!=\"status\",controller=~\"$controller\",action=~\"$action\"}[5m]) / rate(sources_inventory_api_http_sql_duration_seconds_count{controller!=\"status\",controller=~\"$controller\",action=~\"$action\"}[5m]) > 0)",
+                  "interval": "",
+                  "legendFormat": "Avg SQL",
+                  "refId": "D"
+                }
+              ],
+              "thresholds": [
+                {
+                  "$$hashKey": "object:94",
+                  "colorMode": "critical",
+                  "fill": false,
+                  "line": true,
+                  "op": "gt",
+                  "value": 0.5,
+                  "yaxis": "left"
+                }
+              ],
+              "timeFrom": null,
+              "timeRegions": [],
+              "timeShift": null,
+              "title": "Avg/Max Request Duration",
+              "tooltip": {
+                "shared": true,
+                "sort": 0,
+                "value_type": "individual"
+              },
+              "type": "graph",
+              "xaxis": {
+                "buckets": null,
+                "mode": "time",
+                "name": null,
+                "show": true,
+                "values": []
+              },
+              "yaxes": [
+                {
+                  "decimals": null,
+                  "format": "s",
+                  "label": "",
+                  "logBase": 1,
+                  "max": null,
+                  "min": "0",
+                  "show": true
+                },
+                {
+                  "format": "short",
+                  "label": null,
+                  "logBase": 1,
+                  "max": null,
+                  "min": null,
+                  "show": true
+                }
+              ],
+              "yaxis": {
+                "align": false,
+                "alignLevel": null
+              }
             }
           ],
-          "thresholds": [],
-          "timeFrom": null,
-          "timeRegions": [],
-          "timeShift": null,
-          "title": "Request Duration",
-          "tooltip": {
-            "shared": true,
-            "sort": 0,
-            "value_type": "individual"
-          },
-          "type": "graph",
-          "xaxis": {
-            "buckets": null,
-            "mode": "time",
-            "name": null,
-            "show": true,
-            "values": []
-          },
-          "yaxes": [
-            {
-              "format": "ms",
-              "label": null,
-              "logBase": 1,
-              "max": null,
-              "min": null,
-              "show": true
-            },
-            {
-              "format": "short",
-              "label": null,
-              "logBase": 1,
-              "max": null,
-              "min": null,
-              "show": true
-            }
-          ],
-          "yaxis": {
-            "align": false,
-            "alignLevel": null
-          }
-        },
-        {
-          "aliasColors": {},
-          "bars": false,
-          "dashLength": 10,
-          "dashes": false,
-          "datasource": "$Datasource",
-          "description": "Alert: Avg Request > 500ms[5m] for 10m",
-          "fieldConfig": {
-            "defaults": {
-              "custom": {},
-              "links": []
-            },
-            "overrides": []
-          },
-          "fill": 1,
-          "fillGradient": 0,
-          "gridPos": {
-            "h": 7,
-            "w": 12,
-            "x": 12,
-            "y": 13
-          },
-          "hiddenSeries": false,
-          "id": 26,
-          "legend": {
-            "avg": false,
-            "current": false,
-            "max": false,
-            "min": false,
-            "show": true,
-            "total": false,
-            "values": false
-          },
-          "lines": true,
-          "linewidth": 1,
-          "nullPointMode": "null",
-          "options": {
-            "alertThreshold": true
-          },
-          "percentage": false,
-          "pluginVersion": "7.2.1",
-          "pointradius": 2,
-          "points": false,
-          "renderer": "flot",
-          "seriesOverrides": [],
-          "spaceLength": 10,
-          "stack": false,
-          "steppedLine": false,
-          "targets": [
-            {
-              "expr": "max(rate(sources_api_http_duration_seconds_sum{controller!=\"status\",controller=~\"$controller\",action=~\"$action\"}[5m]) / rate(sources_api_http_duration_seconds_count{controller!=\"status\",controller=~\"$controller\",action=~\"$action\"}[5m]) > 0)",
-              "interval": "",
-              "legendFormat": "Max Request",
-              "refId": "A"
-            },
-            {
-              "expr": "max(rate(sources_api_http_sql_duration_seconds_sum{controller!=\"status\",controller=~\"$controller\",action=~\"$action\"}[5m]) / rate(sources_inventory_api_http_sql_duration_seconds_count{controller!=\"status\",controller=~\"$controller\",action=~\"$action\"}[5m]) > 0)",
-              "interval": "",
-              "legendFormat": "Max SQL",
-              "refId": "B"
-            },
-            {
-              "expr": "avg(rate(sources_api_http_duration_seconds_sum{controller!=\"status\",controller=~\"$controller\",action=~\"$action\"}[5m]) / rate(sources_api_http_duration_seconds_count{controller!=\"status\",controller=~\"$controller\",action=~\"$action\"}[5m]) > 0)",
-              "interval": "",
-              "legendFormat": "Avg Request",
-              "refId": "C"
-            },
-            {
-              "expr": "avg(rate(sources_api_http_sql_duration_seconds_sum{controller!=\"status\",controller=~\"$controller\",action=~\"$action\"}[5m]) / rate(sources_inventory_api_http_sql_duration_seconds_count{controller!=\"status\",controller=~\"$controller\",action=~\"$action\"}[5m]) > 0)",
-              "interval": "",
-              "legendFormat": "Avg SQL",
-              "refId": "D"
-            }
-          ],
-          "thresholds": [
-            {
-              "$$hashKey": "object:94",
-              "colorMode": "critical",
-              "fill": false,
-              "line": true,
-              "op": "gt",
-              "value": 0.5,
-              "yaxis": "left"
-            }
-          ],
-          "timeFrom": null,
-          "timeRegions": [],
-          "timeShift": null,
-          "title": "Avg/Max Request Duration",
-          "tooltip": {
-            "shared": true,
-            "sort": 0,
-            "value_type": "individual"
-          },
-          "type": "graph",
-          "xaxis": {
-            "buckets": null,
-            "mode": "time",
-            "name": null,
-            "show": true,
-            "values": []
-          },
-          "yaxes": [
-            {
-              "decimals": null,
-              "format": "s",
-              "label": "",
-              "logBase": 1,
-              "max": null,
-              "min": "0",
-              "show": true
-            },
-            {
-              "format": "short",
-              "label": null,
-              "logBase": 1,
-              "max": null,
-              "min": null,
-              "show": true
-            }
-          ],
-          "yaxis": {
-            "align": false,
-            "alignLevel": null
-          }
+          "title": "Sources API Requests Duration",
+          "type": "row"
         },
         {
           "collapsed": true,
@@ -696,7 +1026,7 @@ data:
             "h": 1,
             "w": 24,
             "x": 0,
-            "y": 20
+            "y": 13
           },
           "id": 34,
           "panels": [
@@ -905,7 +1235,7 @@ data:
             "h": 1,
             "w": 24,
             "x": 0,
-            "y": 21
+            "y": 14
           },
           "id": 36,
           "panels": [
@@ -1114,7 +1444,247 @@ data:
             "h": 1,
             "w": 24,
             "x": 0,
-            "y": 22
+            "y": 15
+          },
+          "id": 68,
+          "panels": [
+            {
+              "datasource": "$Datasource",
+              "description": "",
+              "fieldConfig": {
+                "defaults": {
+                  "custom": {},
+                  "mappings": [],
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "color": "dark-blue",
+                        "value": null
+                      }
+                    ]
+                  }
+                },
+                "overrides": []
+              },
+              "gridPos": {
+                "h": 6,
+                "w": 8,
+                "x": 0,
+                "y": 6
+              },
+              "id": 70,
+              "options": {
+                "displayMode": "basic",
+                "orientation": "horizontal",
+                "reduceOptions": {
+                  "calcs": [
+                    "lastNotNull"
+                  ],
+                  "fields": "",
+                  "values": false
+                },
+                "showUnfilled": true
+              },
+              "pluginVersion": "7.2.1",
+              "targets": [
+                {
+                  "expr": "round(sum(increase(sources_satellite_operations_status_counter[$__range])) by (name, status))",
+                  "interval": "",
+                  "legendFormat": "{{name}} [{{status}}]",
+                  "refId": "A"
+                }
+              ],
+              "timeFrom": null,
+              "timeShift": null,
+              "title": "Operations statuses",
+              "type": "bargauge"
+            },
+            {
+              "aliasColors": {},
+              "bars": false,
+              "dashLength": 10,
+              "dashes": false,
+              "datasource": "$Datasource",
+              "description": "",
+              "fieldConfig": {
+                "defaults": {
+                  "custom": {
+                    "align": null,
+                    "filterable": false
+                  },
+                  "mappings": [],
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "color": "green",
+                        "value": null
+                      },
+                      {
+                        "color": "red",
+                        "value": 80
+                      }
+                    ]
+                  }
+                },
+                "overrides": []
+              },
+              "fill": 1,
+              "fillGradient": 0,
+              "gridPos": {
+                "h": 6,
+                "w": 10,
+                "x": 8,
+                "y": 6
+              },
+              "hiddenSeries": false,
+              "id": 72,
+              "legend": {
+                "avg": false,
+                "current": false,
+                "max": false,
+                "min": false,
+                "show": true,
+                "total": false,
+                "values": false
+              },
+              "lines": true,
+              "linewidth": 1,
+              "nullPointMode": "null",
+              "options": {
+                "alertThreshold": true
+              },
+              "percentage": false,
+              "pluginVersion": "7.2.1",
+              "pointradius": 2,
+              "points": false,
+              "renderer": "flot",
+              "seriesOverrides": [],
+              "spaceLength": 10,
+              "stack": false,
+              "steppedLine": false,
+              "targets": [
+                {
+                  "expr": "rate(sources_satellite_operations_duration_seconds_sum[5m]) / rate(sources_satellite_operations_duration_seconds_count[5m]) * 1000",
+                  "interval": "",
+                  "legendFormat": "{{name}} / {{pod}}",
+                  "refId": "A"
+                }
+              ],
+              "thresholds": [],
+              "timeFrom": null,
+              "timeRegions": [],
+              "timeShift": null,
+              "title": "Operation duration",
+              "tooltip": {
+                "shared": true,
+                "sort": 0,
+                "value_type": "individual"
+              },
+              "type": "graph",
+              "xaxis": {
+                "buckets": null,
+                "mode": "time",
+                "name": null,
+                "show": true,
+                "values": []
+              },
+              "yaxes": [
+                {
+                  "format": "ms",
+                  "label": null,
+                  "logBase": 1,
+                  "max": null,
+                  "min": null,
+                  "show": true
+                },
+                {
+                  "format": "short",
+                  "label": null,
+                  "logBase": 1,
+                  "max": null,
+                  "min": null,
+                  "show": true
+                }
+              ],
+              "yaxis": {
+                "align": false,
+                "alignLevel": null
+              }
+            },
+            {
+              "datasource": "$Datasource",
+              "fieldConfig": {
+                "defaults": {
+                  "custom": {},
+                  "mappings": [],
+                  "noValue": "0",
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "color": "green",
+                        "value": null
+                      },
+                      {
+                        "color": "orange",
+                        "value": 1
+                      },
+                      {
+                        "color": "red",
+                        "value": 20
+                      }
+                    ]
+                  }
+                },
+                "overrides": []
+              },
+              "gridPos": {
+                "h": 6,
+                "w": 6,
+                "x": 18,
+                "y": 6
+              },
+              "id": 74,
+              "options": {
+                "displayMode": "gradient",
+                "orientation": "horizontal",
+                "reduceOptions": {
+                  "calcs": [
+                    "lastNotNull"
+                  ],
+                  "fields": "",
+                  "values": false
+                },
+                "showUnfilled": true
+              },
+              "pluginVersion": "7.2.1",
+              "targets": [
+                {
+                  "expr": "sum(increase(sources_satellite_operations_errors_total[$__range])) by (type)",
+                  "interval": "",
+                  "legendFormat": "{{type}}",
+                  "refId": "A"
+                }
+              ],
+              "timeFrom": null,
+              "timeShift": null,
+              "title": "Operations Errors",
+              "type": "bargauge"
+            }
+          ],
+          "title": "Satellite Operations",
+          "type": "row"
+        },
+        {
+          "collapsed": true,
+          "datasource": null,
+          "gridPos": {
+            "h": 1,
+            "w": 24,
+            "x": 0,
+            "y": 16
           },
           "id": 38,
           "panels": [
@@ -2115,7 +2685,7 @@ data:
       "timezone": "",
       "title": "Sources",
       "uid": "zxZKNnAMz",
-      "version": 12
+      "version": 3
     }
 kind: ConfigMap
 metadata:
