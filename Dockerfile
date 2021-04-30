@@ -50,10 +50,12 @@ COPY docker-assets/run_sidekiq /usr/bin
 COPY docker-assets/seed_database /usr/bin
 
 RUN chgrp -R 0 $WORKDIR && \
-    chmod -R g=u $WORKDIR
-
+    chmod -R g=u $WORKDIR && \
+    curl -L -o /usr/bin/haberdasher \
+    https://github.com/RedHatInsights/haberdasher/releases/latest/download/haberdasher_linux_amd64 && \
+    chmod 755 /usr/bin/haberdasher
 # for compatibility with CI
 EXPOSE 3000 8000
 
-ENTRYPOINT ["entrypoint"]
-CMD ["run_rails_server"]
+ENTRYPOINT ["/usr/bin/haberdasher"]
+CMD ["entrypoint", "run_rails_server"]

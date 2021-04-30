@@ -47,7 +47,7 @@ module Sources
     config.active_job.queue_adapter = :sidekiq
 
     config.log_level = (ENV['RAILS_LOG_LEVEL'] || 'debug').downcase.to_sym
-    Insights::API::Common::Logging.activate(config)
+    Insights::API::Common::Logging.activate(config, "sources-api")
 
     # ManageIQ Metrics depends on these variables
     require "sources/api/clowder_config"
