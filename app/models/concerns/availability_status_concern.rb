@@ -13,6 +13,7 @@ module AvailabilityStatusConcern
     name
     superkey_data
     updated_at
+    paused_at
   ].freeze
 
   # reset availability status only if allowed attributes were changed
