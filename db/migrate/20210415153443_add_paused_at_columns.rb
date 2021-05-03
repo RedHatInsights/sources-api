@@ -8,5 +8,8 @@ class AddPausedAtColumns < ActiveRecord::Migration[5.2]
 
     add_column :authentications, :paused_at, :datetime
     add_index :authentications, :paused_at
+
+    add_column :application_authentications, :paused_at, :datetime
+    add_index :application_authentications, :paused_at
   end
 end

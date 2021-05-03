@@ -120,12 +120,14 @@ class Application < ApplicationRecord
   # have been paused
   def discard_workflow
     authentications.discard_all
+    application_authentications.discard_all
     source.discard if Application.where(:source_id => source_id).all?(&:discarded?)
   end
 
   # inverse of above.
   def undiscard_workflow
     authentications.undiscard_all
+    application_authentications.undiscard_all
     source.undiscard
   end
 end
