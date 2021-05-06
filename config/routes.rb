@@ -27,6 +27,8 @@ Rails.application.routes.draw do
       end
       resources :applications,                :only => [:create, :destroy, :index, :show, :update] do
         resources :authentications, :only => [:index]
+        post "pause", :to => "applications#pause"
+        post "unpause", :to => "applications#unpause"
       end
       resources :application_authentications, :only => [:create, :destroy, :index, :show, :update]
       resources :authentications,             :only => [:create, :destroy, :index, :show, :update]

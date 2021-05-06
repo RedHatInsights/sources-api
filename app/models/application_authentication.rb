@@ -1,4 +1,5 @@
 class ApplicationAuthentication < ApplicationRecord
+  include Pausable
   include TenancyConcern
   include EventConcern
   belongs_to :application

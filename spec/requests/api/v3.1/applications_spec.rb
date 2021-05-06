@@ -208,6 +208,38 @@ RSpec.describe("v3.1 - Applications") do
     end
   end
 
+  describe "pausing" do
+    let!(:instance) { create(:application, :paused_at => paused_at) }
+
+    before do
+      allow(AvailabilityMessageJob).to receive(:perform_later).and_return(true)
+    end
+
+    describe "POST /applications/:id/pause" do
+      let(:paused_at) { nil }
+
+      it "pauses the application" do
+        expect(AvailabilityMessageJob).to receive(:perform_later).with("Application.pause", anything, anything).once
+        post("#{instance_path(instance.id)}/pause", :headers => headers)
+
+        expect(response.status).to eq 204
+        expect(instance.reload.paused_at).to be_truthy
+      end
+    end
+
+    describe "POST /applications/:id/unpause" do
+      let(:paused_at) { Time.current }
+
+      it "un-pauses the application" do
+        expect(AvailabilityMessageJob).to receive(:perform_later).with("Application.unpause", anything, anything).exactly(1).time
+        post("#{instance_path(instance.id)}/unpause", :headers => headers)
+
+        expect(response.status).to eq 202
+        expect(instance.reload.paused_at).to be_falsey
+      end
+    end
+  end
+
   def instance_path(id)
     File.join(collection_path, id.to_s)
   end
