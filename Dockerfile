@@ -42,8 +42,11 @@ RUN echo "gem: --no-document" > ~/.gemrc && \
     rm -rvf /root/.bundle/cache
 
 COPY . $WORKDIR
+
+# TODO: find a better way to do this. Image is getting bigger layers. 
 COPY docker-assets/entrypoint /usr/bin
 COPY docker-assets/run_rails_server /usr/bin
+COPY docker-assets/run_sidekiq /usr/bin
 COPY docker-assets/seed_database /usr/bin
 
 RUN chgrp -R 0 $WORKDIR && \
