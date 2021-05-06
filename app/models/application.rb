@@ -18,14 +18,29 @@ class Application < ApplicationRecord
   before_save :copy_superkey_data
   after_create :create_superkey_workflow
   after_destroy :teardown_superkey_workflow
-
   after_discard :discard_workflow
   after_undiscard :undiscard_workflow
 
+  after_update :set_availability
+
+  # Calls external service to do availability check
+  # Source's status is updated by the external update
   def reset_availability
     super
 
-    source.reset_availability! if source.endpoints.blank?
+    source.reset_availability!(:availability_check => false) if source.endpoints.blank?
+
+    availability_check
+  end
+
+  def set_availability
+    if saved_change_to_attribute?(:availability_status) && availability_status.present?
+      # If Source has an endpoint, apps' statuses don't influence the source's status
+      return if source.endpoints.any?
+
+      # TODO: partially_available status (later) couldn't overwrite
+      source.set_availability!(self)
+    end
   end
 
   # Calls availability check on connected service

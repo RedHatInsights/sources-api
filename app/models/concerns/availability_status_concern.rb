@@ -34,4 +34,17 @@ module AvailabilityStatusConcern
     reset_availability
     save!
   end
+
+  # sets availability status from dependent's status
+  # now Application -> Source
+  #
+  # @param dependent [ActiveRecord::Base]
+  def set_availability!(dependent)
+    self.availability_status = dependent.availability_status
+    if respond_to?(:availability_status_error) && dependent.respond_to?(:availability_status_error)
+      self.availability_status_error = dependent.availability_status_error
+    end
+    self.last_checked_at = dependent.last_checked_at
+    save!
+  end
 end

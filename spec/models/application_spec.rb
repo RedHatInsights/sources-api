@@ -17,25 +17,80 @@ RSpec.describe("Application") do
       )
     end
 
+    let(:source_unavailable) { create(:source, :availability_status => unavailable_status, :last_checked_at => timestamp) }
+    let(:application2) { create(:application, :source => source_unavailable, :application_type => app_type, :availability_status => unavailable_status) }
+
     context "#with changes" do
       it "resets availability status for related source" do
-        expect(record.source).to receive(:availability_check)
+        expect(record.source).not_to receive(:availability_check)
+        expect(record).to receive(:availability_check)
 
         record.update!(update)
 
         expect(record.source.availability_status).to eq(nil)
         expect(record.source.last_checked_at).to eq(nil)
       end
+
+      it "sets availability status for related source" do
+        expect(application2).not_to receive(:availability_check)
+        expect(application2.source).not_to receive(:availability_check)
+
+        application2.update!(:availability_status       => available_status,
+                             :availability_status_error => availability_status_error,
+                             :last_checked_at           => new_timestamp)
+
+        expect(application2.source.availability_status).to eq(available_status)
+        expect(application2.source.last_checked_at).to eq(new_timestamp)
+      end
     end
 
     context "#without changes" do
       it "does not reset availability status for related source" do
+        expect(record).not_to receive(:availability_check)
         expect(record.source).not_to receive(:availability_check)
 
         record.update!(no_update)
 
         expect(record.source.availability_status).to eq(available_status)
         expect(record.source.last_checked_at).to eq(timestamp)
+      end
+
+      it "does not set availability status for related source" do
+        expect(application2).not_to receive(:availability_check)
+        expect(application2.source).not_to receive(:availability_check)
+
+        application2.update!(:superkey_data => {:they_are => 'ignored'})
+
+        expect(application2.source.availability_status).to eq(unavailable_status)
+        expect(application2.source.last_checked_at).to eq(timestamp)
+      end
+    end
+  end
+
+  describe "availability_check" do
+    let(:available_status) { "available" }
+    let(:source) { create(:source, :availability_status => available_status, :last_checked_at => 1.hour.ago) }
+
+    let(:app_type) { create(:application_type, :name => 'old_app_type') }
+    let(:app_type2) { create(:application_type, :name => 'new_app_type') }
+    let(:application) { create(:application, :source => source, :application_type => app_type, :availability_status => available_status) }
+    let(:application2) { create(:application, :source => source, :application_type => app_type2, :availability_status => available_status) }
+
+    context "when reset_availability called" do
+      %w[with without].each do |endpoint_presence|
+        context "for source #{endpoint_presence} endpoint" do
+          if endpoint_presence == 'with'
+            let(:endpoint) { create(:endpoint, :source => source) }
+          end
+
+          it "calls app's availability_check only" do
+            expect(application.source).not_to receive(:availability_check)
+            expect(application).to receive(:availability_check).once
+            expect(application2).not_to receive(:availability_check)
+
+            application.reset_availability
+          end
+        end
       end
     end
   end

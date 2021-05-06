@@ -389,6 +389,7 @@ RSpec.describe("v1.0 - Sources") do
         source_type = create(:source_type, :name => "openshift", :vendor => "RedHat", :product_name => "OpenShift")
         attributes  = { "name" => "my_source", "source_type_id" => source_type.id.to_s }
         source      = create(:source, attributes.merge("tenant" => tenant))
+        _endpoint   = create(:endpoint, :source => source, :tenant => tenant)
 
         expect(messaging_client).to receive(:publish_topic)
           .with(hash_including(:service => openshift_topic,
@@ -412,6 +413,7 @@ RSpec.describe("v1.0 - Sources") do
         source_type = create(:source_type, :name => "amazon", :vendor => "Amazon", :product_name => "Amazon Web Services")
         attributes  = { "name" => "my_source", "source_type_id" => source_type.id.to_s }
         source      = create(:source, attributes.merge("tenant" => tenant))
+        _endpoint   = create(:endpoint, :source => source, :tenant => tenant)
 
         expect(messaging_client).to receive(:publish_topic)
           .with(hash_including(:service => amazon_topic,
@@ -467,15 +469,7 @@ RSpec.describe("v1.0 - Sources") do
 
         source.applications = [app1, app2]
 
-        expect(messaging_client).to receive(:publish_topic)
-          .with(hash_including(:service => openshift_topic,
-                               :event   => "Source.availability_check",
-                               :payload => a_hash_including(
-                                 :params => a_hash_including(
-                                   :source_id       => source.id.to_s,
-                                   :external_tenant => tenant.external_tenant
-                                 )
-                               )))
+        expect(messaging_client).not_to receive(:publish_topic)
 
         request_body = { :source_id => source.id.to_s }.to_json
 
