@@ -16,6 +16,7 @@ describe Api::V1::Mixins::UpdateMixin do
       source = create(:source, :name => "abc")
 
       expect(Sources::Api::Events).to receive(:raise_event).with("Source.update", anything, anything)
+      expect(Sources::Api::Events).to receive(:raise_event).with("Records.update", anything, anything)
 
       patch(api_v1x0_source_url(source.id), :params => {:name => "xyz"}.to_json, :headers => headers)
 

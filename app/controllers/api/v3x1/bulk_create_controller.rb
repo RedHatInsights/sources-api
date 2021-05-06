@@ -30,6 +30,10 @@ module Api
           end
         end
 
+        # Raising the big ole' bulk-message with all fields included.
+        message = bulk.process_message
+        raise_event_if(message.present?, "Records.create", message)
+
         render :status => 201, :json => bulk.output
       end
     end

@@ -315,6 +315,7 @@ RSpec.describe("v1.0 - Sources") do
 
       it "update availability status" do
         expect(Sources::Api::Events).to receive(:raise_event).with("Source.update", anything, anything)
+        expect(Sources::Api::Events).to receive(:raise_event).with("Records.update", anything, anything)
 
         included_attributes = {"availability_status" => "available"}
         instance = create(:source, attributes.merge("tenant" => tenant))
