@@ -24,9 +24,7 @@ objects:
       podSpec:
         image: ${IMAGE}:${IMAGE_TAG}
         args:
-        - sidekiq
-        - -c
-        - 5
+        - run_sidekiq
         env:
         - name: APP_NAME
           value: ${APP_NAME}
