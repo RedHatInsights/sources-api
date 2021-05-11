@@ -127,12 +127,4 @@ describe Authentication do
       end
     end
   end
-
-  context "when trying to add an authentiction to a non-superkey source" do
-    let(:source) { create(:source) }
-
-    it "does not allow the creation" do
-      expect { Authentication.create!(:resource => source) }.to raise_error(ActiveRecord::RecordInvalid, /Only superkey sources/)
-    end
-  end
 end

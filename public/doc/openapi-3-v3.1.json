@@ -1269,6 +1269,9 @@
           }
         ],
         "responses": {
+          "202": {
+            "description": "Superkey Source Deletion queued."
+          },
           "204": {
             "description": "Source deleted"
           },

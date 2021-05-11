@@ -4,7 +4,7 @@ module Api
       def pause
         app = Application.find(params.require(:application_id)).tap { |s| authorize(s) }
         app.discard!
-        AvailabilityMessageJob.perform_later("Application.pause", app, headers.to_h)
+        AvailabilityMessageJob.perform_later("Application.pause", app.to_json, Insights::API::Common::Request.current_forwardable)
 
         head 204
       end
@@ -12,7 +12,7 @@ module Api
       def unpause
         app = Application.find(params.require(:application_id)).tap { |s| authorize(s) }
         app.undiscard!
-        AvailabilityMessageJob.perform_later("Application.unpause", app, headers.to_h)
+        AvailabilityMessageJob.perform_later("Application.unpause", app.to_json, Insights::API::Common::Request.current_forwardable)
 
         head 202
       end
