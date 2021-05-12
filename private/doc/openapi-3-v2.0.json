@@ -54,6 +54,39 @@
         }
       }
     },
+    "/sources": {
+      "get": {
+        "summary": "List Sources",
+        "operationId": "listSources",
+        "description": "Returns an array of Source objects",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/QueryLimit"
+          },
+          {
+            "$ref": "#/components/parameters/QueryOffset"
+          },
+          {
+            "$ref": "#/components/parameters/QueryFilter"
+          },
+          {
+            "$ref": "#/components/parameters/QuerySortBy"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Tenants collection",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TenantsCollection"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/tenants": {
       "get": {
         "summary": "List Tenants",
@@ -341,6 +374,73 @@
         "description": "Attribute with optional order to sort the result set by.",
         "pattern": "^[a-z\\-_]+(:asc|:desc)?$"
       },
+      "Source": {
+        "type": "object",
+        "properties": {
+          "app_creation_workflow": {
+            "type": "string",
+            "enum": [
+              "manual_configuration",
+              "account_authorization"
+            ]
+          },
+          "availability_status": {
+            "type": "string"
+          },
+          "created_at": {
+            "format": "date-time",
+            "readOnly": true,
+            "type": "string"
+          },
+          "id": {
+            "$ref": "#/components/schemas/ID"
+          },
+          "imported": {
+            "type": "string"
+          },
+          "last_available_at": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "last_checked_at": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "name": {
+            "example": "Sample Provider",
+            "title": "Name",
+            "type": "string"
+          },
+          "source_ref": {
+            "type": "string"
+          },
+          "source_type_id": {
+            "$ref": "#/components/schemas/ID"
+          },
+          "uid": {
+            "readOnly": true,
+            "title": "Unique ID of the inventory source installation",
+            "type": "string"
+          },
+          "updated_at": {
+            "format": "date-time",
+            "readOnly": true,
+            "type": "string"
+          },
+          "version": {
+            "example": "6.5.0",
+            "readOnly": true,
+            "title": "Version",
+            "type": "string"
+          },
+          "paused_at": {
+            "format": "date-time",
+            "readOnly": true,
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
       "Tenant": {
         "type": "object",
         "properties": {
@@ -368,6 +468,23 @@
           }
         },
         "additionalProperties": false
+      },
+      "SourcesCollection": {
+        "type": "object",
+        "properties": {
+          "meta": {
+            "$ref": "#/components/schemas/CollectionMetadata"
+          },
+          "links": {
+            "$ref": "#/components/schemas/CollectionLinks"
+          },
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Source"
+            }
+          }
+        }
       },
       "TenantsCollection": {
         "type": "object",
