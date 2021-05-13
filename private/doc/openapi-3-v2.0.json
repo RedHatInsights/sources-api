@@ -75,11 +75,11 @@
         ],
         "responses": {
           "200": {
-            "description": "Tenants collection",
+            "description": "Sources collection",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/TenantsCollection"
+                  "$ref": "#/components/schemas/SourcesCollection"
                 }
               }
             }
