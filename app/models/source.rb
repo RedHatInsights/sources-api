@@ -69,18 +69,16 @@ class Source < ApplicationRecord
     begin
       logger.debug("Publishing message for Source#availability_check [#{{"source_id" => id, "topic" => topic}}]")
 
-      Sources::Api::Messaging.client.publish_topic(
-        :service => topic,
-        :event   => "Source.availability_check",
-        :payload => {
-          :params => {
-            :source_id       => id.to_s,
-            :source_uid      => uid.to_s,
-            :source_ref      => source_ref.to_s,
-            :external_tenant => tenant.external_tenant
-          }
+      payload = {
+        :params => {
+          :source_id       => id.to_s,
+          :source_uid      => uid.to_s,
+          :source_ref      => source_ref.to_s,
+          :external_tenant => tenant.external_tenant
         }
-      )
+      }
+
+      KafkaPublishJob.perform_later(topic, "Source.availability_check", payload)
 
       logger.debug("Publishing message for Source#availability_check [#{{"source_id" => id, "topic" => topic}}]...Complete")
     rescue => e
