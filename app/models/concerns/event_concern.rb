@@ -15,12 +15,13 @@ module EventConcern
                     :application_authentications => ApplicationAuthentication.where(:authentication => authentications)
                   }
                 when "Authentication"
+                  source = resource.try(:source) || resource
                   {
-                    :source                      => resource.source,
-                    :applications                => resource.source.applications,
-                    :endpoints                   => resource.source.endpoints,
-                    :authentications             => resource.authentications,
-                    :application_authentications => ApplicationAuthentication.where(:authentication => resource.authentications)
+                    :source                      => source,
+                    :applications                => source.applications,
+                    :endpoints                   => source.endpoints,
+                    :authentications             => source.authentications,
+                    :application_authentications => ApplicationAuthentication.where(:authentication => source.authentications)
                   }
                 when "ApplicationAuthentication"
                   {
