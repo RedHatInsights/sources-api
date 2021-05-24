@@ -44,6 +44,8 @@ Rails.application.routes.draw do
         resources :applications,      :only => [:index]
         resources :authentications,   :only => [:index]
         resources :endpoints,         :only => [:index]
+        post "pause", :to => "sources#pause"
+        post "unpause", :to => "sources#unpause"
       end
       resources :app_meta_data, :only => [:index, :show,]
     end
