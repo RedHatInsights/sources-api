@@ -59,6 +59,11 @@ class AvailabilityStatusListener
     Rails.logger.error("Could not find #{model_class} with id #{record_id}")
   rescue ActiveRecord::RecordInvalid
     Rails.logger.error("Invalid status #{payload["status"]}")
+  rescue ActiveRecord::StatementInvalid, PG::UnableToSend
+    Rails.logger.error("Ran into error connecting to db - retrying.")
+    ActiveRecord::Base.establish_connection
+
+    retry
   rescue => e
     Rails.logger.error(["Something is wrong when processing Kafka message: ", e.message, *e.backtrace].join($RS))
   end
