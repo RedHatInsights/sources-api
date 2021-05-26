@@ -5,6 +5,7 @@ class AvailabilityStatusListener
   SERVICE_NAME = "platform.sources.status".freeze
   GROUP_REF = "sources-api-status-worker".freeze
   EVENT_AVAILABILITY_STATUS = "availability_status".freeze
+  REQUIRED_HEADERS = %w(x-rh-identity).freeze
 
   attr_accessor :messaging_client_options, :client
 
@@ -38,6 +39,11 @@ class AvailabilityStatusListener
   def process_event(event)
     Rails.logger.info("Kafka message #{event.message} received with payload: #{event.payload}")
     return unless event.message == EVENT_AVAILABILITY_STATUS
+
+    if (REQUIRED_HEADERS - event.headers.keys).any?
+      Rails.logger.error("Kafka message #{event.message} missing required header(s) [#{REQUIRED_HEADERS.join(",")}], found: [#{event.headers.keys.join(',')}]; returning.")
+      return
+    end
 
     payload = JSON.parse(event.payload)
     model_class = payload["resource_type"].classify.constantize
