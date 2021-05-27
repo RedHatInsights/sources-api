@@ -6,7 +6,7 @@ module Api
           record = model.find(params.require(:id))
           authorize(record)
 
-          record.destroy
+          record.destroy!
           head :no_content
         end
       end

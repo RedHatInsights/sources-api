@@ -125,12 +125,16 @@ RSpec.describe("Application") do
     let!(:sk) { instance_double(Sources::SuperKey) }
 
     let(:client) { instance_double("ManageIQ::Messaging::Client") }
+    let(:redis) { instance_double("Redis") }
 
     before do
       allow(client).to receive(:publish_topic)
       allow(Sources::Api::Messaging).to receive(:client).and_return(client)
 
       allow(Sources::SuperKey).to receive(:new).and_return(sk)
+
+      allow(Redis).to receive(:current).and_return(redis)
+      allow(redis).to receive(:get).and_return(nil)
     end
 
     context "on create" do
@@ -159,7 +163,7 @@ RSpec.describe("Application") do
         it "runs the superkey workflow" do
           _auth = Authentication.create!(:resource => source, :tenant => source.tenant, :username => "foo", :password => "bar")
           source.reload
-          expect(sk).to receive(:teardown).once
+          expect(SuperkeyDeleteJob).to receive(:perform_later).with(application).once
 
           application.destroy!
         end

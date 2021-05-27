@@ -1,4 +1,4 @@
-require "models/shared/availability_status.rb"
+require 'models/shared/availability_status'
 
 describe Source do
   include_context "availability_status_context"

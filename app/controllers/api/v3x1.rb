@@ -11,7 +11,6 @@ module Api
     class AuthenticationsController  < Api::V3x0::AuthenticationsController; end
     class EndpointsController        < Api::V3x0::EndpointsController; end
     class GraphqlController          < Api::V3x0::GraphqlController; end
-    class SourcesController          < Api::V3x0::SourcesController; end
     class SourceTypesController      < Api::V3x0::SourceTypesController; end
   end
 end
