@@ -163,7 +163,7 @@ RSpec.describe("Application") do
         it "runs the superkey workflow" do
           _auth = Authentication.create!(:resource => source, :tenant => source.tenant, :username => "foo", :password => "bar")
           source.reload
-          expect(SuperkeyDeleteJob).to receive(:perform_later).with(application).once
+          expect(sk).to receive(:teardown)
 
           application.destroy!
         end
