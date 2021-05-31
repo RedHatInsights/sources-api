@@ -114,8 +114,14 @@ class Application < ApplicationRecord
 
   def teardown_superkey_workflow
     return unless source.super_key? && source.super_key_credential
+    return if Redis.current.get("application_#{id}_delete_queued")
 
-    SuperkeyDeleteJob.perform_later(self) unless Redis.current.get("application_#{id}_delete_queued")
+    sk = Sources::SuperKey.new(
+      :provider    => source.source_type.name,
+      :source_id   => source.id,
+      :application => self
+    )
+    sk.teardown
   end
 
   def copy_superkey_data
