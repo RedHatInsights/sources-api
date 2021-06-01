@@ -179,10 +179,6 @@ RSpec.describe("v3.1 - Sources") do
   end
 
   describe("/api/v3.1/sources/:id") do
-    def instance_path(id)
-      File.join(collection_path, id.to_s)
-    end
-
     context "get" do
       it "success: with a valid id" do
         instance = create(:source, attributes.merge("tenant" => tenant))
@@ -550,6 +546,44 @@ RSpec.describe("v3.1 - Sources") do
     end
   end
 
+  describe "pausing" do
+    let!(:instance) { create(:source, :paused_at => paused_at, :tenant => tenant) }
+
+    before do
+      # TODO: fix the factory for application
+      Application.create!(
+        :application_type => create(:application_type),
+        :source           => instance,
+        :paused_at        => paused_at,
+        :tenant           => instance.tenant
+      )
+    end
+
+    describe "POST /sources/:id/pause" do
+      let(:paused_at) { nil }
+
+      it "pauses the source" do
+        expect(AvailabilityMessageJob).to receive(:perform_later).with("Application.pause", anything, anything).once
+        post("#{instance_path(instance.id)}/pause", :headers => headers)
+
+        expect(response.status).to eq 204
+        expect(instance.reload.paused_at).to be_truthy
+      end
+    end
+
+    describe "POST /applications/:id/unpause" do
+      let(:paused_at) { Time.current }
+
+      it "un-pauses the application" do
+        expect(AvailabilityMessageJob).to receive(:perform_later).with("Application.unpause", anything, anything).exactly(1).time
+        post("#{instance_path(instance.id)}/unpause", :headers => headers)
+
+        expect(response.status).to eq 202
+        expect(instance.reload.paused_at).to be_falsey
+      end
+    end
+  end
+
   describe("subcollections") do
     existing_subcollections = [
       "endpoints",
@@ -590,5 +624,9 @@ RSpec.describe("v3.1 - Sources") do
         end
       end
     end
+  end
+
+  def instance_path(id)
+    File.join(collection_path, id.to_s)
   end
 end
