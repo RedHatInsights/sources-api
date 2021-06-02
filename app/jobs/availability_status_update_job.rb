@@ -15,7 +15,7 @@ class AvailabilityStatusUpdateJob < ApplicationJob
       :last_checked_at     => Time.now.utc
     }
 
-    options[:availability_status_error] = payload["error"] if %(Endpoint Application).include?(model_class.name)
+    options[:availability_status_error] = payload["error"] if %(Endpoint Application Authentication).include?(model_class.name)
     options[:last_available_at] = options[:last_checked_at] if options[:availability_status] == 'available'
 
     object.update!(options)
@@ -33,6 +33,6 @@ class AvailabilityStatusUpdateJob < ApplicationJob
 
   def validate_resource_type(model_class)
     # For security reason only accept explicitly listed models
-    raise NameError unless [Application, Endpoint, Source].include?(model_class)
+    raise NameError unless [Application, Authentication, Endpoint, Source].include?(model_class)
   end
 end
