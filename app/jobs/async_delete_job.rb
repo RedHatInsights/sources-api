@@ -4,7 +4,7 @@ class AsyncDeleteJob < ApplicationJob
   def perform(instance, headers)
     Sidekiq.logger.info("Destroying #{instance.class} #{instance.id}...")
 
-    Insights::API::Common::Request.with_request(:original_url => "noop", :headers => headers) do
+    Sources::Api::Request.with_request(:original_url => "noop", :headers => headers) do
       instance.destroy!
     end
   end

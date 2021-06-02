@@ -41,7 +41,7 @@ class ApplicationController < ActionController::API
   private
 
   def with_current_request
-    Insights::API::Common::Request.with_request(request) do |current|
+    Sources::Api::Request.with_request(request) do |current|
       begin
         if Tenant.tenancy_enabled? && current.required_auth?
           tenant = if user.key.present? && user.account.present?
@@ -82,7 +82,7 @@ class ApplicationController < ActionController::API
   def raise_event_if(raise_event_allowed, event, payload)
     return unless raise_event_allowed
 
-    headers = Insights::API::Common::Request.current_forwardable
+    headers = Sources::Api::Request.current_forwardable
     Sources::Api::Events.raise_event_with_logging(event, payload, headers)
   end
 
@@ -189,9 +189,9 @@ class ApplicationController < ActionController::API
 
   def pundit_user
     @pundit_user ||= OpenStruct.new(
-      :request => Insights::API::Common::Request.current!,
-      :key     => Insights::API::Common::Request.current.headers['x-rh-sources-psk'],
-      :account => Insights::API::Common::Request.current.headers['x-rh-sources-account-number']
+      :request => Sources::Api::Request.current!,
+      :key     => Sources::Api::Request.current.headers['x-rh-sources-psk'],
+      :account => Sources::Api::Request.current.headers['x-rh-sources-account-number']
     )
   end
   alias user pundit_user

@@ -35,7 +35,7 @@ class DefaultPolicy
 
     # TODO: remove org_admin after everyone has moved over.
     # Maybe even remove the `system` check
-    request.system.present? || request.user&.org_admin? || psk_matches? || write_access?
+    psk_matches? || request.system.present? || request.user&.org_admin? || write_access?
   end
 
   def psk_matches?

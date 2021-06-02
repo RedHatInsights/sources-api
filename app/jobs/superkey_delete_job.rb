@@ -2,7 +2,7 @@ class SuperkeyDeleteJob < ApplicationJob
   queue_as :default
 
   def perform(source, headers)
-    Insights::API::Common::Request.with_request(:original_url => "noop", :headers => headers) do
+    Sources::Api::Request.with_request(:original_url => "noop", :headers => headers) do
       source.applications.each do |app|
         sk = Sources::SuperKey.new(
           :provider    => source.source_type.name,
