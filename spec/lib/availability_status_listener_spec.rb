@@ -5,11 +5,10 @@ RSpec.describe AvailabilityStatusListener do
   let(:status)     { "unavailable" }
   let(:reason)     { "host unreachable" }
   let(:now)        { Time.new(2020).utc }
-  let(:headers)    { {"SECRET_HEADER" => "PASSWORD"} }
+  let(:headers)    { {"SECRET_HEADER" => "PASSWORD", "x-rh-identity" => "ayyyy"} }
+  let(:message)    { ManageIQ::Messaging::ReceivedMessage.new(nil, event_type, payload, headers, nil, client) }
 
   describe "#subscribe_to_availability_status" do
-    let(:message) { ManageIQ::Messaging::ReceivedMessage.new(nil, event_type, payload, headers, nil, client) }
-
     before do
       allow(ManageIQ::Messaging::Client).to receive(:open).with(
         :protocol => :Kafka,
@@ -117,6 +116,19 @@ RSpec.describe AvailabilityStatusListener do
 
       it "logs record not exist" do
         expect(Rails.logger).to receive(:error).with("Could not find #{resource_type} with id #{resource_id}")
+
+        subject.subscribe_to_availability_status
+      end
+    end
+
+    context "when the x-rh-identity header is missing" do
+      let(:headers) { {"SECRET_HEADER" => "PASSWORD"} }
+      let(:endpoint) { create(:endpoint, :role => "first", :default => true) }
+      let(:resource_type) { "endpoint" }
+      let(:resource_id)   { endpoint.id.to_s }
+
+      it "logs missing header" do
+        expect(Rails.logger).to receive(:error).with("Kafka message availability_status missing required header(s) [x-rh-identity], found: [SECRET_HEADER]; returning.")
 
         subject.subscribe_to_availability_status
       end
