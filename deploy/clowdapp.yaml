@@ -156,7 +156,7 @@ objects:
       replicas: 3
     inMemoryDb: true
     optionalDependencies:
-      - rbac
+    - rbac
 
 parameters:
 - description: Application name to be used in request paths.
