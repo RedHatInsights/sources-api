@@ -1,11 +1,11 @@
 require 'rails_helper'
 
 RSpec.describe AvailabilityStatusUpdateJob, :type => :job do
-  let(:now)        { Time.new(2020).utc }
-  let(:payload)    { {"resource_type" => resource_type, "resource_id" => resource_id, "status" => status, "error" => reason}.to_json }
-  let(:headers)    { {"SECRET_HEADER" => "PASSWORD", "x-rh-identity" => "ayyyy"} }
-  let(:reason)     { "host unreachable" }
-  let(:status)     { "unavailable" }
+  let(:now)     { Time.utc(2020, 1, 1, 12, 30) }
+  let(:payload) { {"resource_type" => resource_type, "resource_id" => resource_id, "status" => status, "error" => reason}.to_json }
+  let(:headers) { {"SECRET_HEADER" => "PASSWORD", "x-rh-identity" => "ayyyy"} }
+  let(:reason)  { "host unreachable" }
+  let(:status)  { "unavailable" }
 
   subject { AvailabilityStatusUpdateJob }
 
@@ -16,7 +16,7 @@ RSpec.describe AvailabilityStatusUpdateJob, :type => :job do
     let(:resource_type) { "endpoint" }
     let(:resource_id)   { endpoint.id.to_s }
 
-    before { allow(Time).to receive(:now).and_return(now) }
+    before { Timecop.freeze(now) }
 
     context "when status is available" do
       let(:status) { "available" }
