@@ -44,9 +44,14 @@ class ApplicationController < ActionController::API
     Insights::API::Common::Request.with_request(request) do |current|
       begin
         if Tenant.tenancy_enabled? && current.required_auth?
-          validate_request_entitled!(current)
+          tenant = if user.key.present? && user.account.present?
+                     Tenant.find_or_create_by(:external_tenant => user.account)
+                   else
+                     # only validate entitlement when coming from outside the cluster.
+                     validate_request_entitled!(current)
+                     Tenant.find_or_create_by(:external_tenant => current.tenant)
+                   end
 
-          tenant = Tenant.find_or_create_by(:external_tenant => current.tenant)
           ActsAsTenant.with_tenant(tenant) { yield }
         else
           ActsAsTenant.without_tenant { yield }
@@ -183,6 +188,11 @@ class ApplicationController < ActionController::API
   end
 
   def pundit_user
-    Insights::API::Common::Request.current!
+    @pundit_user ||= OpenStruct.new(
+      :request => Insights::API::Common::Request.current!,
+      :key     => Insights::API::Common::Request.current.headers['x-rh-sources-psk'],
+      :account => Insights::API::Common::Request.current.headers['x-rh-sources-account-number']
+    )
   end
+  alias user pundit_user
 end
