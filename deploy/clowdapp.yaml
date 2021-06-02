@@ -155,6 +155,9 @@ objects:
       partitions: 3
       replicas: 3
     inMemoryDb: true
+    optionalDependencies:
+    - rbac
+
 parameters:
 - description: Application name to be used in request paths.
   displayName: Application Name
