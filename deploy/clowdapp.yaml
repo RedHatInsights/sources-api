@@ -238,7 +238,7 @@ parameters:
 - description: Host to use for the RBAC service URL.
   displayName: Rbac Service Host
   name: RBAC_HOST
-  value: rbac
+  value: rbac-service
 - description: Port to use for the RBAC service URL.
   displayName: Rbac Service Port
   name: RBAC_PORT
