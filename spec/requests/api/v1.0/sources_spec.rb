@@ -7,10 +7,10 @@ RSpec.describe("v1.0 - Sources") do
   let(:attributes)      { {"name" => "my source", "source_type_id" => source_type.id.to_s} }
   let(:collection_path) { "/api/v1.0/sources" }
   let(:source_type)     { create(:source_type, :name => "SourceType", :vendor => "Some Vendor", :product_name => "Product Name") }
-  let(:client)          { instance_double("ManageIQ::Messaging::Client") }
+  let(:client) { instance_double(ManageIQ::Messaging::Client) }
   before do
-    allow(client).to receive(:publish_topic)
     allow(Sources::Api::Messaging).to receive(:client).and_return(client)
+    allow(client).to receive(:publish_topic)
   end
 
   describe("/api/v1.0/sources") do
@@ -363,17 +363,11 @@ RSpec.describe("v1.0 - Sources") do
   end
 
   describe("/api/v1.0/sources/:id/check_availability") do
-    let(:messaging_client)  { double("Sources::Api::Messaging") }
     let(:openshift_topic)   { "platform.topological-inventory.operations-openshift" }
     let(:amazon_topic)      { "platform.topological-inventory.operations-amazon" }
 
     def check_availability_path(source_id)
       File.join(collection_path, source_id.to_s, "check_availability")
-    end
-
-    before do
-      allow(messaging_client).to receive(:publish_topic)
-      allow(Sources::Api::Messaging).to receive(:client).and_return(messaging_client)
     end
 
     context "post" do
@@ -392,15 +386,16 @@ RSpec.describe("v1.0 - Sources") do
         source      = create(:source, attributes.merge("tenant" => tenant))
         _endpoint   = create(:endpoint, :source => source, :tenant => tenant)
 
-        expect(messaging_client).to receive(:publish_topic)
-          .with(hash_including(:service => openshift_topic,
-                               :event   => "Source.availability_check",
-                               :payload => a_hash_including(
-                                 :params => a_hash_including(
-                                   :source_id       => source.id.to_s,
-                                   :external_tenant => tenant.external_tenant
-                                 )
-                               )))
+        expect(KafkaPublishJob).to receive(:perform_later).with(
+          openshift_topic,
+          "Source.availability_check",
+          a_hash_including(
+            :params => a_hash_including(
+              :source_id       => source.id.to_s,
+              :external_tenant => tenant.external_tenant
+            )
+          )
+        )
 
         post(check_availability_path(source.id), :headers => headers)
 
@@ -416,15 +411,16 @@ RSpec.describe("v1.0 - Sources") do
         source      = create(:source, attributes.merge("tenant" => tenant))
         _endpoint   = create(:endpoint, :source => source, :tenant => tenant)
 
-        expect(messaging_client).to receive(:publish_topic)
-          .with(hash_including(:service => amazon_topic,
-                               :event   => "Source.availability_check",
-                               :payload => a_hash_including(
-                                 :params => a_hash_including(
-                                   :source_id       => source.id.to_s,
-                                   :external_tenant => tenant.external_tenant
-                                 )
-                               )))
+        expect(KafkaPublishJob).to receive(:perform_later).with(
+          amazon_topic,
+          "Source.availability_check",
+          a_hash_including(
+            :params => a_hash_including(
+              :source_id       => source.id.to_s,
+              :external_tenant => tenant.external_tenant
+            )
+          )
+        )
 
         post(check_availability_path(source.id), :headers => headers)
 
@@ -470,7 +466,7 @@ RSpec.describe("v1.0 - Sources") do
 
         source.applications = [app1, app2]
 
-        expect(messaging_client).not_to receive(:publish_topic)
+        expect(KafkaPublishJob).not_to receive(:perform_later)
 
         request_body = { :source_id => source.id.to_s }.to_json
 

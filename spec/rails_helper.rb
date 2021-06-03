@@ -9,6 +9,11 @@ require File.expand_path('../../config/environment', __FILE__)
 require 'spec_helper'
 # Prevent database truncation if the environment is production
 abort("The Rails environment is running in production mode!") if Rails.env.production?
+
+# disable sidekiq logging during tests
+require 'sidekiq/testing'
+Sidekiq::Logging.logger = nil
+
 require 'rspec/rails'
 # Add additional requires below this line. Rails is not loaded until this point!
 
