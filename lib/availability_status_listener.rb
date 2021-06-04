@@ -5,7 +5,6 @@ class AvailabilityStatusListener
   SERVICE_NAME = "platform.sources.status".freeze
   GROUP_REF = "sources-api-status-worker".freeze
   EVENT_AVAILABILITY_STATUS = "availability_status".freeze
-  REQUIRED_HEADERS = %w(x-rh-identity).freeze
 
   attr_accessor :messaging_client_options, :client
 
@@ -40,13 +39,40 @@ class AvailabilityStatusListener
     Rails.logger.info("Kafka message #{event.message} received with payload: #{event.payload}")
     return unless event.message == EVENT_AVAILABILITY_STATUS
 
-    if (REQUIRED_HEADERS - event.headers.keys).any?
-      Rails.logger.error("Kafka message #{event.message} missing required header(s) [#{REQUIRED_HEADERS.join(",")}], found: [#{event.headers.keys.join(',')}]; returning.")
+    # backwards compability for now while people move over to psk, this way we don't skip messages missing the x-rh-id header
+    if event.headers["x-rh-sources-account-number"]
+      event.headers["x-rh-identity"] = Base64.strict_encode64(
+        JSON.dump(
+          {
+            :identity => {
+              :account_number => event.headers["x-rh-sources-account-number"],
+              :user           => {:is_org_admin => true}
+            }
+          }
+        )
+      )
+    end
+
+    if (missing = missing_headers(event.headers)).any?
+      Rails.logger.error("Kafka message #{event.message} missing required header(s) (#{REQUIRED_HEADER_GROUPS.slice(*missing).values.join("|")}), found: [#{event.headers.keys.join(',')}]; returning.")
       return
     end
 
     # async processing so we can process 5 (or more) at once.
     AvailabilityStatusUpdateJob.perform_later(event.payload, event.headers)
+  end
+
+  # hash of "groups" where each value is an array of "one of" headers.
+  # each group needs to have at least one header from each group
+  REQUIRED_HEADER_GROUPS = {
+    :identity => %w[x-rh-identity x-rh-sources-account-number]
+  }.freeze
+
+  def missing_headers(headers)
+    REQUIRED_HEADER_GROUPS.map do |group, req|
+      # we need _at least_ one header from each group.
+      group unless (req & headers.keys).any?
+    end.compact
   end
 
   def default_messaging_options

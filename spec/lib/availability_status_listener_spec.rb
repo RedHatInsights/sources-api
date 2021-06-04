@@ -45,7 +45,28 @@ RSpec.describe AvailabilityStatusListener do
       let(:resource_id)   { endpoint.id.to_s }
 
       it "logs missing header" do
-        expect(Rails.logger).to receive(:error).with("Kafka message availability_status missing required header(s) [x-rh-identity], found: [SECRET_HEADER]; returning.")
+        expect(Rails.logger).to receive(:error).with("Kafka message availability_status missing required header(s) (x-rh-identity|x-rh-sources-account-number), found: [SECRET_HEADER]; returning.")
+
+        subject.subscribe_to_availability_status
+      end
+    end
+
+    context "with x-rh-sources-account-number" do
+      let(:headers) { {"SECRET_HEADER" => "PASSWORD", "x-rh-sources-account-number" => "1234"} }
+      let(:endpoint) { create(:endpoint, :role => "first", :default => true) }
+      let(:resource_type) { "endpoint" }
+      let(:resource_id)   { endpoint.id.to_s }
+      let(:xrhid) do
+        Base64.strict_encode64(
+          JSON.dump(:identity => {
+                      :account_number => "1234",
+                      :user           => {:is_org_admin => true}
+                    })
+        )
+      end
+
+      it "enqueues the avialability status update job with both x-rh-id + x-rh-sources-account_number" do
+        expect(AvailabilityStatusUpdateJob).to receive(:perform_later).with(payload, headers.merge!("x-rh-identity" => xrhid)).once
 
         subject.subscribe_to_availability_status
       end
