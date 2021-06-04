@@ -39,14 +39,14 @@ class DefaultPolicy
   end
 
   def psk_matches?
-    return false if self.class.pre_shared_key.nil?
+    return false if self.class.pre_shared_keys.nil?
 
-    self.class.pre_shared_key == key
+    self.class.pre_shared_keys.include?(key)
   end
 
-  def self.pre_shared_key
-    # memoizing as a class-var, defaulting to ""
-    @pre_shared_key ||= ENV.fetch("SOURCES_PSK", nil)
+  def self.pre_shared_keys
+    # memoizing as a class-var, defaulting to []
+    @pre_shared_keys ||= ENV.fetch("SOURCES_PSK", "").split(",")
   end
 
   delegate :write_access?, :to => Sources::RBAC::Access

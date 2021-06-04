@@ -64,7 +64,7 @@ describe("RBAC requests") do
       let(:headers) { {"CONTENT_TYPE" => "application/json", "x-rh-sources-psk" => "1234", "x-rh-sources-account-number" => external_tenant} }
 
       before do
-        allow(DefaultPolicy).to receive(:pre_shared_key).and_return("1234")
+        allow(DefaultPolicy).to receive(:pre_shared_keys).and_return(%w(1234))
       end
 
       it "allows the request to go through" do
