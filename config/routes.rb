@@ -139,6 +139,7 @@ Rails.application.routes.draw do
 
     namespace :v2x0, :path => "v2.0" do
       resources :authentications, :only => [:show]
+      resources :sources,         :only => [:index]
       resources :tenants,         :only => [:index, :show]
     end
   end

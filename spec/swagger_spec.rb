@@ -41,6 +41,7 @@ describe "Swagger stuff" do
           {:path => "/internal/v2.0/tenants",             :verb => "GET"},
           {:path => "/internal/v2.0/tenants/:id",         :verb => "GET"},
           {:path => "/internal/v2.0/authentications/:id", :verb => "GET"},
+          {:path => "/internal/v2.0/sources",             :verb => "GET"}
         ]
         health_check_routes = [
           {:path => "/health", :verb => "GET"}
