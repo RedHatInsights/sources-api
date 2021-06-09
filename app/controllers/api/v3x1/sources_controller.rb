@@ -5,7 +5,7 @@ module Api
         source = Source.find(params.require(:id)).tap { |s| authorize(s) }
 
         if source.super_key?
-          SuperkeyDeleteJob.perform_later(source, Insights::API::Common::Request.current_forwardable)
+          SuperkeyDeleteJob.perform_later(source, Sources::Api::Request.current_forwardable)
           head :accepted
         else
           source.destroy!
@@ -18,7 +18,7 @@ module Api
         # the after_discard callback on the Application model handles discarding the source.
         src.applications.each do |app|
           app.discard!
-          AvailabilityMessageJob.perform_later("Application.pause", app.to_json, Insights::API::Common::Request.current_forwardable)
+          AvailabilityMessageJob.perform_later("Application.pause", app.to_json, Sources::Api::Request.current_forwardable)
         end
 
         head 204
@@ -29,7 +29,7 @@ module Api
         # the after_discard callback on the Application model handles undiscarding the source.
         src.applications.each do |app|
           app.undiscard!
-          AvailabilityMessageJob.perform_later("Application.unpause", app.to_json, Insights::API::Common::Request.current_forwardable)
+          AvailabilityMessageJob.perform_later("Application.unpause", app.to_json, Sources::Api::Request.current_forwardable)
         end
 
         head 202

@@ -41,12 +41,17 @@ class ApplicationController < ActionController::API
   private
 
   def with_current_request
-    Insights::API::Common::Request.with_request(request) do |current|
+    Sources::Api::Request.with_request(request) do |current|
       begin
         if Tenant.tenancy_enabled? && current.required_auth?
-          validate_request_entitled!(current)
+          tenant = if user.key.present? && user.account.present?
+                     Tenant.find_or_create_by(:external_tenant => user.account)
+                   else
+                     # only validate entitlement when coming from outside the cluster.
+                     validate_request_entitled!(current)
+                     Tenant.find_or_create_by(:external_tenant => current.tenant)
+                   end
 
-          tenant = Tenant.find_or_create_by(:external_tenant => current.tenant)
           ActsAsTenant.with_tenant(tenant) { yield }
         else
           ActsAsTenant.without_tenant { yield }
@@ -77,7 +82,7 @@ class ApplicationController < ActionController::API
   def raise_event_if(raise_event_allowed, event, payload)
     return unless raise_event_allowed
 
-    headers = Insights::API::Common::Request.current_forwardable
+    headers = Sources::Api::Request.current_forwardable
     Sources::Api::Events.raise_event_with_logging(event, payload, headers)
   end
 
@@ -183,6 +188,11 @@ class ApplicationController < ActionController::API
   end
 
   def pundit_user
-    Insights::API::Common::Request.current!
+    @pundit_user ||= OpenStruct.new(
+      :request => Sources::Api::Request.current!,
+      :key     => Sources::Api::Request.current.headers['x-rh-sources-psk'],
+      :account => Sources::Api::Request.current.headers['x-rh-sources-account-number']
+    )
   end
+  alias user pundit_user
 end

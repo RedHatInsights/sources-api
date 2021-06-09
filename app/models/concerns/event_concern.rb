@@ -83,8 +83,8 @@ module EventConcern
   end
 
   def safe_headers
-    return nil unless Insights::API::Common::Request.current
+    return nil unless Sources::Api::Request.current
 
-    Insights::API::Common::Request.current_forwardable
+    Sources::Api::Request.current_forwardable
   end
 end

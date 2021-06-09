@@ -1,8 +1,9 @@
 class DefaultPolicy
-  attr_reader :user, :record
+  attr_reader :request, :key, :record
 
-  def initialize(user, record)
-    @user = user
+  def initialize(context, record)
+    @request = context.request
+    @key = context.key
     @record = record
   end
 
@@ -32,16 +33,30 @@ class DefaultPolicy
   def admin?
     return true unless Sources::RBAC::Access.enabled?
 
-    user.system.present? || user.user&.org_admin? || write_access?
+    # TODO: remove org_admin after everyone has moved over.
+    # Maybe even remove the `system` check
+    psk_matches? || request.system.present? || request.user&.org_admin? || write_access?
+  end
+
+  def psk_matches?
+    return false if self.class.pre_shared_keys.nil?
+
+    self.class.pre_shared_keys.include?(key)
+  end
+
+  def self.pre_shared_keys
+    # memoizing as a class-var, defaulting to []
+    @pre_shared_keys ||= ENV.fetch("SOURCES_PSK", "").split(",")
   end
 
   delegate :write_access?, :to => Sources::RBAC::Access
 
   class Scope
-    attr_reader :user, :scope
+    attr_reader :request, :key, :scope
 
-    def initialize(user, scope)
-      @user = user
+    def initialize(context, scope)
+      @request = context.request
+      @key = context.key
       @scope = scope
     end
 
