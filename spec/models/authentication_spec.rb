@@ -125,6 +125,10 @@ describe Authentication do
       it "allows updating the superkey record" do
         expect { authentication.update!(:username => "another thing") }.not_to raise_error
       end
+
+      it "requires username and password on authentication" do
+        expect { authentication.update!(:password => nil) }.to raise_error(ActiveRecord::RecordInvalid)
+      end
     end
   end
 end

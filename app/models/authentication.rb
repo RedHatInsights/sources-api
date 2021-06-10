@@ -17,6 +17,7 @@ class Authentication < ApplicationRecord
 
   before_validation :set_source
   validate :only_one_superkey, :if => proc { new_record? && source.super_key? }
+  validate :both_username_and_password, :if => proc { resource.kind_of?(Source) && source.super_key? }
 
   private
 
@@ -34,6 +35,12 @@ class Authentication < ApplicationRecord
 
     if source.authentications.any? { |auth| auth.authtype == superkey_authtype }
       errors.add(:only_one_superkey, "Only one Authentication of #{superkey_authtype} is allowed on the Source.")
+    end
+  end
+
+  def both_username_and_password
+    if username.nil? || password.nil?
+      errors.add(:both_username_and_password, "superkey authentications require both username and password")
     end
   end
 
