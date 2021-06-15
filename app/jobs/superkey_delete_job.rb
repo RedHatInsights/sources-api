@@ -2,6 +2,12 @@ class SuperkeyDeleteJob < ApplicationJob
   queue_as :default
 
   def perform(source, headers)
+    if source.super_key_credential.nil?
+      Sidekiq.logger.warn("No superkey credential for source #{source.id}, destroying inline.")
+      ::AsyncDeleteJob.perform_now(source, headers)
+      return
+    end
+
     Sources::Api::Request.with_request(:original_url => "noop", :headers => headers) do
       source.applications.each do |app|
         sk = Sources::SuperKey.new(
