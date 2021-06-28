@@ -97,7 +97,7 @@ objects:
         - name: SOURCES_PSKS
           valueFrom:
             secretKeyRef:
-              name: sources-psks
+              name: sources-api-secrets
               key: psks
               optional: true
         - name: ENCRYPTION_KEY
