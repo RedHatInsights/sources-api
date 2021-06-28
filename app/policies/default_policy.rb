@@ -46,7 +46,7 @@ class DefaultPolicy
 
   def self.pre_shared_keys
     # memoizing as a class-var, defaulting to []
-    @pre_shared_keys ||= ENV.fetch("SOURCES_PSK", "").split(",")
+    @pre_shared_keys ||= ENV.fetch("SOURCES_PSKS", "").split(",")
   end
 
   delegate :write_access?, :to => Sources::RBAC::Access
