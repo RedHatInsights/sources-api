@@ -335,6 +335,10 @@ RSpec.describe("v3.1 - Sources") do
           :parsed_body => {"errors" => [{"detail" => "ActionController::UnpermittedParameters: found unpermitted parameter: :created_at", "status" => "400"}]}
         )
       end
+
+      context "paused resources" do
+        include_examples "updating paused resource", Source
+      end
     end
 
     context "delete" do
