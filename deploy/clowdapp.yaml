@@ -12,6 +12,7 @@ objects:
   stringData:
     encryption-key: "${ENCRYPTION_KEY}"
     secret-key: "${SECRET_KEY}"
+    psks: "${PSK}"
 - apiVersion: cloud.redhat.com/v1alpha1
   kind: ClowdApp
   metadata:
@@ -260,6 +261,12 @@ parameters:
   required: true
   description: Rails SECRET_KEY_BASE
   from: "[a-f0-9]{128}"
+  generate: expression
+- name: PSK
+  displayName: PSK (Ephemeral)
+  required: true
+  description: Sources API PSK
+  from: "[a-f0-9]{16}"
   generate: expression
 - description: Env name for seed
   name: SOURCES_ENV
