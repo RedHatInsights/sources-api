@@ -33,9 +33,11 @@ class DefaultPolicy
   def admin?
     return true unless Sources::RBAC::Access.enabled?
 
-    # TODO: remove org_admin after everyone has moved over.
-    # Maybe even remove the `system` check
-    psk_matches? || request.system.present? || request.user&.org_admin? || write_access?
+    if ENV['DISABLE_ORG_ADMIN'] == "true"
+      psk_matches? || write_access?
+    else
+      psk_matches? || request.system.present? || request.user&.org_admin? || write_access?
+    end
   end
 
   def psk_matches?
