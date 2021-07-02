@@ -545,37 +545,79 @@ RSpec.describe("v3.1 - Sources") do
   describe "pausing" do
     let!(:instance) { create(:source, :paused_at => paused_at, :tenant => tenant) }
 
+    def expect_pausable_relations(check_method)
+      instance.reload
+      expect(instance.send(check_method)).to be_truthy
+      expect(instance.applications.map(&check_method).all?).to be_truthy
+      authentications = instance.applications.map(&:authentications).flatten
+      expect(authentications.map(&check_method).all?).to be_truthy
+      authentications = instance.applications.map(&:application_authentications).flatten
+      expect(authentications.map(&check_method).all?).to be_truthy
+    end
+
     before do
       # TODO: fix the factory for application
-      Application.create!(
+      application = Application.create!(
         :application_type => create(:application_type),
         :source           => instance,
         :paused_at        => paused_at,
         :tenant           => instance.tenant
       )
+      payload =  {
+        "username"      => "test_name",
+        "password"      => "Test Password",
+        "resource_type" => "Application",
+        "resource_id"   => application.id.to_s
+      }
+
+      instance.endpoints << create(:endpoint)
+      instance.applications.first.authentications << create(:authentication, payload.merge(:tenant => tenant))
     end
 
     describe "POST /sources/:id/pause" do
       let(:paused_at) { nil }
 
+      before do
+        instance.undiscard
+        instance.applications.each { |x| x.send(:undiscard_workflow) }
+      end
+
       it "pauses the source" do
         expect(AvailabilityMessageJob).to receive(:perform_later).with("Application.pause", anything, anything).once
+
+        expect_pausable_relations(:undiscarded?)
+
         post("#{instance_path(instance.id)}/pause", :headers => headers)
 
         expect(response.status).to eq 204
-        expect(instance.reload.paused_at).to be_truthy
+
+        instance.reload
+
+        expect(instance.paused_at).to be_truthy
+        expect_pausable_relations(:discarded?)
       end
     end
 
     describe "POST /applications/:id/unpause" do
       let(:paused_at) { Time.current }
 
+      before do
+        instance.discard
+        instance.applications.each { |x| x.send(:discard_workflow) }
+      end
+
       it "un-pauses the application" do
         expect(AvailabilityMessageJob).to receive(:perform_later).with("Application.unpause", anything, anything).exactly(1).time
+        expect_pausable_relations(:discarded?)
+
         post("#{instance_path(instance.id)}/unpause", :headers => headers)
 
         expect(response.status).to eq 202
-        expect(instance.reload.paused_at).to be_falsey
+
+        instance.reload
+
+        expect(instance.paused_at).to be_falsey
+        expect_pausable_relations(:undiscarded?)
       end
     end
   end

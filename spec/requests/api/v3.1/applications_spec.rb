@@ -211,31 +211,67 @@ RSpec.describe("v3.1 - Applications") do
   describe "pausing" do
     let!(:instance) { create(:application, :paused_at => paused_at) }
 
+    def expect_pausable_relations(check_method)
+      instance.reload
+      expect(instance.send(check_method)).to be_truthy
+      expect(instance.source.send(check_method)).to be_truthy
+      expect(instance.authentications.map(&check_method).all?).to be_truthy
+      expect(instance.application_authentications.map(&check_method).all?).to be_truthy
+    end
+
     before do
       allow(AvailabilityMessageJob).to receive(:perform_later).and_return(true)
+      payload =  {
+        "username"      => "test_name",
+        "password"      => "Test Password",
+        "resource_type" => "Application",
+        "resource_id"   => instance.id.to_s
+      }
+
+      instance.source.endpoints << create(:endpoint)
+      instance.source.applications.first.authentications << create(:authentication, payload.merge(:tenant => tenant))
     end
 
     describe "POST /applications/:id/pause" do
       let(:paused_at) { nil }
 
+      before do
+        instance.undiscard
+        instance.send(:undiscard_workflow) # not sure why line above didn't call this callback
+      end
+
       it "pauses the application" do
         expect(AvailabilityMessageJob).to receive(:perform_later).with("Application.pause", anything, anything).once
+
+        expect_pausable_relations(:undiscarded?)
+
         post("#{instance_path(instance.id)}/pause", :headers => headers)
 
         expect(response.status).to eq 204
         expect(instance.reload.paused_at).to be_truthy
+
+        expect_pausable_relations(:discarded?)
       end
     end
 
     describe "POST /applications/:id/unpause" do
       let(:paused_at) { Time.current }
 
+      before do
+        instance.discard
+        instance.send(:discard_workflow) # not sure why line above didn't call this callback
+      end
+
       it "un-pauses the application" do
         expect(AvailabilityMessageJob).to receive(:perform_later).with("Application.unpause", anything, anything).exactly(1).time
+        expect_pausable_relations(:discarded?)
+
         post("#{instance_path(instance.id)}/unpause", :headers => headers)
 
         expect(response.status).to eq 202
         expect(instance.reload.paused_at).to be_falsey
+
+        expect_pausable_relations(:undiscarded?)
       end
     end
   end
