@@ -215,6 +215,7 @@ RSpec.describe("v3.1 - Applications") do
       instance.reload
       expect(instance.send(check_method)).to be_truthy
       expect(instance.source.send(check_method)).to be_truthy
+      expect(instance.source.endpoints.map(&check_method).all?).to be_truthy
       expect(instance.authentications.map(&check_method).all?).to be_truthy
       expect(instance.application_authentications.map(&check_method).all?).to be_truthy
     end

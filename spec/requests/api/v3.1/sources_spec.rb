@@ -548,6 +548,7 @@ RSpec.describe("v3.1 - Sources") do
     def expect_pausable_relations(check_method)
       instance.reload
       expect(instance.send(check_method)).to be_truthy
+      expect(instance.endpoints.map(&check_method).all?).to be_truthy
       expect(instance.applications.map(&check_method).all?).to be_truthy
       authentications = instance.applications.map(&:authentications).flatten
       expect(authentications.map(&check_method).all?).to be_truthy

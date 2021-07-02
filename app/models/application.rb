@@ -136,7 +136,10 @@ class Application < ApplicationRecord
   def discard_workflow
     authentications.discard_all
     application_authentications.discard_all
-    source.discard if Application.where(:source_id => source_id).all?(&:discarded?)
+    if Application.where(:source_id => source_id).all?(&:discarded?)
+      source.discard
+      source.endpoints.discard_all
+    end
   end
 
   # inverse of above.
@@ -144,5 +147,6 @@ class Application < ApplicationRecord
     authentications.undiscard_all
     application_authentications.undiscard_all
     source.undiscard
+    source.endpoints.undiscard_all
   end
 end
