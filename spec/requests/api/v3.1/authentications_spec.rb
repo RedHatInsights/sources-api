@@ -163,6 +163,10 @@ RSpec.describe("v3.1 - Authentications") do
           :parsed_body => {"errors" => [{"detail" => "Record not found", "status" => "404"}]}
         )
       end
+
+      context "paused resources" do
+        include_examples "updating paused resource", Authentication
+      end
     end
 
     context "delete" do

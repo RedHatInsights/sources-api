@@ -8,8 +8,6 @@ module Api
 
     class ApplicationTypesController < Api::V3x0::ApplicationTypesController; end
     class ApplicationAuthenticationsController < Api::V3x0::ApplicationAuthenticationsController; end
-    class AuthenticationsController  < Api::V3x0::AuthenticationsController; end
-    class EndpointsController        < Api::V3x0::EndpointsController; end
     class GraphqlController          < Api::V3x0::GraphqlController; end
     class SourceTypesController      < Api::V3x0::SourceTypesController; end
   end

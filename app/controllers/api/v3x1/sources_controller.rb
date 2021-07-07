@@ -1,6 +1,8 @@
 module Api
   module V3x1
     class SourcesController < Api::V3x0::SourcesController
+      include Mixins::UpdateMixin
+
       def destroy
         source = Source.find(params.require(:id)).tap { |s| authorize(s) }
 

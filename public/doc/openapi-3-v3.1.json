@@ -433,7 +433,7 @@
       "patch": {
         "summary": "Update an existing Application",
         "operationId": "updateApplication",
-        "description": "Updates a Application object",
+        "description": "Updates a Application object.\n\nIn case Application object is paused then allowed attributes for update action are: \n\n `availability_status, availability_status_error, last_checked_at, last_available_at`",
         "parameters": [
           {
             "$ref": "#/components/parameters/ID"
@@ -454,6 +454,16 @@
           "204": {
             "description": "Updated, no content"
           },
+          "207" : {
+            "description": "Multi-status, some parameters are unpermitted due to paused resource(or related) but some parameters are valid.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PartialUpdateResponse"
+                }
+              }
+            }
+          },
           "400": {
             "description": "Bad request"
           },
@@ -463,6 +473,16 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/ErrorNotFound"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Entity due to paused resource or paused related resource",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorUnpermittedParameters"
                 }
               }
             }
@@ -698,7 +718,7 @@
       "patch": {
         "summary": "Update an existing Authentication",
         "operationId": "updateAuthentication",
-        "description": "Updates a Authentication object",
+        "description": "Updates a Authentication object.\n\nIn case Authentication object is paused then allowed attributes for update action are: \n\n `availability_status, availability_status_error, last_checked_at, last_available_at`",
         "parameters": [
           {
             "$ref": "#/components/parameters/ID"
@@ -719,6 +739,16 @@
           "204": {
             "description": "Updated, no content"
           },
+          "207" : {
+            "description": "Multi-status, some parameters are unpermitted due to paused resource(or related) but some parameters are valid.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PartialUpdateResponse"
+                }
+              }
+            }
+          },
           "400": {
             "description": "Bad request"
           },
@@ -728,6 +758,16 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/ErrorNotFound"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Entity due to paused resource or paused related resource",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorUnpermittedParameters"
                 }
               }
             }
@@ -857,7 +897,7 @@
       "patch": {
         "summary": "Update an existing Endpoint",
         "operationId": "updateEndpoint",
-        "description": "Updates a Endpoint object",
+        "description": "Updates a Endpoint object.\n\nIn case Endpoint object is paused then allowed attributes for update action are: \n\n `availability_status, availability_status_error, last_checked_at, last_available_at`",
         "parameters": [
           {
             "$ref": "#/components/parameters/ID"
@@ -878,6 +918,16 @@
           "204": {
             "description": "Updated, no content"
           },
+          "207" : {
+            "description": "Multi-status, some parameters are unpermitted due to paused resource(or related) but some parameters are valid.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PartialUpdateResponse"
+                }
+              }
+            }
+          },
           "400": {
             "description": "Bad request"
           },
@@ -887,6 +937,16 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/ErrorNotFound"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Entity due to paused resource or paused related resource",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorUnpermittedParameters"
                 }
               }
             }
@@ -1223,7 +1283,7 @@
       "patch": {
         "summary": "Update an existing Source",
         "operationId": "updateSource",
-        "description": "Updates a Source object",
+        "description": "Updates a Source object.\n\nIn case Source object is paused then allowed attributes for update action are: \n\n `availability_status, last_checked_at, last_available_at`",
         "parameters": [
           {
             "$ref": "#/components/parameters/ID"
@@ -1244,6 +1304,16 @@
           "204": {
             "description": "Updated, no content"
           },
+          "207" : {
+            "description": "Multi-status, some parameters are unpermitted due to paused resource(or related) but some parameters are valid.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PartialUpdateResponse"
+                }
+              }
+            }
+          },
           "400": {
             "description": "Bad request"
           },
@@ -1253,6 +1323,16 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/ErrorNotFound"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Entity due to paused resource or paused related resource",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorUnpermittedParameters"
                 }
               }
             }
@@ -2513,6 +2593,73 @@
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/Authentication"
+            }
+          }
+        }
+      },
+      "ErrorUnpermittedParameters": {
+        "type": "object",
+        "properties": {
+          "errors": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "string",
+                  "example": "422"
+                },
+                "detail": {
+                  "type": "string",
+                  "example": "Found unpermitted parameters: xxx, yyy"
+                }
+              }
+            }
+          }
+        }
+      },
+      "PartialUpdateResponse": {
+        "type": "object",
+        "properties": {
+          "errors": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "string",
+                  "example": "422"
+                },
+                "detail": {
+                  "type": "string",
+                  "example": "Found unpermitted parameters: xxx, yyy"
+                }
+              }
+            }
+          },
+          "results": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "string",
+                  "example": "200"
+                },
+                "detail": {
+                  "type": "string",
+                  "example": "Listed parameters in 'resource' has been updated successfully."
+                },
+                "resource": {
+                  "type": "object",
+                  "properties": {
+                    "availability_status": {
+                      "type": "string",
+                      "example": "available"
+                    }
+                  }
+                }
+              }
             }
           }
         }
