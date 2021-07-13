@@ -20,6 +20,7 @@ gem 'pundit',               '~> 2.1'
 gem 'rack-cors',            '>= 1.1.1', '~> 1.1'
 gem 'rails',                '~> 5.2.2'
 gem 'sidekiq',              '~> 5.2.2'
+gem 'sidekiq_alive',        '~> 2.1.0'
 gem 'sprockets',            '~> 4.0'
 
 group :development, :test do

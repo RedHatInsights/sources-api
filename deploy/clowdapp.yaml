@@ -58,6 +58,14 @@ objects:
           requests:
             cpu: ${SIDEKIQ_CPU_REQUEST}
             memory: ${SIDEKIQ_MEMORY_REQUEST}
+        readinessProbe:
+          tcpSocket:
+            port: 7433
+          initialDelaySeconds: 5
+        livenessProbe:
+          httpGet:
+            port: 7433
+          initialDelaySeconds: 10
     - name: svc
       minReplicas: ${{MIN_REPLICAS}}
       webServices:
