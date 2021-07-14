@@ -18,7 +18,8 @@ data:
       "editable": true,
       "gnetId": null,
       "graphTooltip": 0,
-      "iteration": 1619683531394,
+      "id": 80,
+      "iteration": 1626293519506,
       "links": [],
       "panels": [
         {
@@ -46,7 +47,7 @@ data:
           },
           "gridPos": {
             "h": 1,
-            "w": 6,
+            "w": 4,
             "x": 0,
             "y": 1
           },
@@ -74,8 +75,8 @@ data:
           },
           "gridPos": {
             "h": 1,
-            "w": 6,
-            "x": 6,
+            "w": 4,
+            "x": 4,
             "y": 1
           },
           "id": 16,
@@ -103,7 +104,7 @@ data:
           "gridPos": {
             "h": 1,
             "w": 4,
-            "x": 12,
+            "x": 8,
             "y": 1
           },
           "id": 57,
@@ -223,7 +224,7 @@ data:
           "pluginVersion": "7.2.1",
           "targets": [
             {
-              "expr": "sum(up{service=\"sources-satellite-operations\"})",
+              "expr": "sum(up{service=\"sources-api-sidekiq\"})",
               "interval": "",
               "legendFormat": "",
               "refId": "A"
@@ -231,65 +232,7 @@ data:
           ],
           "timeFrom": null,
           "timeShift": null,
-          "title": "Satellite",
-          "type": "stat"
-        },
-        {
-          "datasource": "$Datasource",
-          "description": "Alert: Down for 2m",
-          "fieldConfig": {
-            "defaults": {
-              "custom": {},
-              "mappings": [],
-              "thresholds": {
-                "mode": "absolute",
-                "steps": [
-                  {
-                    "color": "red",
-                    "value": null
-                  },
-                  {
-                    "color": "green",
-                    "value": 1
-                  }
-                ]
-              }
-            },
-            "overrides": []
-          },
-          "gridPos": {
-            "h": 3,
-            "w": 2,
-            "x": 4,
-            "y": 2
-          },
-          "id": 64,
-          "options": {
-            "colorMode": "value",
-            "graphMode": "none",
-            "justifyMode": "auto",
-            "orientation": "auto",
-            "reduceOptions": {
-              "calcs": [
-                "lastNotNull"
-              ],
-              "fields": "",
-              "values": false
-            },
-            "textMode": "auto"
-          },
-          "pluginVersion": "7.2.1",
-          "targets": [
-            {
-              "expr": "sum(up{service=\"sources-superkey-worker-svc\"})",
-              "interval": "",
-              "legendFormat": "",
-              "refId": "A"
-            }
-          ],
-          "timeFrom": null,
-          "timeShift": null,
-          "title": "SuperKey",
+          "title": "Sidekiq",
           "type": "stat"
         },
         {
@@ -333,7 +276,7 @@ data:
           "gridPos": {
             "h": 3,
             "w": 2,
-            "x": 6,
+            "x": 4,
             "y": 2
           },
           "id": 12,
@@ -398,7 +341,7 @@ data:
           "gridPos": {
             "h": 3,
             "w": 2,
-            "x": 8,
+            "x": 6,
             "y": 2
           },
           "id": 61,
@@ -419,7 +362,7 @@ data:
           "pluginVersion": "7.2.1",
           "targets": [
             {
-              "expr": "round(sum(increase(kube_pod_container_status_restarts_total{container=\"sources-satellite-operations\"}[$__range])))",
+              "expr": "round(sum(increase(kube_pod_container_status_restarts_total{container=\"sources-api-sidekiq\"}[$__range])))",
               "interval": "",
               "legendFormat": "",
               "refId": "A"
@@ -427,82 +370,7 @@ data:
           ],
           "timeFrom": null,
           "timeShift": null,
-          "title": "Satellite",
-          "type": "stat"
-        },
-        {
-          "cacheTimeout": null,
-          "datasource": "$Datasource",
-          "description": "Alert: > 5 [30m] for 1h",
-          "fieldConfig": {
-            "defaults": {
-              "custom": {},
-              "mappings": [
-                {
-                  "id": 0,
-                  "op": "=",
-                  "text": "N/A",
-                  "type": 1,
-                  "value": "null"
-                }
-              ],
-              "nullValueMode": "connected",
-              "thresholds": {
-                "mode": "absolute",
-                "steps": [
-                  {
-                    "color": "green",
-                    "value": null
-                  },
-                  {
-                    "color": "orange",
-                    "value": 1
-                  },
-                  {
-                    "color": "red",
-                    "value": 10
-                  }
-                ]
-              },
-              "unit": "none"
-            },
-            "overrides": []
-          },
-          "gridPos": {
-            "h": 3,
-            "w": 2,
-            "x": 10,
-            "y": 2
-          },
-          "id": 66,
-          "interval": "",
-          "links": [],
-          "options": {
-            "colorMode": "value",
-            "graphMode": "area",
-            "justifyMode": "auto",
-            "orientation": "horizontal",
-            "reduceOptions": {
-              "calcs": [
-                "lastNotNull"
-              ],
-              "fields": "",
-              "values": false
-            },
-            "textMode": "auto"
-          },
-          "pluginVersion": "7.2.1",
-          "targets": [
-            {
-              "expr": "round(sum(increase(kube_pod_container_status_restarts_total{container=\"sources-superkey-worker-svc\"}[$__range])))",
-              "interval": "",
-              "legendFormat": "",
-              "refId": "A"
-            }
-          ],
-          "timeFrom": null,
-          "timeShift": null,
-          "title": "SuperKey",
+          "title": "Sidekiq",
           "type": "stat"
         },
         {
@@ -536,7 +404,7 @@ data:
           "gridPos": {
             "h": 3,
             "w": 2,
-            "x": 12,
+            "x": 8,
             "y": 2
           },
           "id": 56,
@@ -609,7 +477,7 @@ data:
           "gridPos": {
             "h": 3,
             "w": 2,
-            "x": 14,
+            "x": 10,
             "y": 2
           },
           "id": 63,
@@ -644,13 +512,330 @@ data:
           "type": "stat"
         },
         {
+          "datasource": "$Datasource",
+          "description": "Alert: Down for 2m",
+          "fieldConfig": {
+            "defaults": {
+              "custom": {},
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "red",
+                    "value": null
+                  },
+                  {
+                    "color": "green",
+                    "value": 1
+                  }
+                ]
+              }
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 3,
+            "w": 2,
+            "x": 0,
+            "y": 5
+          },
+          "id": 64,
+          "options": {
+            "colorMode": "value",
+            "graphMode": "none",
+            "justifyMode": "auto",
+            "orientation": "auto",
+            "reduceOptions": {
+              "calcs": [
+                "lastNotNull"
+              ],
+              "fields": "",
+              "values": false
+            },
+            "textMode": "auto"
+          },
+          "pluginVersion": "7.2.1",
+          "targets": [
+            {
+              "expr": "sum(up{service=\"sources-superkey-worker-svc\"})",
+              "interval": "",
+              "legendFormat": "",
+              "refId": "A"
+            }
+          ],
+          "timeFrom": null,
+          "timeShift": null,
+          "title": "SuperKey",
+          "type": "stat"
+        },
+        {
+          "datasource": "$Datasource",
+          "description": "Alert: Down for 2m",
+          "fieldConfig": {
+            "defaults": {
+              "custom": {},
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "red",
+                    "value": null
+                  },
+                  {
+                    "color": "green",
+                    "value": 1
+                  }
+                ]
+              }
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 3,
+            "w": 2,
+            "x": 2,
+            "y": 5
+          },
+          "id": 75,
+          "options": {
+            "colorMode": "value",
+            "graphMode": "none",
+            "justifyMode": "auto",
+            "orientation": "auto",
+            "reduceOptions": {
+              "calcs": [
+                "lastNotNull"
+              ],
+              "fields": "",
+              "values": false
+            },
+            "textMode": "auto"
+          },
+          "pluginVersion": "7.2.1",
+          "targets": [
+            {
+              "expr": "sum(up{service=\"sources-satellite-operations\"})",
+              "interval": "",
+              "legendFormat": "",
+              "refId": "A"
+            }
+          ],
+          "timeFrom": null,
+          "timeShift": null,
+          "title": "Satellite",
+          "type": "stat"
+        },
+        {
+          "cacheTimeout": null,
+          "datasource": "$Datasource",
+          "description": "Alert: > 5 [30m] for 1h",
+          "fieldConfig": {
+            "defaults": {
+              "custom": {},
+              "mappings": [
+                {
+                  "id": 0,
+                  "op": "=",
+                  "text": "N/A",
+                  "type": 1,
+                  "value": "null"
+                }
+              ],
+              "nullValueMode": "connected",
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  },
+                  {
+                    "color": "orange",
+                    "value": 1
+                  },
+                  {
+                    "color": "red",
+                    "value": 10
+                  }
+                ]
+              },
+              "unit": "none"
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 3,
+            "w": 2,
+            "x": 4,
+            "y": 5
+          },
+          "id": 66,
+          "interval": "",
+          "links": [],
+          "options": {
+            "colorMode": "value",
+            "graphMode": "area",
+            "justifyMode": "auto",
+            "orientation": "horizontal",
+            "reduceOptions": {
+              "calcs": [
+                "lastNotNull"
+              ],
+              "fields": "",
+              "values": false
+            },
+            "textMode": "auto"
+          },
+          "pluginVersion": "7.2.1",
+          "targets": [
+            {
+              "expr": "round(sum(increase(kube_pod_container_status_restarts_total{container=\"sources-superkey-worker-svc\"}[$__range])))",
+              "interval": "",
+              "legendFormat": "",
+              "refId": "A"
+            }
+          ],
+          "timeFrom": null,
+          "timeShift": null,
+          "title": "SuperKey",
+          "type": "stat"
+        },
+        {
+          "datasource": "$Datasource",
+          "description": "Alert: > 50 [5m] for 10m",
+          "fieldConfig": {
+            "defaults": {
+              "custom": {},
+              "mappings": [],
+              "noValue": "0",
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  },
+                  {
+                    "color": "orange",
+                    "value": 1
+                  },
+                  {
+                    "color": "red",
+                    "value": 10
+                  }
+                ]
+              }
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 3,
+            "w": 2,
+            "x": 6,
+            "y": 5
+          },
+          "id": 76,
+          "options": {
+            "colorMode": "value",
+            "graphMode": "none",
+            "justifyMode": "auto",
+            "orientation": "auto",
+            "reduceOptions": {
+              "calcs": [
+                "lastNotNull"
+              ],
+              "fields": "",
+              "values": false
+            },
+            "textMode": "auto"
+          },
+          "pluginVersion": "7.2.1",
+          "targets": [
+            {
+              "expr": "round(sum(increase(kube_pod_container_status_restarts_total{container=\"sources-satellite-operations\"}[$__range])))",
+              "interval": "",
+              "legendFormat": "",
+              "refId": "A"
+            }
+          ],
+          "timeFrom": null,
+          "timeShift": null,
+          "title": "Satellite",
+          "type": "stat"
+        },
+        {
+          "datasource": "$Datasource",
+          "description": "Alert: > 50 [5m] for 10m",
+          "fieldConfig": {
+            "defaults": {
+              "custom": {},
+              "mappings": [],
+              "noValue": "0",
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  },
+                  {
+                    "color": "orange",
+                    "value": 1
+                  },
+                  {
+                    "color": "red",
+                    "value": 10
+                  }
+                ]
+              }
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 3,
+            "w": 2,
+            "x": 8,
+            "y": 5
+          },
+          "id": 77,
+          "options": {
+            "colorMode": "value",
+            "graphMode": "none",
+            "justifyMode": "auto",
+            "orientation": "auto",
+            "reduceOptions": {
+              "calcs": [
+                "lastNotNull"
+              ],
+              "fields": "",
+              "values": false
+            },
+            "textMode": "auto"
+          },
+          "pluginVersion": "7.2.1",
+          "targets": [
+            {
+              "expr": "-1",
+              "interval": "",
+              "legendFormat": "",
+              "refId": "A"
+            }
+          ],
+          "timeFrom": null,
+          "timeShift": null,
+          "title": "Superkey",
+          "type": "stat"
+        },
+        {
           "collapsed": false,
           "datasource": null,
           "gridPos": {
             "h": 1,
             "w": 24,
             "x": 0,
-            "y": 5
+            "y": 8
           },
           "id": 10,
           "panels": [],
@@ -677,7 +862,7 @@ data:
             "h": 6,
             "w": 24,
             "x": 0,
-            "y": 6
+            "y": 9
           },
           "hiddenSeries": false,
           "id": 18,
@@ -772,7 +957,7 @@ data:
             "h": 1,
             "w": 24,
             "x": 0,
-            "y": 12
+            "y": 15
           },
           "id": 20,
           "panels": [
@@ -812,7 +997,7 @@ data:
                 "h": 7,
                 "w": 12,
                 "x": 0,
-                "y": 13
+                "y": 16
               },
               "hiddenSeries": false,
               "id": 22,
@@ -909,7 +1094,7 @@ data:
                 "h": 7,
                 "w": 12,
                 "x": 12,
-                "y": 13
+                "y": 16
               },
               "hiddenSeries": false,
               "id": 26,
@@ -1026,7 +1211,7 @@ data:
             "h": 1,
             "w": 24,
             "x": 0,
-            "y": 13
+            "y": 16
           },
           "id": 34,
           "panels": [
@@ -1050,7 +1235,7 @@ data:
                 "h": 7,
                 "w": 12,
                 "x": 0,
-                "y": 21
+                "y": 17
               },
               "hiddenSeries": false,
               "id": 24,
@@ -1147,7 +1332,7 @@ data:
                 "h": 7,
                 "w": 12,
                 "x": 12,
-                "y": 21
+                "y": 17
               },
               "hiddenSeries": false,
               "id": 28,
@@ -1235,7 +1420,7 @@ data:
             "h": 1,
             "w": 24,
             "x": 0,
-            "y": 14
+            "y": 17
           },
           "id": 36,
           "panels": [
@@ -1258,10 +1443,10 @@ data:
                 "h": 6,
                 "w": 12,
                 "x": 0,
-                "y": 15
+                "y": 18
               },
               "hiddenSeries": false,
-              "id": 30,
+              "id": 78,
               "interval": "",
               "legend": {
                 "avg": false,
@@ -1289,7 +1474,7 @@ data:
               "steppedLine": false,
               "targets": [
                 {
-                  "expr": "sum (rate (container_cpu_usage_seconds_total{container=\"sources-api\"}[1m])) by (pod)",
+                  "expr": "sum (rate (container_cpu_usage_seconds_total{container=\"sources-api-svc\"}[1m])) by (pod)",
                   "interval": "",
                   "legendFormat": "{{ pod }}",
                   "refId": "A"
@@ -1299,7 +1484,7 @@ data:
               "timeFrom": null,
               "timeRegions": [],
               "timeShift": null,
-              "title": "CPU Usage",
+              "title": "API CPU Usage",
               "tooltip": {
                 "shared": true,
                 "sort": 0,
@@ -1355,7 +1540,7 @@ data:
                 "h": 6,
                 "w": 12,
                 "x": 12,
-                "y": 15
+                "y": 18
               },
               "hiddenSeries": false,
               "id": 32,
@@ -1386,7 +1571,7 @@ data:
               "steppedLine": false,
               "targets": [
                 {
-                  "expr": "sum (container_memory_working_set_bytes{container=\"sources-api\"}) by (pod)",
+                  "expr": "sum (container_memory_working_set_bytes{container=\"sources-api-svc\"}) by (pod)",
                   "interval": "",
                   "legendFormat": "{{ pod }}",
                   "refId": "A"
@@ -1396,7 +1581,589 @@ data:
               "timeFrom": null,
               "timeRegions": [],
               "timeShift": null,
-              "title": "Memory Usage",
+              "title": "API Memory Usage",
+              "tooltip": {
+                "shared": true,
+                "sort": 0,
+                "value_type": "individual"
+              },
+              "type": "graph",
+              "xaxis": {
+                "buckets": null,
+                "mode": "time",
+                "name": null,
+                "show": true,
+                "values": []
+              },
+              "yaxes": [
+                {
+                  "format": "short",
+                  "label": null,
+                  "logBase": 1,
+                  "max": null,
+                  "min": null,
+                  "show": true
+                },
+                {
+                  "format": "short",
+                  "label": null,
+                  "logBase": 1,
+                  "max": null,
+                  "min": null,
+                  "show": true
+                }
+              ],
+              "yaxis": {
+                "align": false,
+                "alignLevel": null
+              }
+            },
+            {
+              "aliasColors": {},
+              "bars": false,
+              "dashLength": 10,
+              "dashes": false,
+              "datasource": "$Datasource",
+              "fieldConfig": {
+                "defaults": {
+                  "custom": {},
+                  "links": []
+                },
+                "overrides": []
+              },
+              "fill": 1,
+              "fillGradient": 0,
+              "gridPos": {
+                "h": 6,
+                "w": 12,
+                "x": 0,
+                "y": 24
+              },
+              "hiddenSeries": false,
+              "id": 30,
+              "interval": "",
+              "legend": {
+                "avg": false,
+                "current": false,
+                "max": false,
+                "min": false,
+                "show": true,
+                "total": false,
+                "values": false
+              },
+              "lines": true,
+              "linewidth": 1,
+              "nullPointMode": "null",
+              "options": {
+                "alertThreshold": true
+              },
+              "percentage": false,
+              "pluginVersion": "7.2.1",
+              "pointradius": 2,
+              "points": false,
+              "renderer": "flot",
+              "seriesOverrides": [],
+              "spaceLength": 10,
+              "stack": false,
+              "steppedLine": false,
+              "targets": [
+                {
+                  "expr": "sum (rate (container_cpu_usage_seconds_total{container=\"sources-api-sidekiq\"}[1m])) by (pod)",
+                  "interval": "",
+                  "legendFormat": "{{ pod }}",
+                  "refId": "A"
+                }
+              ],
+              "thresholds": [],
+              "timeFrom": null,
+              "timeRegions": [],
+              "timeShift": null,
+              "title": "Sidekiq CPU Usage",
+              "tooltip": {
+                "shared": true,
+                "sort": 0,
+                "value_type": "individual"
+              },
+              "type": "graph",
+              "xaxis": {
+                "buckets": null,
+                "mode": "time",
+                "name": null,
+                "show": true,
+                "values": []
+              },
+              "yaxes": [
+                {
+                  "format": "short",
+                  "label": null,
+                  "logBase": 1,
+                  "max": null,
+                  "min": null,
+                  "show": true
+                },
+                {
+                  "format": "short",
+                  "label": null,
+                  "logBase": 1,
+                  "max": null,
+                  "min": null,
+                  "show": true
+                }
+              ],
+              "yaxis": {
+                "align": false,
+                "alignLevel": null
+              }
+            },
+            {
+              "aliasColors": {},
+              "bars": false,
+              "dashLength": 10,
+              "dashes": false,
+              "datasource": "$Datasource",
+              "fieldConfig": {
+                "defaults": {
+                  "custom": {},
+                  "links": []
+                },
+                "overrides": []
+              },
+              "fill": 1,
+              "fillGradient": 0,
+              "gridPos": {
+                "h": 6,
+                "w": 12,
+                "x": 12,
+                "y": 24
+              },
+              "hiddenSeries": false,
+              "id": 80,
+              "interval": "",
+              "legend": {
+                "avg": false,
+                "current": false,
+                "max": false,
+                "min": false,
+                "show": true,
+                "total": false,
+                "values": false
+              },
+              "lines": true,
+              "linewidth": 1,
+              "nullPointMode": "null",
+              "options": {
+                "alertThreshold": true
+              },
+              "percentage": false,
+              "pluginVersion": "7.2.1",
+              "pointradius": 2,
+              "points": false,
+              "renderer": "flot",
+              "seriesOverrides": [],
+              "spaceLength": 10,
+              "stack": false,
+              "steppedLine": false,
+              "targets": [
+                {
+                  "expr": "sum (container_memory_working_set_bytes{container=\"sources-api-sidekiq\"}) by (pod)",
+                  "interval": "",
+                  "legendFormat": "{{ pod }}",
+                  "refId": "A"
+                }
+              ],
+              "thresholds": [],
+              "timeFrom": null,
+              "timeRegions": [],
+              "timeShift": null,
+              "title": "Sidekiq Memory Usage",
+              "tooltip": {
+                "shared": true,
+                "sort": 0,
+                "value_type": "individual"
+              },
+              "type": "graph",
+              "xaxis": {
+                "buckets": null,
+                "mode": "time",
+                "name": null,
+                "show": true,
+                "values": []
+              },
+              "yaxes": [
+                {
+                  "format": "short",
+                  "label": null,
+                  "logBase": 1,
+                  "max": null,
+                  "min": null,
+                  "show": true
+                },
+                {
+                  "format": "short",
+                  "label": null,
+                  "logBase": 1,
+                  "max": null,
+                  "min": null,
+                  "show": true
+                }
+              ],
+              "yaxis": {
+                "align": false,
+                "alignLevel": null
+              }
+            },
+            {
+              "aliasColors": {},
+              "bars": false,
+              "dashLength": 10,
+              "dashes": false,
+              "datasource": "$Datasource",
+              "fieldConfig": {
+                "defaults": {
+                  "custom": {},
+                  "links": []
+                },
+                "overrides": []
+              },
+              "fill": 1,
+              "fillGradient": 0,
+              "gridPos": {
+                "h": 6,
+                "w": 12,
+                "x": 0,
+                "y": 30
+              },
+              "hiddenSeries": false,
+              "id": 81,
+              "interval": "",
+              "legend": {
+                "avg": false,
+                "current": false,
+                "max": false,
+                "min": false,
+                "show": true,
+                "total": false,
+                "values": false
+              },
+              "lines": true,
+              "linewidth": 1,
+              "nullPointMode": "null",
+              "options": {
+                "alertThreshold": true
+              },
+              "percentage": false,
+              "pluginVersion": "7.2.1",
+              "pointradius": 2,
+              "points": false,
+              "renderer": "flot",
+              "seriesOverrides": [],
+              "spaceLength": 10,
+              "stack": false,
+              "steppedLine": false,
+              "targets": [
+                {
+                  "expr": "sum (rate (container_cpu_usage_seconds_total{container=\"sources-superkey-worker-svc\"}[1m])) by (pod)",
+                  "interval": "",
+                  "legendFormat": "{{ pod }}",
+                  "refId": "A"
+                }
+              ],
+              "thresholds": [],
+              "timeFrom": null,
+              "timeRegions": [],
+              "timeShift": null,
+              "title": "Superkey CPU Usage",
+              "tooltip": {
+                "shared": true,
+                "sort": 0,
+                "value_type": "individual"
+              },
+              "type": "graph",
+              "xaxis": {
+                "buckets": null,
+                "mode": "time",
+                "name": null,
+                "show": true,
+                "values": []
+              },
+              "yaxes": [
+                {
+                  "format": "short",
+                  "label": null,
+                  "logBase": 1,
+                  "max": null,
+                  "min": null,
+                  "show": true
+                },
+                {
+                  "format": "short",
+                  "label": null,
+                  "logBase": 1,
+                  "max": null,
+                  "min": null,
+                  "show": true
+                }
+              ],
+              "yaxis": {
+                "align": false,
+                "alignLevel": null
+              }
+            },
+            {
+              "aliasColors": {},
+              "bars": false,
+              "dashLength": 10,
+              "dashes": false,
+              "datasource": "$Datasource",
+              "fieldConfig": {
+                "defaults": {
+                  "custom": {},
+                  "links": []
+                },
+                "overrides": []
+              },
+              "fill": 1,
+              "fillGradient": 0,
+              "gridPos": {
+                "h": 6,
+                "w": 12,
+                "x": 12,
+                "y": 30
+              },
+              "hiddenSeries": false,
+              "id": 79,
+              "interval": "",
+              "legend": {
+                "avg": false,
+                "current": false,
+                "max": false,
+                "min": false,
+                "show": true,
+                "total": false,
+                "values": false
+              },
+              "lines": true,
+              "linewidth": 1,
+              "nullPointMode": "null",
+              "options": {
+                "alertThreshold": true
+              },
+              "percentage": false,
+              "pluginVersion": "7.2.1",
+              "pointradius": 2,
+              "points": false,
+              "renderer": "flot",
+              "seriesOverrides": [],
+              "spaceLength": 10,
+              "stack": false,
+              "steppedLine": false,
+              "targets": [
+                {
+                  "expr": "sum (container_memory_working_set_bytes{container=\"sources-superkey-worker-svc\"}) by (pod)",
+                  "interval": "",
+                  "legendFormat": "{{ pod }}",
+                  "refId": "A"
+                }
+              ],
+              "thresholds": [],
+              "timeFrom": null,
+              "timeRegions": [],
+              "timeShift": null,
+              "title": "Superkey Memory Usage",
+              "tooltip": {
+                "shared": true,
+                "sort": 0,
+                "value_type": "individual"
+              },
+              "type": "graph",
+              "xaxis": {
+                "buckets": null,
+                "mode": "time",
+                "name": null,
+                "show": true,
+                "values": []
+              },
+              "yaxes": [
+                {
+                  "format": "short",
+                  "label": null,
+                  "logBase": 1,
+                  "max": null,
+                  "min": null,
+                  "show": true
+                },
+                {
+                  "format": "short",
+                  "label": null,
+                  "logBase": 1,
+                  "max": null,
+                  "min": null,
+                  "show": true
+                }
+              ],
+              "yaxis": {
+                "align": false,
+                "alignLevel": null
+              }
+            },
+            {
+              "aliasColors": {},
+              "bars": false,
+              "dashLength": 10,
+              "dashes": false,
+              "datasource": "$Datasource",
+              "fieldConfig": {
+                "defaults": {
+                  "custom": {},
+                  "links": []
+                },
+                "overrides": []
+              },
+              "fill": 1,
+              "fillGradient": 0,
+              "gridPos": {
+                "h": 6,
+                "w": 12,
+                "x": 0,
+                "y": 36
+              },
+              "hiddenSeries": false,
+              "id": 82,
+              "interval": "",
+              "legend": {
+                "avg": false,
+                "current": false,
+                "max": false,
+                "min": false,
+                "show": true,
+                "total": false,
+                "values": false
+              },
+              "lines": true,
+              "linewidth": 1,
+              "nullPointMode": "null",
+              "options": {
+                "alertThreshold": true
+              },
+              "percentage": false,
+              "pluginVersion": "7.2.1",
+              "pointradius": 2,
+              "points": false,
+              "renderer": "flot",
+              "seriesOverrides": [],
+              "spaceLength": 10,
+              "stack": false,
+              "steppedLine": false,
+              "targets": [
+                {
+                  "expr": "sum (rate (container_cpu_usage_seconds_total{container=\"sources-satellite-operations\"}[1m])) by (pod)",
+                  "interval": "",
+                  "legendFormat": "{{ pod }}",
+                  "refId": "A"
+                }
+              ],
+              "thresholds": [],
+              "timeFrom": null,
+              "timeRegions": [],
+              "timeShift": null,
+              "title": "Satellite CPU Usage",
+              "tooltip": {
+                "shared": true,
+                "sort": 0,
+                "value_type": "individual"
+              },
+              "type": "graph",
+              "xaxis": {
+                "buckets": null,
+                "mode": "time",
+                "name": null,
+                "show": true,
+                "values": []
+              },
+              "yaxes": [
+                {
+                  "format": "short",
+                  "label": null,
+                  "logBase": 1,
+                  "max": null,
+                  "min": null,
+                  "show": true
+                },
+                {
+                  "format": "short",
+                  "label": null,
+                  "logBase": 1,
+                  "max": null,
+                  "min": null,
+                  "show": true
+                }
+              ],
+              "yaxis": {
+                "align": false,
+                "alignLevel": null
+              }
+            },
+            {
+              "aliasColors": {},
+              "bars": false,
+              "dashLength": 10,
+              "dashes": false,
+              "datasource": "$Datasource",
+              "fieldConfig": {
+                "defaults": {
+                  "custom": {},
+                  "links": []
+                },
+                "overrides": []
+              },
+              "fill": 1,
+              "fillGradient": 0,
+              "gridPos": {
+                "h": 6,
+                "w": 12,
+                "x": 12,
+                "y": 36
+              },
+              "hiddenSeries": false,
+              "id": 84,
+              "interval": "",
+              "legend": {
+                "avg": false,
+                "current": false,
+                "max": false,
+                "min": false,
+                "show": true,
+                "total": false,
+                "values": false
+              },
+              "lines": true,
+              "linewidth": 1,
+              "nullPointMode": "null",
+              "options": {
+                "alertThreshold": true
+              },
+              "percentage": false,
+              "pluginVersion": "7.2.1",
+              "pointradius": 2,
+              "points": false,
+              "renderer": "flot",
+              "seriesOverrides": [],
+              "spaceLength": 10,
+              "stack": false,
+              "steppedLine": false,
+              "targets": [
+                {
+                  "expr": "sum (container_memory_working_set_bytes{container=\"sources-satellite-operations\"}) by (pod)",
+                  "interval": "",
+                  "legendFormat": "{{ pod }}",
+                  "refId": "A"
+                }
+              ],
+              "thresholds": [],
+              "timeFrom": null,
+              "timeRegions": [],
+              "timeShift": null,
+              "title": "Satellite Memory Usage",
               "tooltip": {
                 "shared": true,
                 "sort": 0,
@@ -1434,7 +2201,7 @@ data:
               }
             }
           ],
-          "title": "Sources API CPU & Memory",
+          "title": "CPU & Memory",
           "type": "row"
         },
         {
@@ -1444,7 +2211,7 @@ data:
             "h": 1,
             "w": 24,
             "x": 0,
-            "y": 15
+            "y": 18
           },
           "id": 68,
           "panels": [
@@ -1471,7 +2238,7 @@ data:
                 "h": 6,
                 "w": 8,
                 "x": 0,
-                "y": 6
+                "y": 19
               },
               "id": 70,
               "options": {
@@ -1536,7 +2303,7 @@ data:
                 "h": 6,
                 "w": 10,
                 "x": 8,
-                "y": 6
+                "y": 19
               },
               "hiddenSeries": false,
               "id": 72,
@@ -1644,7 +2411,7 @@ data:
                 "h": 6,
                 "w": 6,
                 "x": 18,
-                "y": 6
+                "y": 19
               },
               "id": 74,
               "options": {
@@ -1684,7 +2451,7 @@ data:
             "h": 1,
             "w": 24,
             "x": 0,
-            "y": 16
+            "y": 19
           },
           "id": 38,
           "panels": [
@@ -2558,7 +3325,7 @@ data:
         "list": [
           {
             "current": {
-              "selected": true,
+              "selected": false,
               "text": "crcp01ue1-prometheus",
               "value": "crcp01ue1-prometheus"
             },
@@ -2685,7 +3452,7 @@ data:
       "timezone": "",
       "title": "Sources",
       "uid": "zxZKNnAMz",
-      "version": 3
+      "version": 2
     }
 kind: ConfigMap
 metadata:
