@@ -31,8 +31,10 @@ objects:
           value: ${APP_NAME}
         - name: DB_POOL_SIZE
           value: ${SIDEKIQ_DB_POOL_SIZE}
-        - name: RAILS_LOG_LEVEL
+        - name: LOG_LEVEL
           value: ${LOG_LEVEL}
+        - name: CONTAINER_LOG_LEVEL
+          value: ${CONTAINER_LOG_LEVEL}
           # TODO: It never can be blank!
         - name: CLOUD_METER_AVAILABILITY_CHECK_URL
           value: ${CLOUD_METER_SOURCES_API_SCHEME}://${CLOUD_METER_API_HOST}:${CLOUD_METER_SOURCES_API_PORT}${CLOUD_METER_SOURCES_API_AVAILABILITY_CHECK_PATH}
@@ -97,8 +99,10 @@ objects:
           value: ${APP_NAME}
         - name: DB_POOL_SIZE
           value: ${DB_POOL_SIZE}
-        - name: RAILS_LOG_LEVEL
+        - name: LOG_LEVEL
           value: ${LOG_LEVEL}
+        - name: CONTAINER_LOG_LEVEL
+          value: ${CONTAINER_LOG_LEVEL}
         - name: CLOUD_METER_AVAILABILITY_CHECK_URL
           value: ${CLOUD_METER_API_SCHEME}://${CLOUD_METER_API_HOST}:${CLOUD_METER_SOURCES_API_PORT}${CLOUD_METER_SOURCES_API_AVAILABILITY_CHECK_PATH}
         - name: COST_MANAGEMENT_AVAILABILITY_CHECK_URL
@@ -231,6 +235,8 @@ parameters:
   value: /api/cost-management/v1/source-status/
 - name: LOG_LEVEL
   value: WARN
+- name: CONTAINER_LOG_LEVEL
+  value: INFO
 - name: MEMORY_LIMIT
   value: 1Gi
 - name: MEMORY_REQUEST
