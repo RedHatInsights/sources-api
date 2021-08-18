@@ -40,7 +40,8 @@ class AvailabilityStatusListener
     return unless event.message == EVENT_AVAILABILITY_STATUS
 
     # backwards compability for now while people move over to psk, this way we don't skip messages missing the x-rh-id header
-    if event.headers["x-rh-sources-account-number"]
+    # we also don't want to overwrite the x-rh-id _if its there_
+    if event.headers["x-rh-sources-account-number"] && !event.headers["x-rh-identity"]
       event.headers["x-rh-identity"] = Base64.strict_encode64(
         JSON.dump(
           {
