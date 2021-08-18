@@ -45,7 +45,7 @@ services:
     command: ["run_rails_server"]
     entrypoint: ["entrypoint", "seed_database"]
     environment:
-      - ACG_CONFIG=test.json
+      - ACG_CONFIG=.docker-compose-config.json
       - APP_NAME=sources
       - PATH_PREFIX=api
       - DISABLE_ORG_ADMIN='true'
