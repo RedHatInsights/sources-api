@@ -72,8 +72,3 @@ services:
     depends_on:
       - sources-db
       - kafka
-
-networks:
- default:
-   external:
-     name: koku_default
