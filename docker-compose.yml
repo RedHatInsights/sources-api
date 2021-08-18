@@ -72,3 +72,8 @@ services:
     depends_on:
       - sources-db
       - kafka
+
+networks:
+ default:
+   external:
+     name: ${DOCKER_NETWORK_NAME-sources-api_default}
