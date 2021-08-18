@@ -1,0 +1,30 @@
+{
+    "webPort": 3000,
+    "metricsPath": "/metrics",
+    "metricsPort": "0",
+    "logging": {
+        "type": "local"
+    },
+    "kafka": {
+        "brokers": [
+            {
+                "hostname": "kafka",
+                "port": 29092
+            }
+        ],
+        "topics": [
+            {
+                "name": "platform.sources.event-stream",
+                "requestedName": "platform.sources.event-stream"
+            }
+        ]
+    },
+    "database": {
+        "name": "sources_api_development",
+        "username": "postgres",
+        "password": "postgres",
+        "hostname": "sources-db",
+        "sslMode": "disable",
+        "port": 5432
+    }
+}
