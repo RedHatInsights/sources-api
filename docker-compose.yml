@@ -42,8 +42,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    command: ["run_rails_server"]
-    entrypoint: ["entrypoint", "seed_database"]
+    entrypoint: ["entrypoint", "seed_database", "run_rails_server"]
     environment:
       - ACG_CONFIG=.docker-compose-config.json
       - APP_NAME=sources
