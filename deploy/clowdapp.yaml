@@ -113,6 +113,8 @@ objects:
               name: sources-api-secrets
               key: psks
               optional: true
+        - name: DISABLE_ORG_ADMIN
+          value: ${DISABLE_ORG_ADMIN}
         - name: ENCRYPTION_KEY
           valueFrom:
             secretKeyRef:
@@ -290,3 +292,6 @@ parameters:
   value: 100Mi
 - name: SIDEKIQ_REPLICAS
   value: '1'
+- name: DISABLE_ORG_ADMIN
+  description: when set to true this disables the org_admin check in the x-rh-identity.
+  value: "false"
