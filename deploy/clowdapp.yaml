@@ -13,6 +13,14 @@ objects:
     encryption-key: "${ENCRYPTION_KEY}"
     secret-key: "${SECRET_KEY}"
     psks: "thisMustBeEphemeralOrMinikube"
+- apiVersion: v1
+  kind: Secret # For ephemeral/local environment
+  metadata:
+    name: internal-psk
+    labels:
+      app: sources-api
+  stringData:
+    psk: "thisMustBeEphemeralOrMinikube"
 - apiVersion: cloud.redhat.com/v1alpha1
   kind: ClowdApp
   metadata:
