@@ -94,7 +94,7 @@ services:
       - QUEUE_PORT=${KAFKA_QUEUE_PORT-29092}
       - KOKU_SOURCES_API_HOST=sources-client
       - KOKU_SOURCES_API_PORT=4000
-      - COST_MANAGEMENT_AVAILABILITY_CHECK_URL=http://localhost:4000/api/v1/cost_management/sources/
+      - COST_MANAGEMENT_AVAILABILITY_CHECK_URL=http://sources-client:4000/api/v1/cost_management/sources/
       - REDIS_CACHE_HOST=redis
       - REDIS_CACHE_PORT=6379
     volumes:
