@@ -26,5 +26,9 @@
         "hostname": "sources-db",
         "sslMode": "disable",
         "port": 5432
-    }
+    },
+    "inMemoryDb":{
+        "hostname":"redis",
+        "port":6379
+     }
 }

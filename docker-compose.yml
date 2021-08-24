@@ -72,7 +72,50 @@ services:
       - sources-db
       - kafka
 
+  sources-sidekiq:
+    container_name: sources_sidekiq
+    build:
+      context: .
+      dockerfile: Dockerfile
+    entrypoint: ["entrypoint", "bundle", "exec", "sidekiq", "-c", "5"]
+    environment:
+      - ACG_CONFIG=.docker-compose-config.json
+      - APP_NAME=sources
+      - PATH_PREFIX=api
+      - DISABLE_ORG_ADMIN='true'
+      - SOURCES_PSKS=${SOURCES_PSK-sources-psk}
+      - DISABLE_DATABASE_ENVIRONMENT_CHECK=1
+      - ENCRYPTION_KEY=uXfIgSAUq5Oz8goc/zI8HOOo0SI++Sd9mfpgBanYIM4=
+      - RAILS_ENV=development
+      - SECRET_KEY_BASE=2e13a003477a557ba3fcc6260c2ec69e411238b9b8b530c3c70e71f7cfc905b5f746f5c195a0282342a77ad6acd4e6ef8949106723200a99414fe83393d67344
+      - DATABASE_HOST=${DATABASE_HOST-127.0.0.1}
+      - DATABASE_PORT=${DATABASE_PORT-5432}
+      - QUEUE_HOST=${KAFKA_QUEUE_HOST-kafka}
+      - QUEUE_PORT=${KAFKA_QUEUE_PORT-29092}
+      - KOKU_SOURCES_API_HOST=sources-client
+      - KOKU_SOURCES_API_PORT=4000
+      - COST_MANAGEMENT_AVAILABILITY_CHECK_URL=http://localhost:4000/api/v1/cost_management/sources/
+      - REDIS_CACHE_HOST=redis
+      - REDIS_CACHE_PORT=6379
+    volumes:
+      - ./tmp:/opt/sources-api/tmp
+      - ./log:/opt/sources-api/log
+    #   - ./config:/opt/sources-api/config
+    #   - ./db:/opt/sources-api/db
+    ports:
+      - "7433:7433"
+    links:
+      - sources-db
+    depends_on:
+      - sources-db
+      - redis
+
+  # redis:
+  #   container_name: sources_redis
+  #   image: redis:5.0.4
+  #   ports:
+  #     - 6379:6379
+
 networks:
- default:
-   external:
-     name: ${DOCKER_NETWORK_NAME-sources-api_default}
+  default:
+    name: ${DOCKER_NETWORK_NAME-sources-api_default}
