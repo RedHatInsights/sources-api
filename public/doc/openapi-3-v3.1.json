@@ -2309,6 +2309,7 @@
         "properties": {
           "app_creation_workflow": {
             "type": "string",
+            "readOnly": true,
             "enum": [
               "manual_configuration",
               "account_authorization"

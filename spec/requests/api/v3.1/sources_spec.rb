@@ -258,13 +258,13 @@ RSpec.describe("v3.1 - Sources") do
 
       it "failure: with read-only parameters" do
         instance = create(:source, attributes.merge("tenant" => tenant))
-        new_attributes = {"uid" => "xxxxx"}
+        new_attributes = {"uid" => "xxxxx", "app_creation_workflow" => "manual_configuration"}
 
         patch(instance_path(instance.id), :params => new_attributes.to_json, :headers => headers)
 
         expect(response).to have_attributes(
           :status      => 400,
-          :parsed_body => {"errors" => [{"detail" => "ActionController::UnpermittedParameters: found unpermitted parameter: :uid", "status" => "400"}]}
+          :parsed_body => {"errors" => [{"detail" => "ActionController::UnpermittedParameters: found unpermitted parameters: :uid, :app_creation_workflow", "status" => "400"}]}
         )
       end
 
