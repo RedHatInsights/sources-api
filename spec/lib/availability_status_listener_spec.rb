@@ -23,6 +23,7 @@ RSpec.describe AvailabilityStatusListener do
     context "with the availability_status event_type" do
       it "enqueues the AvailabilityStatusUpdateJob" do
         expect(AvailabilityStatusUpdateJob).to receive(:perform_later).with(payload, headers).once
+        expect(Sources::Api::Request).to receive(:ensure_psk_and_rhid).once
 
         subject.subscribe_to_availability_status
       end

@@ -1,17 +1,31 @@
 module Sources
   module Api
     class Request < Insights::API::Common::Request
-      # map of extra headers mapping with a name as well as a function to get the value if it isn't present already.
-      # this is currently only useful for the account-number changes since we need that account number to be present
-      # on the kafka messages even if the request came from outside (e.g. 3scale)
-      EXTRA_HEADERS = {
-        "x-rh-sources-account-number" => proc { Sources::Api::Request.current.identity["identity"]["account_number"] }
-      }.freeze
-
       def self.current_forwardable
         super.tap do |headers|
-          EXTRA_HEADERS.each do |name, func|
-            headers[name] = (current.headers[name] || func.call)
+          ensure_psk_and_rhid(headers)
+        end
+      end
+
+      def self.ensure_psk_and_rhid(headers)
+        headers.tap do |h|
+          # backwards compability for now while people move over to psk, this way we don't skip messages missing the x-rh-id header
+          # we also don't want to overwrite the x-rh-id _if its there_
+          if h["x-rh-sources-account-number"] && !h["x-rh-identity"]
+            h["x-rh-identity"] = Base64.strict_encode64(
+              JSON.dump(
+                {
+                  :identity => {
+                    :account_number => h["x-rh-sources-account-number"],
+                    :user           => {:is_org_admin => true}
+                  }
+                }
+              )
+            )
+            # generate x-rh-sources-account-number if its not there, but x-rh-id is.
+          elsif h["x-rh-identity"] && !h["x-rh-sources-account-number"]
+            parsed_identity = JSON.parse(Base64.decode64(h["x-rh-identity"]))
+            h["x-rh-sources-account-number"] = parsed_identity["identity"]["account_number"]
           end
         end
       end
