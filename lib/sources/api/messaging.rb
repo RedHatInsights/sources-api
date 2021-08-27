@@ -50,7 +50,7 @@ module Sources
         }
 
         client.publish_topic(
-          :service => "platform.sources.superkey-requests",
+          :service => Sources::Api::ClowderConfig.kafka_topic("platform.sources.superkey-requests"),
           :event   => "destroy_application",
           :payload => payload,
           :headers => Sources::Api::Request.current_forwardable
