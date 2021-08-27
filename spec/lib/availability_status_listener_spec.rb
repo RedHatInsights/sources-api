@@ -72,5 +72,26 @@ RSpec.describe AvailabilityStatusListener do
         subject.subscribe_to_availability_status
       end
     end
+
+    context "with x-rh-identity" do
+      let(:headers) { {"SECRET_HEADER" => "PASSWORD", "x-rh-identity" => xrhid} }
+      let(:endpoint) { create(:endpoint, :role => "first", :default => true) }
+      let(:resource_type) { "endpoint" }
+      let(:resource_id)   { endpoint.id.to_s }
+      let(:xrhid) do
+        Base64.strict_encode64(
+          JSON.dump(:identity => {
+                      :account_number => "1234",
+                      :user           => {:is_org_admin => true}
+                    })
+        )
+      end
+
+      it "enqueues the avialability status update job with both x-rh-id + x-rh-sources-account_number" do
+        expect(AvailabilityStatusUpdateJob).to receive(:perform_later).with(payload, headers.merge!("x-rh-sources-account-number" => "1234")).once
+
+        subject.subscribe_to_availability_status
+      end
+    end
   end
 end
