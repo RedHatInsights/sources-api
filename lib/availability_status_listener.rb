@@ -39,20 +39,8 @@ class AvailabilityStatusListener
     Rails.logger.info("Kafka message #{event.message} received with payload: #{event.payload}")
     return unless event.message == EVENT_AVAILABILITY_STATUS
 
-    # backwards compability for now while people move over to psk, this way we don't skip messages missing the x-rh-id header
-    # we also don't want to overwrite the x-rh-id _if its there_
-    if event.headers["x-rh-sources-account-number"] && !event.headers["x-rh-identity"]
-      event.headers["x-rh-identity"] = Base64.strict_encode64(
-        JSON.dump(
-          {
-            :identity => {
-              :account_number => event.headers["x-rh-sources-account-number"],
-              :user           => {:is_org_admin => true}
-            }
-          }
-        )
-      )
-    end
+    # make sure we have both psk + xrhid in the headers
+    Sources::Api::Request.ensure_psk_and_rhid(event.headers)
 
     if (missing = missing_headers(event.headers)).any?
       Rails.logger.error("Kafka message #{event.message} missing required header(s) (#{REQUIRED_HEADER_GROUPS.slice(*missing).values.join("|")}), found: [#{event.headers.keys.join(',')}]; returning.")
