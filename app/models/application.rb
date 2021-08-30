@@ -77,8 +77,9 @@ class Application < ApplicationRecord
 
   def availability_check_headers
     {
-      "Content-Type"  => "application/json",
-      "x-rh-identity" => Base64.strict_encode64({'identity' => {'account_number' => source.tenant.external_tenant}}.to_json)
+      "Content-Type"                => "application/json",
+      "x-rh-identity"               => Base64.strict_encode64({'identity' => {'account_number' => source.tenant.external_tenant}}.to_json),
+      "x-rh-sources-account-number" => source.tenant.external_tenant
     }
   end
 
