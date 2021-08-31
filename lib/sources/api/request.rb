@@ -1,10 +1,16 @@
 module Sources
   module Api
     class Request < Insights::API::Common::Request
+      FORWARDABLE_HEADERS = Insights::API::Common::Request::FORWARDABLE_HEADER_KEYS + ["x-rh-sources-account-number"]
+
+      # overwriting the super method with the same code - since we can't overwrite the
+      # FORWARDABLE_HEADER_KEYS array in the superclass.
       def self.current_forwardable
-        super.tap do |headers|
-          ensure_psk_and_rhid(headers)
+        forwarding = FORWARDABLE_HEADERS.each_with_object({}) do |key, hash|
+          hash[key] = current.headers[key] if current.headers.key?(key)
         end
+
+        ensure_psk_and_rhid(forwarding)
       end
 
       def self.ensure_psk_and_rhid(headers)
