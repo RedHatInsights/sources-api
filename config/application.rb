@@ -49,6 +49,6 @@ module Sources
     require "sources/api/clowder_config"
     ENV['METRICS_PORT'] = Sources::Api::ClowderConfig.instance['metricsPort'].to_s
 
-    Insights::API::Common::Metrics.activate(config, "sources_api")
+    Insights::API::Common::Metrics.activate(config, "sources_api") unless defined?(::Rails::Console)
   end
 end
