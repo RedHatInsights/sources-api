@@ -19,14 +19,7 @@ module Sources
           # we also don't want to overwrite the x-rh-id _if its there_
           if h["x-rh-sources-account-number"] && !h["x-rh-identity"]
             h["x-rh-identity"] = Base64.strict_encode64(
-              JSON.dump(
-                {
-                  :identity => {
-                    :account_number => h["x-rh-sources-account-number"],
-                    :user           => {:is_org_admin => true}
-                  }
-                }
-              )
+              JSON.dump({:identity => {:account_number => h["x-rh-sources-account-number"]}})
             )
             # generate x-rh-sources-account-number if its not there, but x-rh-id is.
           elsif h["x-rh-identity"] && !h["x-rh-sources-account-number"]
