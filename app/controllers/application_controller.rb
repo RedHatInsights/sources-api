@@ -42,6 +42,21 @@ class ApplicationController < ActionController::API
 
   def with_current_request
     Sources::Api::Request.with_request(request) do |current|
+      if ProxyHandler.should_proxy?(params["action"], params["controller"])
+        Rails.logger.info("Proxying request [#{request.path}] to go svc at [#{ProxyHandler.go_svc}]")
+
+        begin
+          resp = ProxyHandler.proxy_request(request, current.forwardable)
+          render :json => resp.body, :status => resp.status
+        rescue => e
+          Rails.logger.warn("Failed to hit go svc: #{e.message}")
+          doc = Insights::API::Common::ErrorDocument.new.add("500", "Error hitting Go svc [#{ProxyHandler.go_svc}]")
+          render :json => doc.to_h, :status => 500
+        end
+
+        return
+      end
+
       begin
         if Tenant.tenancy_enabled? && current.required_auth?
           tenant = if user.key.present? && user.account.present?

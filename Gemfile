@@ -7,6 +7,7 @@ require File.join(Bundler::Plugin.index.load_paths("bundler-inject")[0], "bundle
 gem 'cloudwatchlogger',     '~> 0.2.1'
 gem 'clowder-common-ruby',  '~> 0.2.3'
 gem 'discard',              '~> 1.2'
+gem 'faraday',              '~> 1.7.2'
 gem 'insights-api-common',  '~> 5.0', '>= 5.0.6'
 gem 'jbuilder',             '~> 2.0'
 gem 'json-schema',          '~> 2.8'
