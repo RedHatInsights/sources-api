@@ -34,7 +34,7 @@ class DefaultPolicy
     return true unless Sources::RBAC::Access.enabled?
 
     if ENV['DISABLE_ORG_ADMIN'] == "true"
-      psk_matches? || write_access?
+      psk_matches? || request.system.present? || write_access?
     else
       psk_matches? || request.system.present? || request.user&.org_admin? || write_access?
     end
