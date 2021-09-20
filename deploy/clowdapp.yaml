@@ -27,6 +27,8 @@ objects:
     name: sources-api
   spec:
     envName: ${ENV_NAME}
+    testing:
+      iqePlugin: sources
     deployments:
     - name: sidekiq
       minReplicas: ${{SIDEKIQ_REPLICAS}}
