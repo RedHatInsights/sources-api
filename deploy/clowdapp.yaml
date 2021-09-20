@@ -29,6 +29,35 @@ objects:
       app: sources-api
   stringData:
     psk: "thisMustBeEphemeralOrMinikube"
+  data:
+    rules.json: |
+      {
+          "sources": [
+              "index",
+              "show"
+          ],
+          "endpoints": [
+              "index",
+              "show"
+          ],
+          "applications": [
+              "index",
+              "show"
+          ],
+          "source_types": [
+              "index",
+              "show"
+          ],
+          "application_types": [
+              "index",
+              "show"
+          ]
+      }
+  kind: ConfigMap
+  metadata:
+    name: sources-proxy-rules
+    labels:
+      app: sources-api
 - apiVersion: cloud.redhat.com/v1alpha1
   kind: ClowdApp
   metadata:
@@ -125,6 +154,12 @@ objects:
           value: ${CLOUD_METER_API_SCHEME}://${CLOUD_METER_API_HOST}:${CLOUD_METER_SOURCES_API_PORT}${CLOUD_METER_SOURCES_API_AVAILABILITY_CHECK_PATH}
         - name: COST_MANAGEMENT_AVAILABILITY_CHECK_URL
           value: ${KOKU_SOURCES_API_SCHEME}://${KOKU_SOURCES_API_HOST}:${KOKU_SOURCES_API_PORT}${KOKU_SOURCES_API_APP_CHECK_PATH}
+        - name: PROXY_REQUESTS
+          value: ${PROXY_REQUESTS}
+        - name: GO_SVC
+          value: ${GO_SVC}
+        - name: GO_PORT
+          value: ${GO_PORT}
         - name: SOURCES_PSKS
           valueFrom:
             secretKeyRef:
@@ -147,6 +182,17 @@ objects:
               key: secret-key
         - name: RBAC_URL
           value: ${RBAC_SCHEME}://${RBAC_HOST}:${RBAC_PORT}
+        volumeMounts:
+        - name: proxy-rules
+          mountPath: /opt/sources-api/proxy_rules/
+          readOnly: true
+        volumes:
+        - name: proxy-rules
+          configMap:
+            name: sources-proxy-rules
+            items:
+            - key: rules.json
+              path: rules.json
         readinessProbe:
           tcpSocket:
             port: 8000
@@ -313,3 +359,12 @@ parameters:
 - name: DISABLE_ORG_ADMIN
   description: when set to true this disables the org_admin check in the x-rh-identity.
   value: "false"
+- name: PROXY_REQUESTS
+  description: Proxy requests from configmap to the new go-rewrite svc
+  value: "false"
+- name: GO_SVC
+  description: hostname of the go-rewrite svc
+  value: sources-api-go
+- name: GO_PORT
+  description: port of the go-rewrite svc
+  value: "8000"
