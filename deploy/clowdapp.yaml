@@ -21,6 +21,14 @@ objects:
       app: sources-api
   stringData:
     psk: "thisMustBeEphemeralOrMinikube"
+- apiVersion: v1
+  kind: Secret # For ephemeral/local environment
+  metadata:
+    name: sources-psk
+    labels:
+      app: sources-api
+  stringData:
+    psk: "thisMustBeEphemeralOrMinikube"
 - apiVersion: cloud.redhat.com/v1alpha1
   kind: ClowdApp
   metadata:
