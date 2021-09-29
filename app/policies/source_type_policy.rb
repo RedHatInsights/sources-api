@@ -1,0 +1,2 @@
+class SourceTypePolicy < DefaultPolicy
+end
