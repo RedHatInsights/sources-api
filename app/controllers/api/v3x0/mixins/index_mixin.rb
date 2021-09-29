@@ -3,6 +3,8 @@ module Api
     module Mixins
       module IndexMixin
         def index
+          authorize(filtered.new)
+
           raise_unless_primary_instance_exists
           render :json => Insights::API::Common::PaginatedResponseV2.new(
             :base_query => scoped(filtered.where(params_for_list)),
