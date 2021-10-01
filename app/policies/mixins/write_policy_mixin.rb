@@ -1,6 +1,6 @@
 module WritePolicyMixin
   def create?
-    admin? || system?
+    system? || admin?
   end
 
   def update?

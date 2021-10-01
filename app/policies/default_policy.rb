@@ -36,6 +36,8 @@ class DefaultPolicy
     return false unless request.identity["identity"]
 
     request.identity["identity"]["system"] && supported_authtype?
+  rescue Insights::API::Common::IdentityError # this crops up if the request does NOT have x-rh-identity
+    false
   end
 
   def supported_authtype?
