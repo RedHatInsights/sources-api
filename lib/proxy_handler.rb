@@ -26,11 +26,11 @@ class ProxyHandler
   def self.proxy_request(request, headers)
     case request.method
     when "GET", "DELETE"
-      Faraday.send(request.method.downcase, "#{go_svc}#{request.path}") do |req|
+      Faraday.send(request.method.downcase, "#{go_svc}#{CGI.unescape(request.fullpath)}") do |req|
         req.headers = headers
       end
     when "POST", "PATCH"
-      Faraday.send(request.method.downcase, "#{go_svc}#{request.path}") do |req|
+      Faraday.send(request.method.downcase, "#{go_svc}#{CGI.unescape(request.fullpath)}") do |req|
         # we need to include the content-type header because by default faraday
         # encodes the request body as x-www-form-urlencoded
         req.headers = headers.merge!("Content-Type" => "application/json")

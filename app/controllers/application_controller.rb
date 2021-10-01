@@ -43,7 +43,7 @@ class ApplicationController < ActionController::API
   def with_current_request
     Sources::Api::Request.with_request(request) do |current|
       if ProxyHandler.should_proxy?(params["action"], params["controller"])
-        Rails.logger.info("Proxying request [#{request.path}] to go svc at [#{ProxyHandler.go_svc}]")
+        Rails.logger.info("Proxying request [#{CGI.unescape(request.fullpath)}] to go svc at [#{ProxyHandler.go_svc}]")
 
         begin
           resp = ProxyHandler.proxy_request(request, current.forwardable)
