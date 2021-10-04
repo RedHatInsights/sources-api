@@ -145,21 +145,6 @@ RSpec.describe ApplicationController, :type => :request do
       expect(response.status).to eq(200)
     end
 
-    it "accepts PATCH request as org_admin without tenancy enforcement" do
-      stub_const("ENV", "BYPASS_TENANCY" => "true")
-
-      headers = {
-        "CONTENT_TYPE"  => "application/json",
-        "x-rh-identity" => Base64.encode64(
-          { "identity" => { "user" => { "is_org_admin" => true }}}.to_json
-        )
-      }
-
-      patch("/api/v1.0/sources/#{source.id}", :params => { "name" => "updated_name" }.to_json, :headers => headers)
-
-      expect(response.status).to eq(204)
-    end
-
     it "accepts GET request with tenancy enforcement and user not as org_admin" do
       headers = {
         "CONTENT_TYPE"  => "application/json",
