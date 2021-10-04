@@ -1,0 +1,22 @@
+{
+    "sources": [
+        "index",
+        "show"
+    ],
+    "endpoints": [
+        "index",
+        "show"
+    ],
+    "applications": [
+        "index",
+        "show"
+    ],
+    "source_types": [
+        "index",
+        "show"
+    ],
+    "application_types": [
+        "index",
+        "show"
+    ]
+}
