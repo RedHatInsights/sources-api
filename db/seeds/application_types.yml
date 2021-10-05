@@ -33,6 +33,8 @@
   :supported_authentication_types:
     amazon:
     - cloud-meter-arn
+    azure:
+    - tenant_id_subscription_id_role_id
 "/insights/platform/fifi":
   :display_name: Remediations
   :dependent_applications: []

@@ -195,6 +195,27 @@ azure:
         :name: authentication.password
         :label: Client Secret
         :type: password
+    - :type: tenant_id_subscription_id_role_id
+      :name: Tenant ID, Subscription ID, Role ID
+      :fields:
+      - :component: text-field
+        :name: application.extra.tenant_id
+        :label: Tenant ID
+        :isRequired: true
+        :validate:
+        - :type: required
+      - :component: text-field
+        :name: application.extra.subscription_id
+        :label: Subscription ID
+        :isRequired: true
+        :validate:
+        - :type: required
+      - :component: text-field
+        :name: application.extra.role_id
+        :label: Role assignment ID
+        :isRequired: true
+        :validate:
+        - :type: required
     :endpoint:
       :hidden: true
       :fields:
