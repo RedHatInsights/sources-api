@@ -29,6 +29,7 @@ objects:
       app: sources-api
   stringData:
     psk: "thisMustBeEphemeralOrMinikube"
+- apiVersion: v1
   data:
     rules.json: |
       {
@@ -364,7 +365,7 @@ parameters:
   value: "false"
 - name: GO_SVC
   description: hostname of the go-rewrite svc
-  value: sources-api-go
+  value: sources-api-go-svc
 - name: GO_PORT
   description: port of the go-rewrite svc
   value: "8000"
