@@ -1,0 +1,2 @@
+class TenantPolicy < DefaultPolicy
+end

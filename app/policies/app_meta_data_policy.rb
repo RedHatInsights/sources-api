@@ -1,0 +1,2 @@
+class AppMetaDataPolicy < DefaultPolicy
+end
