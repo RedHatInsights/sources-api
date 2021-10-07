@@ -44,6 +44,10 @@ class DefaultPolicy
     ALLOWED_AUTHTYPES.any? { |type| request.identity["identity"]["system"].key?(type) }
   end
 
+  def psk?
+    request.headers.key?("x-rh-sources-psk")
+  end
+
   def admin?
     return true unless Sources::RBAC::Access.enabled?
 
