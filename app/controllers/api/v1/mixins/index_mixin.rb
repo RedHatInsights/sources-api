@@ -32,6 +32,8 @@ module Api
               end
             end
           end
+        rescue Insights::API::Common::IdentityError # if psk is used we don't have a "current" request
+          {}
         end
 
         def raise_unless_primary_instance_exists
