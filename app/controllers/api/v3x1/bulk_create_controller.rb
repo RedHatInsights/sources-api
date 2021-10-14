@@ -28,6 +28,9 @@ module Api
           auth.application_authentications.each do |app_auth|
             raise_event("ApplicationAuthentication.create", app_auth.as_json)
           end
+
+          # post the newly created authentication over to vault
+          VaultInterface.new(auth).process
         end
 
         # Raising the big ole' bulk-message with all fields included.

@@ -11,6 +11,8 @@ module Api
         authentication.save!
 
         raise_event("#{model}.create", authentication.as_json)
+        VaultInterface.new(authentication).process
+
         render :json => authentication, :status => :created, :location => instance_link(authentication)
       end
     end
