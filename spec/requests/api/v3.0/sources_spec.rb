@@ -137,10 +137,11 @@ RSpec.describe("v3.0 - Sources") do
       end
 
       it "success: with a duplicate name in a different tenant" do
+        stub_const("ENV", "BYPASS_RBAC" => "true")
         post(collection_path, :params => attributes.to_json, :headers => headers)
 
         second_tenant = rand(1000).to_s
-        second_identity = {"x-rh-identity" => Base64.encode64({"identity" => {"account_number" => second_tenant, "user" => { "is_org_admin" => true }}}.to_json)}
+        second_identity = {"x-rh-identity" => Base64.encode64({"identity" => {"account_number" => second_tenant }}.to_json)}
         post(collection_path, :params => attributes.to_json, :headers => headers.merge(second_identity))
 
         expect(response).to have_attributes(
