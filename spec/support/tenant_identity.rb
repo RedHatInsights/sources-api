@@ -9,8 +9,8 @@ module Spec
         let!(:unknown_tenant)   { rand(1000).to_s }
         let!(:identity)         { Base64.encode64({'identity' => { 'account_number' => external_tenant, 'user' => { 'is_org_admin' => true }}}.to_json) }
         let!(:unknown_identity) { Base64.encode64({'identity' => { 'account_number' => unknown_tenant,  'user' => { 'is_org_admin' => true }}}.to_json) }
-        let!(:system_identity)  { Base64.encode64({'identity' => {'account_number' => external_tenant, 'system' => {'cn' => rand(1000).to_s}}}.to_json) }
-        let!(:non_org_admin_identity) { Base64.encode64({'identity' => {'account_number' => external_tenant, 'user' => {'is_org_admin' => false}}}.to_json) }
+        let!(:system_identity)  { Base64.encode64({'identity' => { 'account_number' => external_tenant, 'system' => {'cn' => rand(1000).to_s}}}.to_json) }
+        let!(:user_identity)    { Base64.encode64({'identity' => { 'account_number' => external_tenant }}.to_json) }
 
         let!(:entitlements) do
           {

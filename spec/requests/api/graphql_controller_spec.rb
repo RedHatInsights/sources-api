@@ -20,8 +20,8 @@ RSpec.describe("v1.0 - GraphQL") do
       expect(result_source_tenant(response.body)).to match_array([tenant.external_tenant])
     end
 
-    it "with non-org-admin: returns the external tenant identifier" do
-      headers = { "CONTENT_TYPE" => "application/json", "x-rh-identity" => non_org_admin_identity }
+    it "with user_identity: returns the external tenant identifier" do
+      headers = { "CONTENT_TYPE" => "application/json", "x-rh-identity" => user_identity }
 
       post("/api/v1.0/graphql", :headers => headers, :params => graphql_source_query)
 
