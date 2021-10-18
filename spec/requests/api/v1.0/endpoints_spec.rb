@@ -53,6 +53,7 @@ RSpec.describe("v1.0 - Endpoints") do
 
     context "post" do
       it "success: with valid body" do
+        stub_const("ENV", "BYPASS_RBAC" => "true")
         post(collection_path, :params => payload.to_json, :headers => headers)
 
         expect(response).to have_attributes(
@@ -116,6 +117,7 @@ RSpec.describe("v1.0 - Endpoints") do
     context "patch" do
       let(:instance) { create(:endpoint, :tenant => tenant) }
       it "success: with a valid id" do
+        stub_const("ENV", "BYPASS_RBAC" => "true")
         new_attributes = {"host" => "example.org"}
         patch(instance_path(instance.id), :params => new_attributes.to_json, :headers => headers)
 

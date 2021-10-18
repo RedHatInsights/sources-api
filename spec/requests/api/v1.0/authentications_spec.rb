@@ -48,6 +48,7 @@ RSpec.describe("v1.0 - Authentications") do
 
     context "post" do
       it "success: with valid body" do
+        stub_const("ENV", "BYPASS_RBAC" => "true")
         post(collection_path, :params => payload.to_json, :headers => headers)
 
         expect(response).to have_attributes(
@@ -58,6 +59,7 @@ RSpec.describe("v1.0 - Authentications") do
       end
 
       it "success: with valid body containing extra" do
+        stub_const("ENV", "BYPASS_RBAC" => "true")
         payload_with_extra = payload.merge(:extra => {:azure => {:tenant_id => "tenant_id_value"}})
         post(collection_path, :params => payload_with_extra.to_json, :headers => headers)
 
@@ -134,6 +136,7 @@ RSpec.describe("v1.0 - Authentications") do
     context "patch" do
       let(:instance) { create(:authentication, payload) }
       it "success: with a valid id" do
+        stub_const("ENV", "BYPASS_RBAC" => "true")
         new_attributes = {"name" => "new name"}
         patch(instance_path(instance.id), :params => new_attributes.to_json, :headers => headers)
 
@@ -146,6 +149,7 @@ RSpec.describe("v1.0 - Authentications") do
       end
 
       it "success: with extra attributes" do
+        stub_const("ENV", "BYPASS_RBAC" => "true")
         extra_attributes = {"extra" => {"azure" => {"tenant_id" => "tenant_id_value"}}}
 
         patch(instance_path(instance.id), :params => extra_attributes.to_json, :headers => headers)

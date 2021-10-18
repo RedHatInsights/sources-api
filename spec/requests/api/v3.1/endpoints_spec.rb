@@ -51,6 +51,7 @@ RSpec.describe("v3.1 - Endpoints") do
 
     context "post" do
       it "success: with valid body" do
+        stub_const("ENV", "BYPASS_RBAC" => "true")
         post(collection_path, :params => payload.to_json, :headers => headers)
 
         expect(response).to have_attributes(
@@ -114,6 +115,7 @@ RSpec.describe("v3.1 - Endpoints") do
     context "patch" do
       let(:instance) { create(:endpoint, payload.merge(:tenant => tenant)) }
       it "success: with a valid id" do
+        stub_const("ENV", "BYPASS_RBAC" => "true")
         new_attributes = {"host" => "example.org"}
         patch(instance_path(instance.id), :params => new_attributes.to_json, :headers => headers)
 
@@ -157,6 +159,7 @@ RSpec.describe("v3.1 - Endpoints") do
       let(:instance) { create(:endpoint, payload.merge(:tenant => tenant)) }
 
       it "success: with a valid id" do
+        stub_const("ENV", "BYPASS_RBAC" => "true")
         expect(Sources::Api::Events).to receive(:raise_event).once
         delete(instance_path(instance.id), :headers => headers)
 
@@ -167,6 +170,7 @@ RSpec.describe("v3.1 - Endpoints") do
       end
 
       it "success: with associated authentications" do
+        stub_const("ENV", "BYPASS_RBAC" => "true")
         authentication_payload = {
           "username"      => "test_name",
           "password"      => "Test Password",

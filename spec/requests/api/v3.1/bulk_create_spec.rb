@@ -25,6 +25,7 @@ describe "v3.1 - /bulk_create" do
     context "with source + application" do
       context "with string apptype" do
         it "creates the resources" do
+          stub_const("ENV", "BYPASS_RBAC" => "true")
           expect(Sources::Api::Events).to receive(:raise_event).exactly(3).times
 
           post collection_path,
@@ -47,6 +48,7 @@ describe "v3.1 - /bulk_create" do
 
       context "with id apptype" do
         it "creates the resources" do
+          stub_const("ENV", "BYPASS_RBAC" => "true")
           expect(Sources::Api::Events).to receive(:raise_event).exactly(3).times
 
           post collection_path,
@@ -69,6 +71,7 @@ describe "v3.1 - /bulk_create" do
 
       context "with multiple applications" do
         it "creates the resources" do
+          stub_const("ENV", "BYPASS_RBAC" => "true")
           expect(Sources::Api::Events).to receive(:raise_event).exactly(4).times
 
           post collection_path,
@@ -97,6 +100,7 @@ describe "v3.1 - /bulk_create" do
         let(:superkey_source) { {:sources => [{:name => "testsksource", :source_type_name => "amazon", :app_creation_workflow => "account_authorization"}]} }
 
         it "does not raise an application create message" do
+          stub_const("ENV", "BYPASS_RBAC" => "true")
           expect(Sources::Api::Events).to receive(:raise_event).exactly(1).times
           post collection_path,
                :headers => headers,
@@ -106,6 +110,7 @@ describe "v3.1 - /bulk_create" do
         end
 
         it "sets the availability_status to in_progress" do
+          stub_const("ENV", "BYPASS_RBAC" => "true")
           post(collection_path, :headers => headers, :params => superkey_source.to_json)
 
           source = response.parsed_body["sources"].first
@@ -116,6 +121,7 @@ describe "v3.1 - /bulk_create" do
 
     context "with source + endpoint" do
       it "creates the resources" do
+        stub_const("ENV", "BYPASS_RBAC" => "true")
         expect(Sources::Api::Events).to receive(:raise_event).twice
 
         post collection_path,
@@ -138,6 +144,7 @@ describe "v3.1 - /bulk_create" do
 
     context "with source + application + authentication" do
       it "creates the resources" do
+        stub_const("ENV", "BYPASS_RBAC" => "true")
         expect(Sources::Api::Events).to receive(:raise_event).exactly(5).times
 
         post collection_path,
@@ -171,6 +178,7 @@ describe "v3.1 - /bulk_create" do
 
     context "with source + endpoint + authentication" do
       it "creates the resources" do
+        stub_const("ENV", "BYPASS_RBAC" => "true")
         expect(Sources::Api::Events).to receive(:raise_event).exactly(4).times
 
         post collection_path,
@@ -206,6 +214,7 @@ describe "v3.1 - /bulk_create" do
       let!(:instance) { create(:application) }
 
       it "raises the Records.create message" do
+        stub_const("ENV", "BYPASS_RBAC" => "true")
         expect(Sources::Api::Events).to receive(:raise_event).with("Authentication.create", anything, anything).exactly(1).times
         expect(Sources::Api::Events).to receive(:raise_event).with("ApplicationAuthentication.create", anything, anything).exactly(1).times
         expect(Sources::Api::Events).to receive(:raise_event).with("Records.create", anything, anything).exactly(1).times

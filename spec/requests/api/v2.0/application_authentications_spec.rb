@@ -45,6 +45,7 @@ RSpec.describe("v2.0 - ApplicationAuthentications") do
 
     context "post" do
       it "success: with valid body" do
+        stub_const("ENV", "BYPASS_RBAC" => "true")
         post(collection_path, :params => payload.to_json, :headers => headers)
 
         expect(response).to have_attributes(
@@ -108,6 +109,7 @@ RSpec.describe("v2.0 - ApplicationAuthentications") do
 
     context "delete" do
       it "success: with a valid paylod" do
+        stub_const("ENV", "BYPASS_RBAC" => "true")
         record = create(:application_authentication, payload)
 
         delete(instance_path(record.id), :headers => headers)

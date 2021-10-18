@@ -13,6 +13,7 @@ describe Api::V1::Mixins::DestroyMixin do
     end
 
     it "Primary Collection: delete /sources/:id destroys a Source" do
+      stub_const("ENV", "BYPASS_RBAC" => "true")
       delete(api_v1x0_source_url(source_1.id), :headers => headers)
 
       expect(response.status).to eq(204)

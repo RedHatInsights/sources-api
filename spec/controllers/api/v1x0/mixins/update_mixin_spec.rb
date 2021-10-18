@@ -13,6 +13,7 @@ describe Api::V1::Mixins::UpdateMixin do
     end
 
     it "patch /sources/:id updates a Source" do
+      stub_const("ENV", "BYPASS_RBAC" => "true")
       source = create(:source, :name => "abc")
 
       expect(Sources::Api::Events).to receive(:raise_event).with("Source.update", anything, anything)

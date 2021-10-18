@@ -53,6 +53,7 @@ RSpec.shared_examples_for "updating paused resource" do |model_klass|
   end
 
   it "rejects update action of disallowed attributes by pausing a #{model_klass}" do
+    stub_const("ENV", "BYPASS_RBAC" => "true")
     new_attributes = instance_attributes_for(model_klass, new_values_for_disallowed_attributes)
 
     patch(instance_path(instance.id), :params => new_attributes.to_json, :headers => headers)
@@ -70,6 +71,7 @@ RSpec.shared_examples_for "updating paused resource" do |model_klass|
   end
 
   it "rejects update action of disallowed attributes by pausing a #{model_klass} and updates allowed attributes" do
+    stub_const("ENV", "BYPASS_RBAC" => "true")
     update_attributes = new_values_for_disallowed_attributes.merge(new_values_for_allowed_attributes)
     new_attributes = instance_attributes_for(model_klass, update_attributes)
 
@@ -92,6 +94,7 @@ RSpec.shared_examples_for "updating paused resource" do |model_klass|
   end
 
   it "updates paused resource with allowed attributes" do
+    stub_const("ENV", "BYPASS_RBAC" => "true")
     new_attributes = instance_attributes_for(model_klass, new_values_for_allowed_attributes)
 
     patch(instance_path(instance.id), :params => new_attributes.to_json, :headers => headers)

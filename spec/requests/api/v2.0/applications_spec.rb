@@ -44,6 +44,7 @@ RSpec.describe("v2.0 - Applications") do
 
     context "post" do
       it "success: with valid body" do
+        stub_const("ENV", "BYPASS_RBAC" => "true")
         post(collection_path, :params => payload.to_json, :headers => headers)
 
         expect(response).to have_attributes(
@@ -108,6 +109,7 @@ RSpec.describe("v2.0 - Applications") do
       let(:instance) { create(:application, payload.merge(:tenant => tenant)) }
 
       it "update availability status" do
+        stub_const("ENV", "BYPASS_RBAC" => "true")
         expect(Sources::Api::Events).to receive(:raise_event).twice
 
         new_attributes = {"availability_status" => "available"}
