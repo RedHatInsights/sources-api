@@ -1,6 +1,6 @@
 describe("RBAC requests") do
   include ::Spec::Support::TenantIdentity
-  let(:headers) { {"CONTENT_TYPE" => "application/json", "x-rh-identity" => user_identity} }
+  let(:headers) { {"CONTENT_TYPE" => "application/json", "x-rh-identity" => identity} }
   let(:source_type) { create(:source_type, :name => "SourceType", :vendor => "Some Vendor", :product_name => "Product Name") }
   let(:attributes) { {"name" => "my source", "source_type_id" => source_type.id.to_s} }
 
