@@ -165,6 +165,25 @@ azure:
   :icon_url: "/apps/chrome/assets/images/partners-icons/microsoft-azure.svg"
   :schema:
     :authentication:
+    - :type: username_password_tenant_id
+      :is_superkey: true
+      :name: Username, Password, Tenant ID
+      :fields:
+      - :component: text-field
+        :name: authentication.authtype
+        :hideField: true
+        :initializeOnMount: true
+        :initialValue: username_password_tenant_id
+      - :component: text-field
+        :name: authentication.extra.azure.tenant_id
+        :label: Tenant ID
+      - :component: text-field
+        :name: authentication.username
+        :label: Username
+      - :component: text-field
+        :name: authentication.password
+        :label: Password
+        :type: password
     - :type: tenant_id_client_id_client_secret
       :name: Tenant ID, Client ID, Client Secret
       :fields:
