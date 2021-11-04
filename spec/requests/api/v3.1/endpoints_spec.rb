@@ -66,7 +66,7 @@ RSpec.describe("v3.1 - Endpoints") do
         expect(response).to have_attributes(
           :status      => 400,
           :location    => nil,
-          :parsed_body => Insights::API::Common::ErrorDocument.new.add("400", "OpenAPIParser::NotExistPropertyDefinition: #/components/schemas/Endpoint does not define properties: aaa").to_h
+          :parsed_body => Insights::API::Common::ErrorDocument.new.add("400", "ActiveModel::UnknownAttributeError: unknown attribute 'aaa' for Endpoint.").to_h
         )
       end
 
@@ -76,7 +76,7 @@ RSpec.describe("v3.1 - Endpoints") do
         expect(response).to have_attributes(
           :status      => 400,
           :location    => nil,
-          :parsed_body => Insights::API::Common::ErrorDocument.new.add("400", "OpenAPIParser::ValidateError: #/components/schemas/Endpoint/properties/default expected boolean, but received Integer: 123").to_h
+          :parsed_body => Insights::API::Common::ErrorDocument.new.add("400", "OpenAPIParser::ValidateError: #/components/schemas/EndpointCreate/properties/default expected boolean, but received Integer: 123").to_h
         )
       end
     end

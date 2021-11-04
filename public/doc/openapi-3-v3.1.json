@@ -840,7 +840,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/Endpoint"
+                "$ref": "#/components/schemas/EndpointCreate"
               }
             }
           },
@@ -2237,6 +2237,71 @@
             }
           }
         }
+      },
+      "EndpointCreate": {
+        "type": "object",
+        "properties": {
+          "availability_status": {
+            "description": "The availability status of the endpoint.",
+            "example": "available",
+            "enum": ["", "available", "unavailable"],
+            "type": "string"
+          },
+          "certificate_authority": {
+            "description": "Optional X.509 Certificate Authority.",
+            "example": "Let's Encrypt",
+            "type": "string"
+          },
+          "default": {
+            "description": "Mark endpoint as the default endpoint? Each source can only have one default endpoint. It gets set to true by default if the given source has no endpoints.",
+            "example": false,
+            "type": "boolean"
+          },
+          "host": {
+            "description": "URI host component of the endpoint.",
+            "example": "example.com",
+            "type": "string"
+          },
+          "path": {
+            "description": "URI path component of the endpoint.",
+            "example": "/example/path",
+            "type": "string"
+          },
+          "port": {
+            "default": 443,
+            "description": "URI port component of the endpoint.",
+            "example": 443,
+            "type": "integer"
+          },
+          "receptor_node": {
+            "description": "Identifier of a receptor node.",
+            "type": "string"
+          },
+          "role": {
+            "description": "The role of the endpoint. It must be unique among the source's endpoints.",
+            "type": "string"
+          },
+          "scheme": {
+            "default": "https",
+            "description": "The scheme of the protocol.",
+            "example": "https",
+            "type": "string"
+          },
+          "source_id": {
+            "description": "The id of the source this endpoint relates to.",
+            "example": "12",
+            "type": "string"
+          },
+          "verify_ssl": {
+            "default": true,
+            "description": "Should the SSL certificate be verified?",
+            "example": true,
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "source_id"
+        ]
       },
       "ErrorNotFound": {
         "type": "object",
