@@ -175,15 +175,24 @@ azure:
         :initializeOnMount: true
         :initialValue: username_password_tenant_id
       - :component: text-field
-        :name: authentication.extra.azure.tenant_id
-        :label: Tenant ID
-      - :component: text-field
         :name: authentication.username
-        :label: Username
+        :label: App ID
+        :isRequired: true
+        :validate:
+        - :type: required
       - :component: text-field
         :name: authentication.password
         :label: Password
         :type: password
+        :isRequired: true
+        :validate:
+        - :type: required
+      - :component: text-field
+        :name: authentication.extra.azure.tenant_id
+        :label: Tenant ID
+        :isRequired: true
+        :validate:
+        - :type: required
     - :type: tenant_id_client_id_client_secret
       :name: Tenant ID, Client ID, Client Secret
       :fields:
