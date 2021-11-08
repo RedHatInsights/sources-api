@@ -5,11 +5,10 @@ RSpec.describe ApplicationController, :type => :request do
   before do
     allow(client).to receive(:publish_topic)
     allow(Sources::Api::Messaging).to receive(:client).and_return(client)
+    stub_const("ENV", "BYPASS_RBAC" => "true")
   end
 
   context "with tenancy enforcement" do
-    before { stub_const("ENV", "BYPASS_TENANCY" => nil) }
-
     it "get /source with tenant" do
       headers = { "CONTENT_TYPE" => "application/json", "x-rh-identity" => identity }
 
@@ -43,26 +42,6 @@ RSpec.describe ApplicationController, :type => :request do
 
       expect(response.status).to eq(200)
       expect(Tenant.find_by(:external_tenant => unknown_tenant)).not_to be_nil
-    end
-  end
-
-  context "without tenancy enforcement" do
-    before { stub_const("ENV", "BYPASS_TENANCY" => "true") }
-
-    it "get /sources without identity" do
-      headers = { "CONTENT_TYPE" => "application/json" }
-
-      get("/api/v1.0/sources", :headers => headers)
-
-      expect(response.status).to eq(200)
-    end
-
-    it "get /sources with unknown identity" do
-      headers = { "CONTENT_TYPE" => "application/json", "x-rh-identity" => unknown_identity }
-
-      get("/api/v1.0/sources", :headers => headers)
-
-      expect(response.status).to eq(200)
     end
   end
 
@@ -115,26 +94,6 @@ RSpec.describe ApplicationController, :type => :request do
   end
 
   context "with rbac enforcement" do
-    it "accepts GET request without tenancy enforcement" do
-      stub_const("ENV", "BYPASS_TENANCY" => "true")
-
-      headers = { "CONTENT_TYPE"  => "application/json" }
-
-      get("/api/v1.0/sources", :headers => headers)
-
-      expect(response.status).to eq(200)
-    end
-
-    it "accepts GET request without tenancy enforcement" do
-      stub_const("ENV", "BYPASS_TENANCY" => "true")
-
-      headers = { "CONTENT_TYPE"  => "application/json" }
-
-      get("/api/v1.0/sources", :headers => headers)
-
-      expect(response.status).to eq(200)
-    end
-
     it "accepts GET request with tenancy enforcement" do
       headers = {
         "CONTENT_TYPE"  => "application/json",
@@ -175,7 +134,6 @@ RSpec.describe ApplicationController, :type => :request do
     end
 
     it "accepts PATCH request with tenancy enforcement" do
-      stub_const("ENV", "BYPASS_RBAC" => "true")
       headers = {
         "CONTENT_TYPE"  => "application/json",
         "x-rh-identity" => Base64.encode64(
@@ -189,8 +147,6 @@ RSpec.describe ApplicationController, :type => :request do
     end
 
     it "accepts GET request with tenancy enforcement when RBAC is bypassed" do
-      stub_const("ENV", "BYPASS_RBAC" => "true")
-
       headers = {
         "CONTENT_TYPE"  => "application/json",
         "x-rh-identity" => Base64.encode64(
@@ -204,8 +160,6 @@ RSpec.describe ApplicationController, :type => :request do
     end
 
     it "accepts PATCH request with tenancy enforcement when RBAC is bypassed" do
-      stub_const("ENV", "BYPASS_RBAC" => "true")
-
       headers = {
         "CONTENT_TYPE"  => "application/json",
         "x-rh-identity" => Base64.encode64(

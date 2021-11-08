@@ -5,6 +5,8 @@ RSpec.describe("v3.0 - ApplicationAuthentications") do
   before do
     allow(messaging_client).to receive(:publish_topic)
     allow(Sources::Api::Messaging).to receive(:client).and_return(messaging_client)
+    stub_const("ENV", "BYPASS_RBAC" => "true")
+
   end
 
   let(:headers)          { {"CONTENT_TYPE" => "application/json", "x-rh-identity" => identity} }
@@ -45,7 +47,6 @@ RSpec.describe("v3.0 - ApplicationAuthentications") do
 
     context "post" do
       it "success: with valid body" do
-        stub_const("ENV", "BYPASS_RBAC" => "true")
         post(collection_path, :params => payload.to_json, :headers => headers)
 
         expect(response).to have_attributes(
@@ -109,7 +110,6 @@ RSpec.describe("v3.0 - ApplicationAuthentications") do
 
     context "delete" do
       it "success: with a valid paylod" do
-        stub_const("ENV", "BYPASS_RBAC" => "true")
         record = create(:application_authentication, payload)
 
         expect(Sources::Api::Events).to receive(:raise_event).once

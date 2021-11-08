@@ -10,10 +10,10 @@ describe Api::V1::Mixins::DestroyMixin do
     before do
       allow(client).to receive(:publish_topic)
       allow(Sources::Api::Messaging).to receive(:client).and_return(client)
+      stub_const("ENV", "BYPASS_RBAC" => "true")
     end
 
     it "Primary Collection: delete /sources/:id destroys a Source" do
-      stub_const("ENV", "BYPASS_RBAC" => "true")
       delete(api_v1x0_source_url(source_1.id), :headers => headers)
 
       expect(response.status).to eq(204)

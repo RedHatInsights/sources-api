@@ -10,10 +10,10 @@ describe Api::V1::Mixins::UpdateMixin do
     before do
       allow(client).to receive(:publish_topic)
       allow(Sources::Api::Messaging).to receive(:client).and_return(client)
+      stub_const("ENV", "BYPASS_RBAC" => "true")
     end
 
     it "patch /sources/:id updates a Source" do
-      stub_const("ENV", "BYPASS_RBAC" => "true")
       source = create(:source, :name => "abc")
 
       expect(Sources::Api::Events).to receive(:raise_event).with("Source.update", anything, anything)

@@ -5,6 +5,7 @@ RSpec.describe("v3.0 - Applications") do
   before do
     allow(client).to receive(:publish_topic)
     allow(Sources::Api::Messaging).to receive(:client).and_return(client)
+    stub_const("ENV", "BYPASS_RBAC" => "true")
   end
 
   let(:headers)          { {"CONTENT_TYPE" => "application/json", "x-rh-identity" => identity} }
@@ -44,7 +45,6 @@ RSpec.describe("v3.0 - Applications") do
 
     context "post" do
       it "success: with valid body" do
-        stub_const("ENV", "BYPASS_RBAC" => "true")
         post(collection_path, :params => payload.to_json, :headers => headers)
 
         expect(response).to have_attributes(
@@ -108,7 +108,6 @@ RSpec.describe("v3.0 - Applications") do
     context "patch" do
       let(:instance) { create(:application, payload.merge(:tenant => tenant)) }
       it "success: with a valid id" do
-        stub_const("ENV", "BYPASS_RBAC" => "true")
         new_attributes = {"availability_status" => "available"}
         patch(instance_path(instance.id), :params => new_attributes.to_json, :headers => headers)
 
@@ -146,7 +145,6 @@ RSpec.describe("v3.0 - Applications") do
 
     context "delete" do
       it "success: with a valid id" do
-        stub_const("ENV", "BYPASS_RBAC" => "true")
         instance = create(:application, payload.merge(:tenant => tenant))
 
         expect(Sources::Api::Events).to receive(:raise_event).once

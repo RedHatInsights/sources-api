@@ -5,6 +5,7 @@ RSpec.describe("v3.1 - Applications") do
   before do
     allow(client).to receive(:publish_topic)
     allow(Sources::Api::Messaging).to receive(:client).and_return(client)
+    stub_const("ENV", "BYPASS_RBAC" => "true")
   end
 
   let(:headers)          { {"CONTENT_TYPE" => "application/json", "x-rh-identity" => identity} }
@@ -43,7 +44,6 @@ RSpec.describe("v3.1 - Applications") do
 
     context "post" do
       it "success: with valid body" do
-        stub_const("ENV", "BYPASS_RBAC" => "true")
         post(collection_path, :params => payload.to_json, :headers => headers)
 
         expect(response).to have_attributes(
@@ -103,7 +103,6 @@ RSpec.describe("v3.1 - Applications") do
     context "patch" do
       let(:instance) { create(:application, payload.merge(:tenant => tenant)) }
       it "success: with a valid id" do
-        stub_const("ENV", "BYPASS_RBAC" => "true")
         new_attributes = {"availability_status" => "available"}
         patch(instance_path(instance.id), :params => new_attributes.to_json, :headers => headers)
 
@@ -145,7 +144,6 @@ RSpec.describe("v3.1 - Applications") do
 
     context "delete" do
       it "success: with a valid id" do
-        stub_const("ENV", "BYPASS_RBAC" => "true")
         instance = create(:application, payload.merge(:tenant => tenant))
 
         expect(Sources::Api::Events).to receive(:raise_event).once
@@ -207,7 +205,6 @@ RSpec.describe("v3.1 - Applications") do
       let(:extra_attributes) { {:extra => {:_superkey => {"worked" => true}}} }
 
       it "raises the create event instead of the update event" do
-        stub_const("ENV", "BYPASS_RBAC" => "true")
         expect(Sources::Api::Events).to receive(:raise_event).with("Application.create", any_args).exactly(1).times
         expect(Sources::Api::Events).not_to receive(:raise_event).with("Application.update", any_args)
 
@@ -250,7 +247,6 @@ RSpec.describe("v3.1 - Applications") do
       end
 
       it "pauses the application" do
-        stub_const("ENV", "BYPASS_RBAC" => "true")
         expect(AvailabilityMessageJob).to receive(:perform_later).with("Application.pause", anything, anything).once
 
         expect_pausable_relations(:undiscarded?)
@@ -273,7 +269,6 @@ RSpec.describe("v3.1 - Applications") do
       end
 
       it "un-pauses the application" do
-        stub_const("ENV", "BYPASS_RBAC" => "true")
         expect(AvailabilityMessageJob).to receive(:perform_later).with("Application.unpause", anything, anything).exactly(1).time
         expect_pausable_relations(:discarded?)
 

@@ -11,6 +11,7 @@ RSpec.describe("v3.0 - Sources") do
   before do
     allow(Sources::Api::Messaging).to receive(:client).and_return(client)
     allow(client).to receive(:publish_topic)
+    stub_const("ENV", "BYPASS_RBAC" => "true")
   end
 
   describe("/api/v3.0/sources") do
@@ -64,7 +65,6 @@ RSpec.describe("v3.0 - Sources") do
 
     context "post" do
       it "success: with valid body" do
-        stub_const("ENV", "BYPASS_RBAC" => "true")
         post(collection_path, :params => attributes.to_json, :headers => headers)
 
         expect(response).to have_attributes(
@@ -75,7 +75,6 @@ RSpec.describe("v3.0 - Sources") do
       end
 
       it "failure: with a missing name attribute" do
-        stub_const("ENV", "BYPASS_RBAC" => "true")
         post(collection_path, :params => attributes.except("name").to_json, :headers => headers)
 
         expect(response).to have_attributes(
@@ -96,7 +95,6 @@ RSpec.describe("v3.0 - Sources") do
       end
 
       it "failure: with a blank name attribute" do
-        stub_const("ENV", "BYPASS_RBAC" => "true")
         post(collection_path, :params => attributes.merge("name" => "").to_json, :headers => headers)
 
         expect(response).to have_attributes(
@@ -127,7 +125,6 @@ RSpec.describe("v3.0 - Sources") do
       end
 
       it "failure: with a duplicate name in the same tenant" do
-        stub_const("ENV", "BYPASS_RBAC" => "true")
         2.times do
           post(collection_path, :params => attributes.to_json, :headers => headers)
         end
@@ -141,7 +138,6 @@ RSpec.describe("v3.0 - Sources") do
       end
 
       it "success: with a duplicate name in a different tenant" do
-        stub_const("ENV", "BYPASS_RBAC" => "true")
         post(collection_path, :params => attributes.to_json, :headers => headers)
 
         second_tenant = rand(1000).to_s
@@ -156,7 +152,6 @@ RSpec.describe("v3.0 - Sources") do
       end
 
       it "failure: with a not unique UID" do
-        stub_const("ENV", "BYPASS_RBAC" => "true")
         post(collection_path, :params => attributes.merge("name" => "aaa", "uid" => "123").to_json, :headers => headers)
         post(collection_path, :params => attributes.merge("name" => "abc", "uid" => "123").to_json, :headers => headers)
 
@@ -214,7 +209,6 @@ RSpec.describe("v3.0 - Sources") do
 
     context "patch" do
       it "success: with a valid id" do
-        stub_const("ENV", "BYPASS_RBAC" => "true")
         instance = create(:source, attributes.merge("tenant" => tenant))
         new_attributes = {"name" => "new name"}
 
@@ -267,7 +261,6 @@ RSpec.describe("v3.0 - Sources") do
       end
 
       it "failure: with read-only parameters" do
-        stub_const("ENV", "BYPASS_RBAC" => "true")
         instance = create(:source, attributes.merge("tenant" => tenant))
         new_attributes = {"uid" => "xxxxx"}
 
@@ -290,7 +283,6 @@ RSpec.describe("v3.0 - Sources") do
       end
 
       it "failure: with an invalid availability_status value" do
-        stub_const("ENV", "BYPASS_RBAC" => "true")
         post(collection_path, :params => attributes.merge("availability_status" => "bogus").to_json, :headers => headers)
 
         expect(response).to have_attributes(
@@ -301,7 +293,6 @@ RSpec.describe("v3.0 - Sources") do
       end
 
       it "success: with an available availability_status" do
-        stub_const("ENV", "BYPASS_RBAC" => "true")
         included_attributes = { "name" => "availability_source", "availability_status" => "available" }
 
         post(collection_path, :params => attributes.merge(included_attributes).to_json, :headers => headers)
@@ -314,7 +305,6 @@ RSpec.describe("v3.0 - Sources") do
       end
 
       it "success: with a partially_available availability_status" do
-        stub_const("ENV", "BYPASS_RBAC" => "true")
         included_attributes = { "name" => "availability_source", "availability_status" => "partially_available" }
 
         post(collection_path, :params => attributes.merge(included_attributes).to_json, :headers => headers)
@@ -327,7 +317,6 @@ RSpec.describe("v3.0 - Sources") do
       end
 
       it "success: with an unavailable availability_status" do
-        stub_const("ENV", "BYPASS_RBAC" => "true")
         included_attributes = { "name" => "availability_source", "availability_status" => "unavailable" }
 
         post(collection_path, :params => attributes.merge(included_attributes).to_json, :headers => headers)
@@ -340,7 +329,6 @@ RSpec.describe("v3.0 - Sources") do
       end
 
       it "rejects read_only attributes" do
-        stub_const("ENV", "BYPASS_RBAC" => "true")
         instance = create(:source, attributes.merge("tenant" => tenant))
         new_attributes = {"name" => "new name", "created_at" => Time.now.utc}
 
@@ -355,7 +343,6 @@ RSpec.describe("v3.0 - Sources") do
 
     context "delete" do
       it "success: with a valid id" do
-        stub_const("ENV", "BYPASS_RBAC" => "true")
         instance = create(:source, attributes.merge("tenant" => tenant))
 
         expect(Sources::Api::Events).to receive(:raise_event).once
@@ -368,7 +355,6 @@ RSpec.describe("v3.0 - Sources") do
       end
 
       it "success: with associated applications" do
-        stub_const("ENV", "BYPASS_RBAC" => "true")
         source_type = create(:source_type, :name => "openshift", :vendor => "RedHat", :product_name => "OpenShift")
         attributes  = { "name" => "my_source", "source_type_id" => source_type.id.to_s }
         instance    = create(:source, attributes.merge("tenant" => tenant))
