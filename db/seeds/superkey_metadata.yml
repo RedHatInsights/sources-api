@@ -2,14 +2,12 @@
 "/insights/platform/cost-management":
   steps:
   - step: 1
-    source_type_name: "amazon"
     name: s3
     payload:
       "create_cost_policy"
     substitutions:
       S3BUCKET: s3
   - step: 2
-    source_type_name: "amazon"
     name: cost_report
     payload:
       {
@@ -31,7 +29,6 @@
     substitutions:
       S3BUCKET: s3
   - step: 3
-    source_type_name: "amazon"
     name: policy
     payload:
       {
@@ -63,7 +60,6 @@
     substitutions:
       S3BUCKET: s3
   - step: 4
-    source_type_name: "amazon"
     name: role
     payload:
       {
@@ -82,7 +78,6 @@
     substitutions:
       ACCOUNT: get_account
   - step: 5
-    source_type_name: "amazon"
     name: bind_role
     payload: {}
     substitutions: {}
@@ -90,7 +85,6 @@
 "/insights/platform/cloud-meter":
   steps:
   - step: 1
-    source_type_name: "amazon"
     name: policy
     payload:
       {
@@ -121,7 +115,6 @@
       }
     substitutions: {}
   - step: 2
-    source_type_name: "amazon"
     name: role
     payload:
       {
@@ -140,14 +133,6 @@
     substitutions:
       ACCOUNT: get_account
   - step: 3
-    source_type_name: "amazon"
     name: bind_role
-    payload: {}
-    substitutions: {}
-
-  # azure lighthouse settings
-  - step: 1
-    source_type_name: "azure"
-    name: "lighthouse"
     payload: {}
     substitutions: {}

@@ -1,13 +1,12 @@
 class SuperKeyMetaData < MetaData
   belongs_to :application_type
-  belongs_to :source_type
 
   default_scope { order(:step) }
 
   # required for the order of operations
   validates :step, :presence => true
   validates :name,
-            :inclusion => {:in      => ["s3", "role", "policy", "bind_role", "cost_report", "lighthouse"],
+            :inclusion => {:in      => ["s3", "role", "policy", "bind_role", "cost_report"],
                            :message => "%{value} is not a supported superkey operation"},
             :presence  => true
 
@@ -21,11 +20,8 @@ class SuperKeyMetaData < MetaData
         apptype = ApplicationType.find_by(:name => app)
 
         settings[:steps].each do |step|
-          sourcetype = SourceType.find_by(:name => step[:source_type_name])
-
           create!(
             :application_type => apptype,
-            :source_type      => sourcetype,
             :step             => step[:step],
             :name             => step[:name],
             :payload          => step[:payload],
