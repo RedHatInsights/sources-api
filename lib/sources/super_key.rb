@@ -22,11 +22,8 @@ module Sources
 
           e[:account] = acct if acct
 
-          # type of authentication to return - changes based on app
+          # type of authentication to return
           e[:result_type] = @application.application_type.supported_authentication_types["amazon"]&.first
-        when "azure"
-          # azure only supports lighthouse at the moment.
-          e[:result_type] = "lighthouse_subscription_id"
         end
       end
 

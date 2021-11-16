@@ -165,31 +165,18 @@ azure:
   :icon_url: "/apps/chrome/assets/images/partners-icons/microsoft-azure.svg"
   :schema:
     :authentication:
-    - :type: username_password_tenant_id
+    - :type: lighthouse_subscription_id
       :is_superkey: true
-      :name: Username, Password, Tenant ID
+      :name: Subscription ID
       :fields:
       - :component: text-field
         :name: authentication.authtype
         :hideField: true
         :initializeOnMount: true
-        :initialValue: username_password_tenant_id
+        :initialValue: lighthouse_subscription_id
       - :component: text-field
         :name: authentication.username
-        :label: App ID
-        :isRequired: true
-        :validate:
-        - :type: required
-      - :component: text-field
-        :name: authentication.password
-        :label: Password
-        :type: password
-        :isRequired: true
-        :validate:
-        - :type: required
-      - :component: text-field
-        :name: authentication.extra.azure.tenant_id
-        :label: Tenant ID
+        :label: Subscription ID
         :isRequired: true
         :validate:
         - :type: required

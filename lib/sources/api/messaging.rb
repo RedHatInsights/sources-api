@@ -58,10 +58,9 @@ module Sources
       end
 
       def self.process_payload(application)
-        application.application_type.super_key_meta_data
-                   .select { |e| e.source_type == application.source.source_type }
-                   .each { |m| m.payload = JSON.dump(m.payload) }
-                   .as_json
+        application.application_type.super_key_meta_data.each do |m|
+          m.payload = JSON.dump(m.payload)
+        end.as_json
       end
     end
   end
