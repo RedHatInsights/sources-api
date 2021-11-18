@@ -296,3 +296,26 @@ satellite:
         :initializeOnMount: true
         :initialValue: satellite
   :icon_url: "/apps/frontend-assets/platform-logos/satellite.svg"
+ibm:
+  :product_name: IBM Cloud
+  :vendor: IBM
+  :icon_url: "/apps/frontend-assets/partners-icons/ibm-cloud.svg"
+  :schema:
+    :authentication:
+    - :type: api_token_account_id
+      :name: API Token and Account ID
+      :fields:
+      - :component: text-field
+        :name: authentication.authtype
+        :hideField: true
+        :initializeOnMount: true
+        :initialValue: api_token_account_id
+      - :component: text-field
+        :name: authentication.username
+        :label: Account ID
+      - :component: text-field
+        :name: application.extra.api_token
+        :label: API Token
+        :isRequired: true
+        :validate:
+        - :type: required
