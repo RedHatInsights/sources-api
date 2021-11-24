@@ -17,6 +17,40 @@
       "UserSecurity": []
     }
   ],
+  "tags": [
+    {
+      "description": "Endpoints related to application metadata",
+      "name": "app metadata"
+    },
+    {
+      "description": "Endpoints related to applications",
+      "name": "applications"
+    },
+    {
+      "description": "Endpoints related to application authentications",
+      "name": "application authentications"
+    },
+    {
+      "description": "Endpoints related to application types",
+      "name": "application types"
+    },
+    {
+      "description": "Endpoints related to authentication",
+      "name": "authentications"
+    },
+    {
+      "description": "Endpoints related to endpoints",
+      "name": "endpoints"
+    },
+    {
+      "description": "Endpoints related to sources",
+      "name": "sources"
+    },
+    {
+      "description": "Endpoints related to source types",
+      "name": "source types"
+    },
+  ],
   "paths": {
     "/application_authentications": {
       "get": {
@@ -48,7 +82,8 @@
               }
             }
           }
-        }
+        },
+        "tags": ["application authentications"]
       },
       "post": {
         "summary": "Create a new ApplicationAuthentication",
@@ -76,7 +111,8 @@
               }
             }
           }
-        }
+        },
+        "tags": ["application authentications"]
       }
     },
     "/application_authentications/{id}": {
@@ -110,7 +146,8 @@
               }
             }
           }
-        }
+        },
+        "tags": ["application authentications"]
       },
       "patch": {
         "summary": "Update an existing ApplicationAuthentication",
@@ -149,7 +186,8 @@
               }
             }
           }
-        }
+        },
+        "tags": ["application authentications"]
       },
       "delete": {
         "summary": "Delete an existing ApplicationAuthentication",
@@ -174,7 +212,8 @@
               }
             }
           }
-        }
+        },
+        "tags": ["application authentications"]
       }
     },
     "/application_types": {
@@ -207,7 +246,8 @@
               }
             }
           }
-        }
+        },
+        "tags": ["application types"]
       }
     },
     "/application_types/{id}": {
@@ -241,7 +281,8 @@
               }
             }
           }
-        }
+        },
+        "tags": ["application types"]
       }
     },
     "/application_types/{id}/sources": {
@@ -287,7 +328,8 @@
               }
             }
           }
-        }
+        },
+        "tags": ["application types"]
       }
     },
     "/application_types/{id}/app_meta_data": {
@@ -333,7 +375,8 @@
               }
             }
           }
-        }
+        },
+        "tags": ["application types"]
       }
     },
     "/applications": {
@@ -366,7 +409,8 @@
               }
             }
           }
-        }
+        },
+        "tags": ["applications"]
       },
       "post": {
         "summary": "Create a new Application",
@@ -394,7 +438,8 @@
               }
             }
           }
-        }
+        },
+        "tags": ["applications"]
       }
     },
     "/applications/{id}": {
@@ -428,7 +473,8 @@
               }
             }
           }
-        }
+        },
+        "tags": ["applications"]
       },
       "patch": {
         "summary": "Update an existing Application",
@@ -487,7 +533,8 @@
               }
             }
           }
-        }
+        },
+        "tags": ["applications"]
       },
       "delete": {
         "summary": "Delete an existing Application",
@@ -512,7 +559,8 @@
               }
             }
           }
-        }
+        },
+        "tags": ["applications"]
       }
     },
     "/applications/{id}/authentications": {
@@ -558,7 +606,8 @@
               }
             }
           }
-        }
+        },
+        "tags": ["applications"]
       }
     },
     "/applications/{id}/pause": {
@@ -588,7 +637,8 @@
               }
             }
           }
-        }
+        },
+        "tags": ["applications"]
       }
     },
     "/applications/{id}/unpause": {
@@ -618,7 +668,8 @@
               }
             }
           }
-        }
+        },
+        "tags": ["applications"]
       }
     },
     "/authentications": {
@@ -651,7 +702,8 @@
               }
             }
           }
-        }
+        },
+        "tags": ["authentications"]
       },
       "post": {
         "summary": "Create a new Authentication",
@@ -679,7 +731,8 @@
               }
             }
           }
-        }
+        },
+        "tags": ["authentications"]
       }
     },
     "/authentications/{id}": {
@@ -713,7 +766,8 @@
               }
             }
           }
-        }
+        },
+        "tags": ["authentications"]
       },
       "patch": {
         "summary": "Update an existing Authentication",
@@ -772,7 +826,8 @@
               }
             }
           }
-        }
+        },
+        "tags": ["authentications"]
       },
       "delete": {
         "summary": "Delete an existing Authentication",
@@ -797,7 +852,8 @@
               }
             }
           }
-        }
+        },
+        "tags": ["authentications"]
       }
     },
     "/endpoints": {
@@ -830,7 +886,8 @@
               }
             }
           }
-        }
+        },
+        "tags": ["endpoints"]
       },
       "post": {
         "summary": "Create a new Endpoint",
@@ -858,7 +915,8 @@
               }
             }
           }
-        }
+        },
+        "tags": ["endpoints"]
       }
     },
     "/endpoints/{id}": {
@@ -892,7 +950,8 @@
               }
             }
           }
-        }
+        },
+        "tags": ["endpoints"]
       },
       "patch": {
         "summary": "Update an existing Endpoint",
@@ -951,7 +1010,8 @@
               }
             }
           }
-        }
+        },
+        "tags": ["endpoints"]
       },
       "delete": {
         "summary": "Delete an existing Endpoint",
@@ -976,7 +1036,8 @@
               }
             }
           }
-        }
+        },
+        "tags": ["endpoints"]
       }
     },
     "/endpoints/{id}/authentications": {
@@ -1022,7 +1083,8 @@
               }
             }
           }
-        }
+        },
+        "tags": ["endpoints"]
       }
     },
     "/graphql": {
@@ -1103,7 +1165,8 @@
               }
             }
           }
-        }
+        },
+        "tags": ["source types"]
       }
     },
     "/source_types/{id}": {
@@ -1137,7 +1200,8 @@
               }
             }
           }
-        }
+        },
+        "tags": ["source types"]
       }
     },
     "/source_types/{id}/sources": {
@@ -1183,7 +1247,8 @@
               }
             }
           }
-        }
+        },
+        "tags": ["source types"]
       }
     },
     "/sources": {
@@ -1216,7 +1281,8 @@
               }
             }
           }
-        }
+        },
+        "tags": ["sources"]
       },
       "post": {
         "summary": "Create a new Source",
@@ -1244,7 +1310,8 @@
               }
             }
           }
-        }
+        },
+        "tags": ["sources"]
       }
     },
     "/sources/{id}": {
@@ -1278,7 +1345,8 @@
               }
             }
           }
-        }
+        },
+        "tags": ["sources"]
       },
       "patch": {
         "summary": "Update an existing Source",
@@ -1337,7 +1405,8 @@
               }
             }
           }
-        }
+        },
+        "tags": ["sources"]
       },
       "delete": {
         "summary": "Delete an existing Source",
@@ -1365,7 +1434,8 @@
               }
             }
           }
-        }
+        },
+        "tags": ["sources"]
       }
     },
     "/sources/{id}/application_types": {
@@ -1411,7 +1481,8 @@
               }
             }
           }
-        }
+        },
+        "tags": ["sources"]
       }
     },
     "/sources/{id}/applications": {
@@ -1457,7 +1528,8 @@
               }
             }
           }
-        }
+        },
+        "tags": ["sources"]
       }
     },
     "/sources/{id}/authentications": {
@@ -1503,7 +1575,8 @@
               }
             }
           }
-        }
+        },
+        "tags": ["sources"]
       }
     },
     "/sources/{id}/check_availability": {
@@ -1530,7 +1603,8 @@
               }
             }
           }
-        }
+        },
+        "tags": ["sources"]
       }
     },
     "/sources/{id}/endpoints": {
@@ -1576,7 +1650,8 @@
               }
             }
           }
-        }
+        },
+        "tags": ["sources"]
       }
     },
     "/sources/{id}/pause": {
@@ -1606,7 +1681,8 @@
               }
             }
           }
-        }
+        },
+        "tags": ["sources"]
       }
     },
     "/sources/{id}/unpause": {
@@ -1636,7 +1712,8 @@
               }
             }
           }
-        }
+        },
+        "tags": ["sources"]
       }
     },
     "/app_meta_data": {
@@ -1669,7 +1746,8 @@
               }
             }
           }
-        }
+        },
+        "tags": ["app metadata"]
       }
     },
     "/app_meta_data/{id}": {
@@ -1703,7 +1781,8 @@
               }
             }
           }
-        }
+        },
+        "tags": ["app metadata"]
       }
     },
     "/bulk_create": {
@@ -1734,7 +1813,8 @@
           "400": {
             "description": "Bad Request"
           }
-        }
+        },
+        "tags": ["sources"]
       }
     }
   },
