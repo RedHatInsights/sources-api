@@ -166,7 +166,6 @@ azure:
   :schema:
     :authentication:
     - :type: lighthouse_subscription_id
-      :is_superkey: true
       :name: Subscription ID
       :fields:
       - :component: text-field
