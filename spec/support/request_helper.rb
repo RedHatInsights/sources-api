@@ -30,7 +30,6 @@ module RequestHelper
         "first_name"   => "John",
         "last_name"    => "Doe",
         "is_active"    => true,
-        "is_org_admin" => false,
         "is_internal"  => false,
         "locale"       => "en_US"
       },

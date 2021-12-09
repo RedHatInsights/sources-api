@@ -11,6 +11,7 @@ describe "v3.1 - /bulk_create" do
   before do
     allow(client).to receive(:publish_topic)
     allow(Sources::Api::Messaging).to receive(:client).and_return(client)
+    stub_const("ENV", "BYPASS_RBAC" => "true")
   end
 
   let(:amazontype) { SourceType.find_by(:name => "amazon") }

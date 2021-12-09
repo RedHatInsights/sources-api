@@ -5,6 +5,7 @@ RSpec.describe("v3.0 - Applications") do
   before do
     allow(client).to receive(:publish_topic)
     allow(Sources::Api::Messaging).to receive(:client).and_return(client)
+    stub_const("ENV", "BYPASS_RBAC" => "true")
   end
 
   let(:headers)          { {"CONTENT_TYPE" => "application/json", "x-rh-identity" => identity} }

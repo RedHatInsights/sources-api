@@ -5,6 +5,7 @@ RSpec.describe("v3.1 - ApplicationAuthentications") do
   before do
     allow(messaging_client).to receive(:publish_topic)
     allow(Sources::Api::Messaging).to receive(:client).and_return(messaging_client)
+    stub_const("ENV", "BYPASS_RBAC" => "true")
   end
 
   let(:headers)          { {"CONTENT_TYPE" => "application/json", "x-rh-identity" => identity} }

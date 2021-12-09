@@ -50,6 +50,7 @@ RSpec.shared_examples_for "updating paused resource" do |model_klass|
 
   before do
     instance.discard
+    stub_const("ENV", "BYPASS_RBAC" => "true")
   end
 
   it "rejects update action of disallowed attributes by pausing a #{model_klass}" do

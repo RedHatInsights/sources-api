@@ -11,6 +11,7 @@ RSpec.describe("v1.0 - Sources") do
   before do
     allow(Sources::Api::Messaging).to receive(:client).and_return(client)
     allow(client).to receive(:publish_topic)
+    stub_const("ENV", "BYPASS_RBAC" => "true")
   end
 
   describe("/api/v1.0/sources") do
@@ -140,7 +141,7 @@ RSpec.describe("v1.0 - Sources") do
         post(collection_path, :params => attributes.to_json, :headers => headers)
 
         second_tenant = rand(1000).to_s
-        second_identity = {"x-rh-identity" => Base64.encode64({"identity" => {"account_number" => second_tenant, "user" => { "is_org_admin" => true }}}.to_json)}
+        second_identity = {"x-rh-identity" => Base64.encode64({"identity" => {"account_number" => second_tenant }}.to_json)}
         post(collection_path, :params => attributes.to_json, :headers => headers.merge(second_identity))
 
         expect(response).to have_attributes(
@@ -434,7 +435,6 @@ RSpec.describe("v1.0 - Sources") do
         source_type = create(:source_type, :name => "vsphere", :vendor => "VMware", :product_name => "VMware vSphere")
         attributes  = {"name" => "my_source", "source_type_id" => source_type.id.to_s}
         source      = create(:source, attributes.merge("tenant" => tenant))
-
         post(check_availability_path(source.id), :headers => headers)
 
         expect(response).to have_attributes(

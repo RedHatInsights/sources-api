@@ -60,8 +60,7 @@ RSpec.describe AvailabilityStatusListener do
       let(:xrhid) do
         Base64.strict_encode64(
           JSON.dump(:identity => {
-                      :account_number => "1234",
-                      :user           => {:is_org_admin => true}
+                      :account_number => "1234"
                     })
         )
       end
@@ -81,8 +80,7 @@ RSpec.describe AvailabilityStatusListener do
       let(:xrhid) do
         Base64.strict_encode64(
           JSON.dump(:identity => {
-                      :account_number => "1234",
-                      :user           => {:is_org_admin => true}
+                      :account_number => "1234"
                     })
         )
       end
