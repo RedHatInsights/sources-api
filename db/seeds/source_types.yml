@@ -264,6 +264,20 @@ openshift:
           :is: true
   :vendor: Red Hat
   :icon_url: "/apps/frontend-assets/platform-logos/openshift-container-platform.svg"
+rh-marketplace:
+  :product_name: Red Hat Marketplace
+  :vendor: Red Hat
+  :schema:
+    :authentication:
+      - :type: token
+        :name: API Token
+        :fields:
+          - :component: text-field
+            :name: application.extra.api_token
+            :label: API Token
+            :isRequired: true
+            :validate:
+              - :required:
 satellite:
   :product_name: Red Hat Satellite
   :vendor: Red Hat
