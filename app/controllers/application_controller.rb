@@ -59,7 +59,7 @@ class ApplicationController < ActionController::API
 
       begin
         if Tenant.tenancy_enabled? && current.required_auth?
-          Rails.logger.warn("PSK present but account-number blank: #{request.fullpath}") if user.key.present? && user.account.blank?
+          Rails.logger.warn("PSK present but account-number blank: #{request.method} #{request.fullpath}") if user.key.present? && user.account.blank?
 
           tenant = if user.key.present? && user.account.present?
                      Tenant.find_or_create_by(:external_tenant => user.account)
