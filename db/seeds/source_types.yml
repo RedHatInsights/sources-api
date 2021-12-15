@@ -277,7 +277,7 @@ rh-marketplace:
             :label: API Token
             :isRequired: true
             :validate:
-              - :required:
+              - :type: required
 satellite:
   :product_name: Red Hat Satellite
   :vendor: Red Hat
