@@ -24,14 +24,6 @@
     - project_id_service_account_json
     openshift:
     - token
-"/insights/platform/rh-marketplace":
-  :display_name: Red Hat Marketplace
-  :dependent_applications: []
-  :supported_source_types:
-  - rh-marketplace
-  :supported_authentication_types:
-    rh-marketplace:
-      - token
 "/insights/platform/cloud-meter":
   :display_name: RHEL management
   :dependent_applications: []
