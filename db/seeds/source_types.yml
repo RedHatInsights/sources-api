@@ -273,6 +273,11 @@ rh-marketplace:
         :name: API Token
         :fields:
           - :component: text-field
+            :name: authentication.authtype
+            :hideField: true
+            :initializeOnMount: true
+            :initialValue: token
+          - :component: text-field
             :name: authentication.password
             :label: API Token
             :isRequired: true
