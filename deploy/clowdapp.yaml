@@ -167,6 +167,8 @@ objects:
               name: sources-api-secrets
               key: psks
               optional: true
+        - name: DISABLE_AVAILABILITY_STATUS_LISTENER
+          value: ${DISABLE_AVAILABILITY_STATUS_LISTENER}
         - name: DISABLE_ORG_ADMIN
           value: ${DISABLE_ORG_ADMIN}
         - name: ENCRYPTION_KEY
@@ -359,6 +361,8 @@ parameters:
   value: '1'
 - name: DISABLE_ORG_ADMIN
   description: when set to true this disables the org_admin check in the x-rh-identity.
+  value: "false"
+- name: DISABLE_AVAILABILITY_STATUS_LISTENER
   value: "false"
 - name: PROXY_REQUESTS
   description: Proxy requests from configmap to the new go-rewrite svc

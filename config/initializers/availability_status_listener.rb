@@ -2,6 +2,8 @@ require 'sources/api/clowder_config'
 
 # Be sure to restart your server when you modify this file.
 
+return if ENV['DISABLE_AVAILABILITY_STATUS_LISTENER'] == "true"
+
 # we ony want the AvailabilityStatusListener to start for the api pod, NOT the sidekiq pod.
 sidekiq_pod = Rails.env.production? && ENV['HOSTNAME'].match?(/sidekiq/)
 
