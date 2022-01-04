@@ -3,11 +3,9 @@ module Api
     module Mixins
       module IndexMixin
         def index
-          authorize(filtered.new)
-
           raise_unless_primary_instance_exists
           render :json => Insights::API::Common::PaginatedResponse.new(
-            :base_query => scoped(filtered.where(params_for_list.merge!(limited_access))),
+            :base_query => scoped(filtered.where(params_for_list)),
             :request    => request,
             :limit      => pagination_limit,
             :offset     => pagination_offset,
@@ -21,19 +19,6 @@ module Api
           end
 
           relation
-        end
-
-        def limited_access
-          {}.tap do |extra|
-            case model.to_s
-            when "Source"
-              if Rails.env.production? && Sources::Api::Request.current.system&.cn
-                extra["source_type_id"] = SourceType.find_by(:name => "satellite")&.id
-              end
-            end
-          end
-        rescue Insights::API::Common::IdentityError # if psk is used we don't have a "current" request
-          {}
         end
 
         def raise_unless_primary_instance_exists
