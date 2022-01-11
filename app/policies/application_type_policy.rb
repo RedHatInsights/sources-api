@@ -1,2 +1,0 @@
-class ApplicationTypePolicy < DefaultPolicy
-end

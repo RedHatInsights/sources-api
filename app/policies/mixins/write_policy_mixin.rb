@@ -1,12 +1,9 @@
 module WritePolicyMixin
   def create?
-    system? || admin?
-  end
-
-  def update?
     admin?
   end
-  alias destroy? update?
-  alias pause? update?
-  alias unpause? update?
+  alias update? create?
+  alias destroy? create?
+  alias pause? create?
+  alias unpause? create?
 end

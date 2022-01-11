@@ -30,28 +30,10 @@ class DefaultPolicy
   end
   alias delete? destroy?
 
-  ALLOWED_AUTHTYPES = %w[cluster_id cn].freeze
-
-  def system?
-    return false unless request.identity["identity"]
-
-    request.identity["identity"]["system"] && supported_authtype?
-  rescue Insights::API::Common::IdentityError # this crops up if the request does NOT have x-rh-identity
-    false
-  end
-
-  def supported_authtype?
-    ALLOWED_AUTHTYPES.any? { |type| request.identity["identity"]["system"].key?(type) }
-  end
-
-  def psk?
-    request.headers.key?("x-rh-sources-psk")
-  end
-
   def admin?
     return true unless Sources::RBAC::Access.enabled?
 
-    psk_matches? || write_access?
+    psk_matches? || request.system.present? || write_access?
   end
 
   def psk_matches?
