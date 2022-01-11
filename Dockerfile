@@ -15,7 +15,7 @@ RUN dnf -y --disableplugin=subscription-manager module enable ruby:2.6 && \
       cyrus-sasl-devel zlib-devel openssl-devel diffutils \
       # For the mimemagic gem (+rails)
       shared-mime-info \
-      jq \
+      jq libffi-devel \
       && \
     dnf --disableplugin=subscription-manager clean all
 
@@ -25,12 +25,6 @@ WORKDIR $WORKDIR
 
 RUN touch /opt/rdsca.crt && chmod 666 /opt/rdsca.crt
 
-COPY docker-assets/librdkafka-1.5.0.tar.gz /tmp/librdkafka.tar.gz
-RUN cd /tmp && tar -xf /tmp/librdkafka.tar.gz && cd librdkafka-1.5.0 && \
-    ./configure --prefix=/usr && \
-    make -j2 && make install && \
-    rm -rf /tmp/librdkafka*
-
 COPY Gemfile $WORKDIR
 RUN echo "gem: --no-document" > ~/.gemrc && \
     gem install bundler --conservative --without development:test && \
@@ -39,12 +33,7 @@ RUN echo "gem: --no-document" > ~/.gemrc && \
     rm -rvf /root/.bundle/cache
 
 COPY . $WORKDIR
-
-# TODO: find a better way to do this. Image is getting bigger layers. 
-COPY docker-assets/entrypoint /usr/bin
-COPY docker-assets/run_rails_server /usr/bin
-COPY docker-assets/run_sidekiq /usr/bin
-COPY docker-assets/seed_database /usr/bin
+COPY docker-assets/* /usr/bin/
 
 RUN chgrp -R 0 $WORKDIR && \
     chmod -R g=u $WORKDIR
