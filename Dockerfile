@@ -1,4 +1,4 @@
-FROM registry.access.redhat.com/ubi8/ubi:8.4-206
+FROM registry.access.redhat.com/ubi8/ubi:latest
 
 RUN dnf -y --disableplugin=subscription-manager module enable ruby:2.6 && \
     dnf -y --disableplugin=subscription-manager --setopt=tsflags=nodocs install \
@@ -15,16 +15,13 @@ RUN dnf -y --disableplugin=subscription-manager module enable ruby:2.6 && \
       cyrus-sasl-devel zlib-devel openssl-devel diffutils \
       # For the mimemagic gem (+rails)
       shared-mime-info \
+      jq \
       && \
     dnf --disableplugin=subscription-manager clean all
 
 ENV WORKDIR /opt/sources-api/
 ENV RAILS_ROOT $WORKDIR
 WORKDIR $WORKDIR
-
-# For the clowder config parser
-RUN curl -L https://github.com/stedolan/jq/releases/download/jq-1.6/jq-linux64 -o jq \
-  && chmod +x ./jq && cp jq /usr/bin
 
 RUN touch /opt/rdsca.crt && chmod 666 /opt/rdsca.crt
 
