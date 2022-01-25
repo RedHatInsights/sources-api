@@ -65,6 +65,24 @@ amazon:
           :pattern: "^arn:aws:.*"
         - :type: min-length
           :threshold: 10
+    - :type: resource-optimization-service-arn
+      :name: Resource Optimization Service ARN
+      :fields:
+      - :component: text-field
+        :name: authentication.authtype
+        :hideField: true
+        :initializeOnMount: true
+        :initialValue: resource-optimization-service-arn
+      - :name: authentication.username
+        :component: text-field
+        :label: ARN
+        :isRequired: true
+        :validate:
+        - :type: required
+        - :type: pattern
+          :pattern: "^arn:aws:.*"
+        - :type: min-length
+          :threshold: 10
     :endpoint:
       :hidden: true
       :fields:
