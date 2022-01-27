@@ -17,11 +17,12 @@ gem 'manageiq-messaging',   '~> 1.0.0'
 gem 'manageiq-password',    '~> 0.2', ">= 0.2.1"
 gem 'more_core_extensions', '~> 3.5'
 gem 'pg',                   '~> 1.0', :require => false
+gem 'psych', '~> 3.3'
 gem 'puma',                 '~> 4.3.8'
 gem 'pundit',               '~> 2.1'
 gem 'rack-cors',            '>= 1.1.1', '~> 1.1'
 gem 'rails',                '~> 5.2.2'
-gem 'rdoc',                 '>= 6.3.1'
+# gem 'rdoc',                 '>= 6.3.1'
 gem 'sidekiq',              '~> 5.2.2'
 gem 'sidekiq_alive',        '~> 2.1.0'
 gem 'sprockets',            '~> 4.0'
