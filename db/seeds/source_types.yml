@@ -353,8 +353,9 @@ ibm:
         :validate:
         - :type: required
       - :component: text-field
-        :name: application.extra.api_token
+        :name: application.password
         :label: API Token
+        :type: password
         :isRequired: true
         :validate:
         - :type: required
