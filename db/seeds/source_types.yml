@@ -349,9 +349,18 @@ ibm:
       - :component: text-field
         :name: authentication.username
         :label: Account ID
+        :isRequired: true
+        :validate:
+        - :type: required
       - :component: text-field
         :name: application.extra.api_token
         :label: API Token
+        :isRequired: true
+        :validate:
+        - :type: required
+      - :component: text-field
+        :name: application.extra.enterprise_id
+        :label: Enterprise ID
         :isRequired: true
         :validate:
         - :type: required
