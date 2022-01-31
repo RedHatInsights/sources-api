@@ -1,5 +1,4 @@
 .git
-Gemfile.lock
 v2_key
 /.bundle/
 /.rspec_status
