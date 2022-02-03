@@ -142,6 +142,8 @@ objects:
                 key: secret-key
           - name: SOURCES_ENV
             value: ${SOURCES_ENV}
+          - name: SKIP_SEEDING
+            value: ${SKIP_SEEDING}
         env:
         - name: APP_NAME
           value: ${APP_NAME}
@@ -373,3 +375,6 @@ parameters:
 - name: GO_PORT
   description: port of the go-rewrite svc
   value: "8000"
+- name: SKIP_SEEDING
+  description: skip the rake db:seed step since it is handled by the Go rewrite now
+  value: "false"
