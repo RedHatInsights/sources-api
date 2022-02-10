@@ -20,7 +20,7 @@ before_script:
 - chmod +x ./cc-test-reporter
 - "./cc-test-reporter before-build"
 - cp ./v2_key.dev ./v2_key
-- curl -sSL https://raw.githubusercontent.com/RedHatInsights/insights-api-common-rails/master/.travis_scripts/openapi-validator.sh | bash -s
+# - curl -sSL https://raw.githubusercontent.com/RedHatInsights/insights-api-common-rails/master/.travis_scripts/openapi-validator.sh | bash -s
 - bundle exec rake db:create db:migrate
 after_script:
 - "./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT"
