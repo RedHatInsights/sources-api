@@ -52,6 +52,17 @@
     }
   ],
   "paths": {
+    "/rhc_connections/:id": {
+      "get":{},
+      "patch":{}
+    },
+    "/rhc_connections": {
+      "get":{},
+      "post":{}
+    },
+    "/sources/:id/rhc_connections": {
+      "get":{}
+    },
     "/application_authentications": {
       "get": {
         "summary": "List ApplicationAuthentications",
