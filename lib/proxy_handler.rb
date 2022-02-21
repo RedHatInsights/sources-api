@@ -23,7 +23,7 @@ class ProxyHandler
     enabled? && proxy_mapping[controller.split("/").last]&.include?(action) && controller.split("/")[1] == "v3x1"
   end
 
-  def self.proxy_request(request, headers)
+  def self.proxy_request(request)
     case request.method
     when "GET", "DELETE"
       Faraday.send(request.method.downcase, "#{go_svc}#{CGI.unescape(request.fullpath)}") do |req|
@@ -38,6 +38,15 @@ class ProxyHandler
       end
     else
       raise "unsupported proxy operation #{request.method}"
+    end
+  end
+
+  def self.headers
+    Sources::Api::Request.current_forwardable.tap do |h|
+      # pass along the psk if present
+      if Sources::Api::Request.current.headers["x-rh-sources-psk"].present?
+        h["x-rh-sources-psk"] = Sources::Api::Request.current.headers["x-rh-sources-psk"]
+      end
     end
   end
 end
