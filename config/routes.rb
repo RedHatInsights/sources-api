@@ -21,6 +21,8 @@ Rails.application.routes.draw do
       post "/graphql", :to => "graphql#query"
       post "/bulk_create", :to => "bulk_create#create"
 
+      resources :rhc_connections
+
       resources :application_types,           :only => [:index, :show] do
         resources :sources, :only => [:index]
         get "app_meta_data", :to => "app_meta_data#index"
