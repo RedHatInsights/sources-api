@@ -46,7 +46,7 @@ class ApplicationController < ActionController::API
         Rails.logger.info("Proxying request [#{CGI.unescape(request.fullpath)}] to go svc at [#{ProxyHandler.go_svc}]")
 
         begin
-          resp = ProxyHandler.proxy_request(request, current.forwardable)
+          resp = ProxyHandler.proxy_request(request)
           render :json => resp.body, :status => resp.status
         rescue => e
           Rails.logger.warn("Failed to hit go svc: #{e.message}")

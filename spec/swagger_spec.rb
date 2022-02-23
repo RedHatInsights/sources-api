@@ -27,7 +27,7 @@ describe "Swagger stuff" do
       let(:app_name)    { "sources" }
       let(:path_prefix) { "/api" }
 
-      it "matches the routes" do
+      xit "matches the routes" do
         redirect_routes = [
           {:path => "#{path_prefix}/#{app_name}/v1/*path", :verb => "DELETE|GET|OPTIONS"},
           {:path => "#{path_prefix}/#{app_name}/v2/*path", :verb => "DELETE|GET|OPTIONS"},

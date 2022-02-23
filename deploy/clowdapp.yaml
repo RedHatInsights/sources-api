@@ -33,26 +33,24 @@ objects:
   data:
     rules.json: |
       {
-          "sources": [
-              "index",
-              "show"
-          ],
-          "endpoints": [
-              "index",
-              "show"
-          ],
-          "applications": [
-              "index",
-              "show"
-          ],
-          "source_types": [
-              "index",
-              "show"
-          ],
-          "application_types": [
-              "index",
-              "show"
-          ]
+        "sources": [
+          "index", "show"
+        ],
+        "endpoints": [
+          "index", "show"
+        ],
+        "applications": [
+          "index", "show"
+        ],
+        "source_types": [
+          "index", "show"
+        ],
+        "application_types": [
+          "index", "show"
+        ],
+        "rhc_connections": [
+          "index", "show", "create", "edit", "destroy"
+        ]
       }
   kind: ConfigMap
   metadata:
