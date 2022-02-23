@@ -22,6 +22,8 @@ Rails.application.routes.draw do
       post "/bulk_create", :to => "bulk_create#create"
 
       resources :rhc_connections
+      get "/sources/:source_id/rhc_connectiosn", :to => "rhc_connections#list"
+      get "/rhc_connections/:rhc_connection_id/sources", :to => "sources#list"
 
       resources :application_types,           :only => [:index, :show] do
         resources :sources, :only => [:index]
