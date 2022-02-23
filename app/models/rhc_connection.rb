@@ -1,0 +1,2 @@
+class RhcConnection < ApplicationRecord
+end
