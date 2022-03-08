@@ -50,6 +50,9 @@ objects:
         ],
         "rhc_connections": [
           "index", "show", "create", "edit", "destroy"
+        ],
+        "root": [
+          "openapi"
         ]
       }
   kind: ConfigMap
