@@ -347,7 +347,7 @@ parameters:
 - description: Skip the RBAC service entirely. All the identified requests will be assumed to be valid.
   displayName: Bypass RBAC option enabled
   name: BYPASS_RBAC
-  value: false
+  value: "false"
 - name: SECRET_KEY
   displayName: Secret Key (Ephemeral)
   required: true
