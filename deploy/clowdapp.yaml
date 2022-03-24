@@ -146,6 +146,8 @@ objects:
           - name: SKIP_SEEDING
             value: ${SKIP_SEEDING}
         env:
+        - name: BYPASS_RBAC
+          value: true
         - name: APP_NAME
           value: ${APP_NAME}
         - name: DB_POOL_SIZE
