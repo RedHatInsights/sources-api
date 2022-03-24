@@ -186,6 +186,8 @@ objects:
             secretKeyRef:
               name: sources-api-secrets
               key: secret-key
+        - name: BYPASS_RBAC
+          value: ${BYPASS_RBAC}
         - name: RBAC_URL
           value: ${RBAC_SCHEME}://${RBAC_HOST}:${RBAC_PORT}
         volumeMounts:
@@ -342,6 +344,10 @@ parameters:
   name: RBAC_SCHEME
   required: true
   value: http
+- description: Skip the RBAC service entirely. All the identified requests will be assumed to be valid.
+  displayName: Bypass RBAC option enabled
+  name: BYPASS_RBAC
+  value: false
 - name: SECRET_KEY
   displayName: Secret Key (Ephemeral)
   required: true
