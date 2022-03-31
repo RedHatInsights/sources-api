@@ -16,6 +16,8 @@ class ProxyHandler
   end
 
   def self.should_proxy?(action, controller)
+    return true if ENV["PROXY_REQUESTS"] == "all"
+
     # proxy on 3 rules:
     # 1. enabled in the ENV
     # 2. route is enabled in the config
