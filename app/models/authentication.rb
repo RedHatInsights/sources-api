@@ -19,6 +19,21 @@ class Authentication < ApplicationRecord
   validate :only_one_superkey, :if => proc { new_record? && source.super_key? }
   validate :both_username_and_password, :if => proc { resource.kind_of?(Source) && source.super_key? }
 
+  # This will populate the go-side's password column on create.
+  before_save do
+    if !Rails.env.test?
+      self.password_hash = GoEncryption.encrypt(self.password) if self.password_hash.blank? && self.password.present?
+    end
+  end
+
+  # if an authentication gets created on the go side it won't have populated the `password` column, so we populate it
+  # on initilization on the rails side (in case we have to switch back and forth)
+  after_initialize do
+    if !Rails.env.test?
+      update!(:password => GoEncryption.decrypt(self.password_hash)) if self.password.blank? && self.password_hash.present?
+    end
+  end
+
   private
 
   def set_source
