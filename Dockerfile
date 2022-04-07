@@ -33,6 +33,10 @@ RUN echo "gem: --no-document" > ~/.gemrc && \
     rm -rvf $(gem env gemdir)/cache/* && \
     rm -rvf /root/.bundle/cache
 
+# Download the go-rewrite's encryption compatibility tool
+RUN curl -L https://github.com/lindgrenj6/sources-encrypt-compat/releases/download/v1.0.0/sources-encrypt-compat > /usr/local/bin/sources-encrypt-compat && \
+    chmod +x /usr/local/bin/sources-encrypt-compat
+
 COPY . $WORKDIR
 COPY docker-assets/* /usr/bin/
 
