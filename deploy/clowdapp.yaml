@@ -164,6 +164,8 @@ objects:
           value: ${GO_SVC}
         - name: GO_PORT
           value: ${GO_PORT}
+        - name: PROXY_GRAPHQL
+          value: ${PROXY_GRAPHQL}
         - name: SOURCES_PSKS
           valueFrom:
             secretKeyRef:
@@ -384,4 +386,6 @@ parameters:
   value: "8000"
 - name: SKIP_SEEDING
   description: skip the rake db:seed step since it is handled by the Go rewrite now
+  value: "false"
+- name: PROXY_GRAPHQL
   value: "false"

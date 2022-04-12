@@ -16,8 +16,7 @@ class ProxyHandler
   end
 
   def self.should_proxy?(action, controller)
-    # never proxy graphql - even if the proxy_requests var is set to "all"
-    return false if controller.end_with?("graphql")
+    return false if controller.end_with?("graphql") && ENV["PROXY_GRAPHQL"] == "false"
     return true if ENV["PROXY_REQUESTS"] == "all"
 
     # proxy on 3 rules:
