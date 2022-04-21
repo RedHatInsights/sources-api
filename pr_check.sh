@@ -42,9 +42,7 @@ source $CICD_ROOT/build.sh
 # This script is used to deploy the ephemeral environment for smoke tests.
 # The manual steps for this can be found in:
 # https://internal.cloud.redhat.com/docs/devprod/ephemeral/02-deploying/
-
-# Disabling this because the IQE plugins no longer work with this after the rename.
-# source $CICD_ROOT/deploy_ephemeral_env.sh
+source $CICD_ROOT/deploy_ephemeral_env.sh
 
 # (DEPRECATED!) Run smoke tests using smoke_test.sh
 #
@@ -58,6 +56,4 @@ source $CICD_ROOT/build.sh
 # Run smoke tests using a ClowdJobInvocation (preferred)
 # The contents of this script can be found at:
 # https://raw.githubusercontent.com/RedHatInsights/bonfire/master/cicd/cji_smoke_test.sh
-
-# Disabling this because the IQE plugins no longer work with this after the rename.
-# source $CICD_ROOT/cji_smoke_test.sh
+source $CICD_ROOT/cji_smoke_test.sh
