@@ -1,14 +1,14 @@
 apiVersion: v1
 kind: Template
 metadata:
-  name: sources-api-legacy
+  name: sources-api
 objects:
 - apiVersion: v1
   kind: Secret # For ephemeral/local environment
   metadata:
     name: sources-api-secrets
     labels:
-      app: sources-api-legacy
+      app: sources-api
   stringData:
     encryption-key: "${ENCRYPTION_KEY}"
     secret-key: "${SECRET_KEY}"
@@ -18,7 +18,7 @@ objects:
   metadata:
     name: internal-psk
     labels:
-      app: sources-api-legacy
+      app: sources-api
   stringData:
     psk: "thisMustBeEphemeralOrMinikube"
 - apiVersion: v1
@@ -26,7 +26,7 @@ objects:
   metadata:
     name: sources-psk
     labels:
-      app: sources-api-legacy
+      app: sources-api
   stringData:
     psk: "thisMustBeEphemeralOrMinikube"
 - apiVersion: v1
@@ -59,11 +59,11 @@ objects:
   metadata:
     name: sources-proxy-rules
     labels:
-      app: sources-api-legacy
+      app: sources-api
 - apiVersion: cloud.redhat.com/v1alpha1
   kind: ClowdApp
   metadata:
-    name: sources-api-legacy
+    name: sources-api
   spec:
     envName: ${ENV_NAME}
     testing:
