@@ -8,6 +8,10 @@ class MigrateAuthsForGo < ActiveRecord::Migration[5.2]
         next
       end
 
+      if auth.password.blank?
+        Rails.logger.warn("skipping auth #{auth.id} due to password being blank")
+      end
+
       auth.update!(:password_hash => GoEncryption.encrypt(auth.password))
     end
   end
