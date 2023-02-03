@@ -1,5 +1,8 @@
 # Sources API
 
+# **DEPRECATED**: this is the "original" Sources API, the rewrite is here: https://github.com/RedHatInsights/sources-api-go
+# this version is missing many of the newer features that the new version contains.
+
 [![Build Status](https://travis-ci.com/RedHatInsights/sources-api.svg?branch=master)](https://travis-ci.com/github/RedHatInsights/sources-api)
 [![Maintainability](https://api.codeclimate.com/v1/badges/bc0595445f017018ffbc/maintainability)](https://codeclimate.com/github/RedHatInsights/sources-api/maintainability)
 [![Test Coverage](https://api.codeclimate.com/v1/badges/bc0595445f017018ffbc/test_coverage)](https://codeclimate.com/github/RedHatInsights/sources-api/test_coverage)
